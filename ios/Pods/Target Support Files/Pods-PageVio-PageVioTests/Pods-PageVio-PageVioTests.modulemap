@@ -1,0 +1,6 @@
+module Pods_PageVio_PageVioTests {
+  umbrella header "Pods-PageVio-PageVioTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

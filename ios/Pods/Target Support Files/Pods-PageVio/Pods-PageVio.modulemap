@@ -1,0 +1,6 @@
+module Pods_PageVio {
+  umbrella header "Pods-PageVio-umbrella.h"
+
+  export *
+  module * { export * }
+}

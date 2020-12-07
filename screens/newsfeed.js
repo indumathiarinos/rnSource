@@ -1,0 +1,1519 @@
+import React, { Component } from 'react'
+import { View,SafeAreaView,ImageBackground,Platform, FlatList, AsyncStorage, Modal, LayoutAnimation, useEffect, BackHandler, RefreshControl, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons';
+import img1 from '../assets/img/cover1.png';
+import img2 from '../assets/img/cover2.png';
+import img3 from '../assets/img/cover3.png';
+import { Avatar, Divider } from 'react-native-elements';
+import EIcons from 'react-native-vector-icons/Entypo';
+import ReadMore from 'react-native-read-more-text';
+import Modal1 from "react-native-modal";
+import ModalBox1 from 'react-native-modalbox';
+import Share from 'react-native-share';
+import Toast from 'react-native-easy-toast';
+import HTMLView from 'react-native-htmlview';
+import NetInfo from '@react-native-community/netinfo';
+import ViewMoreText from 'react-native-view-more-text';
+import { connect } from "react-redux";
+import SnackBar from 'react-native-snackbar';
+
+import { ceil } from 'react-native-reanimated';
+import LinearGradient from 'react-native-linear-gradient';
+// import Toast1 from 'react-native-tiny-toast'
+console.disableYellowBox = true;
+const shareOptions1 = {
+  title: 'Share via',
+  message: 'some message',
+  url: 'some share url',
+  social: Share.Social.INSTAGRAM,
+  whatsAppNumber: "9199999999",  // country code + phone number(currently only works on Android)
+  filename: 'test', // only for base64 file in Android 
+};
+// Share.shareSingle(shareOptions);
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+var imgSource;
+class NewsFeed extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    
+      showlikeImg: false,
+      isOpen: false,
+      isDisabled: false,
+      swipeToClose: true,
+      getuserid: '',
+      gettypeid: '',
+      sliderValue: 0.3,
+      expanded: false,
+      boolean: false,
+      toastvisible: false,
+      feeding: [],
+      newModalVisible: false,
+      shareModal: false,
+      collectionModal: false,
+      loading: true,
+      selectedItemLike: [],
+      pagingCount: 1,
+      collection: '',
+      currentItem: '',
+      curFuncName: '',
+      descPage: false,
+      readlaterPopup: false,
+      selectedItemArray:[],
+      exists: false,
+      fetching_from_server: false,
+      // onEndReachedCalledDuringMomentum: false,
+      lastLoadCount: 0,
+      notFinalLoad: false,
+      getpagingCount:0,
+      socialmedia:'',
+      shareId:'',
+      newwid:'',
+      sectionExpand:false,
+      section:'',
+      secCollid:'',
+      
+
+    }
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    this.onEndReachedCalledDuringMomentum = true,
+    this.pageCountVal = 0;
+
+  }
+  renderViewMore(onPress) {
+    return (
+      <Text onPress={onPress}>View more</Text>
+    )
+  }
+  renderViewLess(onPress) {
+    return (
+      <Text onPress={onPress}>View less</Text>
+    )
+  }
+  _toggleModal = () => {
+    // this.setState({ isModalVisible: !this.state.isModalVisible });
+    this.refs.modal6.open()
+  }
+  toggle_newModal = () => {
+    this.setState({ newModalVisible: !this.state.newModalVisible })
+  }
+  fb = () => {
+    console.log('newsfeed share id ',this.state.shareId)
+    this.setState({ shareModal: false,});
+    let shareOptions2 = {
+      url: 'https://pagevio.com/sample-page/'+this.state.shareId,
+      social: Share.Social.FACEBOOK,
+    };
+    // console.log('share click ',Share.Social.INSTAGRAM,this.state.shareId)
+    Share.shareSingle(shareOptions2);
+  }
+  insta = () => {
+    this.setState({ shareModal: false,});
+    let shareOptions2 = {
+      url: 'https://pagevio.com/sample-page/'+this.state.shareId,
+      social: Share.Social.INSTAGRAM,
+    };
+    // console.log('share click ',Share.Social.INSTAGRAM,this.state.shareId)
+    Share.shareSingle(shareOptions2);
+  }
+  pinterest = () => {
+    this.setState({ shareModal: false});
+    let shareOptions2 = {
+      url: 'https://pagevio.com/sample-page/'+this.state.shareId,
+      social: Share.Social.PINTEREST,
+    };
+    // console.log('share click ',Share.Social.INSTAGRAM,this.state.shareId)
+    Share.shareSingle(shareOptions2);
+  }
+  twitter = () => {
+    this.setState({ shareModal: false});
+    let shareOptions2 = {
+      url: 'https://pagevio.com/sample-page/'+this.state.shareId,
+      social: Share.Social.TWITTER,
+    };
+    // console.log('share click ',Share.Social.INSTAGRAM,this.state.shareId)
+    Share.shareSingle(shareOptions2);
+  }
+  tumblr = () => {
+    this.setState({ shareModal: false});
+    let shareOptions2 = {
+      url: 'https://pagevio.com/sample-page/'+this.state.shareId,
+      social: Share.Social.TUMBLR,
+    };
+    // console.log('share click ',Share.Social.INSTAGRAM,this.state.shareId)
+    Share.shareSingle(shareOptions2);
+  }
+  // onPressHandler(id) {
+  //   // let selected;
+  //    let list=[...this.state.feeding];
+  //    for(let data of list){
+  //      if(data.Post_page_id==id){
+
+  //        data.like=(data.like==null)?true:!data.like;
+
+  //        (data.like)?this.state.selectedItemLike.push(data):this.state.selectedItemLike.pop(data);
+  //        console.log('selected item array ',this.state.selectedItemLike)
+  //         console.log("data.selected"+data.like,'id',data.Post_page_id);
+  //         console.log('post id in pagefeed is ',data.Post_Page_Id);
+
+  //       //   this.state.selectedItem.length!=0? this.setState({showlikeImg:true}):this.setState({showlikeImg:false});
+
+  //        // console.log("id"+id);
+  //       //  (data.selected)?this.state.selectedItemArray.push(id):this.state.selectedItemArray.pop(id);
+  //        //console.log("array"+selectedItemArray);
+  //        break;
+  //      }
+  //    }
+  //   // console.log("array"+this.state.selectedItemArray);
+  //   // MultiselectItems.push(selectedItemArray);
+  //    this.setState({feeding:list});
+  //  }
+  fullcard1({ item }) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#fff', margin: '3%' }}>
+        <TouchableOpacity onPress={this.imgPress}>
+          <View style={{ flexDirection: 'column', margin: '3%', justifyContent: 'space-between' }}>
+            <Image style={{ width: 50, height: 50, borderRadius: 50 / 2 }} source={item.img} />
+            <Text>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>)
+  }
+  // renderImage(){
+  //   // const like=require('../assets/img/like.png');
+  //   // const unlike=require('../assets/img/unlike.png');
+  // var imgSource = this.state.showlikeImg? like:unlike ;
+  //   return (
+  //     <Image
+  //       style={ homeStyles.optionsImage }
+  //       source={ imgSource }
+  //     />
+  //   );
+  // }
+
+  exploredata = async () =>{
+    this.setState({ loading: true })
+    var json = JSON.stringify({
+      // 'UserId': userid,
+      "PagingCount": this.state.pagingCount
+    });
+    console.log('pagefeed passing data value is ', json)
+    fetch("http://162.250.120.20:444/Login/PageFeed",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // responseJson = responseJson.map(item => {
+        //   item.isSelect = false,
+        //     item.readmore = false;
+        //   return item;
+        // });
+        // this.pageCountVal+=1;
+        //After the response increasing the offset for the next API call.
+        this.setState({
+          feeding: this.state.feeding.concat(responseJson),
+          //adding the new data with old one available in Data Source of the List
+          loading: false,
+          getpagingCount:responseJson[0].Pagingcounts
+          //updating the loading state to false
+        });
+        console.warn(responseJson)
+        // alert(this.pageCountVal)  
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
+  _renderTruncatedFooter = (handlePress,index,item) => {
+    return (
+      <Text key={index} style={{ color: '#27A291',
+      //  marginTop: -18, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={handlePress}>
+      marginTop: -16, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={()=>this.pressIcon(item)}>
+        Read more
+          </Text>
+    );
+  }
+  selectItem = data => {
+    let { feeding } = this.state;
+    var newData = feeding.map(el => {
+      if (el.Post_Page_Id == data.Post_Page_Id)
+
+        return Object.assign({}, el, { isSelect: true })
+      return el
+    });
+    this.likeAdd(this.state.getuserid, data.Post_Page_Id)
+    this.setState({ feeding: newData });
+    // data.isSelect = !data.isSelect;
+    // this.setState({isSelect:data.isSelect})
+
+    console.log('kdfsklk like select ', data.isSelect)
+  }
+  likeAdd(userid, pageid) {
+    this.setState({ loading: true })
+    var json = JSON.stringify({ "UserID": userid, "PageID": pageid });
+    fetch("http://162.250.120.20:444/Login/LikesAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({ loading: false });
+        console.warn(responseJson);
+        console.log('like service called');
+        { this.exploredata() }
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
+  _renderRevealedFooter = (handlePress) => {
+    console.log('handle press is', handlePress)
+    return (
+      <Text style={{ color: '#27A291', marginTop: -17, alignSelf: "flex-end", backgroundColor: '#F9F9F9', textDecorationLine: 'underline', }} onPress={handlePress}>
+        Read less
+      </Text>
+    );
+  }
+
+  onClose() {
+    //called on modal closed
+    console.log('Modal just closed');
+  }
+
+  onOpen() {
+    this.refs.modal4.open()
+    //called on modal opened
+    console.log('Modal just opened');
+  }
+  changeLayout = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    this.setState({ expanded: !this.state.expanded });
+    { this.collData(this.state.getuserid) };
+
+  }
+  secData(userid,collid) {
+    this.setState({loading:true})
+    var json = JSON.stringify({
+        "CollectionID":collid,
+        "User_ID":userid,
+        "SortBy":"DESC"
+    });
+    fetch("http://162.250.120.20:444/Login/Section",
+        {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'content-type': 'application/json'
+            },
+            body: json
+        }
+    )
+    .then((response) => response.json())
+    .then((responseJson) => {
+        //alert(responseText);
+        const filteredList = responseJson.filter((item) => item.SectionID !== 0);
+        this.setState({ section: filteredList, loading: false,secCollid:responseJson[0].CollectionsID })
+                
+        console.warn(responseJson)
+        console.warn("section")
+        //alert(this.state.data.status)  
+    })
+    .catch((error) => {
+        console.warn(error);
+    });
+}
+collData(userid,colid,secid) {
+this.setState({loading:true})
+var json = JSON.stringify({
+    'UserID': userid,
+    "CollectionID":colid,
+    "SectionID":""
+});
+fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
+    {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'content-type': 'application/json'
+        },
+        body: json
+    }
+)
+.then((response) => response.json())
+.then((responseJson) => {
+    //alert(responseText);
+    this.setState({ collection: responseJson, loading: false })
+    console.warn(responseJson)
+    console.warn("collection")
+    //alert(this.state.data.status)  
+})
+.catch((error) => {
+    console.warn(error);
+});
+}
+  onClosingState(state) {
+    //called on modal close/open of the swipe to close change
+    console.log('Open/Close of the SwipeToClose just changed');
+  }
+  closeModal = () => {
+    this.setState({ isModalVisible: false });
+  }
+
+  pressIcon = (item) => {
+    console.log('feeeddd data is ', item)
+    let { feeding } = this.state;
+    console.log('items are', item)
+    feeding = feeding.map(e => {
+      if (item.TypeID === e.TypeID) {
+        // item.like = !e.like;
+
+        if (item.TypeID == 4) {
+          // AsyncStorage.setItem('pagefeedItem',JSON.stringify(item));
+          AsyncStorage.setItem('typeid', item.TypeID);
+          AsyncStorage.setItem('postid', item.Post_Page_Id);
+          AsyncStorage.setItem('pagefeed_userid',item.UserID);
+          console.log('newsfeed post id is', item.Post_Page_Id,item.TypeID);
+          return this.props.navigation.navigate('readingBook');
+        } else if (item.TypeID == 1) {
+          AsyncStorage.setItem('typeid', item.TypeID);
+          AsyncStorage.setItem('postid', item.Post_Page_Id);
+  
+          console.log('newsfeed post id is', item.Post_Page_Id,item.TypeID);
+          return this.props.navigation.navigate('viewBook');
+        } else if (item.TypeID == 2) {
+          AsyncStorage.setItem('typeid', item.TypeID);
+          AsyncStorage.setItem('postid', item.Post_Page_Id);
+  
+          console.log('newsfeed post id is', item.Post_Page_Id,item.TypeID);
+          return this.props.navigation.navigate('periodiViewBook');
+        } else if (item.TypeID == 3) {
+          AsyncStorage.setItem('typeid', item.TypeID);
+          AsyncStorage.setItem('postid', item.Post_Page_Id);
+  
+          console.log('newsfeed post id is', item.Post_Page_Id,item.TypeID);
+          return this.props.navigation.navigate('seriesViewBook');
+        }
+      } else {
+        return e;
+      }
+    });
+  }
+  likeClick(id) {
+    // let selected;
+    let feeding = [...this.state.feeding];
+    for (let data of feeding) {
+      if (data.Post_Page_Id == id) {
+
+        data.isSelect = (data.isSelect == null) ? true : !data.isSelect;
+        (data.isSelect) ? this.state.selectedItemArray.push(data) : this.state.selectedItemArray.pop(data);
+        console.log('sel item array ', this.state.selectedItemArray);
+        this.setState({ loading: true })
+        var json = JSON.stringify({ "UserID": this.state.getuserid, "PageID": pageid });
+        fetch("http://162.250.120.20:444/Login/LikesAdd",
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'content-type': 'application/json'
+            },
+            body: json
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            this.setState({ loading: false });
+            console.warn(responseJson);
+            // console.log('like service called');
+            // { this.exploredata() }
+          })
+          .catch((error) => {
+            console.warn(error);
+          });
+        break;
+      }
+    }
+    this.setState({ feeding });
+  }
+
+  closeDrawer = () => {
+    this._drawer._root.close();
+  }
+  openDrawer = () => {
+    alert('open');
+    this._drawer._root.open();
+  }
+  toggleTab1() {
+
+    this.setState({
+      tab1: true,
+      tab2: false,
+      tab3: false,
+      tab4: false
+    });
+    {this.props.nav==1?this.props.navigation.navigate('newsfeed'):this.props.navigation.navigate('mainpage')}
+  }
+  toggleTab2() {
+    this.setState({
+      tab1: false,
+      tab2: true,
+      tab3: false,
+      tab4: false
+    });
+    this.props.navigation.navigate('collection')
+
+  }
+  toggleTab3() {
+    this.setState({
+      tab1: false,
+      tab2: false,
+      tab3: true,
+      tab4: false
+    });
+    this.props.navigation.navigate('search')
+
+  }
+  toggleTab4() {
+    this.setState({
+      tab1: false,
+      tab2: false,
+      tab3: false,
+      tab4: true
+    });
+    // this.props.navigation.navigate('menu')
+    this.props.navigation.openDrawer()
+  }
+  componentWillUnmount() {
+    
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+  handleBackButtonClick() {
+    this.setState({ loading: false })
+    // BackHandler.exitApp();
+    // this.props.changeNavRec();
+    // this.props.navigation.goBack();
+    this.props.navigation.navigate('mainpage')
+    return true;
+  }
+  exploredataPic(userid){
+    // this.setState({loading:true})
+    var json=JSON.stringify({
+      'userid':userid
+      });
+      console.log('profile',json)
+      fetch("http://162.250.120.20:444/Login/ProfileUpdateGet",
+        {
+            method: 'POST',
+            headers:  {
+                'Accept': 'application/json',
+                'content-type': 'application/json'
+            },
+            body: json
+        }
+    )
+        .then((response) => response.json())
+        .then((responseJson) => {
+            //alert(responseText);
+            this.setState({loading:false})
+            console.warn(responseJson)
+            for (let i = 0; i <responseJson.length; i++) {
+              // alert(this.state.bookdetail[0].Image)
+               this.setState({ 
+                 avatar:responseJson[i].avatar,
+                 username:responseJson[i].username
+              
+                })
+              }
+              AsyncStorage.setItem('profile_img',this.state.avatar);
+              AsyncStorage.setItem('user_name',this.state.username);
+            //alert(this.state.data.status)  
+        })
+        .catch((error) => {
+            console.warn(error);
+        });
+  }
+  componentDidMount() {
+    AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
+    AsyncStorage.getItem('typeid').then((val) => this.setState({ gettypeid: val })).done();
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    // this.getData();
+    this.CheckConnectivity();
+    // { this.exploredata(this.state.getuserid) }
+  };
+  CheckConnectivity() {
+    NetInfo.fetch().then(state => {
+
+      console.log("Connection type cheking", state.type);
+      console.log("Is connected cheking?", state.isConnected);
+
+      if (state.isConnected == true) {
+        { this.getData(); }
+      } else {
+        alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
+      }
+
+    });
+  }
+  getData() {
+    setTimeout(() => {
+      console.log('pagefeed user id is ', this.state.getuserid);
+      { this.exploredata() }
+      { this.exploredataPic(this.state.getuserid) }
+    }, 5)
+  }
+  toast = () => {
+    this.setState({ toastvisible: true })
+
+  }
+  readlater = () => {
+    this.setState({
+      collectionModal: false,
+      readlaterPopup: true
+    });
+
+    setTimeout(() => {
+      // this.props.changeRemove()
+      this.setState({
+        readlaterPopup: false,
+        exists: false
+      });
+     
+      //   this.props.changeRemove();
+    }, 5000);
+    // this.props.navigation.navigate('readlater');
+  }
+  readlaterClick(){
+    let list = [this.state.currentItem];
+    for (let item of list) {
+      AsyncStorage.setItem('typeid', item.TypeID);
+      AsyncStorage.setItem('postid', item.Post_Page_Id);
+      this.readlaterAdd(this.state.getuserid, item.Post_Page_Id, item.TypeID)
+
+    }
+  }
+  readlaterAdd(userid, pageid, typeid) {
+    this.setState({ loading: true })
+    var json = JSON.stringify({
+      'UserID': userid,
+      "Post_PageID": pageid,
+      "Type_ID": typeid
+    });
+    console.log('json newsfeed ', json)
+    fetch("http://162.250.120.20:444/Login/ReadLaterAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        //alert(responseText);
+        if (responseJson[0].Message == "Already Exist") {
+          this.setState({ exists: true })
+        }
+        this.setState({ loading: false })
+        // this.readlater();
+        this.setState({ collectionModal: false,expanded:false,sectionExpand:false });
+
+      this.readlater();
+      // SnackBar.show({
+      //     title: !this.state.exists?"Added to ReadLater":"Already Added in ReadLater",
+      //     duration:SnackBar.LENGTH_LONG,
+      //     backgroundColor: '#27A291',
+      //     action: {
+      //       title: 'Undo',
+      //     //   onPress: () => SnackBar.show({ title: 'Thank you!' }),
+      //       color: '#fff',
+      //     },
+      //   })
+      //      setTimeout(() => {
+      //         SnackBar.dismiss()
+      //     // this.props.changeRemove()
+      //     this.setState({
+      //         // readlaterPopup: false,
+      //         exists:false
+      //     });
+         
+      //     //   this.props.changeRemove();
+      // }, 5000);
+        console.warn(responseJson)
+        console.warn("readlateradd")
+        //alert(this.state.data.status)  
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
+  reportClk = () => {
+    this.setState({ newModalVisible: false })
+    this.props.navigation.navigate('report')
+  }
+  // collectionBook=()=>{
+  //   this.setState({collectionModal:false})
+  //   this.props.navigation.navigate('viewBook')
+  //   }
+  collectionAdd(colid, secid, postid, pageid, userid, type, status) {
+    var json = JSON.stringify(
+      {
+        "collectionid": colid,
+        "sectionid": secid,
+        "postid": postid,
+        "pageid": pageid,
+        "userid": userid,
+        "Type": type,
+        "Status": status
+      }
+
+    )
+    console.log('json post newsfeed ', json)
+
+    fetch("http://162.250.120.20:444/Login/CollectionPostAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        //alert(responseText);
+        this.setState({ loading: false })
+        console.warn(responseJson)
+        console.warn("readlateradd")
+        //alert(this.state.data.status)  
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
+  collectionBook = (value, colid) => {
+    this.setState({ collectionModal: false,expanded:false,sectionExpand:false });
+    // this.props.navigation.navigate('viewBook');
+    let gotoDescPage = this.state.curFuncName;
+    let list = [this.state.currentItem];
+    for (let item of list) {
+      AsyncStorage.setItem('typeid', item.TypeID);
+      AsyncStorage.setItem('postid', item.Post_Page_Id);
+      console.log('type id postid ', item.TypeID, item.Post_Page_Id);
+      this.props.collSecPopup();
+         console.log('collSeccollSeccollSeccollSec',this.props.collSec)
+         AsyncStorage.setItem('popup_name',JSON.stringify(value));
+         AsyncStorage.setItem('colSec',"Collection");
+         AsyncStorage.setItem('colId',JSON.stringify(colid));
+      if (item.TypeID == 4) {
+
+        this.collectionAdd(colid, "", "", item.Post_Page_Id, this.state.getuserid, item.TypeID, "")
+        // this.props.collSecPopup();
+        return this.props.navigation.navigate('readingBook');
+        // return this.pressIcon();
+      } else if (item.TypeID == 1) {
+        this.collectionAdd(colid, "", item.Post_Page_Id, "", this.state.getuserid, item.TypeID, "")
+        return this.props.navigation.navigate('viewBook');
+      } else if (item.TypeID == 2) {
+        this.collectionAdd(colid, "", item.Post_Page_Id, "", this.state.getuserid, item.TypeID, "")
+        return this.props.navigation.navigate('periodiViewBook');
+      } else if (item.TypeID == 3) {
+        this.collectionAdd(colid, "", item.Post_Page_Id, "", this.state.getuserid, item.TypeID, "")
+        return this.props.navigation.navigate('seriesViewBook');
+      }
+
+    };
+
+  }
+ 
+    sectionClick = (collid) => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        this.setState({ sectionExpand: !this.state.sectionExpand });
+        this.secData(this.state.getuserid,collid)
+        console.log('section data collection ',this.state.section);
+    }
+    secBook=(value,colid,secid,item)=>{
+      this.setState({ collectionModal: false,expanded:false,sectionExpand:false });
+      // this.props.navigation.navigate('viewBook');
+      let gotoDescPage = this.state.curFuncName;
+      let list = [this.state.currentItem];
+      for (let item of list) {
+        AsyncStorage.setItem('typeid', item.TypeID);
+        AsyncStorage.setItem('postid', item.Post_Page_Id);
+        console.log('type id postid ', item.TypeID, item.Post_Page_Id);
+        this.props.collSecPopup();
+         AsyncStorage.setItem('popup_name',JSON.stringify(value));
+         AsyncStorage.setItem('colSec',"Section");
+         AsyncStorage.setItem('colId',JSON.stringify(colid));
+                   AsyncStorage.setItem('SecId',JSON.stringify(secid));
+        if (item.TypeID == 4) {
+  
+          this.collectionAdd(colid, secid, "", item.Post_Page_Id, this.state.getuserid, item.TypeID, "")
+          // this.props.collSecPopup();
+          return this.props.navigation.navigate('readingBook');
+          // return this.pressIcon();
+        } else if (item.TypeID == 1) {
+          this.collectionAdd(colid, secid, item.Post_Page_Id, "", this.state.getuserid, item.TypeID, "")
+          return this.props.navigation.navigate('viewBook');
+        } else if (item.TypeID == 2) {
+          this.collectionAdd(colid,secid, item.Post_Page_Id, "", this.state.getuserid, item.TypeID, "")
+          return this.props.navigation.navigate('periodiViewBook');
+        } else if (item.TypeID == 3) {
+          this.collectionAdd(colid,secid, item.Post_Page_Id, "", this.state.getuserid, item.TypeID, "")
+          return this.props.navigation.navigate('seriesViewBook');
+        }
+  
+      };  
+        }
+  _onMomentumScrollBegin = () => this.setState({ onEndReachedCalledDuringMomentum: false });
+  // Load more data function
+  _loadMoreData = () => {
+    if (!this.state.onEndReachedCalledDuringMomentum) {
+      this.setState({ onEndReachedCalledDuringMomentum: true }, () => {
+
+        setTimeout(() => {
+          if (this.state.lastLoadCount >= 4 && this.state.notFinalLoad) {
+            this.pageCountVal += 1;
+            this.setState({
+
+              // page: this.state.page + 1,
+            }, () => {
+              // Then we fetch more data;
+              this.loadMoreData1();
+            });
+          };
+        }, 1500);
+      });
+    };
+  };
+ 
+  descriptionList({ item }) {
+    return (
+      <View>
+                  <ReadMore
+                     numberOfLines={3}
+                     renderTruncatedFooter={this._renderTruncatedFooter}
+                     renderRevealedFooter={this._renderRevealedFooter}
+                     onReady={this._handleTextReady}>
+
+        {item.Contant == null ? <Image source={{ uri: item.Image }}
+        /> : null}
+        {item.Image == null ?
+         
+            <Text style={styles.description}>
+              {item.Contant}
+            </Text>
+          : null}
+          </ReadMore>
+
+      </View>
+    )
+  }
+  goToTop = () => {
+    this.scroll.scrollTo({x: 0, y: 0, animated: true});
+ }
+  sharepress=(id)=>{
+    this.setState({ shareId:id,shareModal: !this.state.shareModal,})
+  }
+  goToAuthorProfile(id){
+    AsyncStorage.setItem('profile_userid',id);
+    AsyncStorage.setItem('pagefeed_userid',id);
+    console.log(' profile userid ',id)
+    this.props.navigation.navigate('profileAbout')
+  
+  }
+  fullcard(item) {
+    // const like = require('../assets/img/like.png');
+    // const unlike = require('../assets/img/unlike.png');
+    // var imgSource = this.state.showlikeImg ? like : unlike;
+    // var imgSource = this.state.showlikeImg? require('../assets/img/like.png') : require('../assets/img/unlike.png');
+    return (
+      <View style={{ width: width, flex: 1, backgroundColor: '#fff', }}>
+
+        <View style={{ flexDirection: 'row', margin: '3%', justifyContent: 'space-around' }}>
+          <TouchableOpacity onPress={() =>this.goToAuthorProfile(item.UserID) }>
+            <Image style={{ width: 50, height: 50, borderRadius: 50 / 2,resizeMode:'cover'}} resizeMode="cover"
+              // source={require('../assets/img/user.png')}
+              source={{ uri: item.User_Images != "" ? item.User_Images : null }}
+            />
+          </TouchableOpacity>
+          {/* <Avatar
+            rounded
+            size='medium'
+            overlayContainerStyle={{ borderColor: '#24D4BC', borderWidth: 1 }}
+            // style={{ borderWidth: 2,  borderTopLeftRadius: 1, borderStyle:'solid' }}
+            icon={{ name: 'user', type: 'font-awesome' }}
+            onPress={() => console.log("Works!")}
+            activeOpacity={0.7}
+          // containerStyle={{marginLeft:'1%'}}
+          /> */}
+          <View style={{ flexDirection: 'column', width: width / 2 + 70, top: 5 }}>
+            <TouchableOpacity onPress={() =>this.goToAuthorProfile(item.UserID) }>
+            <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold', textAlign: 'left' }}>{item.Username}</Text>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 15, color: '#707070', textAlign: 'left' }}>Published a {item.TypeID == 4 ? "page" : "publication"} {item.Publisheddate}</Text>
+          </View>
+          <TouchableOpacity style={{ padding: '2%' }}
+            // onPress={() => this.refs.modal5.open()}
+            onPress={() => this.toggle_newModal()}
+          >
+            <Image source={require('../assets/img/3dots_gray.png')} />
+          </TouchableOpacity>
+        </View>
+        <Text numberOfLines={2}
+          style={{ fontSize: 20, color: 'black', fontWeight: 'bold', alignSelf: 'flex-start', marginLeft: '8%', marginRight: '8%', marginTop: '2%' }}>{item.Title}</Text>
+        <TouchableOpacity
+          onPress={() => this.pressIcon(item)}
+        //  onPress={()=>this.props.navigate.navigate('readingBook')}
+        >
+          {/* <ImageBackground
+            style={{ width: width, height: 500, alignSelf: 'center', marginTop: '2%',}}
+            source={{ uri: item.Images != "" ? item.Images : null }}
+            onPress={() => console.log("Works!")}
+            activeOpacity={0.7}
+          /> */}
+          <ImageBackground
+            style={{width:width,height:550,alignSelf: 'center',marginTop:'2%',resizeMode:'cover' }}
+            source={{uri:item.Images != "" ? item.Images : null }}
+            onPress={() => console.log("Works!")}
+            activeOpacity={0.7}
+          />
+        </TouchableOpacity>
+
+        <View style={{ backgroundColor: '#F9F9F9', paddingLeft: '5%', paddingRight: '5%', paddingTop: '2%', paddingBottom: '2%' }}>
+          <ReadMore
+                  numberOfLines={3}
+                  renderTruncatedFooter={(handlePress1,index)=>this._renderTruncatedFooter(handlePress1,index,item)}
+                  renderRevealedFooter={this._renderRevealedFooter}
+                  onReady={this._handleTextReady}>
+                  <Text style={styles.description}>
+                  {item.DescriptionContent}
+                        </Text>
+                </ReadMore>
+          {/* <ViewMoreText
+      numberOfLines={3}
+      renderViewMore={this.renderViewMore}
+      renderViewLess={this.renderViewLess}
+      textStyle={{textAlign: 'center'}}
+      >
+           <HTMLView
+        value={item.Description}/>
+     </ViewMoreText> */}
+          {/* <FlatList
+            data={item.Data}
+            extraData={this.state}
+            renderItem={(item) => this.descriptionList(item)}
+            keyExtractor={(item, index) => index.toString()} /> */}
+          {/* <HTMLView
+        value={item.Description}/> */}
+          {/* <ReadMore
+            numberOfLines={3}
+            renderTruncatedFooter={this._renderTruncatedFooter}
+            renderRevealedFooter={this._renderRevealedFooter}
+            onReady={this._handleTextReady}>
+      <Text> */}
+          {/* <HTMLView
+        value={item.Description}></HTMLView> */}
+
+          {/* <Text style={styles.description}>
+              Lorem ipsum dolor sit amet, in quo dolorum ponderum, nam veri molestie constituto eu. Eum enim tantas sadipscing ne, ut omnes malorum nostrum cum. Errem populo qui ne, ea ipsum antiopam definitionem eos.
+          </Text> */}
+          {/* </ReadMore> */}
+          {/* <Text style={{fontSize:17,marginLeft:'5%',marginRight:'5%',padding:'2%'}}
+          numberOfLines={3}>
+          The  cost to orchestrate an act of terrorism compared to the potential costs as a result of a successful terror attack is insignificant in comparison. The terrorist attacks in the United States on 11 September, 2001 (“9/11”) cost the terrorists about US$500,000 to stage, claimed 3,000 lives and the total losses of life and property cost insurance companies approximately US$40 billion. This direct cost pales in comparison to the indirect costs. Tip #1: Call those women out! Shopping centres and restaurants across the country were closed for at least 24 hours, high-risk office buildings (such as the former Sears Tower in Chicago) were evacuated; planes were grounded; and the stock market ceased trading for four consecutive days. The effects were not only felt in New York.
+          </Text> */}
+          {/* <Text style={{color:'#27A291',textDecorationLine: 'underline',alignSelf:'flex-end',marginRight:'5%',marginTop:'-7%',backgroundColor:'#F9F9F9'}}>Read more</Text> */}
+        </View>
+
+        {/* <Divider style={{ backgroundColor: 'gray', borderWidth: 0.7, borderColor: 'gray' }} /> */}
+        <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', }}>
+          <TouchableOpacity
+            style={{ padding: '3%' }}
+            onPress={() => {
+              this.likeClick(item.Post_Page_Id)
+              // this.selectItem(item)
+              console.log('dskaldsjksdfjl like ', item.Post_Page_Id, 'item.abc ', item.isSelect)
+            }}
+          // onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
+          >
+            {/* {this.renderImage} */}
+            <View>
+              {item.isSelect == true ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
+              <Text style={{ color: item.isSelect ? '#27A291' : '#707070', fontSize: 10,textAlign:'center' }}>{item.likescount}</Text>
+            </View>
+            {/* <Image
+              source={imgSource}
+            /> */}
+
+          </TouchableOpacity>
+          {/* <Image
+            onPress={()=>this.setState({showlikeImg:!this.state.showlikeImg})}  
+           source={imgSource}/> */}
+          <TouchableOpacity
+            style={{ padding: '3%' }}
+            onPress={() => {
+              // this.props.navigation.navigate('comments')
+              AsyncStorage.setItem('postid', item.Post_Page_Id);
+              console.log('comments page id is ', item.Post_Page_Id)
+            }}
+          >
+            <Image
+
+              source={require('../assets/img/comment1.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ padding: '3%' }}
+            // onPress={() => this.refs.modal4.open()} 
+            onPress={() => this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon" })}
+          // onPress={() =>this.props.navigation.navigate('createCollection')} 
+          >
+            <Image source={require('../assets/img/plus.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ padding: '3%' }} onPress={() =>
+              this.sharepress(item.Post_Page_Id)
+              // this.refs.modal6.open()
+            } >
+            <Image source={require('../assets/img/share.png')} />
+          </TouchableOpacity>
+
+        </View>
+        <Divider style={{ borderColor: '#707070' }} />
+
+      </View>);
+  }
+  // filter_page = () => {
+  //   // let data = [ { id: 1, name: 'Mike', city: 'philps', state:'New York'}, { id: 2, name: 'Steve', city: 'Square', state: 'Chicago'}, { id: 3, name: 'Jhon', city: 'market', state: 'New York'}, { id: 4, name: 'philps', city: 'booket', state: 'Texas'}, { id: 5, name: 'smith', city: 'brookfield', state: 'Florida'}, { id: 6, name: 'Broom', city: 'old street', state: 'Florida'}, ]
+  //   data_fav = this.state.articles.filter(function (item) {
+  //     return item.like == true;
+  //   }).map(function ({id,img,title,like,date,htmlContent} ) {
+  //     return { id,img,title,like,date,htmlContent};
+  //   });
+  //   console.log(data_fav);
+  //   console.log("state articles", this.state.articles);
+  // }
+  onEndReached = ({ distanceFromEnd }) => {
+    this.setState({pagingCount:this.state.pagingCount+1,loading:true})
+    console.log('calleddd ',this.state.pagingCount)
+    if(!this.onEndReachedCalledDuringMomentum){
+        {this.exploredata()}
+        this.onEndReachedCalledDuringMomentum = true;
+    }
+}
+  handleMore=()=>{
+    console.log('onend reached called')
+    this.setState({pagingCount:this.state.pagingCount+1})
+    if(this.state.pagingCount<this.state.getpagingCount){
+    this.exploredata();
+    }
+  //   if(!this.onEndReachedCalledDuringMomentum){
+  //     {this.exploredata()}
+  //     this.onEndReachedCalledDuringMomentum = true;
+  // }
+  }
+  handleMore1=()=>{
+    console.log('onend reached called,1' )
+    // this.setState({pagingCount:this.state.pagingCount+1})
+    // // this.exploredata();
+    // if(!this.onEndReachedCalledDuringMomentum){
+    //   {this.exploredata()}
+    //   this.onEndReachedCalledDuringMomentum = true;
+  // }
+  }
+
+  render() {
+    const { list } = this.state;
+    return (
+      <SafeAreaView style={{backgroundColor:'#fff',flex:1}}>
+
+      <View style={styles.header}>
+        <LinearGradient
+          colors={['#fff', '#fff']} >
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('mainpage')}>
+            <Text style={styles.inactiveText}
+            >Recommendations</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+        <LinearGradient style={ styles.active }
+          colors={ ['#24D4BC', '#27A291']} >
+          <TouchableOpacity style={styles.active }>
+            <Text style={ styles.activetext}>PageFeed</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </View>        
+         <ScrollView
+   showsVerticalScrollIndicator={false}
+//    style={{flex:3}}
+style={{marginBottom:'10%'}}
+
+     ref={(c) => {this.scroll = c}}>
+               <FlatList
+        showsVerticalScrollIndicator={false}
+            data={this.state.feeding}
+            renderItem={({ item }) =>
+            this.fullcard(item)
+        }    
+            keyExtractor={(item,index)=>index.toString()}
+            extraData={this.state}
+            // onEndReached={this.handleMore}
+
+            // // onEndReached={this.onEndReached.bind(this)}
+            // onEndReachedThreshold={0.9}
+            // onMomentumScrollEnd={()=>{ this.onEndReachedCalledDuringMomentum = true; this.handleMore()}}
+            // onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
+        />
+          <TouchableOpacity style={{margin:'5%',padding:'2%',alignSelf:'center'}} onPress={()=>this.goToTop()} 
+      >
+        <Image source={require('../assets/img/plus.png')}/>
+      </TouchableOpacity>
+      
+      <View style={{alignSelf:'center',alignItems:'center',justifyContent:'center',marginBottom:'5%'}}>
+      <LinearGradient style={{width:width/3,borderRadius:5,height:20,alignItems:'center',justifyContent:'center'}}
+                colors={['#24D4BC', '#27A291']} >
+                <TouchableOpacity onPress={()=>this.handleMore()}>
+              <Text style={{fontSize:15,color:'#fff'}}>See more Feeds</Text>
+              </TouchableOpacity>
+              </LinearGradient>
+      </View>
+    
+      </ScrollView>
+     
+        <Modal1 isVisible={this.state.newModalVisible}
+          onBackdropPress={() => this.setState({ newModalVisible: false })}>
+          <View style={{ backgroundColor: '#fff', width: width / 1.2, height: height / 18, alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity onPress={() => this.reportClk()} >
+
+              <Text style={styles.modaltext}>Report</Text>
+            </TouchableOpacity>
+            <Toast ref="toast"
+
+              style={{ backgroundColor: '#707070', fontSize: 18, width: width - 100, alignItems: 'center', borderRadius: 15 }}
+            />
+          </View>
+        </Modal1>
+        <Modal1 isVisible={this.state.collectionModal}
+  onBackdropPress={() => this.setState({ collectionModal: false,expanded:false,sectionExpand:false})}>
+            <View 
+            style={{backgroundColor:'#fff', alignItems: 'center',
+            justifyContent:'center',
+            alignSelf:'center',
+            flex: !this.state.expanded ? 0.3 : 0.4,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            borderBottomLeftRadius: 5,
+            borderBottomEndRadius: 5,
+            width: 300,}}
+            >
+              <TouchableOpacity
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center' }}
+                onPress={() => {this.props.navigation.navigate('createCollection')
+                this.setState({collectionModal:false})}}>
+                <View style={{
+                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                  justifyContent: 'center', alignSelf: 'center'
+                }}>
+                  <Image source={require('../assets/img/plus_green.png')} />
+                  <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
+  
+                </View>
+              </TouchableOpacity>
+  
+              <Divider style={{ backgroundColor: '#707070', marginTop: '5%',borderWidth:0.3,width: 300 }} />
+              {!this.state.expanded ? (
+                <TouchableOpacity
+                  onPress={this.changeLayout}>
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    padding: '4%',
+                    width:300,
+                    justifyContent: 'space-between',
+                  }}>
+                    <View 
+                    style={{
+                      flexDirection: 'row',
+                     width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                    }}
+                    >
+                      <Image source={require('../assets/img/collection.png')} />
+                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                    </View>
+  
+                    <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                  <View style={{ height: !this.state.expanded ? 50 : 145, }}>
+  
+                    <View style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: '4%',
+                      backgroundColor: '#27A291',
+                      width: 300,
+                      justifyContent: 'space-between',
+                    }}>
+                      <View style={{
+                        flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                      }}>
+                        <Image style={{ backgroundColor: '#fff' }} source={require('../assets/img/collection_green.png')} />
+                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                      </View>
+                      <TouchableOpacity
+                        // style={{ marginLeft: '-15%', }}
+                        onPress={this.changeLayout}>
+                        <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
+                      </TouchableOpacity>
+                    </View>
+                 <ScrollView>
+                     <FlatList
+                          data={this.state.collection}
+                          keyExtractor={(item,index)=>index.toString()}
+                          renderItem={({item})=>(
+                              <View>
+                              <TouchableOpacity
+                                 style={{backgroundColor:'#f0f0f0',width:300,}}
+                                   onPress={() => this.collectionBook(item.title,item.id)}>
+                                   <View style={{
+                                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
+                                   }}>
+                                     <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
+                                     <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
+                         <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
+                                 <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
+                         </TouchableOpacity> 
+                         </View>
+                         </TouchableOpacity>
+                                 <Divider style={{ backgroundColor: '#707070',borderWidth:0.2 }} />
+                      {this.state.sectionExpand && item.id==this.state.secCollid
+                        //  item.id==this.state.secCollid
+                      //    item.SectionStatus==1
+                         ?
+                      <FlatList
+                      data={this.state.section}
+                      keyExtractor={(item,index)=>index.toString()}
+                      renderItem={({item})=>(
+                          <View>
+                           {item.SectionID!=0? 
+                           <View>
+                           <TouchableOpacity
+                             style={{backgroundColor:'#f0f0f0',width:300,}}
+                               onPress={() => this.secBook(item.Title,item.CollectionsID,item.SectionID,item)}
+                               >
+                             <View style={{
+                                 flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
+                               }}>
+                                 <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
+                     {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
+                             <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
+                     </TouchableOpacity>  */}
+                     </View>
+                     </TouchableOpacity>
+                             <Divider style={{ backgroundColor: '#707070',borderWidth:0.2 }} />
+                             </View>
+                             :null}
+                             </View> )}/>:null}
+                              
+                                 {/* <TouchableOpacity
+                                 style={{backgroundColor:'#f0f0f0',width:300,}}
+                                   onPress={() => this.collectionBook("Cats in the Wild")}>
+                                   <View style={{
+                                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
+                                   }}>
+                                     <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 250 }}>Cats in the Wild</Text>
+               
+                                     <Image style={{ alignSelf: 'center', marginLeft: '-5%' }} source={require('../assets/img/not.png')} />
+                                   </View>
+                                 </TouchableOpacity>
+               
+                                 <Divider style={{ backgroundColor: '#707070',borderWidth:0.3 }} /> */}
+               
+                       </View>
+                          )}/>
+                 </ScrollView>
+                  </View>
+                )}
+  
+              <TouchableOpacity
+                onPress={() => this.readlaterClick()}>
+  
+                <View style={{
+                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                  justifyContent: 'center', alignSelf: 'center'
+                }}>
+                  <Image source={require('../assets/img/readlater2.png')} />
+                  <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
+                  <Divider style={{ backgroundColor: '#707070' }} />
+  
+                </View>
+              </TouchableOpacity>
+  
+            </View>
+          </Modal1>
+        <Modal1 isVisible={this.state.loading}
+
+        // onBackdropPress={() => this.setState({ loading: true })}
+        >
+          <Image source={require('../assets/gif/logo.gif')} style={{
+            alignSelf: 'center',
+            width: 140,
+            height: 140
+          }} />
+        </Modal1>
+        <Modal1 isVisible={this.state.shareModal}
+          onBackdropPress={() => this.setState({ shareModal: false })}>
+          <View style={{ flex: 0.5, backgroundColor: '#fff', borderRadius: 30, margin: '8%' }}>
+            {/* <View> */}
+            <Text style={{ fontWeight: 'bold', fontSize: 20, margin: '5%', textAlign: 'center' }}>Share Via</Text>
+            <View style={{ flexDirection: 'column', justifyContent: 'center', alignSelf: 'center' }}>
+              <View style={{ flexDirection: 'row', backgroundColor: '#fff', margin: '3%', alignItems: 'center' }}>
+
+                <TouchableOpacity onPress={()=> this.fb()}>
+                  <View style={{ flexDirection: 'column', margin: '5%', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Image source={require('../assets/img/fb2.png')} />
+                    <Text style={{ margin: '2%' }}>Facebook</Text>
+                  </View>
+
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> this.twitter()
+                }>
+                  <View style={{ flexDirection: 'column', margin: '5%', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Image source={require('../assets/img/twitter.png')} />
+                    <Text style={{ margin: '2%' }}>Twitter</Text>
+                  </View>
+
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> this.insta()}>
+                  <View style={{ flexDirection: 'column', margin: '5%', justifyContent: 'space-between', alignItems: 'center', }}>
+                    <Image source={require('../assets/img/insta.png')} />
+                    <Text style={{ margin: '2%' }}>Instagram</Text>
+                  </View>
+
+                </TouchableOpacity>
+              </View>
+              <View style={{ flexDirection: 'row', backgroundColor: '#fff', margin: '3%', alignItems: 'center' }}>
+
+                <TouchableOpacity onPress={()=> this.pinterest()}>
+                  <View style={{ flexDirection: 'column', margin: '5%', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Image source={require('../assets/img/pinterest.png')} />
+                    <Text style={{ margin: '2%' }}>Pinterest</Text>
+                  </View>
+
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> this.tumblr()}>
+                  <View style={{ flexDirection: 'column', margin: '5%', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Image source={require('../assets/img/tumblr.png')} />
+                    <Text style={{ margin: '2%' }}>Tumblr</Text>
+                  </View>
+
+                </TouchableOpacity>
+
+              </View>
+
+            </View>
+
+            {/* </View> */}
+          </View>
+        </Modal1>
+        {/* <Modal
+          animationType="slide"
+          transparent
+          visible={this.state.readlaterPopup}
+          onRequestClose={() => {
+            console.log('Modal has been closed.');
+          }}> */}
+          {this.state.readlaterPopup?
+          <View style={{
+            left: 0, right: 0, bottom: '6%', position: 'absolute',
+            height: '8%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#27A291',
+          }}>
+            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
+
+            <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
+          </View>
+          :null}
+        {/* </Modal> */}
+            {/* <View style={{bottom:"8%",left:0,right:0, position:'absolute',width:width,height:25,marginBottom:5,marginTop:5,alignItems:'center',justifyContent:'center'}}>
+            
+                <LinearGradient style={{width:width/3,borderRadius:5,height:20,alignItems:'center',justifyContent:'center'}}
+                colors={['#24D4BC', '#27A291']} >
+                <TouchableOpacity onPress={()=>this.handleMore()}>
+              <Text style={{fontSize:15,color:'#fff'}}>See more Feeds</Text>
+              </TouchableOpacity>
+              </LinearGradient>
+            </View> */}
+            <View style={styles.bottomBar}>
+                        <TouchableOpacity
+                            style={styles.tabsss}
+                            onPress={() => this.toggleTab1()}>
+                            <Image source={require('../assets/img/logo.png')} />
+                            {/* <Text>Home</Text> */}
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
+                            <Image source={require('../assets/img/collection.png')} />
+                            {/* <Text>Collection</Text> */}
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
+                            <Image source={require('../assets/img/search.png')} />
+                            {/* <Text>Search</Text> */}
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab4()}>
+                            {/* <Drawer
+        ref={(ref) => { this.drawer = ref; }}
+        content={<SideBar navigator={this.navigator} />}
+        onClose={() => this.closeDrawer()} > */}
+                            {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
+                            <Image style={{ width: 28, height: 28,borderRadius:28/2 }} source={{uri:this.state.avatar}}></Image>
+                            {/* <Text>Menu</Text> */}
+                            {/* </Drawer> */}
+                        </TouchableOpacity>
+                   
+                 </View>
+  </SafeAreaView>     )
+  }
+
+}
+const styles = StyleSheet.create({
+  headline: {
+    fontSize: 18,
+    textAlign: 'center',
+    backgroundColor: 'black',
+    color: 'white'
+},
+tabs: {
+    flexDirection: 'row',
+    padding: '2%',
+    borderBottomColor: 'gray',
+    marginVertical: 5,
+    marginHorizontal: 5 * 2,
+},
+container: {
+    flex: 1,
+    backgroundColor: '#fff',
+
+  },
+  fragment:{
+    backgroundColor: '#fff', 
+    flex: 0.9
+  },
+  header:{
+    flexDirection: 'row', 
+    // flex: 0.5,
+    height:'9%',
+    top:0,
+    left:0,
+    right:0,
+     width: width, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    elevation: 2,
+     backgroundColor: '#fff',
+     borderBottomColor: '#707070'
+  },
+  tabsss: {
+    alignItems: 'center', justifyContent: 'center'
+  },
+  inactiveText: {
+    color:'#707070',
+    padding: '5%',
+    fontSize: 16,
+    // fontFamily:'regular',
+  },
+  active: {
+
+    // backgroundColor: '#27A291',  
+    borderRadius: 10,
+  },
+  activetext: {
+    padding: '5%',
+    fontSize: 16,
+    // fontWeight: 'bold',
+    // fontFamily:'regular',
+    color: 'white'
+  },
+  button: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#808080',
+    padding: 10,
+    margin: 2,
+  },
+  bottomBar:{
+    backgroundColor: '#fff', 
+    alignItems: 'center',
+    bottom:0,
+    left:0,
+    right:0,
+    height:'6%',
+    justifyContent:'space-around',
+    flexDirection:'row',
+    position:'absolute'
+},
+tabsss:{
+    margin:'2%'
+},
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modaltext: {
+    fontSize: 18,
+    alignSelf: 'center',
+    // padding: '4%',
+    color: '#707070'
+  },
+
+  modal5: {
+    // flex:0.2
+    height: height / 18,
+    width: width / 1.3,
+  },
+  headerText: {
+    padding: '5%',
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+})
+function mapStateToProps(state) {
+  return {
+    nav: state.apiReducer.nav,
+    addCol: state.apiReducer.addCol,
+    collSec: state.apiReducer.collSec
+
+  }
+}
+
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
+    changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' }),
+    popupAddCol: () => dispatch({ type: 'ADD_COL' }),
+    collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'})
+
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed);
