@@ -10,7 +10,8 @@ import HTMLView from 'react-native-htmlview';
 import Modal1 from 'react-native-modal';
 import NetInfo from '@react-native-community/netinfo';
 import ModalBox from 'react-native-modalbox';
-
+import {keys,getAsyncStorage} from '../asyncStorage';
+import {setUniqueValue,collectionId} from '../asyncStorage/constants'
 // import { Button } from 'react-native-paper';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -60,7 +61,7 @@ class CollectionDetail extends Component {
         newval: 0,
         modalVisible: false,
         mergeModal:false,
-        collectionId:null,
+        collectionId:'',
         collectionId1:'',
         sectionData:'',
         loading:true,
@@ -82,7 +83,8 @@ class CollectionDetail extends Component {
         currentItem:'',
         PostPageTitle:'',
         readsRemovePopup:false,
-        editPopup:false
+        editPopup:false,
+        getCollectionId:''
   
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -164,7 +166,7 @@ pressIcon = (item) => {
           // item.like = !e.like;
           AsyncStorage.setItem('sectionId', JSON.stringify(item.SectionID));
           AsyncStorage.setItem('newColl_Id', JSON.stringify(item.CollectionsID));
-          if(item.SectionID==0){
+          if(item.SectionID==0){z
           
             if (item.Type == 4) {
               AsyncStorage.setItem('typeid',JSON.stringify(item.Type));
@@ -306,16 +308,15 @@ AsyncStorage.getItem('collectionId').then((value) => this.setState({ collectionI
 AsyncStorage.getItem('coll_name').then((value) => this.setState({ coll_name : value })).done();
 AsyncStorage.getItem('coll_desc').then((value) => this.setState({ coll_desc : value })).done();
 AsyncStorage.getItem('col_id').then((value) => this.setState({ collectionId1 : value })).done();
-console.log('this. collection id in section page ',this.state.collectionId1,this.state.getuserid, value1);
 AsyncStorage.getItem('collSecFilter').then((val) =>val!=null? this.setState({ SortBy: val }):"DESC").done();
 console.log('value1 ',this.state.collectionId1,value1)
-
 
 this.setState({collectionId:value1})
 // this.props.removePopup();
 // this.props.mergePopup();
 this.CheckConnectivity();
 this.focusListener = this.props.navigation.addListener('willFocus', () => {
+
   value1 = this.props.navigation.state.params.collId
   ? this.props.navigation.state.params.collId
   : null;
@@ -391,9 +392,11 @@ secCoverData() {
 getData() {
 setTimeout(() => {
   console.log('col id in collection detail is ',this.state.collectionId)
+
   // alert(this.state.collectionId)
   {this.exploredata_Pic(this.state.getuserid)}
   {this.secCoverData()}
+  // alert("coll id ",this.state.getCollectionId)
   // {this.exploredata(this.state.collectionId)}
   {this.exploredata(value1)}
         }, 3000)
@@ -546,7 +549,7 @@ descPage = (item) => {
   let { readsData } = this.state;
   console.log('items are', item)
   readsData = readsData.map(e => {
-    if (item.Post_pageID === e.Post_pageID) {
+    if (item.PK_ID === e.PK_ID) {
       // item.like = !e.like;
     //   AsyncStorage.setItem('typeid',JSON.stringify(item.Type));
     //   AsyncStorage.setItem('postid',JSON.stringify(item.postpage_id));
@@ -594,7 +597,7 @@ deletefunc(item){
 
   var json = JSON.stringify({
       "Deleted_for":"CollectionPost",
-      "PK_ID":item.Post_pageID,
+      "PK_ID":item.PK_ID,
       "user_ID":this.state.getuserid
   });
   console.log('json in sec read ',this.state.readsDeletedName,json)

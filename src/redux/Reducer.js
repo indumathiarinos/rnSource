@@ -15,7 +15,8 @@ const initialState = {
   checklogin:0,
   pinsRemove:false,
   collSec:false,
-  pinsRemove:false
+  pinsRemove:false,
+  secEditPopup:false
 };
 
 const apiReducer = (state = initialState, action) => {
@@ -50,6 +51,8 @@ const apiReducer = (state = initialState, action) => {
         return {undo:!state.undo}  
         case ACTION_TYPES.PINS_REMOVE:
           return {pinsRemove:!state.pinsRemove} 
+   case ACTION_TYPES.SEC_EDIT_POPUP:
+            return {secEditPopup:!state.secEditPopup} 
   case ACTION_TYPES.ADD_cOL:
           return {addCol:!state.addCol}  
           case ACTION_TYPES.COLLSEC_POPUP:

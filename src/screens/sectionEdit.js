@@ -15,8 +15,8 @@ const height = Dimensions.get('window').height;
 // let sourceCollId,sourceSecId;
 
 class SectionEdit extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
       this.state = {  
         title:'Edit <Collection or Section Title>',
         actions: [
@@ -30,7 +30,7 @@ class SectionEdit extends Component {
         ],
       
         collection: [],
-        loading: false,
+        loading: true,
         getuserid:'',
         getuserid:'',
         next:false,
@@ -51,7 +51,8 @@ class SectionEdit extends Component {
         sectionCheck:false,
         getCollectionId:'',
         sourceCollId:'',
-        sourceSecId:''
+        sourceSecId:'',
+        collSourceName:''
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -172,7 +173,7 @@ getData() {
 
         // { this.exploredata(this.state.getuserid) }
         
-            }, 5)
+            }, 2000)
 }
 
 componentWillUnmount () {
@@ -298,7 +299,7 @@ readlaterPress = () => {
     this.props.navigation.navigate('readlater')
 }
 secData(userid,collid) {
-    this.setState({loading:true})
+    // this.setState({loading:true})
     var json = JSON.stringify({
         "CollectionID":collid,
         "User_ID":userid,
@@ -328,7 +329,7 @@ secData(userid,collid) {
     });
 }
 collData(userid,colid,secid) {
-this.setState({loading:true})
+// this.setState({loading:true})
 var json = JSON.stringify({
     'UserID': userid,
     "CollectionID":colid,
@@ -360,7 +361,7 @@ editClk() {
     this.setState({loading:true})
     var json = JSON.stringify({
         "From_C_ID":this.state.sourceCollId,
-        "To_C_ID":this.state.secCollid,
+        "To_C_ID":this.state.selectedCol,
         "From_S_ID":this.state.sourceSecId,
         "Action_for":"S",
         "userid":this.state.getuserid
@@ -380,7 +381,9 @@ editClk() {
     .then((responseJson) => {
         //alert(responseText);
         this.setState({ loading: false })
-        console.warn(responseJson)
+        console.warn(responseJson);
+        this.props.secEditPopupFunc();
+        AsyncStorage.setItem('secEdit_Name',JSON.stringify(this.state.collSourceName))
         // AsyncStorage.setItem('sectionEditPopup',true)
         this.props.navigation.navigate('sectionDetail')
         //alert(this.state.data.status)  
@@ -390,24 +393,26 @@ editClk() {
     });
     }
     collectionBook=(value,collid)=>{
-        this.setState({collectionModal:false,txtClick:collid,selectedCol:collid,next:true,secCollid:null});
+        this.setState({collectionModal:false,txtClick:collid,selectedCol:collid,next:true,secCollid:null,collSourceName:value});
+        AsyncStorage.setItem('collectionId',JSON.stringify(Number(this.state.selectedCol)));
+        AsyncStorage.setItem('secEdit_Name',JSON.stringify(this.state.collSourceName))
         console.log('collection book value is ',value)
        
         }
-        gotoCreateColl(){
+        gotoCreateColl=()=>{
             AsyncStorage.setItem('EditCreateColl',JSON.stringify(true));
+            AsyncStorage.setItem('secEdit_Name',JSON.stringify(this.state.collSourceName))
             this.props.navigation.navigate('createCollection');
         }
-        gotoCreateSec(){
-            AsyncStorage.setItem('collectionId',JSON.stringify(this.state.secCollid));
+        gotoCreateSec=()=>{
             AsyncStorage.setItem('EditCreateSec',JSON.stringify(true));
-            AsyncStorage.getItem('collectionId',JSON.stringify(Number(this.state.secCollid)));
-
+            AsyncStorage.setItem('collectionId',JSON.stringify(Number(this.state.selectedCol)));
+            // this.props.navigation.navigate('editCreateSection');
             this.props.navigation.navigate('createSection');
             }
-        sectionClick = (collid) => {
+        sectionClick = (collid,value) => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            this.setState({ sectionExpand: !this.state.sectionExpand,next:!this.state.next,
+            this.setState({ sectionExpand: !this.state.sectionExpand,next:!this.state.next,collSourceName:value,
                 selectedCol:collid
             });
             this.secData(this.state.getuserid,collid)
@@ -422,7 +427,6 @@ editClk() {
         
             }
             gotoSectionDetail(){
-                AsyncStorage.setItem('sectionEdit_popup',)
                this.editClk()
             }
         render() {
@@ -451,7 +455,7 @@ editClk() {
                                 <View>
                                 <TouchableOpacity
                                    style={{backgroundColor:'#fff',width:width,}}
-                                     onPress={() => this.collectionBook(item.title,item.id)}>
+                                     onPress={() => this.collectionBook(item.title,item.id,)}>
                                      <View 
                                     //  style={{
                                     //    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
@@ -468,7 +472,7 @@ editClk() {
                                        <Text style={[{ fontSize: 17, color: '#707070', textAlign: 'center', width: width/1.5 },{color:  item.id==this.state.selectedCol || item.id==this.state.secCollid ?"#fff":"#707070"}]}>{item.title}</Text>
     
                                        {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
-                           <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1 ?this.sectionClick(item.id):null}}>
+                           <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1 ?this.sectionClick(item.id,item.title):null}}>
                                    {/* <Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.SectionStatus==0 || item.id==this.state.selectedCol?require('../assets/img/down-arrow1.png'):require('../assets/img/right-arrow1.png')} /> */}
                                    <Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.SectionStatus==0?null:require('../assets/img/right-arrow1.png')} />
                            </TouchableOpacity> 
@@ -560,7 +564,7 @@ editClk() {
                                 </TouchableOpacity>
                                 </View>:
                     <View style={{height:40,alignItems:'center', flexDirection:'row',justifyContent:'space-around',bottom:'10%',position:'absolute',left:0,right:0}}>
-                                  <TouchableOpacity onPress={()=>this.gotoCreateColl()}>
+                                  <TouchableOpacity onPress={this.gotoCreateColl.bind(this)}>
                     <View style={{width:width/2-30,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18}}>
                                     <Text style={{paddingLeft:10}}>Create Collection</Text>
                                     <Image source={require('../assets/img/plus_white.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
@@ -603,7 +607,7 @@ editClk() {
                             </TouchableOpacity>
                             <LinearGradient style={{backgroundColor:'#fff',width:width/3.5,padding:'1%',borderRadius:15}} colors={this.state.next?['#24D4BC', '#27A291']:['#fff','#fff']} >
                             <TouchableOpacity 
-                                onPress={() =>this.state.next? this.gotoSectionDetail():console.log('value is ',value,'value true or false',)}>
+                                onPress={() =>this.state.next? this.editClk():console.log('value is ',value,'value true or false',)}>
                                 <Text style={[this.state.next?styles.inacitveColor:styles.inacitveStyle]}>Edit</Text>
                             </TouchableOpacity>
                             </LinearGradient>
@@ -721,21 +725,19 @@ editClk() {
     
         },
     })
-function mapStateToProps(state) {
-    return {
-        nav: state.apiReducer.nav,
-        merge:state.apiReducer.merge,
-        remove:state.apiReducer.remove
-    }
-}
-
-
+    function mapStateToProps(state) {
+        return {
+          nav: state.apiReducer.nav,
+          secEditPoup:state.apiReducer.secEditPopup
+        }
+      }
+      
+      
 function mapDispatchToProps(dispatch) {
     return {
         changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
         changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' }),
-        mergePopup:()=>dispatch({type:'MERGE_POPUP1'}),
-        removePopup:()=>dispatch({type:'REMOVE_POPUP'}),
+        secEditPopupFunc:()=>dispatch({type:'SEC_EDIT_POPUP'})
 
     }
 };

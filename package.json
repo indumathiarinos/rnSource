@@ -5,12 +5,13 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": " npx react-native start",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
     "@astrocoders/react-native-selectable-text": "^1.5.1",
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/cli-platform-android": "^4.8.0",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/masked-view": "^0.1.10",

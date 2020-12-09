@@ -9,6 +9,7 @@ console.disableYellowBox = true;
 import HTMLView from 'react-native-htmlview';
 import Modal1 from 'react-native-modal';
 import NetInfo from '@react-native-community/netinfo';
+import {keys,setAsyncStorage} from '../asyncStorage';
 // import { Button } from 'react-native-paper';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -67,7 +68,8 @@ class Collection extends Component {
         getDeletedName:'',
         mergePopup:"",
         collFilter:'DESC',
-        collCoverImg:''
+        collCoverImg:'',
+        setCollectionId:''
         // getuserid:''
 
     }
@@ -210,25 +212,19 @@ pressIcon = (item) => {
     console.log('entered ', item)
     let { collection } = this.state;
     collection = collection.map(e => {
+        this.setState({setCollectionId:item.collectionsID})
         //     if (item.collectionsID === e.collectionsID) {
         AsyncStorage.setItem('collectionId',item.collectionsID+"");
         AsyncStorage.setItem('coll_name',item.Title);
         AsyncStorage.setItem('coll_desc',item.Description);
-        AsyncStorage.setItem('col_id',item.collectionsID+"");
-        AsyncStorage.setItem('coll_Img',item.Image1!=""?item.Image1:null)
-        console.log('collection id ', item.collectionsID+"");
-        // alert(item.collectionsID.toString(),'collection id')
-        let collid= item.collectionsID.toString();
-        // try{
-        // item.like = !e.like;
-        return this.props.navigation.navigate('collectionDetail',{'collId':item.collectionsID.toString()+""});
-        // return this.props.navigation.navigate('collectionDetail',{'collId':JSON.stringify(item.collectionsID)});
-        // } else {
-        //     return e;
-        // }
-        // }catch(error){
-        //     console.log(error)
-        // }
+        AsyncStorage.setItem('col_id',JSON.stringify(Number(item.collectionsID)));
+        AsyncStorage.setItem('coll_Img',item.Image1!=""?item.Image1:null);
+        setAsyncStorage(keys.collectionId, item.collectionsID);
+        AsyncStorage.setItem('newColl_Id', JSON.stringify(item.CollectionsID));
+        setAsyncStorage(keys.newCollId, item.collectionsID);
+         this.props.navigation.navigate('collectionDetail',{'collId':item.collectionsID.toString()+""});
+ 
+      
     });
 }
 
