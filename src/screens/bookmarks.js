@@ -271,13 +271,13 @@ removeItem(item1){
 
 }
 undoFunc(item) {
-  const reading = this.state.reading;
+  // const reading = this.state.reading;
   // this.state.reading.push(item);
-  console.log('values after undo list ',this.state.reading);
+  // console.log('values after undo list ',this.state.reading);
   this.setState({undo:true})
   // list.splice(item.id, 1);
   // this.showModal(item.id)
-  this.setState({ reading });
+  // this.setState({ reading });
   // this.showModal();
   // this.CheckConnectivity1();
 }

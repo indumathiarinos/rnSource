@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-    View, ImageBackground, FlatList,BackHandler, RefreshControl,AsyncStorage, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
+    View, ImageBackground,Modal, FlatList,BackHandler, RefreshControl,AsyncStorage, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
     TouchableOpacity, PermissionsAndroid,SafeAreaView
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -40,7 +40,9 @@ class SubCollectionMerge extends Component {
         loading:true,
         // loading:true,
         // getuserid:'',
-        collection:''
+        collection:'',
+        mergeModal:false,
+        undo:false
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -85,6 +87,29 @@ class SubCollectionMerge extends Component {
       componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
       }
+      showModal1 = () => {
+        console.log('enters')
+        this.setState({
+            mergeModal: true,
+        //    mergePopup:0
+    
+        });
+        setTimeout(() => {
+            // this.props.changeRemove()
+            this.setState({
+                mergeModal: false
+            })
+            if(this.state.undo==false){
+                {this.CheckConnectivity1()}
+              }else{
+                this.setState({undo:false})
+              }    
+              this.props.navigation.navigate('collection');
+
+        }, 5000);
+        //   this.props.mergePopup();
+        //   console.log('modal state is ',this.props.mergePopup())
+    }
       handleBackButtonClick() {
         //   this.props.navigation.navigate('collection')
         this.props.navigation.goBack();
@@ -118,9 +143,8 @@ class SubCollectionMerge extends Component {
             .then((responseJson) => {
                 //alert(responseText);
                 this.setState({  loading: false })
-                AsyncStorage.setItem('MergeName', JSON.stringify(this.state.mergeName));
-                this.props.mergePopup();
-                this.props.navigation.navigate('collection');
+                // AsyncStorage.setItem('MergeName', JSON.stringify(this.state.mergeName));
+                // this.props.mergePopup();
     
             })
             .catch((error) => {
@@ -226,7 +250,8 @@ class SubCollectionMerge extends Component {
                         <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
                             {/* <View > */}
                                 <ImageBackground
-                                    style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
+                                imageStyle={{ borderTopRightRadius: 10,}}
+                                    style={{ height: height / 12, resizeMode: 'cover', marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} >
                                      {this.state.mergeToId==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
                                 </ImageBackground>
@@ -303,7 +328,7 @@ class SubCollectionMerge extends Component {
                         </TouchableOpacity>
                         <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.mergeToId!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                         <TouchableOpacity 
-                            onPress={() =>this.mergeFunc()}>
+                            onPress={() =>this.showModal1()}>
                             <Text style={[this.state.mergeToId!=""?styles.inacitveColor:styles.inacitveStyle]}>Next</Text>
                         </TouchableOpacity>
                         </LinearGradient>
@@ -316,6 +341,28 @@ class SubCollectionMerge extends Component {
                                 height: 140
                             }} />
                         </Modal1>
+                        <Modal
+                        animationType="slide"
+                        transparent
+                        visible={this.state.mergeModal}
+                        onRequestClose={() => {
+                            console.log('Modal has been closed.');
+                        }}>
+                        <View style={{
+                            left: 0, right: 0, bottom: 0, position: 'absolute',
+                            height: '10%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#27A291',
+                        }}>
+                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeName} </Text>
+                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            onPress={()=>this.setState({undo:true})}
+                            >
+                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Modal>
             </SafeAreaView>
 
         )

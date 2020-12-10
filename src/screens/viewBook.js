@@ -90,7 +90,12 @@ class ViewBook extends Component {
       getColId:'',
       getSecId:'',
       Is_Follow:'',
-      visible:false
+      visible:false,
+      post_author:'',
+      post_editor:'',
+      post_illustrator:'',
+      post_translator:'',
+      isbn:''
       
       // Image: "https://arinos.co.uk/uploads/publication-cover/1581929254.jpg"
       // Title: "SNOW WHITE AND THE SEVEN DWARF"
@@ -383,9 +388,13 @@ class ViewBook extends Component {
             user_img:responseJson[0].user_img,
             user_id:responseJson[0].user_id,
             Is_Follow:responseJson[0].Is_Follow,
+            post_author:responseJson[0].post_author,
+            post_editor:responseJson[0].post_editor,
+            post_illustrator:responseJson[0].post_illustrator,
+            post_translator:responseJson[0].post_translator,
+            isbn:responseJson[0].post_isbn_years
             // visible:this.state.Is_Follow=="Follow"?false:true
           })
-
           //  Title: "SNOW WHITE AND THE SEVEN DWARF"
           //  Content: "Once upon a time . . . in a great castle, a Prince’s daughter grew up happy and contented, in spite of a jealous stepmother. She was very pretty, with blue eyes and long black hair. Her skin was delicate and fair, and so she was called Snow White. Everyone was quite sure she would become very beautiful. Though her stepmother was a wicked woman, she too was very beautiful, and the magic mirror told her this every day, whenever she asked it"
           //  Updated_Date: "17 February 2020"
@@ -881,24 +890,24 @@ onPress={() => this.props.navigation.navigate('report')}>
             </View>
             <View style={styles.info2}>
               <Image style={{ marginRight: '2%' }} source={require('../assets/img/section.png')} />
-              <Text style={styles.text1}>Sections</Text>
+              <Text style={styles.text1}>{this.state.partname}</Text>
             </View>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
             <View style={styles.info1}>
-              <Text style={styles.text1}>Published: {!this.state.apicallBoolean ? '20 Aug 2015' : this.state.updateddate}</Text>
+              <Text style={styles.text1}>Published: {this.state.updateddate}</Text>
             </View>
             <View style={styles.info2}>
-              <Text style={styles.text1}>Release Date: {!this.state.apicallBoolean ? '15 Feb 2018' : this.state.releasedate}</Text>
+              <Text style={styles.text1}>Release Date: {this.state.releasedate}</Text>
             </View>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
             <View style={styles.info1}>
-              <Text style={styles.text1}>{!this.state.apicallBoolean ? 'Copy Rights' : this.state.copyrights}</Text>
+              <Text style={styles.text1}>Copy Rights : {this.state.copyrights}</Text>
               <Image source={require('../assets/img/open-book.png')} />
             </View>
             <View style={styles.info2}>
-              <Text style={styles.text1}>ISBN:</Text>
+              <Text style={styles.text1}>ISBN : {this.state.isbn}</Text>
             </View>
             {/* </View> */}
           </View>
@@ -996,19 +1005,19 @@ onPress={() => this.goToAuthorProfile()}>
           <View style={{ margin: '4%', paddingLeft: '5%' }}>
             <View style={{ flexDirection: 'row', }}>
               <Text style={styles.authText}>Author</Text>
-              <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}></Text>
+              <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}>{this.state.post_author}</Text>
             </View>
             <View style={{ flexDirection: 'row', }}>
               <Text style={styles.authText}>Editor</Text>
-              <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}></Text>
+              <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}>{this.state.post_editor}</Text>
             </View>
             <View style={{ flexDirection: 'row', }}>
               <Text style={styles.authText}>Illustrator</Text>
-              <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}></Text>
+              <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}>{this.state.post_illustrator}</Text>
             </View>
             <View style={{ flexDirection: 'row', }}>
               <Text style={styles.authText}>Translator</Text>
-              <Text style={{ width: width / 2, textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}></Text>
+              <Text style={{ width: width / 2, textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}>{this.state.post_translator}</Text>
             </View>
           </View>
           <View style={{ margin: '4%', marginBottom: '10%' }} >
@@ -1016,29 +1025,29 @@ onPress={() => this.goToAuthorProfile()}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
               <View style={styles.info1}>
                 <Image style={{ marginRight: '4%', top: "5%", marginTop: "2%" }} source={require('../assets/img/eye.png')} />
-                <Text style={styles.text1}> {!this.state.apicallBoolean ? '343k' : this.state.totalviews}</Text>
+                <Text style={styles.text1}> {this.state.totalviews}</Text>
               </View>
               <View style={styles.info2}>
                 <Image style={{ marginRight: '2%' }} source={require('../assets/img/section.png')} />
-                <Text style={styles.text1}>Sections</Text>
+                <Text style={styles.text1}>{this.state.partname}</Text>
               </View>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
               <View style={styles.info1}>
-                <Text style={styles.text1}>Published: {!this.state.apicallBoolean ? '20 Aug 2015' : this.state.updateddate}</Text>
+                <Text style={styles.text1}>Published : {this.state.updateddate}</Text>
               </View>
               <View style={styles.info2}>
-                <Text style={styles.text1}>Release Date: {!this.state.apicallBoolean ? '15 Feb 2018' : this.state.releasedate}</Text>
+                <Text style={styles.text1}>Release Date : {this.state.releasedate}</Text>
               </View>
 
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
               <View style={styles.info1}>
-                <Text style={styles.text1}>{!this.state.apicallBoolean ? 'Copy Rights' : this.state.copyrights}</Text>
+                <Text style={styles.text1}>'Copy Rights' : {this.state.copyrights}</Text>
                 <Image source={require('../assets/img/open-book.png')} />
               </View>
               <View style={styles.info2}>
-                <Text style={styles.text1}>ISBN:</Text>
+                <Text style={styles.text1}>ISBN : {this.state.isbn}</Text>
 
               </View>
               {/* </View> */}
@@ -1126,7 +1135,7 @@ onPress={() => this.goToAuthorProfile()}>
                         <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
                       </TouchableOpacity>
                     </View>
-                 <ScrollView>
+                    <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
                      <FlatList
                           data={this.state.collection}
                           keyExtractor={(item,index)=>index.toString()}
@@ -1322,7 +1331,10 @@ isDisabled={this.state.isDisabled}>
  source={imgSource}/> */}
 {/* <TouchableOpacity
   style={{ padding: '1%' }}
-  onPress={() => this.props.navigation.navigate('comments')}
+  onPress={() =>{ 
+    AsyncStorage.setItem('typeid',JSON.stringify(Number(this.state.gettypeid)));
+    AsyncStorage.setItem('postid',JSON.stringify(Number(this.state.getpostid)));
+    this.props.navigation.navigate('comments')}}
 >
   <Image
 

@@ -434,7 +434,9 @@ class Home extends Component {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'content-type': 'multipart/form-data'
+                    // 'content-type': 'multipart/form-data'
+                    'content-type': 'application/json'
+
                 },
                 body: json
             }
@@ -1505,7 +1507,8 @@ colors={['#C5F3FB40', '#81EEFF40']}>
                 cardElevation={2}
                 cardMaxElevation={2}
                 cornerRadius={5}>
-                <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 130, height: 150, jsutifyContent: 'center',resizeMode:'cover' }}>
+                    
+                <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle}>
                     <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon") }>
                             <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1621,7 +1624,7 @@ autoplay={false}
                         <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
                       </TouchableOpacity>
                     </View>
-                 <ScrollView>
+                 <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
                      <FlatList
                           data={this.state.collection}
                           keyExtractor={(item,index)=>index.toString()}
@@ -1743,7 +1746,7 @@ autoplay={false}
                               {/* <Text>Home</Text> */}
                           </TouchableOpacity>
                           <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                              <Image source={require('../assets/img/collection.png')} />
+                          <Image source={require('../assets/img/collection.png')} />
                               {/* <Text>Collection</Text> */}
                           </TouchableOpacity>
                           <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
@@ -1947,7 +1950,18 @@ autoplay={false}
           backgroundColor: '#808080',
           padding: 10,
           margin: 2,
-        }
+        },
+        pubImgStyle:{ 
+            width: 130, height: 150,
+            borderRadius:15,
+             justifyContent: 'center'
+             },
+             pageImgStyle:{ 
+              elevation:1,
+              width: 130, height: 100,
+              borderRadius:15,
+               justifyContent: 'center'
+               }
   })
   
 function mapStateToProps(state){

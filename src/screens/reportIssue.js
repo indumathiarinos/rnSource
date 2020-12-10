@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import LinearGradient from 'react-native-linear-gradient';
 import HtmlView from 'react-native-htmlview';
 import NetInfo from '@react-native-community/netinfo';
+import Modal from 'react-native-modal';
 const width = Dimensions.get('window').width;
 const htmlview=`<h4><p class="center">We’re thrilled to have you onboard as a creator. We will review your request and will get back to you within 2 working days.</p></h4>`;
 console.disableYellowBox = true;
@@ -33,7 +34,8 @@ class ReportIssue extends Component {
               value:0,
               // loading:false,
               reportData:'',
-              getuserid:''
+              getuserid:'',
+              loading:false
         }
        
         if (Platform.OS === 'android') {
@@ -44,10 +46,12 @@ class ReportIssue extends Component {
     componentDidMount() {
       AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+      AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
+      AsyncStorage.getItem('typeid').then((value) => this.setState({ gettypeid: value })).done();
     }
     exData() {
       var json = JSON.stringify({
-        "user_id":this.state.getuserid,"author_id":"2","page_id":"30","type":"2","Reason":"I Don't Like","Addition_Details":"abc","report":"0"            });
+        "user_id":this.state.getuserid,"author_id":"2","page_id":this.state.getpostid,"type":this.state.gettypeid,"Reason":"I Don't Like","Addition_Details":"abc","report":"0"});
       fetch("http://162.250.120.20:444/Login/Report",
           {
               method: 'POST',
@@ -99,6 +103,7 @@ class ReportIssue extends Component {
       submitBtn=()=>{
         // this.setState({loading:true})
         // {this.exData()}
+        this.setState({loading:true})
         this.CheckConnectivity();
 
         // this.setState({btnActive:!this.state.btnActive})
@@ -188,6 +193,15 @@ class ReportIssue extends Component {
                      
                        
                 </View>
+                <Modal isVisible={this.state.loading}
+         
+         // onBackdropPress={() => this.setState({ loading: true })}
+         >
+               <Image source={require('../assets/gif/logo.gif')} style = {{alignSelf:'center',
+                 width: 140,           
+                       height: 140
+                       }} />
+                 </Modal>
             </SafeAreaView>
         )
     }

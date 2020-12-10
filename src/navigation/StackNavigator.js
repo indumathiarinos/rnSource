@@ -478,6 +478,12 @@ const HomeNavigator = createStackNavigator({
       header:null
     }
   },
+  sectionFilter:{
+    screen:sectionFilter,
+    navigationOptions:{
+      header:null
+    }
+  },
   viewBook:{
     screen:viewBook,
     navigationOptions:{
@@ -598,7 +604,12 @@ subCollectionMerge:{
 
   } 
 },
-
+thankyou: {
+  screen: thankyou,
+  navigationOptions: {
+    header: null,
+},
+},
 mergeSection:{
   screen:MergeSection,
   navigationOptions:{
@@ -629,24 +640,26 @@ subSectionMerge:{
   }
   );
   const FullStack=createStackNavigator({
-    privacyPolicy:{
-      screen:privacyPolicy,
-      navigationOptions:{
-      header:null,
-    },
-    },
-    forgotpwd:{
-      screen:forgotpwd,
-      navigationOptions:{
-      header:null,
-    },
-    },
+ 
+ 
     Onboarding: {
       screen: onboarding,
       navigationOptions: {
         header: null,
     },
     
+    },
+    privacyPolicy:{
+      screen:privacyPolicy,
+      navigationOptions:{
+      header:null,
+    },
+    },
+    thankyou: {
+      screen: thankyou,
+      navigationOptions: {
+        header: null,
+    },
     },
   loginSignup: {
     screen: loginSignup,
@@ -666,10 +679,10 @@ subSectionMerge:{
       header: null,
   },
   },
-  thankyou: {
-    screen: thankyou,
-    navigationOptions: {
-      header: null,
+  forgotpwd:{
+    screen:forgotpwd,
+    navigationOptions:{
+    header:null,
   },
   },
   signin: {
@@ -692,12 +705,7 @@ subSectionMerge:{
   },
   
   },
-  sectionFilter:{
-    screen:sectionFilter,
-    navigationOptions:{
-      header:null
-    }
-  },
+ 
  
   })
  

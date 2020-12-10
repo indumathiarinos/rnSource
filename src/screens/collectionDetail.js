@@ -323,17 +323,9 @@ this.focusListener = this.props.navigation.addListener('willFocus', () => {
   AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
   AsyncStorage.getItem('coll_Img').then((val) => this.setState({ coll_img: val })).done();
 AsyncStorage.getItem('collectionId').then((value) => this.setState({ collectionId : value })).done();
-console.log('this. collection id in section page ',this.state.collectionId,this.state.getuserid,value1);
 AsyncStorage.getItem('collSecFilter').then((val) =>val!=null? this.setState({ SortBy: val }):"DESC").done();
 this.CheckConnectivity();
    
-    console.log('merge n remove props ',this.state.merge,'',this.state.remove)
-   if(this.props.sectionRemove==true){
-      {this.getData2()}
-
-   }else if(this.props.sectionMerge==true){
-    {this.getData1()}
-   }
 
 })
 BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -401,33 +393,7 @@ setTimeout(() => {
   {this.exploredata(value1)}
         }, 3000)
 }
-getData1() {
-  AsyncStorage.getItem('SecMergeName').then((value)=>{this.setState({getMergeName:value})}).done();
 
-  console.log('this merge props1 ',this.props.sectionMerge,this.props.sectionRemove)
-  if(this.props.sectionMerge==true){
-      setTimeout(
-          () =>
-              this.showModal1(),
-          1000
-      );
-  }
-
-}
-getData2() {
-  AsyncStorage.getItem('Sec_Deleted_Name').then((value) => this.setState({ getDeletedName: value })).done();
-
-  console.log('this merge props2 ',this.props.sectionMerge,this.props.sectionRemove)
-
-  if(this.props.sectionRemove==true){
-
-      setTimeout(
-          () =>
-              this.showModal(),
-          1000
-      );
-  }
-}
 renderItem_card({ item }) {
   // const value = item;
   return (
@@ -656,7 +622,9 @@ readsItems({ item }) {
            >
           <TouchableOpacity
             onPress={() => {this.refs.modal.open() 
-            this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title})}}>
+            this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title})
+            AsyncStorage.setItem('edit_title',item.Page_Post_Title);
+          }}>
             <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
           </TouchableOpacity>
         </ImageBackground>
@@ -784,52 +752,7 @@ readsItems({ item }) {
                           console.log(`selected button: ${name}`);
                         }}
                     />
-                      <Modal
-          animationType="slide"
-          transparent
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
-            <View style={{
-          left:0,right:0,bottom:0,position:'absolute',  
-          height:'10%', 
-          alignItems:'center',
-          justifyContent:'center',
-          backgroundColor: 'red',
-}}>
-<Text style={{color:'#fff',fontSize:18,textAlign:'center'}}>Removed - {this.state.getDeletedName} </Text>
-        <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
-        // onPress={()=>this.undoFunc(item)}
-        >
-            <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline',textDecorationColor:'#fff'}}>Undo</Text>
-         </TouchableOpacity>
-            
-         
-          </View>
-          </Modal>
-          <Modal
-          animationType="slide"
-          transparent
-          visible={this.state.mergeModal}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
-            <View style={{
-          left:0,right:0,bottom:0,position:'absolute',  
-          height:'10%', 
-          alignItems:'center',
-          justifyContent:'center',
-          backgroundColor: '#27A291',
-}}>
-    <Text style={{color:'#fff',fontSize:18,textAlign:'center'}}>Merged - {this.state.getMergeName} </Text>
-        <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
-        // onPress={()=>this.undoFunc(item)}
-        >
-            <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
-         </TouchableOpacity>
-          </View>
-          </Modal>
+        
           <Modal1 isVisible={this.state.loading} >
                             <Image source={require('../assets/gif/logo.gif')} style={{
                                 alignSelf: 'center',
@@ -878,25 +801,7 @@ readsItems({ item }) {
             </TouchableOpacity>
           </View>
         </ModalBox>
-        <Modal
-          animationType="slide"
-          transparent
-          visible={this.state.editPopup}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
-          <View style={{
-            left: 0, right: 0, bottom: 0, position: 'absolute',
-            height: '8%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#27A291',
-          }}>
-            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Edited {this.state.PostPageTitle} -</Text>
-            <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>{this.state.coll_name}</Text>
-          </View>
-        </Modal>
+        
         <Modal
           animationType="slide"
           transparent
@@ -905,7 +810,7 @@ readsItems({ item }) {
             console.log('Modal has been closed.');
           }}>
             
-       <View style={{
+            <View style={{
           left:0,right:0,bottom:0,position:'absolute',   
           height:'8%',
           backgroundColor: 'red',
@@ -914,13 +819,18 @@ readsItems({ item }) {
           
           padding:'1%',
          }}>
-           <View style={{flexDirection:'row',width:width-60,margin:'1%',alignSelf:'center',  alignItems: 'center',
+           <View style={{flexDirection:'row',width:'85%',margin:'1%',alignSelf:'center',  alignItems: 'center',
           justifyContent:'center',}}>
-           <Text  style={{fontSize: 17,marginLeft:'2%',textAlign:'center', color: 'white',alignSelf:'center',}}>Removed - {this.state.readsDeletedName.length<25?this.state.readsDeletedName:null} </Text>
-          
-          {this.state.readsDeletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.readsDeletedName}</Text>:null}
+           <Text  style={{fontSize: 17,marginLeft:'2%',textAlign:'center', color: 'white',alignSelf:'center',}}>Removed - </Text>
+           <Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',textAlign:'left'}}> 
+          {this.state.readsDeletedName}
+          </Text>
+          {/* {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null} */}
            </View>
-            <Text style={{fontSize: 16,color:'white',width:50,textDecorationStyle:'underline',alignSelf:'flex-end',marginRight:'2%',textAlign:'center'}}>Undo</Text>
+           
+          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({removeUndo:true})}>
+            <Text style={{fontSize: 16,color:'white',width:50,textDecorationLine:'underline',textAlign:'center'}}>Undo</Text>
+         </TouchableOpacity>
        </View>
           </Modal>
                  <View style={styles.bottomBar}>
@@ -1001,15 +911,15 @@ const styles = StyleSheet.create({
     // width: width,
   },
   pubImgStyle:{ 
-    elevation:1,
+    // elevation:1,
     width: 130, height: 150,
     borderRadius:15
     // alignItems:'center',
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
-      elevation:1,
-      width: 130, height: 70,
+      // elevation:1,
+      width: 130, height: 100,
       borderRadius:15
       // alignItems:'center',
       //  jsutifyContent: 'center'

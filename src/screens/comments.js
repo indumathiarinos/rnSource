@@ -56,15 +56,19 @@ class Comments extends Component {
             getuserid:'',
             comments:'',
             loading:true,
+            postpageid:'',
             getpostid:'',
             commentCounts:'',
-            commentText:''
+            commentText:'',
+            gettypeid:'',
+            getpageid:''
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     componentDidMount() {
         AsyncStorage.getItem('userid').then((value)=>{this.setState({getuserid:value})}).done();
-        AsyncStorage.getItem('postid').then((value)=>{this.setState({getpostid:value})}).done();
+        AsyncStorage.getItem('typeid').then((value)=>{this.setState({gettypeid:value})}).done();
+        AsyncStorage.getItem('postid').then((value)=>{this.setState({postpageid:value})}).done();
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // {this.getData()}
@@ -86,11 +90,13 @@ class Comments extends Component {
       }
     getData() {
         setTimeout(() => {
-            { this.exploredata("617") }
+            {this.state.gettypeid==4?this.setState({getpageid:this.state.postpageid,getpostid:''}):this.setState({getpostid:"0",getpageid:''})}
+            { this.exploredata() }
         }, 5)
     }
-    exploredata(postid){
-        var json=JSON.stringify({"pageID":postid});
+    exploredata(){
+        var json=JSON.stringify({"pageID":this.state.getpageid,"PostID":"0"});
+        console.log('get json ',json,'type id ',this.state.gettypeid)
           fetch("http://162.250.120.20:444/Login/CommentGet",
             {
                 method: 'POST',
@@ -276,13 +282,17 @@ class Comments extends Component {
         // MultiselectItems.push(selectedItemArray);
         this.setState({ comments: list });
     }
-    commentAddService(userid,postid,text){
+    commentAddService(){
         this.setState({loading:true})
         var json=JSON.stringify({
-            "UserID":userid,
-            "PageID":postid,
-            "Txt":text,
-            "Imz_PagesID":""});
+            "UserID":this.state.getuserid,
+            "PageID":this.state.getpageid,
+            "Txt":this.state.commentText,
+            "Imz_PagesID":"",
+            "PostID":this.state.getpostid,
+            "Imz_Post_post_id":""
+        });
+        console.log('comment add json ',json)
         fetch("http://162.250.120.20:444/Login/CommentAdd",
           {
               method: 'POST',
@@ -297,7 +307,7 @@ class Comments extends Component {
           .then((responseJson) => {
               //alert(responseText);1
               this.setState({loading:false,commentText:""});
-             {this.exploredata("617")}
+             {this.exploredata()}
               console.warn(responseJson);
               console.warn('comments add')
           })
@@ -381,7 +391,7 @@ class Comments extends Component {
                     // onChangeText={value => this.refs.modal4.open()}
                     />
                     <TouchableOpacity style={styles.touchableButton}
-                        onPress={() => this.commentAddService(this.state.getuserid,"617",this.state.commentText,)}>
+                        onPress={() => this.commentAddService()}>
                         <Image
                             source={require('../assets/img/send-icon.png')}
                         />

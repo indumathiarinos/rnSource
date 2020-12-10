@@ -196,6 +196,7 @@ export default class MergeCollection extends Component {
                         <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
                             {/* <View > */}
                                 <ImageBackground
+                                    imageStyle={{ borderTopRightRadius: 10,}}
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} >
                                      {this.state.selectedMergeId==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}

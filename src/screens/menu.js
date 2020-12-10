@@ -128,6 +128,7 @@ class MenuPage extends Component {
   getData(){
     setTimeout(() => {
       {this.exploredata(this.state.getuserid)}
+      // {this.exploredata1(this.state.getuserid)}
     }, 3);
   }
   handleBackButtonClick() {
@@ -184,7 +185,7 @@ class MenuPage extends Component {
                this.setState({ 
                  username: responseJson[i].username,
                  avatar:responseJson[i].avatar,
-                 notificationCount:responseJson[i].new_content_notifications,
+                 notificationCount:responseJson[i].notifycnt,
                 })
               }
             //alert(this.state.data.status)  
@@ -193,6 +194,7 @@ class MenuPage extends Component {
             console.warn(error);
         });
   }
+ 
   pressIcon = (item) => {
     let { list } = this.state;
     list = list.map(e => {

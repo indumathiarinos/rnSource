@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View,SafeAreaView,AsyncStorage, FlatList, RefreshControl, BackHandler, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
+import { View,SafeAreaView,AsyncStorage, ImageBackground,FlatList, RefreshControl, BackHandler, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import img1 from '../assets/img/cover1.png';
 import img2 from '../assets/img/cover2.png';
@@ -179,15 +179,18 @@ class Notification extends Component {
             activeOpacity={0.7}
           // containerStyle={{marginLeft:'1%'}}
           /> */}
-        <View style={{ flexDirection: 'column', width: width / 2 }}>
+        <View style={{ flexDirection: 'column', width: width / 1.8,marginLeft:'5%'}}>
           <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold', textAlign: 'left' }}>{item.user_name}</Text>
           <Text style={{ fontSize: 16, color: 'black', textAlign: 'left' }}
             numberOfLines={2}
             ellipsizeMode='middle'>{item.heading}</Text>
         </View>
         <Image style={{ width: width / 5, height: height / 12, resizeMode: 'cover' }} source={{ uri: item.bookimg }} />
-
-
+        {/* <ImageBackground source={{uri:item.bookimg!=null?item.bookimg:null}} 
+          imageStyle={{ borderRadius: 15 }}
+          style={[item.Type==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.bookimg?'#fff':null}]}
+            /> */}
+           
 
       </View>);
   }
@@ -274,6 +277,21 @@ class Notification extends Component {
 
 }
 const styles = StyleSheet.create({
+  pubImgStyle:{ 
+    elevation:1,
+    width: 130, height: 150,
+    borderRadius:15,
+    
+    // alignItems:'center',
+    //  jsutifyContent: 'center'
+     },
+     pageImgStyle:{ 
+      elevation:1,
+      width: 130, height: 100,
+      borderRadius:15
+      // alignItems:'center',
+      //  jsutifyContent: 'center'
+       },
   headerText: {
     padding: '5%',
     fontSize: 16,

@@ -75,7 +75,8 @@ class SectionDetail extends Component {
     collectionId:'',
     coll_img:'',
     secCoverImg:'',
-    editSourceName:''
+    editSourceName:'',
+    removeUndo:false
     
     
   }
@@ -134,41 +135,10 @@ componentDidMount() {
   AsyncStorage.getItem('coll_Img').then((val) => this.setState({ coll_img: val })).done();
 
   this.CheckConnectivity();
-  
-  this.focusListener = this.props.navigation.addListener('willFocus', () => {
-    // AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
-    // AsyncStorage.getItem('sectionId').then(val =>this.setState({ sectionId: val })).done;
-    // AsyncStorage.getItem('newColl_Id').then(val =>this.setState({ collectionId: val })).done;
-    // console.log('this. sectionId id is ',this.state.collectionId,this.state.sectionId)
-    // AsyncStorage.getItem('coll_name').then((value) => this.setState({ coll_name : value })).done();
-    // AsyncStorage.getItem('sec_name').then((value) => this.setState({ sec_name : value })).done();
-    // AsyncStorage.getItem('sectionEdit_popup').then((value) => this.setState({ editPopupState : value })).done();
-    if(this.props.secEditPopup==true){
-      {this.getDataEdit()}
-        }
-    // {this.getData()}
-    // alert(this.state.collectionId)
-    AsyncStorage.getItem('coll_Img').then((val) => this.setState({ coll_img: val })).done();
-  
-    this.CheckConnectivity();
-//     AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
-//   AsyncStorage.getItem('sectionId').then(val =>this.setState({ sectionId: val })).done;
-//   AsyncStorage.getItem('newColl_Id').then(val =>this.setState({ collectionId: val })).done;
-//   AsyncStorage.getItem('coll_Img').then((val) => this.setState({ coll_img: val })).done();
-//   console.log('this. sectionId id is ',this.state.collectionId,this.state.sectionId)
-//   AsyncStorage.getItem('coll_name').then((value) => this.setState({ coll_name : value })).done();
-//   AsyncStorage.getItem('sec_name').then((value) => this.setState({ sec_name : value })).done();
-//     this.CheckConnectivity();
-})
+
 BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 }
-getDataEdit(){
-  AsyncStorage.getItem('secEdit_Name').then((value) => this.setState({ editSourceName : value })).done();
 
-  setTimeout(() => {
-    this.showModal1()
-  }, 5000);
-}
 CheckConnectivity(){    
   NetInfo.fetch().then(state => {
 
@@ -260,25 +230,15 @@ handleBackButtonClick() {
       this.setState({
         modalVisible1: false
       })
-      {this.exploredata(this.state.getuserid)}
+      
+      if(this.state.removeUndo==false){
+        {this.deletefunc(this.state.currentItem)}
+      }else{
+        this.setState({removeUndo:false})
+      }
       }, 5000);
   }
-  showModal1 = () => {
-    console.log('enters')
-    this.setState({
-      editPopupState: true
-    });
-    setTimeout(() => {
-      // this.props.changeRemove()
-      this.setState({
-        editPopupState: false,
-      })
-      this.props.secEditPopupFunc();
-      // AsyncStorage.setItem('sectionEdit_popup',JSON.stringify(false))
-      //   this.props.changeRemove();
-    }, 3000);
-    console.log('modal state is ', this.state.popupModal)
-  }
+  
   descPage = (item) => {
     console.log('feeeddd data is ',item)
     let { readsData } = this.state;
@@ -352,8 +312,12 @@ handleBackButtonClick() {
           style={[item.Type==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null}]}
              >
             <TouchableOpacity
-              onPress={() => {this.refs.modal.open() 
-              this.setState({currentItem:item,deletedName:item.Title,title:item.Title})}}>
+              onPress={() => {
+                this.refs.modal.open() 
+              this.setState({currentItem:item,deletedName:item.Title,title:item.Title,})
+              AsyncStorage.setItem('edit_title',item.Title);
+              // alert(item.title)
+             }}>
               <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
             </TouchableOpacity>
           </ImageBackground>
@@ -396,7 +360,8 @@ handleBackButtonClick() {
             console.warn(responseJson)
             // if(responseJson.Msg=="Success"){
               this.refs.modal.close();
-              this.showModal();
+              {this.exploredata(this.state.getuserid)}
+              // this.showModal();
               // {this.exploredata(this.state.getuserid)}
             // }
             //  else {
@@ -602,7 +567,7 @@ handleBackButtonClick() {
   </View>
               {/* <Text style={styles.modaltext}>Edit</Text> */}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.bottombtn} onPress={()=> this.deletefunc(this.state.currentItem)}>
+            <TouchableOpacity style={styles.bottombtn} onPress={()=>this.showModal()}>
             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
             <Image style={styles.iconwidth1} source={require('../assets/img/trash1.png')} />
               <Text style={styles.modaltext}>Remove</Text>
@@ -614,44 +579,7 @@ handleBackButtonClick() {
             </TouchableOpacity>
           </View>
         </ModalBox>
-        <Modal
-          animationType="slide"
-          transparent
-          visible={this.state.editPopupState}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
-              <View style={{
-          left:0,right:0,bottom:0,position:'absolute',   
-          height:'8%',
-          backgroundColor: '#27A291',
-          flexDirection:'row',
-          width:width,
-          
-          padding:'1%',
-         }}>
-           <View style={{flexDirection:'row',width:'90%',margin:'1%',alignSelf:'center',  alignItems: 'center',
-          justifyContent:'center',}}>
-           <Text  style={{fontSize: 17,marginLeft:'2%',textAlign:'center', color: 'white',alignSelf:'center',}}>Edited -</Text>
-          <Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',}}> {this.state.title} to </Text>
-          <Text style={{textDecorationLine:'underline',color:'#27A291',fontSize:17}}>{this.state.editSourceName}</Text>
-           </View>
-           
-
-            <Text style={{fontSize: 16,color:'white',width:'10%',textDecorationStyle:'underline',alignSelf:'flex-end',marginRight:'2%',textAlign:'center'}}>Undo</Text>
-       </View>
-          {/* <View style={{
-            left: 0, right: 0, bottom: 0, position: 'absolute',
-            height: '8%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#27A291',
-          }}>
-            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Edited {this.state.title} -</Text>
-            <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>{this.state.coll_name}</Text>
-          </View> */}
-        </Modal>
+       
         <Modal
           animationType="slide"
           transparent
@@ -669,15 +597,18 @@ handleBackButtonClick() {
           
           padding:'1%',
          }}>
-           <View style={{flexDirection:'row',width:width-60,margin:'1%',alignSelf:'center',  alignItems: 'center',
+           <View style={{flexDirection:'row',width:'85%',margin:'1%',alignSelf:'center',  alignItems: 'center',
           justifyContent:'center',}}>
-           <Text  style={{fontSize: 17,marginLeft:'2%',textAlign:'center', color: 'white',alignSelf:'center',}}>Removed - {this.state.deletedName.length<25?this.state.deletedName:null} </Text>
-          
-          {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null}
+           <Text  style={{fontSize: 17,marginLeft:'2%',textAlign:'center', color: 'white',alignSelf:'center',}}>Removed - </Text>
+           <Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',textAlign:'left'}}> 
+          {this.state.deletedName}
+          </Text>
+          {/* {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null} */}
            </View>
            
-
-            <Text style={{fontSize: 16,color:'white',width:50,textDecorationStyle:'underline',alignSelf:'flex-end',marginRight:'2%',textAlign:'center'}}>Undo</Text>
+          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({removeUndo:true})}>
+            <Text style={{fontSize: 16,color:'white',width:50,textDecorationLine:'underline',textAlign:'center'}}>Undo</Text>
+         </TouchableOpacity>
        </View>
           </Modal>
           <Modal1 isVisible={this.state.loading}
@@ -704,7 +635,7 @@ const styles = StyleSheet.create({
      },
      pageImgStyle:{ 
       elevation:1,
-      width: 130, height: 70,
+      width: 130, height: 100,
       borderRadius:15
       // alignItems:'center',
       //  jsutifyContent: 'center'

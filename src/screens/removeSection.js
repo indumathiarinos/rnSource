@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {
     View,SafeAreaView, ImageBackground, FlatList, BackHandler,RefreshControl,AsyncStorage, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
-    TouchableOpacity, PermissionsAndroid
+    TouchableOpacity, PermissionsAndroid,Modal
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import img1 from '../assets/img/cover1.png';
@@ -66,7 +66,10 @@ class RemoveSection extends Component {
         getuserid:'',
         selectedSecid:'',
         deletedName:'',
-        selectedIds:[]
+        selectedIds:[],
+        undo:false,
+        modalVisible: false,
+
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -81,6 +84,23 @@ componentDidMount() {
     // {this.getData()}
     this.CheckConnectivity();
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+}
+showModal = () => {
+    this.setState({
+        modalVisible: true
+    });
+    setTimeout(() => {
+        // this.props.changeRemove()
+        this.setState({
+            modalVisible: false
+        })
+        if(this.state.undo==false){
+            {this.CheckConnectivity1()}
+          }else{
+            this.setState({undo:false})
+          }    
+          this.props.navigation.navigate('collectionDetail',{'collId':colvalue})
+        }, 5000);
 }
 getData(){
     setTimeout(() => {
@@ -137,8 +157,7 @@ deleteData(userid,sectionId) {
             this.setState({ loading: false })
             AsyncStorage.setItem('Sec_Deleted_Name', JSON.stringify(this.state.deletedName));
             // AsyncStorage.setItem('removePopup', JSON.stringify(1));
-            this.props.removePopupSection();
-            this.props.navigation.navigate('collectionDetail',{'collId':colvalue})
+            // this.props.removePopupSection();
     
         })
         .catch((error) => {
@@ -448,12 +467,38 @@ componentWillUnmount() {
                         </TouchableOpacity>
                         <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedSecid!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                         <TouchableOpacity 
-                            onPress={() =>this.deleteFunc()}>
+                            onPress={() =>this.showModal()}>
                             <Text style={[this.state.selectedSecid!=""?styles.inacitveColor:styles.inacitveStyle]}>Delete</Text>
                         </TouchableOpacity>
                         </LinearGradient>
                     </View>
                 </View>
+                <Modal
+                        animationType="slide"
+                        transparent
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            console.log('Modal has been closed.');
+                        }}>
+                        <View style={{
+                            left: 0, right: 0, bottom: 0, position: 'absolute',
+                            height: '10%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'red',
+                        }}>
+                            <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed - {this.state.deletedName} </Text>
+
+
+                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            onPress={()=>this.setState({undo:true})}
+                            >
+                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                            </TouchableOpacity>
+
+
+                        </View>
+                    </Modal>
                 <Modal1 isVisible={this.state.loading}  >
                             <Image source={require('../assets/gif/logo.gif')} style={{
                                 alignSelf: 'center',

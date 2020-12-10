@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View,SafeAreaView,FlatList, ImageBackground,AsyncStorage, BackHandler ,RefreshControl, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
+import { View,SafeAreaView,Modal,FlatList, ImageBackground,AsyncStorage, BackHandler ,RefreshControl, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from "react-redux";
 import { FloatingAction } from "react-native-floating-action";
@@ -65,7 +65,10 @@ class RemovePins extends Component {
         selectedColid:'',
         deletedName:'',
         backpins:true,
-        selectedIds:[]
+        selectedIds:[],
+        undo:false,
+        modalVisible: false,
+
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -103,6 +106,23 @@ componentDidMount() {
      
     });
   }
+  showModal = () => {
+    this.setState({
+        modalVisible: true
+    });
+    setTimeout(() => {
+        // this.props.changeRemove()
+        this.setState({
+            modalVisible: false
+        })
+        if(this.state.undo==false){
+            {this.CheckConnectivity1()}
+          }else{
+            this.setState({undo:false})
+          }    
+          this.props.navigation.navigate('pins'); 
+           }, 5000);
+}
   CheckConnectivity1(){    
     NetInfo.fetch().then(state => {
   
@@ -331,10 +351,10 @@ deleteData(userid,id) {
         .then((responseJson) => {
             this.setState({ loading: false })
                 // AsyncStorage.setItem('removePopup2', JSON.stringify(1));
-            AsyncStorage.setItem('deletedPin',this.state.deletedName)
+            // AsyncStorage.setItem('deletedPin',this.state.deletedName)
             // AsyncStorage.setItem('loading',JSON.stringify(true))
-            this.props.removePinsPopup();
-          this.props.navigation.navigate('pins');
+        //     this.props.removePinsPopup();
+        //   this.props.navigation.navigate('pins');
         })
         .catch((error) => {
             console.warn(error);
@@ -427,12 +447,38 @@ render() {
                     </TouchableOpacity>
                     <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.next?['#24D4BC', '#27A291']:['#fff','#fff']} >
                     <TouchableOpacity 
-                        onPress={() =>this.deleteFunc()}>
+                        onPress={() =>this.showModal()}>
                         <Text style={[this.state.next?styles.inacitveColor:styles.inacitveStyle]}>Delete</Text>
                     </TouchableOpacity>
                     </LinearGradient>
                 </View>
             </View>
+            <Modal
+                        animationType="slide"
+                        transparent
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            console.log('Modal has been closed.');
+                        }}>
+                        <View style={{
+                            left: 0, right: 0, bottom: 0, position: 'absolute',
+                            height: '10%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'red',
+                        }}>
+                            <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed - {this.state.deletedName} </Text>
+
+
+                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            onPress={()=>this.setState({undo:true})}
+                            >
+                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                            </TouchableOpacity>
+
+
+                        </View>
+                    </Modal>
             <Modal1 isVisible={this.state.loading}  >
                         <Image source={require('../assets/gif/logo.gif')} style={{
                             alignSelf: 'center',

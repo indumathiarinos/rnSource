@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-    View, ImageBackground, FlatList,BackHandler, RefreshControl,AsyncStorage, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
+    View, ImageBackground,Modal, FlatList,BackHandler, RefreshControl,AsyncStorage, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
     TouchableOpacity, PermissionsAndroid,SafeAreaView
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -41,7 +41,9 @@ class SubCollectionMerge extends Component {
         // loading:true,
         getuserid:'',
         sectionData:'',
-        getColId:''
+        getColId:'',
+        mergeModal:false,
+        undo:false
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -119,14 +121,36 @@ class SubCollectionMerge extends Component {
         )
             .then((response) => response.json())
             .then((responseJson) => {
-              AsyncStorage.setItem('SecMergeName', JSON.stringify(this.state.mergeName));
-                this.props.mergePopupSection();
-             this.props.navigation.navigate('collectionDetail')
+            //   AsyncStorage.setItem('SecMergeName', JSON.stringify(this.state.mergeName));
+            //     this.props.mergePopupSection();
 
             })
             .catch((error) => {
                 console.warn(error);
             });
+    }
+    showModal1 = () => {
+        console.log('enters')
+        this.setState({
+            mergeModal: true,
+        //    mergePopup:0
+    
+        });
+        setTimeout(() => {
+            // this.props.changeRemove()
+            this.setState({
+                mergeModal: false
+            })
+            if(this.state.undo==false){
+                {this.CheckConnectivity1()}
+              }else{
+                this.setState({undo:false})
+              }    
+              this.props.navigation.navigate('collectionDetail')
+
+        }, 5000);
+        //   this.props.mergePopup();
+        //   console.log('modal state is ',this.props.mergePopup())
     }
     onPressHandler(id) {
         // let selected;
@@ -326,12 +350,34 @@ class SubCollectionMerge extends Component {
                           </TouchableOpacity>
                           <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.mergeToId!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                           <TouchableOpacity 
-                              onPress={() =>this.mergeFunc()}>
+                              onPress={() =>this.showModal1()}>
                               <Text style={[this.state.mergeToId!=""?styles.inacitveColor:styles.inacitveStyle]}>Next</Text>
                           </TouchableOpacity>
                         </LinearGradient>
                     </View>
                 </View>
+                <Modal
+                        animationType="slide"
+                        transparent
+                        visible={this.state.mergeModal}
+                        onRequestClose={() => {
+                            console.log('Modal has been closed.');
+                        }}>
+                        <View style={{
+                            left: 0, right: 0, bottom: 0, position: 'absolute',
+                            height: '10%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#27A291',
+                        }}>
+                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeName} </Text>
+                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            onPress={()=>this.setState({undo:true})}
+                            >
+                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Modal>
                 <Modal1 isVisible={this.state.loading}  >
                             <Image source={require('../assets/gif/logo.gif')} style={{
                                 alignSelf: 'center',

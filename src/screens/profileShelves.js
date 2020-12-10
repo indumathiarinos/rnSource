@@ -1286,7 +1286,7 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
                     <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
                   </TouchableOpacity>
                 </View>
-                <ScrollView>
+                <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
                  <FlatList
                       data={this.state.collection}
                       keyExtractor={(item,index)=>index.toString()}

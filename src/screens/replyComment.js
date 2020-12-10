@@ -66,7 +66,11 @@ class ReplyComments extends Component {
             getComText:'',
             getComeDate:'',
             getComLike:false,
-            getComReply:false
+            getComReply:false,
+            gettypeid:'',
+            getpageid:'',
+            postpageid:'',
+
 
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -74,7 +78,9 @@ class ReplyComments extends Component {
     }
     componentDidMount() {
         AsyncStorage.getItem('userid').then((value)=>{this.setState({getuserid:value})}).done();
-        AsyncStorage.getItem('postid').then((value)=>{this.setState({getpostid:value})}).done();
+        AsyncStorage.getItem('typeid').then((value)=>{this.setState({gettypeid:value})}).done();
+        AsyncStorage.getItem('postid').then((value)=>{this.setState({postpageid:value})}).done();
+
         AsyncStorage.getItem('userComment').then((value)=>{
             const user = JSON.parse(value);
             this.setState({
@@ -106,12 +112,15 @@ class ReplyComments extends Component {
       }
     getData() {
         setTimeout(() => {
-            { this.exploredata("617") }
+            {this.state.gettypeid==4?this.setState({getpageid:this.state.postpageid,getpostid:''}):this.setState({getpostid:"0",getpageid:''})}
+
+            { this.exploredata() }
            
         }, 5)
     }
-    exploredata(postid){
-        var json=JSON.stringify({"pageID":postid});
+    exploredata(){
+        var json=JSON.stringify({"pageID":this.state.getpageid,"PostID":this.state.getpostid});
+        console.log('get json ',json,'type id ',this.state.gettypeid)
           fetch("http://162.250.120.20:444/Login/CommentReplyGet",
             {
                 method: 'POST',
@@ -295,14 +304,15 @@ class ReplyComments extends Component {
         // MultiselectItems.push(selectedItemArray);
         this.setState({ comments: list });
     }
-    commentReplyAdd(commentId,userid,postid,text){
+    commentReplyAdd(){
         this.setState({loading:true})
         var json=JSON.stringify({
-            "CommID":commentId,
-            "UserID":userid,
-            "PageID":postid,
-            "Txt":text,
-            "Imz_PagesID":""});
+            "CommID":this.state.getCurrentReplyId,
+            "UserID":this.state.getuserid,
+            "PageID":this.state.getpageid,
+            "Txt":this.state.commentText,
+            "PostID":this.state.getpostid
+        });
         fetch("http://162.250.120.20:444/Login/CommentReplyAdd",
           {
               method: 'POST',
@@ -317,7 +327,7 @@ class ReplyComments extends Component {
           .then((responseJson) => {
               //alert(responseText);1
               this.setState({loading:false,commentText:""});
-             {this.exploredata("617")}
+             {this.exploredata()}
               console.warn(responseJson);
               console.warn('comments add')
           })
@@ -455,7 +465,7 @@ class ReplyComments extends Component {
                     // onChangeText={value => this.refs.modal4.open()}
                     />
                     <TouchableOpacity style={styles.touchableButton}
-                        onPress={() => this.commentReplyAdd(this.state.getCurrentReplyId,this.state.getuserid,"617",this.state.commentText,)}>
+                        onPress={() => this.commentReplyAdd()}>
                         <Image
                             source={require('../assets/img/send-icon.png')}
                         />

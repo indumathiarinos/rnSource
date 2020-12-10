@@ -46,6 +46,7 @@ class ProfileAbout extends Component {
       Is_Follow:'',
       loginUserid:'',
       
+      
 }
 this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }

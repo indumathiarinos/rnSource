@@ -422,7 +422,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
         (data.isSelect) ? this.state.selectedItemArray.push(data) : this.state.selectedItemArray.pop(data);
         console.log('sel item array ', this.state.selectedItemArray);
         this.setState({ loading: true })
-        var json = JSON.stringify({ "UserID": this.state.getuserid, "PageID": pageid });
+        var json = JSON.stringify({ "UserID": this.state.getuserid, "PageID": id });
         fetch("http://162.250.120.20:444/Login/LikesAdd",
           {
             method: 'POST',
@@ -968,9 +968,10 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
           <TouchableOpacity
             style={{ padding: '3%' }}
             onPress={() => {
-              // this.props.navigation.navigate('comments')
+              AsyncStorage.setItem('typeid',"4");
               AsyncStorage.setItem('postid', item.Post_Page_Id);
               console.log('comments page id is ', item.Post_Page_Id)
+              this.props.navigation.navigate('comments')
             }}
           >
             <Image
@@ -1182,7 +1183,7 @@ style={{marginBottom:'10%'}}
                         <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
                       </TouchableOpacity>
                     </View>
-                 <ScrollView>
+                    <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
                      <FlatList
                           data={this.state.collection}
                           keyExtractor={(item,index)=>index.toString()}

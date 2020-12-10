@@ -139,7 +139,8 @@ class ReadingBook extends Component {
       getsecColName:'',
       getColId:'',
       getSecId:'',
-      interactionsComplete: false
+      interactionsComplete: false,
+     
 
     }
     this.pagecounting = 1;
@@ -1195,7 +1196,10 @@ class ReadingBook extends Component {
          source={imgSource}/> */}
         <TouchableOpacity
           style={{ padding: '3%' }}
-          // onPress={() => this.props.navigation.navigate('comments')}
+          onPress={() =>{
+            AsyncStorage.setItem('typeid',"4")
+              AsyncStorage.setItem('postid',this.state.page_id )
+            this.props.navigation.navigate('comments')}}
         >
           <Image
 
@@ -1361,7 +1365,7 @@ class ReadingBook extends Component {
                         <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
                       </TouchableOpacity>
                     </View>
-                 <ScrollView>
+                    <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
                      <FlatList
                           data={this.state.collection}
                           keyExtractor={(item,index)=>index.toString()}

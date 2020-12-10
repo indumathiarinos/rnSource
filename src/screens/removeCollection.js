@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {
-    View,SafeAreaView, ImageBackground, FlatList, BackHandler,RefreshControl,AsyncStorage, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
+    View,SafeAreaView,Modal, ImageBackground, FlatList, BackHandler,RefreshControl,AsyncStorage, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
     TouchableOpacity, PermissionsAndroid
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -66,7 +66,9 @@ class RemoveCollection extends Component {
         getuserid:'',
         selectedColid:'',
         deletedName:'',
-        selectedIds:[]
+        selectedIds:[],
+        undo:false,
+        modalVisible: false,
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -163,10 +165,9 @@ deleteData(userid,collectionId) {
         .then((response) => response.json())
         .then((responseJson) => {
             this.setState({ loading: false })
-                AsyncStorage.setItem('Col_Deleted_Name',JSON.stringify(this.state.deletedName))
-                this.props.removePopup();
-              this.props.navigation.navigate('collection')
-          this.props.navigation.navigate('collection')
+                // AsyncStorage.setItem('Col_Deleted_Name',JSON.stringify(this.state.deletedName))
+                // this.props.removePopup();
+        //   this.props.navigation.navigate('collection')
 
             //alert(this.state.data.status)  
         })
@@ -237,6 +238,23 @@ componentWillUnmount() {
               }
           });
       }
+      showModal = () => {
+        this.setState({
+            modalVisible: true
+        });
+        setTimeout(() => {
+            // this.props.changeRemove()
+            this.setState({
+                modalVisible: false
+            })
+            if(this.state.undo==false){
+                {this.CheckConnectivity1()}
+              }else{
+                this.setState({undo:false})
+              }    
+              this.props.navigation.navigate('collection');
+        }, 5000);
+    }
       deleteFunc=()=>{
           // this.props.changeRemove2();
           // AsyncStorage.setItem('removePopup', true);
@@ -292,6 +310,7 @@ componentWillUnmount() {
               <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
                   {/* <View > */}
                       <ImageBackground
+                      imageStyle={{borderTopRightRadius: 10}}
                           style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                           source={{ uri: item.Image2!=""?item.Image2:null}} >
                            {/* {this.state.selectedColid==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/close.png')}/>:null} */}
@@ -360,12 +379,39 @@ componentWillUnmount() {
                           </TouchableOpacity>
                           <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedColid!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                           <TouchableOpacity 
-                              onPress={() =>this.deleteFunc()}>
+                              onPress={() =>this.showModal()}>
                               <Text style={[this.state.selectedColid!=""?styles.inacitveColor:styles.inacitveStyle]}>Delete</Text>
                           </TouchableOpacity>
                           </LinearGradient>
                       </View>
                   </View>
+                  <Modal
+                        animationType="slide"
+                        transparent
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => {
+                            console.log('Modal has been closed.');
+                        }}>
+                        <View style={{
+                            left: 0, right: 0, bottom: 0, position: 'absolute',
+                            height: '10%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'red',
+                        }}>
+                            <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed - {this.state.deletedName} </Text>
+
+
+                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            onPress={()=>this.setState({undo:true})}
+                            >
+                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                            </TouchableOpacity>
+
+
+                        </View>
+                    </Modal>
+
                   <Modal1 isVisible={this.state.loading}  >
                               <Image source={require('../assets/gif/logo.gif')} style={{
                                   alignSelf: 'center',

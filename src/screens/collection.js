@@ -114,23 +114,7 @@ toggleTab4() {
     });
     this.props.navigation.openDrawer()
 }
-showModal = () => {
-    console.log('enters')
-    this.setState({
-        modalVisible: true
-    });
-    setTimeout(() => {
-        // this.props.changeRemove()
-        this.setState({
-            modalVisible: false
-        })
-        this.props.removePopup();
 
-        //   this.props.changeRemove();
-    }, 5000);
-    console.log('modal state is ', this.state.modalVisible);
-    // {this.exploredata(this.state.getuserid)}
-}
 showModal1 = () => {
     console.log('enters')
     this.setState({
@@ -270,18 +254,9 @@ async componentDidMount() {
 
     this.focusListener = this.props.navigation.addListener('willFocus', () => {
         AsyncStorage.getItem('collectionFilter').then((val) =>val!=null? this.setState({ collFilter: val }):"DESC").done();
-        console.log('merge n remove props ',this.state.merge,'  ',this.state.remove)
-       if(this.props.remove==true){
-          {this.getData2()}
-
-       }else if(this.props.merge==true){
-        {this.getData1()}
-
-       }
+      
         this.CheckConnectivity();
-        // if(this.state.mergePopup==1 || this.state.newval==1){
-        //     this.setState({mergePopup:0,newval:0})
-        // }
+
     })
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 }
@@ -316,80 +291,6 @@ getData() {
         
             }, 3000)
 }
-getData1() {
-    AsyncStorage.getItem('MergeName').then((value)=>{this.setState({getMergeName:value})}).done();
-
-    console.log('this merge props1 ',this.props.merge,this.props.remove)
-    if(this.props.merge==true){
-        setTimeout(
-            () =>
-                this.showModal1(),
-            1000
-        );
-    }
-
-}
-getData2() {
-    AsyncStorage.getItem('Col_Deleted_Name').then((value) => this.setState({ getDeletedName: value })).done();
-
-    console.log('this merge props2 ',this.props.merge,this.props.remove)
-
-    if(this.props.remove==true){
-
-        setTimeout(
-            () =>
-                this.showModal(),
-            1000
-        );
-    }
-}
-popupData() {
-    setTimeout(() => {
-        if (this.state.mergePopup == 1) {
-            console.log('fsdgshd remove entedfdskfslkj')
-
-            AsyncStorage.getItem('MergeName').then((value)=>{this.setState({getMergeName:value})}).done();
-
-            setTimeout(
-                () =>
-                    this.showModal1(),
-                1000
-            );
-            AsyncStorage.setItem('mergePopup', JSON.stringify(0));
-            this.setState({mergePopup:0})
-        }else{
-            AsyncStorage.setItem('mergePopup', JSON.stringify(0));
-            this.setState({mergePopup:0})
-        }
-        
-        if (this.state.newval == 1 ) {
-            console.log('remove entedfdskfslkj fsdgagsa')
-
-            AsyncStorage.getItem('Col_Deleted_Name').then((value) => this.setState({ getDeletedName: value })).done();
-            console.log('value is & deleted name ', this.state.newval,this.state.getDeletedName);
-            setTimeout(
-                () =>
-                    this.showModal(),
-                1000
-            );
-            AsyncStorage.setItem('removePopup', JSON.stringify(0));
-            this.setState({newval:0})
-
-        }else{
-            AsyncStorage.setItem('removePopup', JSON.stringify(0));
-            this.setState({newval:0})
-        }
-        
-            }, 5)
-}
-// willFocus = this.props.navigation.addListener(
-//     'willFocus',
-//     (payload) => {
-//       this.someProcess();
-//     }
-//   );
-
-  // and don't forget to remove the listener
   componentWillUnmount () {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     this.focusListener.remove()
@@ -610,32 +511,7 @@ collCoverItems({ item }) {
                             }} />
                         </Modal1>
                 
-                    <Modal
-                        animationType="slide"
-                        transparent
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            console.log('Modal has been closed.');
-                        }}>
-                        <View style={{
-                            left: 0, right: 0, bottom: 0, position: 'absolute',
-                            height: '10%',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: 'red',
-                        }}>
-                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed - {this.state.getDeletedName} </Text>
 
-
-                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
-                            // onPress={()=>this.undoFunc(item)}
-                            >
-                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
-                            </TouchableOpacity>
-
-
-                        </View>
-                    </Modal>
 
                     <Modal
                         animationType="slide"
@@ -673,7 +549,7 @@ collCoverItems({ item }) {
                             {/* <Text>Home</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                            <Image source={require('../assets/img/collection.png')} />
+                        <Image source={require('../assets/img/green_coll_icon.png')} />
                             {/* <Text>Collection</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
@@ -701,6 +577,7 @@ const styles = StyleSheet.create({
     bottomBar:{
         backgroundColor: '#fff', 
         alignItems: 'center',
+        height:'6%',
         bottom:0,
         left:0,
         right:0,

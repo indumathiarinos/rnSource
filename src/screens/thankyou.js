@@ -113,9 +113,9 @@ class Thankyou extends Component {
       }
       backpress=()=>{
         //    console.log('before set',this.props.nav)
-        this.props.navigation.goBack();
+        // this.props.navigation.goBack();
           //  this.props.changeNavNews();
-          //  this.props.navigation.navigate('MainpageTabs')
+           this.props.navigation.navigate('newsfeed')
         //    console.log('after set',this.props.nav);
        }
     render() {

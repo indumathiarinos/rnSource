@@ -341,6 +341,10 @@ _renderTruncatedFooter = (handlePress,index,item) => {
       // </View>
     );
   }
+  goToAuthorProfile(userid){
+    AsyncStorage.setItem('profile_userid',JSON.stringify(Number(userid)));
+    this.props.navigation.navigate('profileAbout')
+  }
   fullcard({ item,index }) {
     const like=require('../assets/img/like.png');
     const unlike=require('../assets/img/unlike.png');
@@ -370,9 +374,9 @@ _renderTruncatedFooter = (handlePress,index,item) => {
             activeOpacity={0.7}
           />
           </TouchableOpacity>
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate('profileAbout')}>
-            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start',marginLeft:'3%'}}>
-              <Image style={{width:50,height:50,borderRadius:50/2}} source={{uri:item.avatar}}/>
+            <TouchableOpacity onPress={()=>this.goToAuthorProfile(item.USERID)}>
+            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start',margin:'3%'}}>
+              <Image style={{width:35,height:35,borderRadius:35/2}} source={{uri:item.avatar}}/>
               <Text style={{marginLeft:'2%',fontWeight:'bold',fontSize:17}}>{item.User_name}</Text>
               </View>
             </TouchableOpacity>

@@ -52,7 +52,10 @@ class SectionEdit extends Component {
         getCollectionId:'',
         sourceCollId:'',
         sourceSecId:'',
-        collSourceName:''
+        collSourceName:'',
+        editPopupState:false,
+        editpagetitle:'',
+        undo:false
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -135,7 +138,8 @@ componentDidMount() {
     AsyncStorage.getItem('newColl_Id').then(val =>this.setState({ sourceCollId: val })).done;
     // AsyncStorage.getItem('collectionId').then((val) => this.setState({ getCollectionId: val })).done();
     console.log('collection userid is ',this.state.getuserid,this.state.getCollectionId)
-   
+    AsyncStorage.getItem('edit_title').then((value) => this.setState({ editpagetitle : value })).done();
+
     this.CheckConnectivity();
 
     this.focusListener = this.props.navigation.addListener('willFocus', () => {
@@ -357,6 +361,31 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
     console.warn(error);
 });
 }
+showModal1 = () => {
+    console.log('enters')
+    this.setState({
+      editPopupState: true,
+      loading:false
+    });
+    setTimeout(() => {
+      // this.props.changeRemove()
+      this.setState({
+        editPopupState: false,
+      })
+      if(this.state.undo==false){
+        {this.editClk()}
+      }else{
+        this.setState({undo:false})
+      }
+      this.props.navigation.goBack();
+
+
+    //   this.props.secEditPopupFunc();
+      // AsyncStorage.setItem('sectionEdit_popup',JSON.stringify(false))
+      //   this.props.changeRemove();
+    }, 3000);
+    console.log('modal state is ', this.state.popupModal)
+  }
 editClk() {
     this.setState({loading:true})
     var json = JSON.stringify({
@@ -382,10 +411,11 @@ editClk() {
         //alert(responseText);
         this.setState({ loading: false })
         console.warn(responseJson);
-        this.props.secEditPopupFunc();
-        AsyncStorage.setItem('secEdit_Name',JSON.stringify(this.state.collSourceName))
+        // this.props.navigation.navigate('sectionDetail')
+
+        // this.props.secEditPopupFunc();
+        // AsyncStorage.setItem('secEdit_Name',JSON.stringify(this.state.collSourceName))
         // AsyncStorage.setItem('sectionEditPopup',true)
-        this.props.navigation.navigate('sectionDetail')
         //alert(this.state.data.status)  
     })
     .catch((error) => {
@@ -607,12 +637,46 @@ editClk() {
                             </TouchableOpacity>
                             <LinearGradient style={{backgroundColor:'#fff',width:width/3.5,padding:'1%',borderRadius:15}} colors={this.state.next?['#24D4BC', '#27A291']:['#fff','#fff']} >
                             <TouchableOpacity 
-                                onPress={() =>this.state.next? this.editClk():console.log('value is ',value,'value true or false',)}>
+                                onPress={() =>this.state.next? this.showModal1():console.log('value is ',value,'value true or false',)}>
                                 <Text style={[this.state.next?styles.inacitveColor:styles.inacitveStyle]}>Edit</Text>
                             </TouchableOpacity>
                             </LinearGradient>
                         </View>
                     </View>
+                    <Modal
+          animationType="slide"
+          transparent
+          visible={this.state.editPopupState}
+          onRequestClose={() => {
+            console.log('Modal has been closed.');
+          }}>
+              <View style={{
+          left:0,right:0,bottom:0,position:'absolute',   
+          height:'10%',
+          backgroundColor: '#27A291',
+          flexDirection:'row',
+          width:width,
+          
+          padding:'1%',
+         }}>
+           <View style={{flexDirection:'row',width:'85%',margin:'1%',alignSelf:'center',  alignItems: 'center',
+          justifyContent:'center',}}>
+           <Text  style={{fontSize: 17,textAlign:'center', color: 'white',alignSelf:'center',marginLeft:'2%'}}>Edited - </Text>
+          <Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:Number(this.state.editpagetitle).length!=null && this.state.editpagetitle.length<10?width/8:width/4.5,textAlign:'center'}}> 
+          {this.state.editpagetitle}
+          </Text>
+          <Text style={{color:'#fff',fontSize:17}}> to </Text>
+          <Text style={{textDecorationLine:'underline',color:'#fff',fontSize:17}}>
+            {this.state.collSourceName}
+            {/* Sample Collection1 */}
+            </Text>
+           </View>
+           
+          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({undo:true})}>
+          <Text style={{fontSize: 16,color:'white',textDecorationLine:'underline',}}>Undo</Text>
+          </TouchableOpacity>
+       </View>
+        </Modal>
                 </SafeAreaView>
             )
         }

@@ -315,15 +315,14 @@ SearchFilterFunction(text) {
        
           <View style={{ flexDirection: 'row',paddingLeft:'5%',paddingRight:'5%',marginTop:'2%',marginBottom:'2%'
           ,justifyContent:'space-between'}}>
-          <View style={{flexDirection:'column',width:width/1.7,marginTop:'3%' }}>
+          <View style={{flexDirection:'column',width:width/1.8,marginTop:'3%' }}>
 
   <Text style={{fontSize:17,fontWeight:'bold',paddingLeft:'2%'}}> {item.PostLinkTitle} </Text>
   <Text style={{fontSize:16,marginTop:10,color:'#707070',paddingLeft:'3%'}}>
-       
        {item.Post_author} {/* Packaging Design - Bite Me: Packaging Insults Chewers as They... Grab a Piece of Tooth-Shaped Gum */}
     </Text>
   </View>
-  <TouchableOpacity onPress={()=>this.imgClick(item.Post_page_id,item.TypeID)}>
+  {/* <TouchableOpacity onPress={()=>this.imgClick(item.Post_page_id,item.TypeID)}>
   <ImageBackground imageStyle={{borderRadius:10}} source={{uri:item.PostLinkImage!=""?item.PostLinkImage:null}} 
   style={{resizeMode:'cover',width:100,height:120,borderRadius:20,margin:'3%'}}>
   <TouchableOpacity style={{padding:'2%'}}
@@ -332,7 +331,19 @@ SearchFilterFunction(text) {
 <Image style={{alignSelf:'flex-end',marginRight:'5%',marginTop:'5%',}} source={require('../assets/img/3dots_white.png')}/>
 </TouchableOpacity>
 </ImageBackground>
-</TouchableOpacity>
+</TouchableOpacity> */}
+ <TouchableOpacity style={{marginRight:'2%'}} onPress={()=>this.imgClick(item.Post_page_id,item.TypeID)}>
+ <ImageBackground source={{uri:item.PostLinkImage!=""?item.PostLinkImage:null}} 
+          imageStyle={{ borderRadius: 15 }}
+          style={[item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null}]}
+             >
+             <TouchableOpacity style={{padding:'2%'}}
+         onPress={() => this.refs.modal5.open()}
+      >
+              <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
+            </TouchableOpacity>
+          </ImageBackground>
+          </TouchableOpacity>
 </View>);
   
     // var imgSource = this.state.showlikeImg? require('../assets/img/like.png') : require('../assets/img/unlike.png');
@@ -429,6 +440,7 @@ SearchFilterFunction(text) {
     //    console.log('before set',this.props.nav)
       //  this.props.changeNavNews();
       //  this.props.navigation.navigate('MainpageTabs')
+      
       this.props.navigation.goBack();
     //    console.log('after set',this.props.nav);
    }
@@ -669,6 +681,21 @@ style={[!this.state.profilepage?styles.blacktext:styles.headerText]}
 
 }
 const styles = StyleSheet.create({
+  pubImgStyle:{ 
+    elevation:1,
+    width: 130, height: 150,
+    borderRadius:15,
+    
+    // alignItems:'center',
+    //  jsutifyContent: 'center'
+     },
+     pageImgStyle:{ 
+      elevation:1,
+      width: 130, height: 100,
+      borderRadius:15
+      // alignItems:'center',
+      //  jsutifyContent: 'center'
+       },
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
