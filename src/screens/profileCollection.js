@@ -121,6 +121,7 @@ exploredata(){
  
             })
           }
+          console.log('profile service ',responseJson);
           //alert(this.state.profil[0].username)  
       })
       .catch((error) => {
@@ -129,7 +130,7 @@ exploredata(){
 }
 followService(userid, follower_id) {
   // this.setState({ loading: true })
-  var json = JSON.stringify({"followingID":userid,"followerID":follower_id,"Action_For":"Add"}
+  var json = JSON.stringify({"followingID":follower_id,"followerID":userid,"Action_For":"Add"}
   );
   console.log('follow data ',json)
   fetch("http://162.250.120.20:444/Login/FollowAddGet",
@@ -426,7 +427,7 @@ backpress=()=>{
               
                 <View style={styles.socialBarContainer}>
                       
-                      <TouchableOpacity style={styles.socialBarButton} onPress={() => this.addProductToCart()}>
+                      <TouchableOpacity style={styles.socialBarButton}>
                       <Text  style={{color:'#707070'}}>{this.state.followers}</Text>
                         <Image style={{marginLeft:5}}
                         // style={styles.icon}
@@ -434,8 +435,10 @@ backpress=()=>{
                       </TouchableOpacity>
                       <View style={styles.divider}>
                       </View>      
-                      <TouchableOpacity onPress={()=>this.refs.modal6.open()} style={styles.socialBarButton}>
-                      <Text style={{color:'#707070'}}>80.1k(SN)</Text>
+                      <TouchableOpacity 
+                    // onPress={()=>this.refs.modal6.open()}
+                     style={styles.socialBarButton}>
+                         <Text style={{color:'#707070'}}>80.1k(SN)</Text>
                       {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
                       <Image style={styles.icon} source={require('../assets/img/share.png')}/>
                       {/* </TouchableOpacity> */}

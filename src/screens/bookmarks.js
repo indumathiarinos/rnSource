@@ -127,7 +127,7 @@ handleBackButtonClick() {
 getData(){
   setTimeout(() => {
     { this.exploredata(this.state.getuserid) }
-  }, 5);
+  }, 2000);
 }
 deleteData(userid,readlaterId) {
   this.setState({loading:true})
@@ -394,7 +394,7 @@ fullcard({ item,index }) {
         <View style={{backgroundColor:'#F9F9F9',alignItems:'center',paddingLeft:'2%',paddingRight:'2%'}}>
         <ReadMore
                 contentContainerStyle={{backgroundColor:'#F9F9F9'}}
-                numberOfLines={2}
+                numberOfLines={1}
                 renderTruncatedFooter={(handlePress1,index)=>this._renderTruncatedFooter(handlePress1,index,item)}
                 // renderRevealedFooter={this._renderRevealedFooter}
                 onReady={this._handleTextReady}>
@@ -598,19 +598,4 @@ backBtn:{
 ,alignSelf:'center'
 }
 })
-// function mapStateToProps(state) {
-//     return {
-//       nav: state.apiReducer.nav,
-//     }
-//   }
-  
-  
-//   function mapDispatchToProps(dispatch) {
-//     return {
-//       changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
-//       changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' })
-//     }
-//   };
-  
-  // export default connect(mapStateToProps, mapDispatchToProps)(Bookmarks);
   export default Bookmarks;

@@ -67,7 +67,8 @@ export default class MergeSection extends Component {
         getuserid:'',
         selectedMergeId:'',
         imgSelected:false,
-        collectionId:''
+        collectionId:'',
+        selectedMergeName:''
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -179,12 +180,13 @@ CheckConnectivity(){
             }
         });
     }
-    onPressHandler(id) {
+    onPressHandler(id,title) {
         // let selected;
          let sectionData=[...this.state.sectionData];
          for(let data of sectionData){
            if(data.SectionID==id){
-               this.setState({selectedMergeId:id})
+               this.setState({selectedMergeId:id,selectedMergeName:data.Page_Post_Title})
+               alert(this.state.selectedMergeName)
             //  data.abc=(data.abc==null)?true:!data.abc;
             //  (data.abc)?this.state.selectedItemArray.push(data):this.state.selectedItemArray.pop(data);
             //  console.log('selected item array ',this.state.selectedItemArray)
@@ -258,12 +260,12 @@ CheckConnectivity(){
                   }
                  {item.SectionID==0?
                   <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.Author}</Text>
                     </View>
                  :
                    <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
                         <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
                     </View>}
@@ -275,6 +277,8 @@ CheckConnectivity(){
     nextBtn=()=>{
         AsyncStorage.setItem('MergeSecFromId',JSON.stringify(this.state.selectedMergeId))
        {this.props.navigation.navigate('subSectionMerge',{'collId':colvalue})}
+       AsyncStorage.setItem('SecMergeFromName',JSON.stringify(this.state.selectedMergeName))
+
         // this.props.navigation.navigate('subCollectionMerge',
         // {pass_data:this.sendingItem(this.state.selectedItemArray)}
         // )

@@ -43,7 +43,9 @@ class SubCollectionMerge extends Component {
         sectionData:'',
         getColId:'',
         mergeModal:false,
-        undo:false
+        undo:false,
+        mergeFromName:''
+
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -53,6 +55,8 @@ class SubCollectionMerge extends Component {
     : null;
         AsyncStorage.getItem('userid').then((val)=>{this.setState({getuserid:val})}).done();
         AsyncStorage.getItem('collectionId').then((value) => this.setState({ getColId : value })).done();
+        AsyncStorage.getItem('SecMergeFromName').then((val)=>{this.setState({mergeFromName:val})}).done();
+
         this.CheckConnectivity();
         // {this.getData()}
         AsyncStorage.getItem('MergeSecFromId').then((val)=>{this.setState({mergeFromId:val})}).done();
@@ -293,7 +297,7 @@ class SubCollectionMerge extends Component {
                     </View>
                  : */}
                    <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
                         <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
                     </View>
@@ -370,7 +374,7 @@ class SubCollectionMerge extends Component {
                             justifyContent: 'center',
                             backgroundColor: '#27A291',
                         }}>
-                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeName} </Text>
+                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeFromName} - {this.state.mergeName} </Text>
                             <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
                             onPress={()=>this.setState({undo:true})}
                             >

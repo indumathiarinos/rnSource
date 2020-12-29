@@ -42,7 +42,8 @@ class SubCollectionMerge extends Component {
         // getuserid:'',
         collection:'',
         mergeModal:false,
-        undo:false
+        undo:false,
+        mergeFromName:''
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -52,6 +53,7 @@ class SubCollectionMerge extends Component {
         // {this.getData()}
         this.CheckConnectivity();
         AsyncStorage.getItem('MergeFromId').then((val)=>{this.setState({mergeFromId:val})}).done();
+        AsyncStorage.getItem('MergeFromName').then((val)=>{this.setState({mergeFromName:val})}).done();
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
       }
@@ -66,7 +68,6 @@ class SubCollectionMerge extends Component {
           }else{
             alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
         }
-         
         });
       }
       CheckConnectivity1(){    
@@ -161,7 +162,7 @@ class SubCollectionMerge extends Component {
          for(let data of collection){
            if(data.collectionsID==id){
                console.log('id is ',id)
-               this.setState({mergeToId:id,mergeName:data.Title})
+               this.setState({mergeToId:this.state.mergeToId==id?"":id,mergeName:data.Title})
             //    console.log('merge to id in merge collection',this.state.mergeToId)
 
             //  data.abc=(data.abc==null)?true:!data.abc;
@@ -266,7 +267,7 @@ class SubCollectionMerge extends Component {
                     </View>
                     
                     <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
                         <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
                     </View>
@@ -322,13 +323,13 @@ class SubCollectionMerge extends Component {
                             onPress={() =>this.state.mergeToId==""? 
                             // this.props.navigation.navigate('mergeCollection')
                             this.props.navigation.goBack()
-                            :console.log('value is ',value,'value true or false',)}>
+                            :console.log('value is ','value true or false',)}>
                             <Text style={[this.state.mergeToId==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
 
                         </TouchableOpacity>
                         <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.mergeToId!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                         <TouchableOpacity 
-                            onPress={() =>this.showModal1()}>
+                            onPress={() =>this.state.mergeToId!=""?this.showModal1():null}>
                             <Text style={[this.state.mergeToId!=""?styles.inacitveColor:styles.inacitveStyle]}>Next</Text>
                         </TouchableOpacity>
                         </LinearGradient>
@@ -355,7 +356,7 @@ class SubCollectionMerge extends Component {
                             justifyContent: 'center',
                             backgroundColor: '#27A291',
                         }}>
-                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeName} </Text>
+                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeFromName} - {this.state.mergeName} </Text>
                             <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
                             onPress={()=>this.setState({undo:true})}
                             >

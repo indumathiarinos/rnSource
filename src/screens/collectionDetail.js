@@ -96,7 +96,7 @@ toggleTab1() {
       tab3: false,
       tab4: false
   });
-  this.props.changeNavRec();
+  // this.props.changeNavRec();
   this.props.navigation.push('mainpage')
   // this.props.navigation.navigate('MainpageTabs')
 }
@@ -214,10 +214,11 @@ pressIcon = (item) => {
 secCoverItems({ item }) {
   // const value = item;
   return (
-    <View style={{flex:1, height:150,width:width}}>
+    <View style={{height:150,width:width}}>
           
-              <ImageBackground 
-              style={{flexDirection: 'row' }}
+              <View 
+              style={{flexDirection: 'row',width:width,
+              height:150}}
               >
                   <Image style={{  height:150,width:width/5, resizeMode: 'cover', }}
                       source={{ uri: item.Image1!=""?item.Image1:null }}
@@ -236,14 +237,8 @@ secCoverItems({ item }) {
                   <Image style={{  height:150,width:width/5, resizeMode: 'cover',  }}
                       source={{ uri: item.Image5!=""?item.Image5:null }} />
 
-              </ImageBackground>
-              <View style={styles.overlay}/>
-              <View style={{position:'absolute',top:60,alignItems:'center',width:width,justifyContent:'center',}}>
-              {/* <TouchableOpacity onPress={()=>this.setState({toggle:!this.state.toggle})}> */}
-                          <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18 }}
-                          onPress={()=>this.setState({toggle:!this.state.toggle})}>{!this.state.toggle?this.state.coll_name:this.state.coll_desc}</Text>
-                          {/* </TouchableOpacity> */}
-                </View>
+              </View>
+           
               {/* <View style={{  marginTop: '-20%',
   justifyContent: "center",
   alignItems: "center",backgroundColor:'pink'}}>
@@ -428,12 +423,12 @@ renderItem_card({ item }) {
                       source={{ uri: item.Image1!=""?item.Image1:null }} />
                      
               </View>:
-              <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+              <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10, }}
               >
                   <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                       source={{ uri: item.Image1!=""?item.Image1:null }} />
-                  <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                      <View >
+                  <View style={{ flex: 1, flexDirection: 'column', borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
                           <Image
                               style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                               source={{ uri: item.Image2!=""?item.Image2:null}} />
@@ -448,12 +443,12 @@ renderItem_card({ item }) {
             }
            {item.SectionID==0?
             <View style={{ padding: '2%', margin: '1%' }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
+              <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
                   <Text style={{ color: '#707070' }}>{item.Author}</Text>
               </View>
            :
              <View style={{ padding: '2%', margin: '1%' }}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
+              <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                   <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
                   <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
               </View>}
@@ -605,11 +600,11 @@ readsItems({ item }) {
         flex: 1,
         flexDirection: 'row',
         // width: '50%',
-        margin: '2%',
+        // margin: '2%',
         justifyContent: 'space-between'
       }}>
-        <View style={{ flexDirection: 'column',width:width/1.8, }}>
-          <Text style={{ fontSize: 18, color: '#000' }}>{item.Page_Post_Title}</Text>
+        <View style={{ flexDirection: 'column',width:width/1.8-40, }}>
+          <Text numberOfLines={2} style={{ fontSize: 18, color: '#000' }}>{item.Page_Post_Title}</Text>
           <Text style={{ color: '#707070' }}>{item.Author}</Text>
         </View>
         {/* <Image source={item.img} /> */}
@@ -701,7 +696,9 @@ readsItems({ item }) {
                 contentContainerStyle={{
                     flex:1,
                     justifyContent:'center',
-                    marginBottom:'5%'
+                    marginBottom:'5%',
+                    width:width,
+                    height:150
                 }}
                     data={this.state.secCoverImg}
                     extraData={this.state}
@@ -710,11 +707,17 @@ readsItems({ item }) {
                     keyExtractor={(item,index)=>index.toString()}
 
                     />
+                       <View style={styles.overlay}/>
+              <View style={{position:'absolute',top:60,alignItems:'center',width:width,justifyContent:'center',}}>
+                          <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18 }}
+                          onPress={()=>this.setState({toggle:!this.state.toggle})}>{!this.state.toggle?this.state.coll_name:this.state.coll_desc}</Text>
+                </View>
                     <FlatList
                         contentContainerStyle={{
                             // flex: 1,
                             // marginBottom:this.state.sectionData.length<=2?'60%':'0%',
                             marginTop:'5%',
+                          
                             // marginLeft:'5%'
                         }}
                         data={this.state.sectionData}
@@ -725,13 +728,14 @@ readsItems({ item }) {
                         enableEmptySections={false}
                         keyExtractor={(item, index) => index.toString()}
                     />
+                    {this.state.readsData.length>0?
                     <View style={{alignItems:'center'}}>
                     <Text style={{fontSize:20, color:'#000',width:width-40,textAlign:'left',margin:'2%'}}>Reads</Text>
                     <View style={{width:width-40,height:1,backgroundColor:'#27A291'}}/>
-                    </View>
+                    </View>:null}
                     <FlatList
             data={this.state.readsData}
-            contentContainerStyle={{ marginTop: '5%' }}
+            contentContainerStyle={{ marginTop: '5%',width:width-40,alignSelf:'center'}}
             extraData={this.state}
             renderItem={this.readsItems.bind(this)}
             removeClippedSubviews={false}
@@ -841,14 +845,14 @@ readsItems({ item }) {
                             {/* <Text>Home</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                            <Image source={require('../assets/img/collection.png')} />
-                            {/* <Text>Collection</Text> */}
-                        </TouchableOpacity>
+                        <Image style={{ width: 50, height: 40 }} source={require('../assets/img/green_coll_icon.png')} />
+                        {/* <Text>Collection</Text> */}
+                    </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
                             <Image source={require('../assets/img/search.png')} />
                             {/* <Text>Search</Text> */}
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab4()}>
+                        <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
                             {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
@@ -934,8 +938,11 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         position:'absolute'
     },
-    tabsss:{
-        margin:'2%'
+    // tabsss:{
+    //     margin:'2%'
+    // },
+    tabsss: {
+      alignItems: 'center', justifyContent: 'center'
     },
     TouchableOpacityStyle: {
         position: 'absolute',
@@ -1018,7 +1025,6 @@ const styles = StyleSheet.create({
 })
 function mapStateToProps(state) {
     return {
-        nav: state.apiReducer.nav,
         sectionMerge:state.apiReducer.sectionMerge,
         sectionRemove:state.apiReducer.sectionRemove,
        
@@ -1028,8 +1034,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
-        changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' }),
         mergePopupSection:()=>dispatch({type:'MERGE_POPUP_SECTION'}),
         removePopupSection:()=>dispatch({type:'REMOVE_POPUP_SECTION'}),
 

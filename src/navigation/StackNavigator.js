@@ -78,7 +78,7 @@ import share_modal from '../screens/share_modal';
 import contents from '../screens/contents';
 import quoteCreation from '../screens/quoteCreation';
 import periodicalContents from '../screens/periodicalContents';
-import camera from '../screens/camera';
+import booksPinFilter from '../screens/booksPinFilter';
 import followsubscribe from '../screens/followsubscribe';
 import imgPreview from '../screens/imgPreview';
 import MainpageTabs from '../screens/mainpageTabs';
@@ -97,7 +97,7 @@ import Help from '../screens/help';
 import commentsLike from '../screens/comments_like';
 import replyComment from '../screens/replyComment';
 import pins1 from '../screens/pins1';
-
+import exploreReadBook from "../screens/exploreReadBook";
 const {width,height}=Dimensions.get('window');
 // import TopNavigator from './TopNavigator';
 // import {createBottomTabNavigator} from 'react-navigation-tabs';
@@ -138,7 +138,12 @@ const HomeNavigator = createStackNavigator({
       header:null
     }
   },
- 
+  exploreReadBook:{
+    screen:exploreReadBook,
+    navigationOptions:{
+      header:null
+    }
+  },
   // menu:{
   //   screen:menu,
   //   navigationOptions:{
@@ -333,8 +338,8 @@ const HomeNavigator = createStackNavigator({
       header:null
     }
   },
-  camera:{
-    screen:camera,
+  booksPinFilter:{
+    screen:booksPinFilter,
     navigationOptions:{
       header:null
     }
@@ -636,7 +641,13 @@ subSectionMerge:{
     header:null,
 
   } 
-}
+},
+newSignup: {
+  screen: newSignup,
+  navigationOptions: {
+    header: null,
+},
+},
   }
   );
   const FullStack=createStackNavigator({

@@ -35,7 +35,7 @@ class BooksPinFilter extends Component {
       },
       {
         id: 2,
-        title: "Most Popuplar",
+        title: "Most Popular",
       },
     
      
@@ -64,7 +64,7 @@ handleBackButtonClick() {
     //  {!this.state.pinfilter?null: AsyncStorage.setItem('pin_filter',false)}
     // }
       //  this.props.changeNavNews();
-      this.props.navigation.goBack();
+       this.props.navigation.navigate('books_pin')
     //    console.log('after set',this.props.nav);
    }
   renderItem_card({ item }) {
@@ -115,9 +115,10 @@ handleBackButtonClick() {
   render() {
 
     return (
-      <SafeAreaView style={{flex:2,backgroundColor:'#ffff'}}>
+      <SafeAreaView style={{flex:1,backgroundColor:'#ffff'}}>
       
-      <View style={styles.topview}>
+      {/* <View style={styles.topview}> */}
+      <View style={{flexDirection:'row'}}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TextInput
           style={styles.textInputStyle}
@@ -139,7 +140,8 @@ handleBackButtonClick() {
         style={{ alignSelf: 'center' }}
        source={require('../assets/img/close.png')}/>
       </TouchableOpacity>
-    </View>
+      </View>
+    {/* </View> */}
    
 <View style={{flex:1,marginTop:'16%'}}>
     <Text style={styles.headline}>Filter by</Text>
@@ -173,10 +175,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems:'center',
      justifyContent: 'space-around',
-     top:0,
-     left:0,
-     right:0,
-     flex:1,
+    //  top:0,
+    //  left:0,
+    //  right:0,
+    //  flex:1,
      position:'absolute',
      padding:'2%'
   },
@@ -247,18 +249,5 @@ const styles = StyleSheet.create({
 
       }
 })
-function mapStateToProps(state){
-  return{
-  nav:state.apiReducer.nav,
-  }
-}
 
-
-function mapDispatchToProps(dispatch){
-  return{
-      changeNavRec:()=>dispatch({type:'CHANGE_NAV_REC'}),
-      changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'})
-  }
-};
-
-export default connect(mapStateToProps,mapDispatchToProps)(BooksPinFilter);
+export default BooksPinFilter;

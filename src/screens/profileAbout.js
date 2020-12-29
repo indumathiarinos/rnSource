@@ -44,8 +44,7 @@ class ProfileAbout extends Component {
       cover:'',
       shareModal:'',
       Is_Follow:'',
-      loginUserid:'',
-      
+      loginUserid:'',     
       
 }
 this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -153,6 +152,7 @@ getData(){
       }
       exploredata(){
         var json=JSON.stringify({"UserID":this.state.getuserid,"View_UserID":this.state.loginUserid});
+        console.log('json view profile ',json)
           fetch("http://162.250.120.20:444/Login/ViewProfile_About",
             {
                 method: 'POST',
@@ -188,7 +188,7 @@ getData(){
       }
       followService(userid, follower_id) {
         // this.setState({ loading: true })
-        var json = JSON.stringify({"followingID":userid,"followerID":follower_id,"Action_For":"Add"}
+        var json = JSON.stringify({"followingID":follower_id,"followerID":userid,"Action_For":"Add"}
         );
         console.log('follow data ',json)
         fetch("http://162.250.120.20:444/Login/FollowAddGet",
@@ -348,7 +348,6 @@ getData(){
               <View style={styles.socialBarContainer}>
                     
                     <TouchableOpacity style={styles.socialBarButton}
-                    //  onPress={() => this.addProductToCart()}
                      >
                     <Text  style={{color:'#707070'}}>{this.state.followers}</Text>
                       <Image style={{marginLeft:5}}
@@ -357,7 +356,9 @@ getData(){
                     </TouchableOpacity>
                     <View style={styles.divider}>
                     </View>      
-                    <TouchableOpacity onPress={()=>this.refs.modal6.open()} style={styles.socialBarButton}>
+                    <TouchableOpacity 
+                    // onPress={()=>this.refs.modal6.open()}
+                     style={styles.socialBarButton}>
                     <Text style={{color:'#707070'}}>80.1k(SN)</Text>
                     {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
                     <Image style={styles.icon} source={require('../assets/img/share.png')}/>

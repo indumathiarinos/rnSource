@@ -65,7 +65,8 @@ export default class MergeCollection extends Component {
             loading:true,
             selectedId:'',
             selectedMergeId:"",
-            selectState:false
+            selectState:false,
+            selectedMergeName:'',
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -140,13 +141,15 @@ export default class MergeCollection extends Component {
             });
     }
 
-   onPressHandler(id) {
+   onPressHandler(id,title) {
         // let selected;
          let collection=[...this.state.collection];
          for(let data of collection){
            if(data.collectionsID==id){
-               this.setState({selectState:!this.state.selectState,selectedMergeId:id,})
-             break;
+               this.setState({selectState:!this.state.selectState,selectedMergeId:this.state.selectedMergeId==id?"":id,selectedMergeName:title})
+            //    alert(this.state.selectedMergeName)
+
+               break;
            }
          }
 
@@ -185,7 +188,7 @@ export default class MergeCollection extends Component {
                 // borderColor:'#ccccccc'
             }}>
                 <TouchableOpacity
-              onPress={() => this.onPressHandler(item.collectionsID)}>
+              onPress={() => this.onPressHandler(item.collectionsID,item.Title)}>
                       
                     <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
                     >
@@ -212,7 +215,7 @@ export default class MergeCollection extends Component {
                     </View>
                     
                     <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
                         <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
                     </View>
@@ -223,6 +226,8 @@ export default class MergeCollection extends Component {
     nextBtn=()=>{
         console.log('selected merge from id is ',this.state.selectedMergeId)
         AsyncStorage.setItem('MergeFromId',JSON.stringify(this.state.selectedMergeId))
+        AsyncStorage.setItem('MergeFromName',this.state.selectedMergeName)
+
        {this.props.navigation.navigate('subCollectionMerge')}
         // this.props.navigation.navigate('subCollectionMerge',
         // {pass_data:this.sendingItem(this.state.selectedItemArray)}
@@ -262,13 +267,13 @@ export default class MergeCollection extends Component {
                 <View style={styles.bottomLine}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around',alignItems:'center' }}>
                         <TouchableOpacity style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}}
-                            onPress={() => this.props.navigation.goBack()}>
+                            onPress={() =>this.state.selectedMergeId==""?this.props.navigation.goBack():null}>
                             <Text style={[this.state.selectedMergeId==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
 
                         </TouchableOpacity>
                         <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedMergeId!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                         <TouchableOpacity 
-                            onPress={() =>this.nextBtn()}>
+                            onPress={() =>this.state.selectedMergeId!=""?this.nextBtn():null}>
                             <Text style={[this.state.selectedMergeId!=""?styles.inacitveColor:styles.inacitveStyle]}>Next</Text>
                         </TouchableOpacity>
                         </LinearGradient>

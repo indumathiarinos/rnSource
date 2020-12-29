@@ -300,7 +300,7 @@ handleBackButtonClick() {
           justifyContent: 'space-between'
         }}>
           <View style={{ flexDirection: 'column',width:width/1.8, }}>
-            <Text style={{ fontSize: 18, color: '#000' }}>{item.Title}</Text>
+            <Text numberOfLines={2} style={{ fontSize: 18, color: '#000' }}>{item.Title}</Text>
             <Text style={{ color: '#707070' }}>{item.Author}</Text>
           </View>
           {/* <Image source={item.img} /> */}

@@ -315,6 +315,10 @@ class Comments extends Component {
               console.warn(error);
           });
     }
+    goToTop = () => {
+        console.log('scrollview content height ',this.scrollViewContent_height,'normal height ',height)
+        this.scroll.scrollTo({x: 0, y: 0, animated: true});
+     }
     render() {
         const like = require('../assets/img/like.png');
         const unlike = require('../assets/img/unlike.png');
@@ -361,6 +365,8 @@ class Comments extends Component {
 
                 {/* <View  style={styles.root}> */}
                 <ScrollView
+                 onContentSizeChange={(width, height) => { this.scrollViewContent_height = height }}
+                ref={(c)=>this.scroll=c}
                 // style={{marginBottom:'20%'}}
                 >
                     <Text style={styles.headline}>Comments</Text>
@@ -377,6 +383,17 @@ class Comments extends Component {
                         }}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={(item,index)=>this.AllComments(item,index)} />
+
+                {height>this.scrollViewContent_height?
+                        <TouchableOpacity onPress={()=>this.goToTop()} style={styles.loadBtn}>
+                            <View style={styles.cmtBtnrow}>
+                            <Text style={styles.prevCommentBtn}>Load Previous Comments</Text>
+                            <Image style={{alignSelf:'center',}} source={require('../assets/img/comment1.png')} />
+
+                            </View>
+                        </TouchableOpacity>
+                        :null}
+
                 </ScrollView>
                 {/* </View> */}
                 {/* <View style={styles.bottomLine}> */}
@@ -474,6 +491,33 @@ const styles = StyleSheet.create({
     //             padding:10,
     //     margin:5
     //   },
+    loadBtn:{
+        backgroundColor:'#fff',
+        alignSelf:'center',
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:15,
+        shadowColor: '#000',
+        backgroundColor: 'white',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 0},
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        marginBottom:10
+    },
+    cmtBtnrow:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+        width:width/1.7,height:height/20,
+       
+    },
+    prevCommentBtn:{
+        fontSize:15,
+        color:'#27A291',
+
+    },
     touchableButton: {
         position: 'absolute',
         right: 40,

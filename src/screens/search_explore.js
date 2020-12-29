@@ -81,7 +81,9 @@ class SearchExplore extends Component {
           sectionExpand:false,
           section:'',
           secCollid:'',
-          text:''
+          text:'',
+          Category_name:'',
+          collection:''
 
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -99,6 +101,7 @@ class SearchExplore extends Component {
     }  
     componentDidMount() {
       AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
+      AsyncStorage.getItem('category_name').then((value) => this.setState({ Category_name : value })).done();
       this.CheckConnectivity();
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
@@ -120,8 +123,8 @@ class SearchExplore extends Component {
     getData=()=>{
       setTimeout(() => {
           // { this.exploredata() }
-          {this.exploredataPopup()}
           { this.exploredata1() }
+          {this.exploredataPopup()}
       }, 3);
     }
       periodIssues(postid) {
@@ -207,14 +210,15 @@ class SearchExplore extends Component {
       }
       exploredata1() {
           var json = JSON.stringify({
-              'UserId': this.state.getuserid,
+              'CategoryName': this.state.Category_name,
           });
-          fetch("http://162.250.120.20:444/Login/HomePage",
+          console.log('cator ',this.state.Category_name)
+          fetch("http://162.250.120.20:444/Login/ExploreCategory",
               {
                   method: 'POST',
                   headers: {
                       'Accept': 'application/json',
-                      'content-type': 'multipart/form-data'
+                      'content-type': 'application/json'
                   },
                   body: json
               }
@@ -231,57 +235,29 @@ class SearchExplore extends Component {
                   console.warn(responseJson)
                   //alert(this.state.data.status)
                   for (let i = 0; i < this.state.expl11.length; i++) {
-  
-                    //   alert(this.state.expl11.length+"df")
-                    if (this.state.expl11[i].Datafor === 'MV') {
-                        let toppick = [...this.state.toppick];
-                        toppick.push(this.state.expl11[i])
-                        this.setState({ toppick });
-                        // this.setState({loading:false})
-                        // alert(this.state.DATAS2.length+"df")
-                    }
-                    else if (this.state.expl11[i].Datafor === 'Publication') {
+                  if (this.state.expl11[i].datafor === 'Publication') {
                         let pub = [...this.state.pub];
                         pub.push(this.state.expl11[i])
                         this.setState({ pub });
                     }
-                    else if (this.state.expl11[i].Datafor === 'page') {
-                        let rv = [...this.state.rv];
-                        rv.push(this.state.expl11[i])
-                        this.setState({ rv });
+                    else if (this.state.expl11[i].datafor === 'Page') {
+                        let pages = [...this.state.pages];
+                        pages.push(this.state.expl11[i])
+                        this.setState({ pages });
                         
                     }
-                    else if (this.state.expl11[i].Datafor === 'Series') {
+                    else if (this.state.expl11[i].datafor === 'Series') {
                       let series = [...this.state.series];
                       series.push(this.state.expl11[i])
                       this.setState({ series });
                   }
-                  else if (this.state.expl11[i].Datafor === 'Periodical') {
+                  else if (this.state.expl11[i].datafor === 'Periodical') {
                       let periodical = [...this.state.periodical];
                       periodical.push(this.state.expl11[i])
                       this.setState({ periodical });
 
                   }
-                      // else{
-                      //   let DATAS4 = [...this.state.DATAS4];
-                      //   DATAS4.push(this.state.DATAS[i])
-                      //   this.setState({DATAS4});
-                      // }
-  
-                      // if(this.state.expl11[i].Datafor==='MV'){
-                      //   this.setState({toppick: this.state.expl11[i]
-                      //     })
-                      //      console.warn(this.state.expl11[i].Datafor+'fnjdnjv')
-  
-                      // }
-                      // else if(this.state.expl11[i].Datafor==='Publication'){
-                      //   this.setState({pub: this.state.expl11[i]
-                      //   })
-                      // }
-                      // else if(this.state.expl11[i].Datafor==='page'){
-                      //   this.setState({rv: this.state.expl11[i]
-                      //   })
-                      // }
+                   
                   }
 
 
@@ -344,20 +320,20 @@ class SearchExplore extends Component {
       //           console.warn(error);
       //       });
       // }
-      pressIcon = (item) => {
-        let { toppick } = this.state;
+      F = (item) => {
+        let { pub } = this.state;
         // console.log('top pick data ',item)
         // console.log('kjdsafksdfjsdka data is',toppick)
         // console.log('kjdsafksdfjsdka data is',item.TypeID)
         // console.log('kjdsafksdfjsdka data is',item.Post_Page_Id)
   
-        toppick = toppick.map(e => {
-            console.log('top pick type id is ', e.TypeID)
+        pub = pub.map(e => {
+            console.log('top pick type id is ', e.type_id)
   
-            if (item.TypeID === e.TypeID) {
-                AsyncStorage.setItem('typeid', item.TypeID);
+            if (item.type_id === e.type_id) {
+                AsyncStorage.setItem('typeid', item.type_id);
   
-                AsyncStorage.setItem('postid', item.Post_Page_Id);
+                AsyncStorage.setItem('postid', item.id);
                 if(nextPageName=='periodiViewBook'){
                 // AsyncStorage.setItem('EmailVer1', this.state.data.data.uid);
                 return this.props.navigation.navigate('viewBook');
@@ -377,15 +353,15 @@ class SearchExplore extends Component {
         });
     }
     pressIcon_pages=(item)=>{
-      let { toppick } = this.state;
+      let { pages } = this.state;
      
-      toppick = toppick.map(e => {
-          console.log('top pick type id is ', e.TypeID)
-
-          if (item.TypeID === e.TypeID) {
-              AsyncStorage.setItem('typeid', item.TypeID);
-
-              AsyncStorage.setItem('postid', item.Post_Page_Id);
+      pages = pages.map(e => {
+        console.log('top pick type id is ', e.type_id)
+  
+            if (item.type_id === e.type_id) {
+                AsyncStorage.setItem('typeid', item.type_id);
+  
+                AsyncStorage.setItem('postid', item.id);
              
               return this.props.navigation.navigate('readingBook');
           } else {
@@ -458,28 +434,24 @@ class SearchExplore extends Component {
         });
       }
       pressIcon1 = (item) => {
-          let { expl } = this.state;
-          console.log('top pick data ', item)
-          console.log('kjdsafksdfjsdka data is', expl)
-          // console.log('items are', item)
-          expl = expl.map(e => {
-              if (item.Category_name === e.Category_name) {
-                  // item.like = !e.like;
-                  return this.props.navigation.navigate('search', {
-                      item: item
-                  });
-                  // }
-                  // else if (item.id === 2) {
-                  //     return this.props.navigation.navigate('filter', {
-                  //         item: item
-                  //     });
-                  // } else if (item.id == 3) {
-                  //     return this.props.navigation.navigate('bookmarks', {
-                  //         item: item
-                  //     });
-              } else {
-                  return e;
+          let { pub } = this.state;
+          pub = pub.map(e => {
+                if (item.type_id === e.type_id) {
+                  AsyncStorage.setItem('typeid',JSON.stringify(Number(item.type_id)));
+          
+                  AsyncStorage.setItem('postid',JSON.stringify(Number(item.id)));
+              if (item.type_id ==4) {
+                  return this.props.navigation.navigate('readingBook');
+              } else if(item.type_id==1){
+                  return this.props.navigation.navigate('viewBook');
+              } else if(item.type_id==2){
+                  return this.props.navigation.navigate('periodiViewBook');
+              }else if(item.type_id==3){
+                  return this.props.navigation.navigate('seriesViewBook');
               }
+            } else {
+              return e;
+            }
           });
       }
       seriesPress = (item) => {
@@ -772,27 +744,25 @@ collData(userid,colid,secid) {
 });
   }
   pagePress = (item) => {
-    let { rv } = this.state;
+    let { pages } = this.state;
     // console.log('top pick data ',item)
     // console.log('kjdsafksdfjsdka data is',toppick)
     // console.log('kjdsafksdfjsdka data is',item.TypeID)
     // console.log('kjdsafksdfjsdka data is',item.Post_Page_Id)
 
-    rv = rv.map(e => {
-        console.log('top pick type id is ', e.TypeID)
-         if (item.TypeID === e.TypeID) {
-    // item.like = !e.like;
-    AsyncStorage.setItem('typeid', item.TypeID);
-    AsyncStorage.setItem('postid', item.Post_Page_Id);
-      
-    console.log('newsfeed post id is',item.Post_Page_Id);
-    if (item.TypeID ==4) {
+    pages = pages.map(e => {
+      if (item.type_id === e.type_id) {
+        AsyncStorage.setItem('typeid',JSON.stringify(Number(item.type_id)));
+          
+        AsyncStorage.setItem('postid',JSON.stringify(Number(item.id)));
+
+    if (item.type_id ==4) {
         return this.props.navigation.navigate('readingBook');
-    } else if(item.TypeID==1){
+    } else if(item.type_id==1){
         return this.props.navigation.navigate('viewBook');
-    } else if(item.TypeID==2){
+    } else if(item.type_id==2){
         return this.props.navigation.navigate('periodiViewBook');
-    }else if(item.TypeID==3){
+    }else if(item.type_id==3){
         return this.props.navigation.navigate('seriesViewBook');
     }
   } else {
@@ -805,39 +775,38 @@ collData(userid,colid,secid) {
     console.log('collection book value is ',value)
     let list=[this.state.currentItem];
     for(let item of list){
-     AsyncStorage.setItem('typeid', item.TypeID);
-     AsyncStorage.setItem('postid', item.Post_Page_Id);
-     console.log('type id postid ',item.TypeID,item.Post_Page_Id);
-     // AsyncStorage.setItem('3dots',JSON.stringify(1));
+      AsyncStorage.setItem('typeid',JSON.stringify(Number(item.type_id)));
+          
+      AsyncStorage.setItem('postid',JSON.stringify(Number(item.id)));
      this.props.collSecPopup();
      console.log('collSeccollSeccollSeccollSec',this.props.collSec)
      AsyncStorage.setItem('popup_name',JSON.stringify(value));
      AsyncStorage.setItem('colSec',"Collection");
      AsyncStorage.setItem('colId',JSON.stringify(collid));
-     if (item.TypeID ==4) {
+     if (item.type_id ==4) {
         // AsyncStorage.setItem('popup_name1',JSON.stringify(value));
-         this.collectionAdd(collid,"","",item.Post_Page_Id,this.state.getuserid,item.TypeID,"")
+         this.collectionAdd(collid,"","",item.id,this.state.getuserid,item.type_id,"")
         //  this.props.popupAddCol();
         //  AsyncStorage.setItem('colSec',"Collection");
         //  AsyncStorage.setItem('colId',collid);
          return this.props.navigation.navigate('readingBook');
          // return this.pressIcon();
-     } else if(item.TypeID==1){
-        this.collectionAdd(collid,"",item.Post_Page_Id,"",this.state.getuserid,item.TypeID,"")
+     } else if(item.type_id==1){
+        this.collectionAdd(collid,"",item.id,"",this.state.getuserid,item.type_id,"")
              return this.props.navigation.navigate('viewBook');
-     } else if(item.TypeID==2){
+     } else if(item.type_id==2){
         // AsyncStorage.setItem('3dots',JSON.stringify(1));
         // AsyncStorage.setItem('popup_name',JSON.stringify(value));
         // AsyncStorage.setItem('colSec',"Collection");
         // AsyncStorage.setItem('colId',collid);
-        this.collectionAdd(collid,"",item.Post_Page_Id,"",this.state.getuserid,item.TypeID,"")
+        this.collectionAdd(collid,"",item.id,"",this.state.getuserid,item.type_id,"")
              return this.props.navigation.navigate('periodiViewBook');
      }else if(item.TypeID==3){
         // AsyncStorage.setItem('3dots',JSON.stringify(1));
         // AsyncStorage.setItem('popup_name',JSON.stringify(value));
         // AsyncStorage.setItem('colSec',"Collection");
         // AsyncStorage.setItem('colId',collid);
-        this.collectionAdd(collid,"",item.Post_Page_Id,"",this.state.getuserid,item.TypeID,"")
+        this.collectionAdd(collid,"",item.id,"",this.state.getuserid,item.type_id,"")
                return this.props.navigation.navigate('seriesViewBook');
      }
     }
@@ -862,41 +831,42 @@ collData(userid,colid,secid) {
         console.log('section book value is ',value,item, collid,secid)
         let list=[this.state.currentItem];
         for(let item of list){
-            AsyncStorage.setItem('typeid', item.TypeID);
-            AsyncStorage.setItem('postid', item.Post_Page_Id);
-            console.log('type id postid ',item.TypeID,item.Post_Page_Id);
+            AsyncStorage.setItem('typeid', item.type_id);
+            AsyncStorage.setItem('postid', item.id);
+            console.log('type id postid , secbook coll id',item.type_id,item.id,collid);
             this.props.collSecPopup();
      AsyncStorage.setItem('popup_name',JSON.stringify(value));
      AsyncStorage.setItem('colSec',"Section");
-               AsyncStorage.setItem('SecId',JSON.stringify(secid));
-            if (item.TypeID ==4) {
+     AsyncStorage.setItem('colId',JSON.stringify(collid));
+     AsyncStorage.setItem('SecId',JSON.stringify(secid));
+            if (item.type_id ==4) {
               //  AsyncStorage.setItem('popup_name1',JSON.stringify(value));
-                this.collectionAdd(collid,secid,"",item.Post_Page_Id,this.state.getuserid,item.TypeID,"")
+                this.collectionAdd(collid,secid,"",item.id,this.state.getuserid,item.type_id,"")
                 // this.props.popupAddCol();
                 // AsyncStorage.setItem('colSec',"Section");
                 // AsyncStorage.setItem('SecId',secid);
                 return this.props.navigation.navigate('readingBook');
                 // return this.pressIcon();
-            } else if(item.TypeID==1){
+            } else if(item.type_id==1){
               //  AsyncStorage.setItem('3dots',JSON.stringify(1));
               //  AsyncStorage.setItem('popup_name',JSON.stringify(value));
               //  AsyncStorage.setItem('colSec',"Section");
               //  AsyncStorage.setItem('SecId',secid);
-               this.collectionAdd(collid,secid,item.Post_Page_Id,"",this.state.getuserid,item.TypeID,"")
+               this.collectionAdd(collid,secid,item.id,"",this.state.getuserid,item.type_id,"")
                     return this.props.navigation.navigate('viewBook');
-            } else if(item.TypeID==2){
+            } else if(item.type_id==2){
               //  AsyncStorage.setItem('3dots',JSON.stringify(1));
               //  AsyncStorage.setItem('popup_name',JSON.stringify(value));
               //  AsyncStorage.setItem('colSec',"Section");
               //  AsyncStorage.setItem('SecId',secid);
-               this.collectionAdd(collid,secid,item.Post_Page_Id,"",this.state.getuserid,item.TypeID,"")
+               this.collectionAdd(collid,secid,item.id,"",this.state.getuserid,item.type_id,"")
                     return this.props.navigation.navigate('periodiViewBook');
-            }else if(item.TypeID==3){
+            }else if(item.type_id==3){
               //  AsyncStorage.setItem('3dots',JSON.stringify(1));
               //  AsyncStorage.setItem('popup_name',JSON.stringify(value));
               //  AsyncStorage.setItem('colSec',"Section");
               //  AsyncStorage.setItem('SecId',secid);
-               this.collectionAdd(collid,secid,item.Post_Page_Id,"",this.state.getuserid,item.TypeID,"")
+               this.collectionAdd(collid,secid,item.id,"",this.state.getuserid,item.type_id,"")
                       return this.props.navigation.navigate('seriesViewBook');
             }
            
@@ -1071,13 +1041,13 @@ collData(userid,colid,secid) {
         <View style={{paddingRight:10}}>
 
         <TouchableOpacity
-            onPress={() => this.pressIcon(item)}
+            onPress={() => this.pressIcon1(item)}
         >
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
                     cornerRadius={5}>
-                    <ImageBackground source={{ uri: item.Images }} style={{ width: 130, height: 150, jsutifyContent: 'center' }}>
+                    <ImageBackground source={{ uri: item.image }} style={{ width: 130, height: 150, jsutifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon") }>
                             <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1085,10 +1055,10 @@ collData(userid,colid,secid) {
                     </ImageBackground>
                 </CardView>
                 <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
-                    {item.Title}
+                    {item.title}
                 </Text>
                 <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
-                  {item.Author}
+                  {item.author}
               </Text>
                 </TouchableOpacity>
             </View>
@@ -1116,7 +1086,7 @@ collData(userid,colid,secid) {
 
  
  <SnapCarousel
-    data={this.state.rv}
+    data={this.state.pages}
     style={{ marginLeft: 5, marginRight: 5 }}
     renderItem={({item,index}) => (
       
@@ -1129,7 +1099,7 @@ collData(userid,colid,secid) {
                     cardElevation={2}
                     cardMaxElevation={2}
                     cornerRadius={5}>
-                    <ImageBackground source={{ uri: item.Images }} style={{ width: 130, height: 100, jsutifyContent: 'center' }}>
+                    <ImageBackground source={{ uri: item.image }} style={{ width: 130, height: 100, jsutifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon_pages") }>
                             <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1137,13 +1107,13 @@ collData(userid,colid,secid) {
                     </ImageBackground>
                 </CardView>
                 <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center'}}>
-                    {item.Title}
+                    {item.title}
                 </Text>
                 <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
-                  {item.Author}
+                  {item.author}
               </Text>
               <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
-                  {item.Pagedate}
+                  {item.Dat}
               </Text>
             </View>
 
@@ -1320,15 +1290,15 @@ collData(userid,colid,secid) {
             borderBottomEndRadius: 5,
             width: 300,}}
             >
-              <TouchableOpacity
-                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center' }}
+             <TouchableOpacity
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/plus_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1351,7 +1321,7 @@ collData(userid,colid,secid) {
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                      <Image source={require('../assets/img/collection.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                       <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                     </View>
   
@@ -1372,7 +1342,7 @@ collData(userid,colid,secid) {
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                        <Image style={{ backgroundColor: '#fff' }} source={require('../assets/img/collection_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                         <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                       </View>
                       <TouchableOpacity
@@ -1393,7 +1363,7 @@ collData(userid,colid,secid) {
                                    <View style={{
                                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                    }}>
-                                     <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
+                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
                                      <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
                          <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                                  <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1419,7 +1389,7 @@ collData(userid,colid,secid) {
                              <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                  {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                      {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />

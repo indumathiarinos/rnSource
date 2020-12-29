@@ -91,7 +91,9 @@ class Home extends Component {
             exists:false,
             sectionExpand:false,
             section:'',
-            secCollid:''
+            secCollid:'',
+            explore_page:'0',
+            loginPopup:false
         }
         // this.moveAnimation = new Animated.ValueXY({ x: 0, animated:true})
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -113,13 +115,13 @@ class Home extends Component {
           });
         }
       };
-      closeDrawer = () => {
-        this._drawer._root.close();
-      }
-      openDrawer = () => {
-        alert('open');
-        this._drawer._root.open();
-      }
+    //   closeDrawer = () => {
+    //     this._drawer._root.close();
+    //   }
+    //   openDrawer = () => {
+    //     alert('open');
+    //     this._drawer._root.open();
+    //   }
       toggleTab1() {
     
         this.setState({
@@ -128,16 +130,18 @@ class Home extends Component {
           tab3: false,
           tab4: false
         });
-        {this.props.nav==1?this.props.navigation.navigate('newsfeed'):this.props.navigation.navigate('mainpage')}
+        this.props.navigation.navigate('newsfeed')
       }
       toggleTab2() {
-        this.setState({
-          tab1: false,
-          tab2: true,
-          tab3: false,
-          tab4: false
-        });
+        {this.state.explore_page=='0'?
+    //    ( this.setState({
+    //       tab1: false,
+    //       tab2: true,
+    //       tab3: false,
+    //       tab4: false
+    //     })
         this.props.navigation.navigate('collection')
+       :this.alertPopup()}
     
       }
       toggleTab3() {
@@ -158,13 +162,31 @@ class Home extends Component {
           tab4: true
         });
         // this.props.navigation.navigate('menu')
-        this.props.navigation.openDrawer()
+        {this.state.explore_page=='0'?
+        this.props.navigation.openDrawer():
+       this.logoutpress()
       }
-
+    }
+      logoutpress=()=>{
+        AsyncStorage.setItem('userid',JSON.stringify(""));
+        AsyncStorage.setItem('typeid',JSON.stringify(""));
+        AsyncStorage.setItem('profile_img',JSON.stringify(""));
+        AsyncStorage.setItem('user_name',JSON.stringify(""));
+        AsyncStorage.setItem('postid',JSON.stringify(""));
+        AsyncStorage.setItem('collectionId',JSON.stringify(""));
+        AsyncStorage.setItem('sectionId',JSON.stringify(""));
+        AsyncStorage.setItem('usertype',JSON.stringify(""));
+        AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+        AsyncStorage.setItem('loginData', JSON.stringify(false));
+        this.props.savelogout();
+        this.props.navigation.closeDrawer();
+        this.props.navigation.navigate('loginSignup');
+      }
     componentDidMount() {
         Keyboard.dismiss();
         BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);  
         AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
+        AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
         this.CheckConnectivity();
 
     // this.focusListener = this.props.navigation.addListener('willFocus', () => {
@@ -180,6 +202,7 @@ class Home extends Component {
       
           if(state.isConnected==true){
             {this.getData();}
+            // alert(this.state.explore_page,"explore")
           }else{
             alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
         }
@@ -570,7 +593,7 @@ class Home extends Component {
           
         console.log('newsfeed post id is',item.Post_Page_Id);
         if (item.TypeID ==4) {
-            return this.props.navigation.navigate('readingBook');
+            return this.props.navigation.navigate('readingBook')
         } else if(item.TypeID==1){
             return this.props.navigation.navigate('viewBook');
         } else if(item.TypeID==2){
@@ -1041,11 +1064,18 @@ return (
     </View>
 );
 }
-
+alertPopup(){
+       this.setState({loginPopup:true})
+       setTimeout(() => {
+           this.setState({loginPopup:false})
+       }, 5000);
+}
 moreClick=(item,funcName)=>{
 // AsyncStorage.setItem('typeid', JSON.stringify(item.TypeID));
 // AsyncStorage.setItem('postid', JSON.stringify(item.Post_Page_Id));
+{this.state.explore_page=='0'?
 this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName})
+:this.alertPopup()}
 }
 renderColData({item}){
 return(
@@ -1147,10 +1177,12 @@ render() {
                     cardMaxElevation={2}
                     cornerRadius={5}>
                     <ImageBackground source={{ uri: item.Images!=''?item.Images:null }} style={{ width: 130, height: 150, jsutifyContent: 'center',resizeMode:'cover'}}>
+                       {/* {this.state.explore_page=='0'? */}
                         <TouchableOpacity
-                              onPress={() => this.moreClick(item,"pressIcon") }>
-                              <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
-                        </TouchableOpacity>
+                        onPress={() => this.moreClick(item,"pressIcon") }>
+                        <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
+                  </TouchableOpacity>
+                  {/* :null} */}
                     </ImageBackground>
   
                 </CardView>
@@ -1564,14 +1596,14 @@ autoplay={false}
             width: 300,}}
             >
               <TouchableOpacity
-                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center' }}
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/plus_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1594,7 +1626,7 @@ autoplay={false}
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                      <Image source={require('../assets/img/collection.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                       <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                     </View>
   
@@ -1615,7 +1647,7 @@ autoplay={false}
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                        <Image style={{ backgroundColor: '#fff' }} source={require('../assets/img/collection_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                         <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                       </View>
                       <TouchableOpacity
@@ -1631,13 +1663,13 @@ autoplay={false}
                           renderItem={({item})=>(
                               <View>
                               <TouchableOpacity
-                                 style={{backgroundColor:'#f0f0f0',width:300,}}
+                                 style={{backgroundColor:'#f0f0f0',}}
                                    onPress={() => this.collectionBook(item.title,item.id)}>
                                    <View style={{
                                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                    }}>
-                                     <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
-                                     <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
+                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 180 }}>{item.title}</Text>
+                                     <Image style={{ alignSelf: 'center', marginLeft: '0%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
                          <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                                  <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
                          </TouchableOpacity> 
@@ -1662,7 +1694,7 @@ autoplay={false}
                              <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                  {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                      {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1718,6 +1750,20 @@ autoplay={false}
                          height: 140
                          }} />
                    </Modal1>
+                   <Modal1
+                    animationType={"slide"}
+                    onBackdropPress={() => this.setState({ loginPopup: false})}
+                    isVisible={this.state.loginPopup}>
+
+                    <View 
+                        style={{backgroundColor:'#fff', 
+                        alignSelf:'center',
+                        flex:  0.2,
+                        width: width/1.2,}}
+                        >
+                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
+                        </View>
+                    </Modal1>
                    {/* <Modal1
                animationType="slide"
                transparent
@@ -1738,33 +1784,42 @@ autoplay={false}
                                   <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
                           </View>:null}
             {/* </Modal1> */}
-                <View style={styles.bottomBar}>
-                          <TouchableOpacity
-                              style={styles.tabsss}
-                              onPress={() => this.toggleTab1()}>
-                              <Image source={require('../assets/img/logo.png')} />
-                              {/* <Text>Home</Text> */}
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                          <Image source={require('../assets/img/collection.png')} />
-                              {/* <Text>Collection</Text> */}
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                              <Image source={require('../assets/img/search.png')} />
-                              {/* <Text>Search</Text> */}
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab4()}>
-                              {/* <Drawer
-          ref={(ref) => { this.drawer = ref; }}
-          content={<SideBar navigator={this.navigator} />}
-          onClose={() => this.closeDrawer()} > */}
-                              {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                              <Image style={{ width: 28, height: 28,borderRadius:28/2 }} source={{uri:this.state.avatar}}></Image>
-                              {/* <Text>Menu</Text> */}
-                              {/* </Drawer> */}
-                          </TouchableOpacity>
-                     
-                   </View>
+ <View style={styles.bottomBar}>
+ <TouchableOpacity
+     style={styles.tabsss}
+     onPress={() => this.toggleTab1()}>
+     <Image source={require('../assets/img/logo.png')} />
+ </TouchableOpacity>
+
+
+ <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
+ <Image source={require('../assets/img/collection.png')} />
+ </TouchableOpacity>
+    
+ <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
+     <Image source={require('../assets/img/search.png')} />
+ </TouchableOpacity>
+
+ <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
+     <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.avatar}}></Image>
+ </TouchableOpacity>
+
+</View>
+                   {/* : 
+                     <View style={styles.bottomBar}>
+                   <TouchableOpacity
+                       style={styles.tabsss}
+                       onPress={() => this.toggleTab1()}>
+                       <Image source={require('../assets/img/logo.png')} />
+                   </TouchableOpacity>
+                 
+                   <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
+                       <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.avatar}}></Image>
+
+                   </TouchableOpacity>
+              
+            </View>
+        } */}
     </SafeAreaView> 
   //   </Content>
   
@@ -1814,10 +1869,10 @@ autoplay={false}
           flexDirection:'row',
           position:'absolute'
       },
-      tabsss:{
-          margin:'2%',
-          padding:'2%'
-      },
+    //   tabsss:{
+    //       margin:'2%',
+    //       padding:'2%'
+    //   },
       modal: {
           // alignItems: 'center',
           flex: 0.3,
@@ -1966,7 +2021,6 @@ autoplay={false}
   
 function mapStateToProps(state){
     return{
-    nav:state.apiReducer.nav,
     addCol:state.apiReducer.addCol,
     }
   }
@@ -1974,10 +2028,10 @@ function mapStateToProps(state){
   
   function mapDispatchToProps(dispatch){
     return{
-        changeNavRec:()=>dispatch({type:'CHANGE_NAV_REC'}),
-        changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'}),
         popupAddCol:()=>dispatch({type:'ADD_COL'}),
-        collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'})
+        collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'}),
+        savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
+
     }
   };
   

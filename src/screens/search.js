@@ -13,6 +13,7 @@ import {Avatar,Divider} from 'react-native-elements';
 import CardView from 'react-native-cardview';
 import Modal1 from 'react-native-modal';
 import NetInfo from '@react-native-community/netinfo';
+import { connect } from "react-redux";
 import {
   Container,
   Content,
@@ -28,7 +29,7 @@ const width = Dimensions.get('window').width;
 
 const height = Dimensions.get('window').height;
 
-export default class Search extends Component {
+class Search extends Component {
   constructor() {
     super();
     this.state = {  
@@ -85,6 +86,8 @@ export default class Search extends Component {
             popPostId:null,
             reportModal:false,
             sortby:"DESC",
+            explore_page:'0',
+            loginPopup:false
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   this.arrayholder=[];
@@ -92,6 +95,7 @@ export default class Search extends Component {
 componentDidMount() {
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
+  AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
   console.log('user id in pagefeed page is ',this.state.getuserid);
   // {this.getData()}
   this.CheckConnectivity();
@@ -175,14 +179,38 @@ getData=()=>{
       tab3: false,
       tab4: true
     });
-    this.props.navigation.openDrawer()
-
+    {this.state.explore_page=='0'?
+    this.props.navigation.openDrawer():
+   this.logoutpress()
   }
+}
+  logoutpress=()=>{
+    AsyncStorage.setItem('userid',JSON.stringify(""));
+    AsyncStorage.setItem('typeid',JSON.stringify(""));
+    AsyncStorage.setItem('profile_img',JSON.stringify(""));
+    AsyncStorage.setItem('user_name',JSON.stringify(""));
+    AsyncStorage.setItem('postid',JSON.stringify(""));
+    AsyncStorage.setItem('collectionId',JSON.stringify(""));
+    AsyncStorage.setItem('sectionId',JSON.stringify(""));
+    AsyncStorage.setItem('usertype',JSON.stringify(""));
+    AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+    AsyncStorage.setItem('loginData', JSON.stringify(false));
+    this.props.savelogout();
+    this.props.navigation.closeDrawer();
+    this.props.navigation.navigate('loginSignup');
+  }
+  alertPopup(){
+    this.setState({loginPopup:true})
+    setTimeout(() => {
+        this.setState({loginPopup:false})
+    }, 5000);
+}
   pressIcon = (item) => {
     let { expl } = this.state;
     expl = expl.map(e => {
       // if (item.Category_name === e.Category_name) {
         // item.like = !e.like;
+        AsyncStorage.setItem("category_name",item.Category_name)
         return this.props.navigation.navigate('search_explore', {
           item: item});
         // }
@@ -513,8 +541,8 @@ popupBookpage=(item)=>{
             marginTop:'2%',marginBottom:'2%'
             }}>
             <TouchableOpacity style={{padding:'2%'}}
-                   onPress={() => { this.setState({reportModal:true})
-                    this.refs.modal4.close()
+                   onPress={() => {this.state.explore_page=='0'?( this.setState({reportModal:true})&&
+                    this.refs.modal4.close()):this.alertPopup()
                    }
                   }
                 >
@@ -568,6 +596,20 @@ onBackdropPress={() => this.setState({ newModalVisible: false })}>
                        height: 140
                        }} />
                  </Modal1>
+                 <Modal1
+                    animationType={"slide"}
+                    onBackdropPress={() => this.setState({ loginPopup: false})}
+                    isVisible={this.state.loginPopup}>
+
+                    <View 
+                        style={{backgroundColor:'#fff', 
+                        alignSelf:'center',
+                        flex:  0.2,
+                        width: width/1.2,}}
+                        >
+                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
+                        </View>
+                    </Modal1>
       <Footer style={{backgroundColor:'#fff',alignItems:'center',}}> 
           <FooterTab style={{backgroundColor:"white",marginLeft:'2%',marginRight:'2%',alignItems:'center',}}>
           <TouchableOpacity 
@@ -584,7 +626,7 @@ onBackdropPress={() => this.setState({ newModalVisible: false })}>
            <Image source={require('../assets/img/search.png')}/>
            {/* <Text>Search</Text> */}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab4()}>
+        <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
         {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
@@ -680,3 +722,20 @@ const styles = StyleSheet.create({
     // marginLeft:'-5%'
   },
 })
+function mapStateToProps(state){
+  return{
+  addCol:state.apiReducer.addCol,
+  }
+}
+
+
+function mapDispatchToProps(dispatch){
+  return{
+      popupAddCol:()=>dispatch({type:'ADD_COL'}),
+      collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'}),
+      savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
+
+  }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(Search);

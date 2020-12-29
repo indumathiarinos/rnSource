@@ -95,8 +95,9 @@ class ViewBook extends Component {
       post_editor:'',
       post_illustrator:'',
       post_translator:'',
-      isbn:''
-      
+      isbn:'',
+      explore_page:'0',
+      loginPopup:false
       // Image: "https://arinos.co.uk/uploads/publication-cover/1581929254.jpg"
       // Title: "SNOW WHITE AND THE SEVEN DWARF"
       // Content: "Once upon a time . . . in a great castle, a Prince’s daughter grew up happy and contented, in spite of a jealous stepmother. She was very pretty, with blue eyes and long black hair. Her skin was delicate and fair, and so she was called Snow White. Everyone was quite sure she would become very beautiful. Though her stepmother was a wicked woman, she too was very beautiful, and the magic mirror told her this every day, whenever she asked it"
@@ -139,7 +140,7 @@ class ViewBook extends Component {
   }
   followService(userid, follower_id) {
     this.setState({ loading: true })
-    var json = JSON.stringify({"followingID":userid,"followerID":follower_id,"Action_For":"Add"}
+    var json = JSON.stringify({"followingID":follower_id,"followerID":userid,"Action_For":"Add"}
     );
     console.log('follow data ',json)
     fetch("http://162.250.120.20:444/Login/FollowAddGet",
@@ -188,6 +189,8 @@ class ViewBook extends Component {
   componentDidMount() {
     AsyncStorage.getItem('typeid').then((value) => this.setState({gettypeid:value})).done();
     AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
+    AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid: value })).done();
     // if(!value){
@@ -209,8 +212,8 @@ class ViewBook extends Component {
         {this.getData2()}
 
      }
-     { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-      // this.CheckConnectivity();
+    //  { this.exploredata(this.state.gettypeid, this.state.getpostid) }
+      this.CheckConnectivity();
     })
 
   }
@@ -296,7 +299,7 @@ class ViewBook extends Component {
     setTimeout(() => {
       console.log('vire book typrif postid ', this.state.gettypeid, this.state.getpostid)
       { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 2000)
+    }, 3000)
   }
 
  
@@ -566,6 +569,12 @@ collectionBook=(value,collid)=>{
     this.showModal();
 
       }
+      alertPopup(){
+        this.setState({loginPopup:true})
+        setTimeout(() => {
+            this.setState({loginPopup:false})
+        }, 5000);
+ }
       goToAuthorProfile(){
         AsyncStorage.setItem('profile_userid',JSON.stringify(this.state.user_id));
         this.props.navigation.navigate('profileAbout')
@@ -698,12 +707,14 @@ collectionBook=(value,collid)=>{
 {/* <View style={styles.staticheader}> */}
 {/* // <Text>{this.state.gettypeid}{this.state.getpostid}</Text> */}
 <View style={styles.staticheader}>
+  {/* {this.state.explore_page=='0'? */}
 <TouchableOpacity
-  onPress={() => this.setState({ downloadState: true })}
+  onPress={() =>{this.state.explore_page=='0'? this.setState({ downloadState: true }):this.alertPopup()}}
 // onPress={()=>this.props.navigation.navigate('newsfeed')}
 >
   <Image source={require('../assets/img/download.png')} />
 </TouchableOpacity>
+{/* :null} */}
 <View style={{ flexDirection: 'row', width: width - 70, justifyContent: 'center', alignItems: 'center' }}>
   <LinearGradient style={{ borderRadius: 10 }} colors={
     ['#24D4BC', '#27A291']}>
@@ -724,21 +735,22 @@ collectionBook=(value,collid)=>{
     </TouchableOpacity>
   </LinearGradient>
   <TouchableOpacity style={{ alignItems: 'center' }}
-    onPress={() => this.props.navigation.navigate('contents')}
+    onPress={() =>{this.state.explore_page=='0'? this.props.navigation.navigate('contents'):this.alertPopup()}}
   >
     <Text style={styles.headerText}
 
     >Contents</Text>
   </TouchableOpacity>
+  {/* {this.state.explore_page=='0'? */}
 
   <TouchableOpacity style={{ alignItems: 'center' }}
-    onPress={() => this.props.navigation.navigate('books_pin')}
+      onPress={() =>{this.state.explore_page=='0'? this.props.navigation.navigate('books_pin'):this.alertPopup()}}
   >
     <Text style={styles.headerText}
 
     >Pins</Text>
   </TouchableOpacity>
-
+  {/* :null} */}
   {/* </View> */}
   {/* </View> */}
 </View>
@@ -879,13 +891,13 @@ onPress={() => this.props.navigation.navigate('report')}>
     {!this.state.downloadState ?
       (<View style={{ marginTop: '2%', }}>
         <View
-          style={{ margin: '2%', marginLeft: '10%', marginRight: '10%' }}
+          style={{ margin: 10, }}
         // style={{backgroundColor:'pink',}}
         >
           {/* <View style={{flexDirection:'column',backgroundColor:'pink'}}> */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between',}}>
             <View style={styles.info1}>
-              <Image style={{ marginRight: '4%', top: "5%", marginTop: "2%" }} source={require('../assets/img/eye.png')} />
+              <Image style={{ marginRight: '4%',  }} source={require('../assets/img/eye.png')} />
               <Text style={styles.text1}> {this.state.totalviews}</Text>
             </View>
             <View style={styles.info2}>
@@ -903,8 +915,9 @@ onPress={() => this.props.navigation.navigate('report')}>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
             <View style={styles.info1}>
-              <Text style={styles.text1}>Copy Rights : {this.state.copyrights}</Text>
-              <Image source={require('../assets/img/open-book.png')} />
+              <Text style={styles.text1}>Copy Rights : </Text>
+              <Text numberOfLines={2} style={[styles.text1,{width:width/4}]}>{this.state.copyrights}</Text>
+              {/* <Image source={require('../assets/img/open-book.png')} /> */}
             </View>
             <View style={styles.info2}>
               <Text style={styles.text1}>ISBN : {this.state.isbn}</Text>
@@ -935,8 +948,8 @@ onPress={() => this.props.navigation.navigate('report')}>
 
         <View style={styles.logoContainer}>
 
-          <TouchableOpacity style={{marginLeft:10,}}
-            onPress={() => this.goToAuthorProfile()}>
+          <TouchableOpacity style={{marginLeft:10}}
+            onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
               <Image style={{ width:30,height:30, borderRadius:30/2 }} source={{uri:this.state.user_img!=""?this.state.user_img:null}} />
               <Text style={styles.text2}>{this.state.author}</Text>
@@ -945,10 +958,12 @@ onPress={() => this.props.navigation.navigate('report')}>
           </TouchableOpacity>
         
           <View>
+          {/* {this.state.explore_page=='0'? */}
+
             <View>
               
             {this.state.user_id==this.state.getuserid?<View style={{width: width / 3.2,}}/>:
-              <TouchableOpacity onPress={() => this.followService(this.state.getuserid,this.state.user_id)} style={[this.state.Is_Follow=="Follow"  ? styles.btnview : styles.activeBtnview]}>
+              <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.followService(this.state.getuserid,this.state.user_id):this.alertPopup()}} style={[this.state.Is_Follow=="Follow"  ? styles.btnview : styles.activeBtnview]}>
                 <Text style={[this.state.Is_Follow=="Follow" ? styles.inactive : styles.active]}>{this.state.Is_Follow}</Text>
               </TouchableOpacity>
               }
@@ -960,7 +975,7 @@ onPress={() => this.props.navigation.navigate('report')}>
               </View> : null}
             
             </View>
-         
+         {/* :null} */}
           </View>
 
         </View>
@@ -1039,7 +1054,6 @@ onPress={() => this.goToAuthorProfile()}>
               <View style={styles.info2}>
                 <Text style={styles.text1}>Release Date : {this.state.releasedate}</Text>
               </View>
-
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
               <View style={styles.info1}>
@@ -1074,15 +1088,15 @@ onPress={() => this.goToAuthorProfile()}>
             borderBottomEndRadius: 5,
             width: 300,}}
             >
-              <TouchableOpacity
-                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center' }}
+            <TouchableOpacity
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/plus_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1105,7 +1119,7 @@ onPress={() => this.goToAuthorProfile()}>
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                      <Image source={require('../assets/img/collection.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                       <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                     </View>
   
@@ -1126,7 +1140,7 @@ onPress={() => this.goToAuthorProfile()}>
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                        <Image style={{ backgroundColor: '#fff' }} source={require('../assets/img/collection_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                         <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                       </View>
                       <TouchableOpacity
@@ -1147,7 +1161,7 @@ onPress={() => this.goToAuthorProfile()}>
                                    <View style={{
                                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                    }}>
-                                     <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
+                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
                                      <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
                          <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                                  <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1173,7 +1187,7 @@ onPress={() => this.goToAuthorProfile()}>
                              <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                  {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                      {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1315,10 +1329,26 @@ isDisabled={this.state.isDisabled}>
   height: 140
 }} />
 </Modal1>
+                <Modal1
+                    animationType={"slide"}
+                    onBackdropPress={() => this.setState({ loginPopup: false})}
+                    isVisible={this.state.loginPopup}>
+
+                    <View 
+                        style={{backgroundColor:'#fff', 
+                        alignSelf:'center',
+                        flex:  0.2,
+                        width: width/1.2,}}
+                        >
+                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
+                        </View>
+                    </Modal1>
+{/* {this.state.explore_page=='0'? */}
+
 <View style={styles.bottomBar}>
 <TouchableOpacity
   style={{ padding: '1%' }}
-  onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
+  onPress={() =>{this.state.explore_page=='0'? this.setState({ showlikeImg: !this.state.showlikeImg }):this.alertPopup()}}
 >
   {/* {this.renderImage} */}
   <Image
@@ -1342,20 +1372,21 @@ isDisabled={this.state.isDisabled}>
 </TouchableOpacity> */}
 <TouchableOpacity
   style={{ padding: '1%' }}
-  onPress={() => this.setState({ collectionModal: !this.state.collectionModal }
-  )}          // onPress={() =>this.props.navigation.navigate('createCollection')} 
+  onPress={() =>{this.state.explore_page=='0'?this.setState({ collectionModal: !this.state.collectionModal }
+  ):this.alertPopup()}}          // onPress={() =>this.props.navigation.navigate('createCollection')} 
 >
   <Image source={require('../assets/img/plus.png')} />
 </TouchableOpacity>
 <TouchableOpacity
   style={{ padding: '1%' }}
 
-  onPress={() => this.setState({shareModal:!this.state.shareModal})}
+  onPress={() =>{this.state.explore_page=='0'?this.setState({shareModal:!this.state.shareModal}):this.alertPopup()}}
 >
 
   <Image source={require('../assets/img/share.png')} />
 </TouchableOpacity>
 </View>
+  {/* :null} */}
 {/* <Modal
 animationType="slide"
 transparent
@@ -1481,14 +1512,15 @@ text1: {
 color: '#707070',
 // paddingLeft:'5%',
 fontSize: 14,
-alignSelf: 'center'
+alignSelf: 'center',
 },
 text2: {
 color: '#000',
 fontSize: 18,
 marginLeft: '3%',
 fontWeight: 'bold',
-alignSelf: 'center'
+alignSelf: 'center',
+
 },
 
 btnview: {
@@ -1736,6 +1768,7 @@ info1: {
 flexDirection: 'row',
 justifyContent: 'flex-start',
 color: '#000',
+width:width/2-10,
 padding: '0.5%'
 // alignItems: 'center',
 },
@@ -1744,7 +1777,7 @@ flexDirection: 'row',
 justifyContent: 'flex-start',
 // flex:1,
 // backgroundColor:'skyblue',
-width: width / 2.1,
+width:width/2-10,
 marginLeft: '1%',
 padding: '0.5%'
 

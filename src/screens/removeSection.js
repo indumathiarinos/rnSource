@@ -336,12 +336,12 @@ componentWillUnmount() {
                   }
                  {item.SectionID==0?
                   <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.Author}</Text>
                     </View>
                  :
                    <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
+                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
                         <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
                     </View>}
@@ -432,7 +432,7 @@ componentWillUnmount() {
             <SafeAreaView style={{ flex: 2, backgroundColor: '#ffff' }}>
 
                 <View style={{height:'8%',backgroundColor:'red',justifyContent:'center'}}>
-                    <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Section to Remove</Text>
+                    <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Section(s) to Remove</Text>
                 </View>
                 <ScrollView style={{marginBottom:'10%'}}>
 

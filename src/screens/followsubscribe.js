@@ -135,7 +135,7 @@ class FollowSubscribe extends Component {
     filterdata:[],
     getuserid:'',
     selectedId:'',
-    undo:false
+    undo:false,
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -175,6 +175,7 @@ handleBackButtonClick() {
 
 
 exploredata(userid){
+  this.setState({loading:true})
   var json=JSON.stringify({
     'UserId':userid,
     });
@@ -212,7 +213,7 @@ exploredata(userid){
    followService(follower_id) {
     // this.setState({loading:true})
     //for followsubscribe page only pass follower id to followingId & following id to follower id.
-    var json = JSON.stringify({"followingID":this.state.getuserid,"followerID":follower_id,"Action_For":"Add"});
+    var json = JSON.stringify({"followingID":follower_id,"followerID":this.state.getuserid,"Action_For":"Add"});
     console.log('json follower ',json)
     fetch("http://162.250.120.20:444/Login/FollowAddGet",
     {
@@ -254,6 +255,12 @@ exploredata(userid){
     console.log('values after filtered',list);
   }
 
+  removeItem(item1){
+    const filteredList = this.state.follows.filter((item) => item.follower_id != item1.follower_id);
+    this.setState({follows:filteredList});
+    this.showModal(item1)
+
+  }
   showModal = (item) => {
     // console.log(this.state.undo)
     
@@ -271,6 +278,7 @@ exploredata(userid){
         if(this.state.undo==false){
           {this.followService(this.state.selectedId)}
         }else{
+          this.state.follows.push(item);
           this.setState({undo:false})
         }
         
@@ -305,8 +313,8 @@ exploredata(userid){
           >{item.Username}</Text>
 
           <TouchableOpacity 
-          // onPress={()=> this.removeItem(item)}
-          onPress={()=>this.showModal(item)}
+          onPress={()=> this.removeItem(item)}
+          // onPress={()=>this.showModal(item)}
           style={{  backgroundColor: '#27A291', elevation: 2, alignItems: 'center', justifyContent: 'center', width: width / 2 - 90, height: height / 16, alignSelf: 'center', borderRadius: 20 }}
           // style={{backgroundColor:'#27A291',elevation:2,marginTop:'0.5%',alignItems:'center',width:width/2-90,height:height/16,alignSelf:'center',borderRadius:20}}
           >

@@ -74,13 +74,14 @@ class Pins extends Component {
         this.CheckConnectivity();
      
         this.focusListener = this.props.navigation.addListener('willFocus', () => {
-            this.setState({loading:true})
-            if(this.props.pinsRemove==true){
-                {this.getData2()}
+            // this.setState({loading:true})
+            // if(this.props.pinsRemove==true){
+            //     {this.getData2()}
       
-             }
+            //  }
+            this.setState({loading:true})
          AsyncStorage.getItem('pinsFilter').then((val) => this.setState({ SortBy: val })).done();
-         console.log('user id ',this.state.getuserid,this.state.SortBy);
+        //  console.log('user id ',this.state.getuserid,this.state.SortBy);
 
          this.CheckConnectivity();
      
@@ -187,13 +188,13 @@ class Pins extends Component {
     renderItem_card({ item }) {
         const value = item;
         return (
-            <View style={{ width:width/2.3, elevation: 3,margin:10 }} >
+            <View style={{ width:width/2.3, elevation: 3,margin:10, }} >
                 <TouchableOpacity onPress={()=>this.cardPress(item)} >
                   <View style={{ elevation: 2, backgroundColor: '#fff', borderRadius: 10,
                 // alignItems:'center',alignSelf:"center",justifyContent:'center'
                  }}>
-                    <View style={{ width: width / 2 - 20, height: height / 5.2, flex:1,alignItems: 'center', justifyContent: 'center' }}>
-                        <Text numberOfLines={9} style={{width: width / 2 - 40,height:height/5.2,textAlign:'center',marginTop:5,marginBottom:5}}>{item.description}</Text>
+                    <View style={{ width: width / 2 - 20, height: height / 6, flex:1,alignItems: 'center', justifyContent: 'center',alignSelf:'center'}}>
+                        <Text numberOfLines={5} style={{textAlign:'center',width: width / 2 - 40,marginTop:5,marginBottom:5,alignSelf:'center'}}>{item.description}</Text>
                     </View>
      {/* <View style={{ marginLeft:10,marginRight:10,  alignItems: 'center', justifyContent: 'center' }}>
                         <Text>{item.description}</Text>
@@ -254,33 +255,25 @@ class Pins extends Component {
       pinscoverItems({ item }) {
         // const value = item;
         return (
-            <View style={{flex:1}}>
-                
-                    <ImageBackground 
-                    style={{flexDirection: 'row' }}
-                    >
+            <View style={{height:150,width:width,}}>
+
+                    <View style={{flex:1,flexDirection:'row',}}>
                         <Image style={{  height:150,width:width/5, resizeMode: 'cover',}}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                         <Image style={{  height:150,width:width/5, resizeMode: 'cover',  }}
                             source={{ uri: item.Image2!=""?item.Image2:null }} />
-                        <ImageBackground style={{  height:150,width:width/5, resizeMode: 'cover',alignItems:'center',justifyContent:'center',}}
+                        <Image style={{  height:150,width:width/5, resizeMode: 'cover',alignItems:'center',justifyContent:'center',}}
                             source={{ uri: item.Image3!=""?item.Image3:null }} >
-                        </ImageBackground>
+                        </Image>
                         <Image style={{  height:150,width:width/5, resizeMode: 'cover',}}
                             source={{ uri: item.Image4!=""?item.Image4:null }} />
                         <Image style={{  height:150,width:width/5, resizeMode: 'cover', }}
                             source={{ uri: item.Image5!=""?item.Image5:null }} />
-
-                    </ImageBackground>
-                    <View style={styles.overlay}/>
-                    <View style={{position:'absolute',top:70,alignItems:'center',width:width,justifyContent:'center',}}>
-                <Text style={{ textAlign: 'center', color:item.Image3!=""?'#fff':'#000', fontWeight: 'bold', fontSize: 18 }}>Pins</Text>
-
-                </View>
+                        </View>
+                   
                     {/* <View style={{  marginTop: '-20%',
-        justifyContent: "center",
-        alignItems: "center",backgroundColor:'pink'}}>
-
+                                justifyContent: "center",
+                                alignItems: "center",backgroundColor:'pink'}}>
                     </View> */}
             </View>
         )
@@ -365,11 +358,14 @@ onPress={() =>this.bookmarkPress()}
                         <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18 }}>Pins</Text>
                     </ImageBackground> */}
             <FlatList
-                contentContainerStyle={{
-                    flex:1,
+                contentContainerStyle={[{
+                    // flex:1,
                     justifyContent:'center',
-                    marginBottom:'5%'
-                }}
+                    marginBottom:'5%',
+                    // backgroundColor: 'black',
+                    width: width,
+                    height:150
+                    }]}
                     data={this.state.pinsCoverImg}
                     extraData={this.state}
                     renderItem={this.pinscoverItems.bind(this)}
@@ -377,6 +373,11 @@ onPress={() =>this.bookmarkPress()}
                     keyExtractor={(item,index)=>index.toString()}
 
                     />
+                     <View style={styles.overlay}/>
+                    <View style={{position:'absolute',top:70,alignItems:'center',width:width,justifyContent:'center',}}>
+                <Text style={{ textAlign: 'center', color:'#fff', fontWeight: 'bold', fontSize: 18 }}>Pins</Text>
+
+                </View>
                     <FlatList
                         contentContainerStyle={{
                             flex: 1,

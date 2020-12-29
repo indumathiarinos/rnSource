@@ -130,7 +130,7 @@ handleBackButtonClick() {
 getData(){
   setTimeout(() => {
     { this.exploredata(this.state.getuserid) }
-  }, 5);
+  },2000);
 }
 deleteData(userid,readlaterId) {
   this.setState({loading:true})

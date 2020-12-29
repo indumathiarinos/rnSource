@@ -217,7 +217,7 @@ renderItem_card({ item }) {
           // alignItems:'center',alignSelf:"center",justifyContent:'center'
            }}>
               <View style={{ width: width / 3-20, height: height / 5.2, flex:1,alignItems: 'center', justifyContent: 'center' }}>
-                  <Text numberOfLines={8} style={{width: width / 3 - 30,height:height/5.2,textAlign:'center',marginTop:5,marginBottom:5}}>{item.description}</Text>
+                  <Text numberOfLines={5} style={{width: width / 3 - 30,height:height/5.2,textAlign:'center',marginTop:5,marginBottom:5}}>{item.description}</Text>
               </View>
 {/* <View style={{ marginLeft:10,marginRight:10,  alignItems: 'center', justifyContent: 'center' }}>
                   <Text>{item.description}</Text>
@@ -257,7 +257,7 @@ renderItem_card({ item }) {
         {/* <View style={styles.staticheader}> */}
         <View style={styles.staticheader}>
           <TouchableOpacity
-          onPress={()=>this.props.navigation.navigate('upload_pic')}
+          onPress={()=>this.props.navigation.navigate('booksPinFilter')}
           >
             <Image source={require('../assets/img/filter.png')} />
           </TouchableOpacity>
@@ -651,18 +651,6 @@ const styles = StyleSheet.create({
 
   }
 });
-function mapStateToProps(state){
-  return{
-  nav:state.apiReducer.nav,
-  }
-}
 
 
-function mapDispatchToProps(dispatch){
-  return{
-      changeNavRec:()=>dispatch({type:'CHANGE_NAV_REC'}),
-      changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'})
-  }
-};
-
-export default connect(mapStateToProps,mapDispatchToProps)(BooksPin);
+export default BooksPin;

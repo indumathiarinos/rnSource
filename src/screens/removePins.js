@@ -264,7 +264,7 @@ componentDidMount() {
                                 {/* <HTMLView style={{width:width/2-30,height:height/6,alignSelf:'center',padding:'5%'}} value={item.page_title}/> */}
   
                       </View>
-                      <Text style={{ fontSize: 16,width: width / 2 - 40,fontWeight: 'bold',textAlign:'center',marginTop:5,marginBottom:5}}>{item.page_url}</Text>
+                      <Text numberOfLines={2} style={{ fontSize: 16,width: width / 2 - 40,fontWeight: 'bold',textAlign:'center',marginTop:5,marginBottom:5}}>{item.page_url}</Text>
                       </TouchableOpacity>
   
                   {/* <View style={{ alignItems: 'center', marginLeft: '15%', marginBottom: 5, marginTop: 5}}> */}
@@ -414,7 +414,7 @@ render() {
         <SafeAreaView style={{ flex: 2, backgroundColor: '#ffff' }}>
 
             <View style={{height:'8%',backgroundColor:'red',justifyContent:'center'}}>
-                <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Pins to Remove</Text>
+                <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Pin(s) to Remove</Text>
             </View>
             <ScrollView style={{marginBottom:'14%'}}>
 
@@ -467,7 +467,7 @@ render() {
                             justifyContent: 'center',
                             backgroundColor: 'red',
                         }}>
-                            <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed - {this.state.deletedName} </Text>
+                            <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed {this.state.selectedItemArray.length>1?"Pins":"Pin"} - {this.state.deletedName} </Text>
 
 
                             <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}

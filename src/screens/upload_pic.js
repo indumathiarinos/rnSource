@@ -249,18 +249,5 @@ const styles = StyleSheet.create({
 
       }
 })
-function mapStateToProps(state){
-  return{
-  nav:state.apiReducer.nav,
-  }
-}
 
-
-function mapDispatchToProps(dispatch){
-  return{
-      changeNavRec:()=>dispatch({type:'CHANGE_NAV_REC'}),
-      changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'})
-  }
-};
-
-export default connect(mapStateToProps,mapDispatchToProps)(BooksPinFilter);
+export default BooksPinFilter;

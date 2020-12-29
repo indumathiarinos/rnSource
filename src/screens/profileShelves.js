@@ -248,7 +248,7 @@ class ProfileShelves extends Component {
   }
   followService(userid, follower_id) {
     // this.setState({ loading: true })
-    var json = JSON.stringify({"followingID":userid,"followerID":follower_id,"Action_For":"Add"}
+    var json = JSON.stringify({"followingID":follower_id,"followerID":userid,"Action_For":"Add"}
     );
     console.log('follow data ',json)
     fetch("http://162.250.120.20:444/Login/FollowAddGet",
@@ -265,7 +265,7 @@ class ProfileShelves extends Component {
       .then((responseJson) => {
         this.setState({ loading: false });
         console.warn(responseJson);
-        { this.exploredata() }
+        { this.exploredataPic() }
         console.log('follow insert service called');
         // if(responseJson.MSGS == "Added successfully" || responseJson.MSGS == "Already Exist"){
         // }
@@ -303,6 +303,7 @@ class ProfileShelves extends Component {
         .then((response) => response.json())
         .then((responseJson) => {
             //alert(responseText);
+            console.log('profile service ',responseJson);
             this.setState({profil: responseJson,loading:false})
             if(this.state.profil!=[]){
               this.setState({
@@ -967,7 +968,7 @@ render() {
           
             <View style={styles.socialBarContainer}>
                   
-                  <TouchableOpacity style={styles.socialBarButton} onPress={() => this.addProductToCart()}>
+                  <TouchableOpacity style={styles.socialBarButton} >
                   <Text  style={{color:'#707070'}}>{this.state.followers}</Text>
                     <Image style={{marginLeft:5}}
                     // style={styles.icon}
@@ -975,8 +976,10 @@ render() {
                   </TouchableOpacity>
                   <View style={styles.divider}>
                   </View>      
-                  <TouchableOpacity onPress={()=>this.refs.modal6.open()} style={styles.socialBarButton}>
-                  <Text style={{color:'#707070'}}>80.1k(SN)</Text>
+                  <TouchableOpacity 
+                    // onPress={()=>this.refs.modal6.open()}
+                     style={styles.socialBarButton}>
+                        <Text style={{color:'#707070'}}>80.1k(SN)</Text>
                   {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
                   <Image style={styles.icon} source={require('../assets/img/share.png')}/>
                   {/* </TouchableOpacity> */}
@@ -1229,63 +1232,67 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
         borderBottomEndRadius: 5,
         width: 300,}}
         >
-          <TouchableOpacity
-            style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center' }}
-            onPress={() => {this.props.navigation.navigate('createCollection')
-            this.setState({collectionModal:false})}}>
-            <View style={{
-              flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
-              justifyContent: 'center', alignSelf: 'center'
-            }}>
-              <Image source={require('../assets/img/plus_green.png')} />
-              <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
-
-            </View>
-          </TouchableOpacity>
-
-          <Divider style={{ backgroundColor: '#707070', marginTop: '5%',borderWidth:0.3,width: 300 }} />
-          {!this.state.expanded ? (
-            <TouchableOpacity
-              onPress={this.changeLayout}>
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                padding: '4%',
-                justifyContent: 'space-between',
-              }}>
+        <TouchableOpacity
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
+                onPress={() => {this.props.navigation.navigate('createCollection')
+                this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', width: 300, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
+                  justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/collection.png')} />
-                  <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                  <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
+  
                 </View>
-
-                <Image style={{ alignSelf: 'center', marginLeft: '-15%' }} source={require('../assets/img/down_arrow.png')} />
-              </View>
-            </TouchableOpacity>
-          ) : (
-              <View style={{ height: !this.state.expanded ? 50 : 150, }}>
-
-                <View style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: '4%',
-                  backgroundColor: '#27A291',
-                  width: 300,
-                  justifyContent: 'space-between',
-                }}>
+              </TouchableOpacity>
+  
+              <Divider style={{ backgroundColor: '#707070', marginTop: '5%',borderWidth:0.3,width: 300 }} />
+              {!this.state.expanded ? (
+                <TouchableOpacity
+                  onPress={this.changeLayout}>
                   <View style={{
-                    flexDirection: 'row', width: 300, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    padding: '4%',
+                    width:300,
+                    justifyContent: 'space-between',
                   }}>
-                    <Image style={{ backgroundColor: '#fff' }} source={require('../assets/img/collection_green.png')} />
-                    <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3.2 }}>Collections</Text>
+                    <View 
+                    style={{
+                      flexDirection: 'row',
+                     width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                    }}
+                    >
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                    </View>
+  
+                    <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
                   </View>
-                  <TouchableOpacity
-                    style={{ marginLeft: '-15%', }}
-                    onPress={this.changeLayout}>
-                    <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
-                  </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
+              ) : (
+                  <View style={{ height: !this.state.expanded ? 50 : 145, }}>
+  
+                    <View style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: '4%',
+                      backgroundColor: '#27A291',
+                      width: 300,
+                      justifyContent: 'space-between',
+                    }}>
+                      <View style={{
+                        flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                      }}>
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                      </View>
+                      <TouchableOpacity
+                        // style={{ marginLeft: '-15%', }}
+                        onPress={this.changeLayout}>
+                        <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
+                      </TouchableOpacity>
+                    </View>
                 <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
                  <FlatList
                       data={this.state.collection}
@@ -1298,7 +1305,7 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
                                <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
                                  <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
                      <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />

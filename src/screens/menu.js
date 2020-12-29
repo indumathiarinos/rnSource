@@ -88,7 +88,8 @@ class MenuPage extends Component {
     getusertype:'',
     profile_img:'',
     user_name:'',
-    notificationCount:0
+    notificationCount:0,
+    explore_page:'0'
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -97,7 +98,9 @@ class MenuPage extends Component {
     AsyncStorage.getItem('usertype').then((value)=>{this.setState({getusertype:value})}).done();
     AsyncStorage.getItem('profile_img').then((value)=>{this.setState({profile_img:value})}).done();
     AsyncStorage.getItem('user_name').then((value)=>{this.setState({user_name:value})}).done();
-    console.log('profile img & username ',this.state.user_name,this.state.profile_img)
+    console.log('profile img & username ',this.state.user_name,this.state.profile_img);
+    AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+
     // {this.getData()}
     this.CheckConnectivity();
     this.focusListener = this.props.navigation.addListener('willFocus', () => {
@@ -229,6 +232,8 @@ class MenuPage extends Component {
   logoutpress=()=>{
     AsyncStorage.setItem('userid',JSON.stringify(""));
     AsyncStorage.setItem('typeid',JSON.stringify(""));
+    AsyncStorage.setItem('profile_img',JSON.stringify(""));
+    AsyncStorage.setItem('user_name',JSON.stringify(""));
     AsyncStorage.setItem('postid',JSON.stringify(""));
     AsyncStorage.setItem('collectionId',JSON.stringify(""));
     AsyncStorage.setItem('sectionId',JSON.stringify(""));
@@ -266,41 +271,43 @@ class MenuPage extends Component {
     if(this.state.getusertype==4){
       return (
         <View style={{ flex: 4,
-        backgroundColor:'rgba(0,0,0,0.5)',
-         }}>
-           <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} style={{height:STATUSBAR_HEIGHT}}/>
-          <View style={{flex:3,backgroundColor:'white',borderBottomEndRadius:40,}}>
-            <View style={{height:'15%',justifyContent:'center'}}>
-              <View style={{flexDirection:'row',justifyContent:'space-between',margin:'3%',marginRight:'6%'}}>
-              <TouchableOpacity
-                onPress={()=>this.profileClick()}>
-               <Image
-                style={{width:50,height:50,borderRadius:50/2}}
-                source={{uri:this.state.avatar!=""?this.state.avatar:null}}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                onPress={()=>this.profileClick()}>
-                <View style={{flexDirection:'column',marginRight:'35%'}}>
-                <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>{this.state.user_name}</Text>
-                <Text
-                onPress={()=>this.profileClick()}
-                style={{color:'#27A291',textDecorationLine:'underline',padding:'1%',textDecorationColor:'#27A291'}}>View Profile</Text>
-  
-                </View>
-                </TouchableOpacity>
+          backgroundColor:'rgba(0,0,0,0.5)',
+           }}>
+              <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} style={{height:STATUSBAR_HEIGHT}}/>
+            <View style={{flex:3,backgroundColor:'white',borderBottomEndRadius:40,}}>
+              <View style={{height:'15%',justifyContent:'center'}}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',margin:'3%'}}>
                 <TouchableOpacity
-                style={{marginLeft:'3%',marginRight:'3%'}}
-                onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
-                <Image
-                source={require('../assets/img/bell.png')}/>
-                <View style={{width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291'}}>
-                  <Text>2</Text>
+                  onPress={()=>this.profileClick()}>
+                 <Image
+                  style={{width:50,height:50,borderRadius:50/2}}
+                  source={{uri:this.state.avatar!=""?this.state.avatar:null}}/>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                  onPress={()=>this.profileClick()}>
+                  <View style={{flexDirection:'column',marginRight:'35%'}}>
+                  <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>{this.state.username}</Text>
+                  <Text
+                  onPress={()=>this.profileClick()}
+                  style={{color:'#27A291',textDecorationLine:'underline',padding:'1%',textDecorationColor:'#27A291'}}>View Profile</Text>
+    
+                  </View>
+                  </TouchableOpacity>
+  
+                  <TouchableOpacity
+                  style={{marginLeft:'3%',marginRight:'3%'}}
+                  onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
+                  <Image
+                  source={require('../assets/img/bell.png')}/>
+                {this.state.notificationCount!=0?
+                  <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:0,top:12,backgroundColor:'#fff'}}>
+                    <Text style={{color:'#27A291'}}>{this.state.notificationCount}</Text>
+                  </View>:null}
+                  </TouchableOpacity>
                 </View>
-                </TouchableOpacity>
               </View>
-            </View>
-            <Divider style={{ backgroundColor:'#707070' }} />
-            <View>
+              <Divider style={{ backgroundColor:'#707070' }} />
+              <View>
             <FlatList
               style={{height:'85%'}}
     
@@ -345,8 +352,50 @@ class MenuPage extends Component {
         </View>
       )
   
-    }else{
+    }else if(this.state.explore_page=='1'){
       
+        return(
+          <View style={{ flex: 4,
+            backgroundColor:'rgba(0,0,0,0.5)',
+             }}>
+                <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} style={{height:STATUSBAR_HEIGHT}}/>
+              <View style={{flex:3,backgroundColor:'white',borderBottomEndRadius:40,}}>
+                <View style={{height:'15%',justifyContent:'center'}}>
+                  <View style={{flexDirection:'row',justifyContent:'space-between',margin:'3%'}}>
+                  <TouchableOpacity style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
+                    onPress={()=>this.profileClick()}>
+                   <Image
+                    style={{width:50,height:50,borderRadius:50/2}}
+                    source={{uri:this.state.avatar!=""?this.state.avatar:null}}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                    onPress={()=>this.profileClick()}>
+                    <View style={{flexDirection:'column',marginRight:'35%'}}>
+                    <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>Guest</Text>
+                    <Text
+                    onPress={()=>this.profileClick()}
+                    style={{color:'#27A291',textDecorationLine:'underline',padding:'1%',textDecorationColor:'#27A291'}}>View Profile</Text>
+      
+                    </View>
+                    </TouchableOpacity>
+    
+                    <TouchableOpacity
+                    style={{marginLeft:'3%',marginRight:'3%'}}
+                    onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
+                    <Image
+                    source={require('../assets/img/bell.png')}/>
+                  {this.state.notificationCount!=0?
+                    <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:-5,top:10,backgroundColor:'#fff'}}>
+                      <Text style={{color:'#27A291'}}>{this.state.notificationCount}</Text>
+                    </View>:null}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+               
+                      </View>                    
+            </View>
+        )
+      }else {
       return (
         <View style={{ flex: 4,
         backgroundColor:'rgba(0,0,0,0.5)',
@@ -429,8 +478,7 @@ class MenuPage extends Component {
                  
         </View>
       )
-  
-    }
+                  }
       }
 
 }

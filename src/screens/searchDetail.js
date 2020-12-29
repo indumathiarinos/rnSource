@@ -226,7 +226,7 @@ imgClick=(postid,typeid)=>{
 }
 followService(userid, follower_id) {
   // this.setState({ loading: true })
-  var json = JSON.stringify({"followingID":userid,"followerID":follower_id,"Action_For":"Add"}
+  var json = JSON.stringify({"followingID":follower_id,"followerID":userid,"Action_For":"Add"}
   );
   console.log('follow data ',json)
   fetch("http://162.250.120.20:444/Login/FollowAddGet",

@@ -1,6 +1,6 @@
 import React from 'react';
 import Carousel from 'react-native-banner-carousel';
-import { StyleSheet,SafeAreaView,BackHandler,Alert, Image, View, Text, Dimensions, TouchableOpacity, ImageBackground, StatusBar } from 'react-native';
+import { StyleSheet,SafeAreaView,BackHandler,AsyncStorage,Alert, Image, View, Text, Dimensions, TouchableOpacity, ImageBackground, StatusBar } from 'react-native';
 import img1 from '../assets/img/img1.png';
 import img2 from '../assets/img/img2.png';
 import img3 from '../assets/img/img3.png';
@@ -103,10 +103,20 @@ class Onboarding extends React.Component {
         // })
     }
     sendData=()=>{
-                  alert("Under Developing");
-        // console.log('nav kk ',this.props.nav)
-        // this.props.changeNavRec();
-        // this.props.navigation.navigate('MainpageTabs')
+        // alert('Under Development')
+            AsyncStorage.setItem('userid',JSON.stringify(""));
+            AsyncStorage.setItem('typeid',JSON.stringify(""));
+            AsyncStorage.setItem('profile_img',JSON.stringify(""));
+            AsyncStorage.setItem('user_name',JSON.stringify("Guest"));
+            AsyncStorage.setItem('postid',JSON.stringify(""));
+            AsyncStorage.setItem('collectionId',JSON.stringify(""));
+            AsyncStorage.setItem('sectionId',JSON.stringify(""));
+            AsyncStorage.setItem('usertype',JSON.stringify(""));
+            AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+            AsyncStorage.setItem('loginData', JSON.stringify(false));
+            this.props.savelogout();
+            AsyncStorage.setItem('explore_page',JSON.stringify(1));
+            this.props.navigation.navigate('mainpage')
     }
     renderPage(image, index) {
         return (
@@ -191,7 +201,7 @@ class Onboarding extends React.Component {
                             style={styles.signupbtn}
                             colors={['#ffff', '#ffff']}>
                             <TouchableOpacity
-                            onPress={()=>this.sendData()}
+                            onPress={()=> this.sendData()}
                                 // onPress={() =>
                                 //     this.props.navigation.navigate('App')
                                 //     //     this.props.navigation.navigate('logintabs', {
@@ -316,16 +326,16 @@ const styles = StyleSheet.create({
 //     }
 // }
 
-const mapStateToProps = state => ({
-    nav: state.apiReducer.nav,
-    
-  });
-function mapDispatchToProps(dispatch){
-    return{
-        changeNavRec:()=>dispatch({type:'CHANGE_NAV_REC'}),
-        changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'}),
-        mergePopup:()=>dispatch({type:'MERGE_POPUP1'}),
+function mapStateToProps(state) {
+    return {
     }
-};
-
-export default connect(mapStateToProps,mapDispatchToProps)(Onboarding);
+  }
+  
+  
+  function mapDispatchToProps(dispatch) {
+    return {
+      savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
+    }
+  };
+  
+  export default connect(mapStateToProps,mapDispatchToProps)(Onboarding);

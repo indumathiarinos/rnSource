@@ -156,12 +156,13 @@ console.warn(json+"")
          else if(responseJson.Msg==='Logedin successfully'){
           // alert(responseJson.Msg)
           this.props.savelogin();
-           AsyncStorage.setItem('userid', responseJson.UserID);
-           AsyncStorage.setItem('profile_userid', responseJson.UserID);
-           AsyncStorage.setItem('bookmarkUserid',responseJson.UserID);
+           AsyncStorage.setItem('userid', JSON.stringify(Number(responseJson.UserID)));
+           AsyncStorage.setItem('profile_userid', JSON.stringify(Number(responseJson.UserID)));
+           AsyncStorage.setItem('bookmarkUserid',JSON.stringify(Number(responseJson.UserID)));
 
-           AsyncStorage.setItem('usertype', responseJson.UserType);
-          AsyncStorage.setItem('typeid', responseJson.UserType);
+           AsyncStorage.setItem('usertype',JSON.stringify(Number(responseJson.UserType)));
+          AsyncStorage.setItem('typeid', JSON.stringify(Number(responseJson.UserType)));
+          AsyncStorage.setItem('explore_page',JSON.stringify(0));
 
           console.log('userid & usertype',responseJson.UserID,'',responseJson.UserType)
           setTimeout(() => {
@@ -326,7 +327,7 @@ console.warn(json+"")
           <TouchableOpacity onPress={()=>this.clear('newSignup')}>
           <View style={styles.btnview1}>
               <Text style={{color:'#24d4bc',fontSize:17,alignSelf:'center'}}>Don't Have an account?</Text>
-            <TouchableOpacity >
+            <TouchableOpacity  onPress={()=>this.clear('newSignup')}>
                 <Text style={styles.boldText}>Sign Up</Text>
                 </TouchableOpacity>
                 </View>

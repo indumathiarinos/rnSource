@@ -189,7 +189,7 @@ class Settings extends Component {
       }
     };
 
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.z(options, response => {
       console.log('Response = ', response);
 
       if (response.didCancel) {

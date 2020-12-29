@@ -73,6 +73,8 @@ class NewsFeed extends Component {
       sectionExpand:false,
       section:'',
       secCollid:'',
+      explore_page:'0',
+      loginPoup:false
       
 
     }
@@ -126,6 +128,12 @@ class NewsFeed extends Component {
     // console.log('share click ',Share.Social.INSTAGRAM,this.state.shareId)
     Share.shareSingle(shareOptions2);
   }
+  alertPopup(){
+    this.setState({loginPopup:true})
+    setTimeout(() => {
+        this.setState({loginPopup:false})
+    }, 5000);
+}
   twitter = () => {
     this.setState({ shareModal: false});
     let shareOptions2 = {
@@ -548,6 +556,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
   componentDidMount() {
     AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
     AsyncStorage.getItem('typeid').then((val) => this.setState({ gettypeid: val })).done();
+    AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     // this.getData();
     this.CheckConnectivity();
@@ -705,6 +714,12 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
       .catch((error) => {
         console.warn(error);
       });
+  }
+  commentClick(item){
+              AsyncStorage.setItem('typeid',"4");
+              AsyncStorage.setItem('postid', item.Post_Page_Id);
+              console.log('comments page id is ', item.Post_Page_Id)
+              this.props.navigation.navigate('comments')
   }
   collectionBook = (value, colid) => {
     this.setState({ collectionModal: false,expanded:false,sectionExpand:false });
@@ -868,12 +883,15 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
             </TouchableOpacity>
             <Text style={{ fontSize: 15, color: '#707070', textAlign: 'left' }}>Published a {item.TypeID == 4 ? "page" : "publication"} {item.Publisheddate}</Text>
           </View>
+          {/* {this.state.explore_page=='0'? */}
+
           <TouchableOpacity style={{ padding: '2%' }}
             // onPress={() => this.refs.modal5.open()}
-            onPress={() => this.toggle_newModal()}
+            onPress={() =>{this.state.explore_page=='0'? this.toggle_newModal():this.alertPopup()}}
           >
             <Image source={require('../assets/img/3dots_gray.png')} />
           </TouchableOpacity>
+          {/* :null} */}
         </View>
         <Text numberOfLines={2}
           style={{ fontSize: 20, color: 'black', fontWeight: 'bold', alignSelf: 'flex-start', marginLeft: '8%', marginRight: '8%', marginTop: '2%' }}>{item.Title}</Text>
@@ -942,13 +960,13 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
         </View>
 
         {/* <Divider style={{ backgroundColor: 'gray', borderWidth: 0.7, borderColor: 'gray' }} /> */}
+        {/* {this.state.explore_page=='0'? */}
         <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', }}>
           <TouchableOpacity
             style={{ padding: '3%' }}
-            onPress={() => {
-              this.likeClick(item.Post_Page_Id)
+            onPress={() => {this.state.explore_page=='0'?
+              this.likeClick(item.Post_Page_Id):this.alertPopup()
               // this.selectItem(item)
-              console.log('dskaldsjksdfjl like ', item.Post_Page_Id, 'item.abc ', item.isSelect)
             }}
           // onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
           >
@@ -967,11 +985,8 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
            source={imgSource}/> */}
           <TouchableOpacity
             style={{ padding: '3%' }}
-            onPress={() => {
-              AsyncStorage.setItem('typeid',"4");
-              AsyncStorage.setItem('postid', item.Post_Page_Id);
-              console.log('comments page id is ', item.Post_Page_Id)
-              this.props.navigation.navigate('comments')
+            onPress={() => {this.state.explore_page=='0'?
+              this.commentClick(item):this.alertPopup()
             }}
           >
             <Image
@@ -981,20 +996,22 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
           <TouchableOpacity
             style={{ padding: '3%' }}
             // onPress={() => this.refs.modal4.open()} 
-            onPress={() => this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon" })}
+            onPress={() =>{this.state.explore_page=='0'? this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon" }):this.alertPopup()}}
           // onPress={() =>this.props.navigation.navigate('createCollection')} 
           >
             <Image source={require('../assets/img/plus.png')} />
           </TouchableOpacity>
           <TouchableOpacity
             style={{ padding: '3%' }} onPress={() =>
-              this.sharepress(item.Post_Page_Id)
+              {this.state.explore_page=='0'?
+              this.sharepress(item.Post_Page_Id):this.alertPopup()}
               // this.refs.modal6.open()
             } >
             <Image source={require('../assets/img/share.png')} />
           </TouchableOpacity>
 
         </View>
+        {/* :null} */}
         <Divider style={{ borderColor: '#707070' }} />
 
       </View>);
@@ -1122,15 +1139,15 @@ style={{marginBottom:'10%'}}
             borderBottomEndRadius: 5,
             width: 300,}}
             >
-              <TouchableOpacity
-                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center' }}
+            <TouchableOpacity
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/plus_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1153,7 +1170,7 @@ style={{marginBottom:'10%'}}
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                      <Image source={require('../assets/img/collection.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                       <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                     </View>
   
@@ -1174,7 +1191,7 @@ style={{marginBottom:'10%'}}
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                        <Image style={{ backgroundColor: '#fff' }} source={require('../assets/img/collection_green.png')} />
+                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
                         <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
                       </View>
                       <TouchableOpacity
@@ -1195,7 +1212,7 @@ style={{marginBottom:'10%'}}
                                    <View style={{
                                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                    }}>
-                                     <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
+                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
                                      <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
                          <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                                  <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1221,7 +1238,7 @@ style={{marginBottom:'10%'}}
                              <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                  {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                      {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1279,6 +1296,20 @@ style={{marginBottom:'10%'}}
             height: 140
           }} />
         </Modal1>
+        <Modal1
+                    animationType={"slide"}
+                    onBackdropPress={() => this.setState({ loginPopup: false})}
+                    isVisible={this.state.loginPopup}>
+
+                    <View 
+                        style={{backgroundColor:'#fff', 
+                        alignSelf:'center',
+                        flex:  0.2,
+                        width: width/1.2,}}
+                        >
+                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
+                        </View>
+                    </Modal1>
         <Modal1 isVisible={this.state.shareModal}
           onBackdropPress={() => this.setState({ shareModal: false })}>
           <View style={{ flex: 0.5, backgroundColor: '#fff', borderRadius: 30, margin: '8%' }}>
@@ -1380,7 +1411,7 @@ style={{marginBottom:'10%'}}
                             <Image source={require('../assets/img/search.png')} />
                             {/* <Text>Search</Text> */}
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab4()}>
+                        <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
                             {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
@@ -1472,9 +1503,9 @@ container: {
     flexDirection:'row',
     position:'absolute'
 },
-tabsss:{
-    margin:'2%'
-},
+// tabsss:{
+//     margin:'2%'
+// },
   modal: {
     justifyContent: 'center',
     alignItems: 'center',

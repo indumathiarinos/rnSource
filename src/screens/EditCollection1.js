@@ -142,7 +142,7 @@ export default class EditCollection extends Component {
          let collection=[...this.state.collection];
          for(let data of collection){
            if(data.collectionsID==id){
-               this.setState({selectedId:id})
+               this.setState({selectedId:this.state.selectedId==id?"":id})
                 
             //  data.abc=(data.abc==null)?true:!data.abc;
             //  (data.abc)?this.state.selectedItemArray.push(data):this.state.selectedItemArray.pop(data);
@@ -234,7 +234,8 @@ export default class EditCollection extends Component {
             <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
                 {/* <View > */}
                     <ImageBackground
-                        style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
+                        style={{ height: height / 12, resizeMode: 'cover',  marginBottom: '1%' }}
+                        imageStyle={{borderTopRightRadius: 10,}}
                         source={{ uri: item.Image2!=""?item.Image2:null}} >
                          {this.state.selectedId==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
                     </ImageBackground>
