@@ -9,7 +9,7 @@ import EIcons from 'react-native-vector-icons/Entypo';
 import { connect } from "react-redux";
 // import ReadMore from 'react-native-read-more-text';
 import ReadMore from './Readmore';
-
+import BlurModal from '../components/blurModal';
 import Modal1 from "react-native-modal";
 import LinearGradient from 'react-native-linear-gradient';
 import NetInfo from '@react-native-community/netinfo';
@@ -60,8 +60,12 @@ class ReadLater extends Component {
     getuserid:'',
     selectedId:'',
     getDeleteId:'',
-    undo:false
-
+    undo:false,
+    avatarProfile:'',
+    tab1: false,
+    tab2: false,
+    tab3: false,
+    tab4: false,
 }
 this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -76,6 +80,45 @@ this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 //     />
 //   );
 // }
+toggleTab1() {
+  this.setState({
+      tab1: true,
+      tab2: false,
+      tab3: false,
+      tab4: false
+  });
+  // this.props.changeNavNews();
+  this.props.navigation.push('mainpage')
+}
+toggleTab2() {
+  this.setState({
+      tab1: false,
+      tab2: true,
+      tab3: false,
+      tab4: false
+  });
+  this.props.navigation.push('collection')
+
+}
+toggleTab3() {
+  this.setState({
+      tab1: false,
+      tab2: false,
+      tab3: true,
+      tab4: false
+  });
+  this.props.navigation.push('search')
+
+}
+toggleTab4() {
+  this.setState({
+      tab1: false,
+      tab2: false,
+      tab3: false,
+      tab4: true
+  });
+  this.props.navigation.openDrawer()
+}
 componentDidMount() {
   AsyncStorage.getItem('readlater').then((value) => this.setState({ scrollReadlater : value })).done();
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -130,10 +173,44 @@ handleBackButtonClick() {
 getData(){
   setTimeout(() => {
     { this.exploredata(this.state.getuserid) }
-  },2000);
+    { this.exploredataPic(this.state.getuserid) }
+  }, 1000);
+}
+exploredataPic(userid) {
+  this.setState({ loading: true })
+  var json = JSON.stringify({
+      'userid': userid
+  });
+  fetch("http://162.250.120.20:444/Login/ProfileUpdateGet",
+      {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'content-type': 'application/json'
+          },
+          body: json
+      }
+  )
+      .then((response) => response.json())
+      .then((responseJson) => {
+          //alert(responseText);
+          // this.setState({loading:false})
+          console.warn(responseJson)
+          for (let i = 0; i < responseJson.length; i++) {
+              // alert(this.state.bookdetail[0].Image)
+              this.setState({
+                  avatarProfile: responseJson[i].avatar,
+
+              })
+          }
+          //alert(this.state.data.status)  
+      })
+      .catch((error) => {
+          console.warn(error);
+      });
 }
 deleteData(userid,readlaterId) {
-  this.setState({loading:true})
+  // this.setState({loading:true})
   var json = JSON.stringify({
       "Deleted_for":"readlater",
       "PK_ID":readlaterId,
@@ -273,7 +350,7 @@ removeItem(item1){
   // this.CheckConnectivity1();
 
 }
-undoFunc(item) {
+undoFunc() {
   const reading = this.state.reading;
   // this.state.reading.push(item);
   console.log('values after undo list ',this.state.reading);
@@ -359,7 +436,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
             <Text style={{fontSize:18,fontWeight:'bold'}}>{item.Titel}</Text></View>
            
      <TouchableOpacity onPress={()=>this.removeItem(item)}>
-           <Image source={require('../assets/img/trash1.png')} />
+     <Image style={{width:50,height:50}} source={require('../assets/img/trashicon.png')} />
 
            </TouchableOpacity>
                        </View>
@@ -368,7 +445,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
                        onPress={() => this.goToRead(item)} 
                          >
             <ImageBackground
-            style={{width:width,height: 550,alignSelf: 'center',marginTop:'2%'}}
+            style={{width:width,height: item.Type_Id==4?217:514,alignSelf: 'center',marginTop:'2%'}}
             source={{uri:item.Cover_Image}}
             onPress={() => console.log("Works!")}
             activeOpacity={0.7}
@@ -392,32 +469,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
            <Divider style={{ backgroundColor: 'gray', borderWidth: 0.1,marginTop:'1%', borderColor: 'gray' }} />
 
           </View> */}
-          <Modal
-          animationType="slide"
-          transparent
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
-            <View style={{
-          left:0,right:0,bottom:0,position:'absolute',  
-          height:'10%', 
-          alignItems:'center',
-          justifyContent:'center',
-          backgroundColor: 'red',
-}}>
-       
-<Text numberOfLines={2} style={{color:'#fff',fontSize:18,textAlign:'center'}}>Removed - {this.state.deletedName} </Text>
          
-         
-        <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
-        onPress={()=>this.undoFunc(item)}
-        >
-            <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
-         </TouchableOpacity>
-          
-          </View>
-          </Modal>
       </View>
       );
   }
@@ -483,16 +535,18 @@ onPress={() => this.bookmarkPress()}
 <Image source={require('../assets/img/close.png')} />
 </TouchableOpacity>
 </View>
+<ScrollView style={{marginBottom:'10%'}}>
       <FlatList
           legacyImplementation={false}
           data={this.state.reading}
           navigation={this.props.navigation}
           renderItem={this.fullcard.bind(this)}
           enableEmptySections={false}
-          style={{ marginTop: '1%' }}
+          contentContainerStyle={{ marginTop: '1%', }}
           extraData={this.state}
           keyExtractor={(item, index) => index.toString()}
         />
+        </ScrollView>
          <Modal1 isVisible={this.state.loading}
 
 // onBackdropPress={() => this.setState({ loading: true })}
@@ -505,11 +559,12 @@ onPress={() => this.bookmarkPress()}
 </Modal1>
 {/* <Modal
           animationType="slide"
-          transparent
+          // transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
+          // onRequestClose={() => {
+          //   console.log('Modal has been closed.');
+          // }}
+          >
             <View style={{
           left:0,right:0,bottom:0,position:'absolute',  
           height:'10%', 
@@ -517,23 +572,91 @@ onPress={() => this.bookmarkPress()}
           justifyContent:'center',
           backgroundColor: 'red',
 }}>
-      
-<Text style={{color:'#fff',fontSize:18,textAlign:'center'}}>Remove - {this.state.deletedName} </Text>
-      
+       
+       <View style={{flexDirection:'row',justifyContent:'center'}}>
+              <Text style={{color:'#fff',fontSize:18,textAlign:'center',}} >Removed - </Text>
+              <Text numberOfLines={2} style={{color:'#fff',fontSize:18,textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
+
+            </View>         
+         
         <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
-        onPress={()=>this.undoFunc(this.state.filterdata)}
+        onPress={()=>this.undoFunc()}
         >
             <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
          </TouchableOpacity>
-           
+          
           </View>
           </Modal> */}
+          <BlurModal visible={this.state.modalVisible}
+          children={  <View style={{
+            left:0,right:0,bottom:0,position:'absolute',  
+            height:'10%', 
+            alignItems:'center',
+            justifyContent:'center',
+            backgroundColor: 'red',
+  }}>
+         
+         <View style={{flexDirection:'row',justifyContent:'center'}}>
+                <Text style={{color:'#fff',fontSize:18,textAlign:'center',}} >Removed - </Text>
+                <Text numberOfLines={2} style={{color:'#fff',fontSize:18,textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
+  
+              </View>         
+           
+          <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
+          onPress={()=>this.undoFunc()}
+          >
+              <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
+           </TouchableOpacity>
+            
+            </View>}
+          // }}
+          >
+          
+          </BlurModal>
+          <View style={styles.bottomBar}>
+                    <TouchableOpacity
+                        style={styles.tabsss}
+                        onPress={() => this.toggleTab1()}>
+                        <Image style={{ width: 25, height: 25 }} source={require('../assets/img/logo.png')} />
+                        {/* <Text>Home</Text> */}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
+                    <Image source={require('../assets/img/collection.png')} />
+                        {/* <Text>Collection</Text> */}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
+                        <Image style={{ width: 28, height: 28 }} source={require('../assets/img/search.png')} />
+                        {/* <Text>Search</Text> */}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
+                        {/* <Drawer
+        ref={(ref) => { this.drawer = ref; }}
+        content={<SideBar navigator={this.navigator} />}
+        onClose={() => this.closeDrawer()} > */}
+                        {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
+                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2 }} source={{ uri: this.state.avatarProfile }}></Image>
+                        {/* <Text>Menu</Text> */}
+                        {/* </Drawer> */}
+                    </TouchableOpacity>
+
+                </View>
     </SafeAreaView>
   )
 }
 
 }
 const styles = StyleSheet.create({
+  bottomBar: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    // height: '6%',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    position: 'absolute'
+},
 headerText: {
   padding: '5%',
   fontSize: 16,
@@ -552,9 +675,14 @@ staticheader: {
 },
 activeText:{
   padding: '5%',
-  fontSize: 16,
-  color: 'white',
-  fontWeight: 'bold'
+  fontSize: 14,
+ color: 'white',
+  fontFamily: 'AzoSans-Medium'
+},
+tabsss: {
+  alignItems: 'center', 
+  justifyContent: 'center',
+  padding:'1%'
 },
 })
 function mapStateToProps(state) {

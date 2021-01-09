@@ -7,13 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import img1 from '../assets/img/cover1.png';
 import img2 from '../assets/img/cover2.png';
 import img3 from '../assets/img/cover3.png';
-import Carousel from '@rhysforyou/react-native-carousel';
-import {
-    Container,
-    Content,
-    Footer,
-    FooterTab
-} from "native-base";
+import BlurModal from '../components/blurModal';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
 import Modal1 from 'react-native-modal';
@@ -100,12 +94,12 @@ showModal = () => {
             this.setState({undo:false})
           }    
           this.props.navigation.navigate('collectionDetail',{'collId':colvalue})
-        }, 5000);
+        }, 3000);
 }
 getData(){
     setTimeout(() => {
         {this.exploredata(colvalue)}
-    }, 5);
+    }, 1000);
 }
 exploredata(collectionId){
     var json=JSON.stringify({
@@ -312,17 +306,18 @@ componentWillUnmount() {
                 {item.SectionID==0? <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
-                        <Image style={{ width: '95%', elevation: 2, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
+                        <Image style={{ width: '95%',  height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                            
                     </View>:
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',borderRadius:10 }}
                     >
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                        <Image style={{ width: '75%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                            <View >
-                                <Image
+                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%',borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc',borderTopRightRadius:10 }}>
+                                <ImageBackground
+                                imageStyle={{borderTopRightRadius:10}}
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} />
                             </View>
@@ -363,6 +358,7 @@ componentWillUnmount() {
                 // borderColor:'#ccccccc'
             }}>
                 <TouchableOpacity
+                style={styles.button}
                    onPress={() => this.onPressHandler(item.SectionID)}>
                     {/* <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
@@ -381,17 +377,18 @@ componentWillUnmount() {
                 {item.SectionID==0? <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
-                        <Image style={{ width: '95%', elevation: 2, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
+                        <Image style={{ width: '95%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                            
                     </View>:
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',borderRadius:10 }}
                     >
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                        <Image style={{ width: '75%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                            <View >
+                        <View style={{ flex:1, flexDirection: 'column',  borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
                                 <ImageBackground
+                                imageStyle={{borderTopRightRadius:10}}
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} >
                         {item.abc==true?<Image style={{alignSelf:'flex-end',position:'absolute',margin:'1%',width:35,height:35}} source={require('../assets/img/remove-delete.png')}/>:null}
@@ -406,6 +403,9 @@ componentWillUnmount() {
                         </View>
                     </View>
                   }
+                  </TouchableOpacity>
+                    <TouchableOpacity
+                   onPress={() => this.onPressHandler(item.SectionID)}>
                  {item.SectionID==0?
                   <View style={{ padding: '2%', margin: '1%' }}>
                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
@@ -467,19 +467,14 @@ componentWillUnmount() {
                         </TouchableOpacity>
                         <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedSecid!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                         <TouchableOpacity 
-                            onPress={() =>this.showModal()}>
+                            onPress={() =>this.state.selectedSecid!=""?this.showModal():null}>
                             <Text style={[this.state.selectedSecid!=""?styles.inacitveColor:styles.inacitveStyle]}>Delete</Text>
                         </TouchableOpacity>
                         </LinearGradient>
                     </View>
                 </View>
-                <Modal
-                        animationType="slide"
-                        transparent
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            console.log('Modal has been closed.');
-                        }}>
+                <BlurModal visible={this.state.modalVisible}
+          children={
                         <View style={{
                             left: 0, right: 0, bottom: 0, position: 'absolute',
                             height: '10%',
@@ -497,9 +492,9 @@ componentWillUnmount() {
                             </TouchableOpacity>
 
 
-                        </View>
-                    </Modal>
-                <Modal1 isVisible={this.state.loading}  >
+                        </View>}
+                        />
+                        <Modal1 isVisible={this.state.loading}  >
                             <Image source={require('../assets/gif/logo.gif')} style={{
                                 alignSelf: 'center',
                                 width: 140,
@@ -565,6 +560,15 @@ const styles = StyleSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
+    },
+    button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
     },
     image: {
         flex: 1,

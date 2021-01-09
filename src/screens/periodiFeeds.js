@@ -86,7 +86,7 @@ CheckConnectivity(){
 getData() {
   setTimeout(() => {
     {this.exploredata1(this.state.getpostid)}
-  }, 5)
+  }, 1000)
 }
 exploredata1(postid) {
 

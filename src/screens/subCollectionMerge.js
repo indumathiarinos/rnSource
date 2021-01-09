@@ -4,17 +4,7 @@ import {
     TouchableOpacity, PermissionsAndroid,SafeAreaView
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import Icon from 'react-native-vector-icons/Ionicons';
-import img1 from '../assets/img/cover1.png';
-import img2 from '../assets/img/cover2.png';
-import img3 from '../assets/img/cover3.png';
-import Carousel from '@rhysforyou/react-native-carousel';
-import {
-    Container,
-    Content,
-    Footer,
-    FooterTab
-} from "native-base";
+import BlurModal from '../components/blurModal';
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
 import Modal1 from 'react-native-modal';
@@ -107,7 +97,7 @@ class SubCollectionMerge extends Component {
               }    
               this.props.navigation.navigate('collection');
 
-        }, 5000);
+        }, 3000);
         //   this.props.mergePopup();
         //   console.log('modal state is ',this.props.mergePopup())
     }
@@ -119,7 +109,7 @@ class SubCollectionMerge extends Component {
       getData(){
           setTimeout(() => {
               {this.exploredata(this.state.getuserid)}
-          }, 5);
+          }, 1000);
       }
     mergeCollection(fromId,ToId) {
         var json = JSON.stringify(
@@ -234,12 +224,10 @@ class SubCollectionMerge extends Component {
                 width: '50%',
                 padding: '2%',
                 backgroundColor: '#ffff',
-                // borderWidth:0.5,
-                // borderColor:'#ccccccc'
+            
             }}>
-                        
-
                 <TouchableOpacity
+                style={styles.button}
               onPress={() => this.onPressHandler(item.collectionsID)}>
                       
                     <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
@@ -265,7 +253,9 @@ class SubCollectionMerge extends Component {
                             </View>
                         </View>
                     </View>
-                    
+                    </TouchableOpacity>
+                    <TouchableOpacity
+              onPress={() => this.onPressHandler(item.collectionsID)}>
                     <View style={{ padding: '2%', margin: '1%' }}>
                     <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
@@ -342,13 +332,8 @@ class SubCollectionMerge extends Component {
                                 height: 140
                             }} />
                         </Modal1>
-                        <Modal
-                        animationType="slide"
-                        transparent
-                        visible={this.state.mergeModal}
-                        onRequestClose={() => {
-                            console.log('Modal has been closed.');
-                        }}>
+                        <BlurModal visible={this.state.mergeModal}
+                          children={
                         <View style={{
                             left: 0, right: 0, bottom: 0, position: 'absolute',
                             height: '10%',
@@ -357,18 +342,17 @@ class SubCollectionMerge extends Component {
                             backgroundColor: '#27A291',
                         }}>
                             <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeFromName} - {this.state.mergeName} </Text>
-                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%',padding:'2%' }}
                             onPress={()=>this.setState({undo:true})}
                             >
                                 <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
                             </TouchableOpacity>
-                        </View>
-                    </Modal>
+                        </View>}
+                        />
             </SafeAreaView>
 
         )
     }
-
 }
 const styles = StyleSheet.create({
     textStyle:{ 
@@ -423,6 +407,15 @@ const styles = StyleSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
+    },
+    button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
     },
     image: {
         flex: 1,

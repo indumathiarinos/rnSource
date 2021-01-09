@@ -203,7 +203,7 @@ class exploreReadBook extends Component {
         AsyncStorage.setItem('contentTopage',JSON.stringify(false));
       }
       { this.exploredata(this.state.getpostid, this.state.gettypeid); }
-          }, 3000);
+          }, 1000);
   }
   
   exploredata = async (postid, typeid) => {

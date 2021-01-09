@@ -109,7 +109,7 @@ export default class MergeCollection extends Component {
     getData(){
         setTimeout(() => {
             {this.exploredata(this.state.getuserid)}
-        }, 1);
+        }, 1000);
     }
     exploredata(userid) {
         var json = JSON.stringify({
@@ -184,27 +184,27 @@ export default class MergeCollection extends Component {
                 width: '50%',
                 padding: '2%',
                 backgroundColor: '#ffff',
-                // borderWidth:0.5,
-                // borderColor:'#ccccccc'
+            
             }}>
                 <TouchableOpacity
+                style={styles.button}
               onPress={() => this.onPressHandler(item.collectionsID,item.Title)}>
                       
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+                    <View style={{flex:1,flexDirection: 'row' }}
                     >
                         
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                        <Image style={{ width: '75%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                       
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                            {/* <View > */}
+                        <View style={{ flex:1, flexDirection: 'column',borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
                                 <ImageBackground
                                     imageStyle={{ borderTopRightRadius: 10,}}
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} >
                                      {this.state.selectedMergeId==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
                                 </ImageBackground>
-                            {/* </View> */}
+                            </View>
                             <View>
             
                                 <Image
@@ -213,7 +213,9 @@ export default class MergeCollection extends Component {
                             </View>
                         </View>
                     </View>
-                    
+                    </TouchableOpacity>
+                    <TouchableOpacity
+              onPress={() => this.onPressHandler(item.collectionsID,item.Title)}>
                     <View style={{ padding: '2%', margin: '1%' }}>
                     <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
@@ -345,6 +347,15 @@ const styles = StyleSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
+    },
+    button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
     },
     image: {
         flex: 1,

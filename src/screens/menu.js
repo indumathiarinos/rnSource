@@ -18,7 +18,7 @@ class MenuPage extends Component {
       {
         id:1,
         title:'Followed/Subscribed',
-        img:require('../assets/img/followers.png')
+        img:require('../assets/img/followsub.png')
       },
       {
         id:2,
@@ -53,7 +53,7 @@ class MenuPage extends Component {
       {
         id:1,
         title:'Followed/Subscribed',
-        img:require('../assets/img/followers.png')
+        img:require('../assets/img/followsub.png')
       },
       {
         id:2,
@@ -105,6 +105,13 @@ class MenuPage extends Component {
     this.CheckConnectivity();
     this.focusListener = this.props.navigation.addListener('willFocus', () => {
       // {this.getData()}
+      AsyncStorage.getItem('userid').then((value)=>{this.setState({getuserid:value})}).done();
+      AsyncStorage.getItem('usertype').then((value)=>{this.setState({getusertype:value})}).done();
+      AsyncStorage.getItem('profile_img').then((value)=>{this.setState({profile_img:value})}).done();
+      AsyncStorage.getItem('user_name').then((value)=>{this.setState({user_name:value})}).done();
+      console.log('profile img & username ',this.state.user_name,this.state.profile_img);
+      AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+  
       this.CheckConnectivity();
 
   })
@@ -130,9 +137,10 @@ class MenuPage extends Component {
   }
   getData(){
     setTimeout(() => {
+      // alert(this.state.explore_page)
       {this.exploredata(this.state.getuserid)}
       // {this.exploredata1(this.state.getuserid)}
-    }, 3);
+    }, 1000);
   }
   handleBackButtonClick() {
     this.props.navigation.closeDrawer();
@@ -244,7 +252,7 @@ class MenuPage extends Component {
     this.props.navigation.closeDrawer();
     this.props.navigation.navigate('loginSignup');
   }
-  renderItem=(item)=>{
+  renderItem=(item,index)=>{
     
     return(
       <TouchableOpacity
@@ -256,9 +264,9 @@ class MenuPage extends Component {
       {/* <View style={{}}> */}
       <View style={{flexDirection:'row',alignItems:'center'}}
    >
-       <Image
-            style={{margin:'2%',padding:'2%'}} source={item.img}/>
-            <Text style={{marginLeft:'5%',color:'#707070'}}>{item.title}</Text>
+       <Image 
+            style={{margin:'2%',padding:'2%',marginLeft:item.id==1?'1%':'2%'}} source={item.img}/>
+            <Text style={{marginLeft:item.id==1?'3%':'5%',color:'#707070'}}>{item.title}</Text>
             </View>
 
       {/* </View> */}
@@ -280,12 +288,12 @@ class MenuPage extends Component {
                 <TouchableOpacity
                   onPress={()=>this.profileClick()}>
                  <Image
-                  style={{width:50,height:50,borderRadius:50/2}}
-                  source={{uri:this.state.avatar!=""?this.state.avatar:null}}/>
+                 style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
+                    source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}/>
                               </TouchableOpacity>
                               <TouchableOpacity
                   onPress={()=>this.profileClick()}>
-                  <View style={{flexDirection:'column',marginRight:'35%'}}>
+                  <View style={{flexDirection:'column',marginRight:'35%',marginTop:'3%'}}>
                   <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>{this.state.username}</Text>
                   <Text
                   onPress={()=>this.profileClick()}
@@ -295,7 +303,7 @@ class MenuPage extends Component {
                   </TouchableOpacity>
   
                   <TouchableOpacity
-                  style={{marginLeft:'3%',marginRight:'3%'}}
+                  style={{marginLeft:'3%',marginRight:'3%',marginTop:'3%'}}
                   onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
                   <Image
                   source={require('../assets/img/bell.png')}/>
@@ -312,7 +320,7 @@ class MenuPage extends Component {
               style={{height:'85%'}}
     
     data={this.state.list}
-    renderItem={(({item})=>this.renderItem(item))
+    renderItem={(({item,index})=>this.renderItem(item,index))
     }
   />
             {/* <FlatList
@@ -362,15 +370,16 @@ class MenuPage extends Component {
               <View style={{flex:3,backgroundColor:'white',borderBottomEndRadius:40,}}>
                 <View style={{height:'15%',justifyContent:'center'}}>
                   <View style={{flexDirection:'row',justifyContent:'space-between',margin:'3%'}}>
-                  <TouchableOpacity style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
+                  <TouchableOpacity 
+                  // style={{width:50,height:50,borderRadius:50/2,}}
                     onPress={()=>this.profileClick()}>
                    <Image
-                    style={{width:50,height:50,borderRadius:50/2}}
-                    source={{uri:this.state.avatar!=""?this.state.avatar:null}}/>
+                    style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
+                    source={{uri:'http://pagevio.com/uploads/profile/noimage.jpg'}}/>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                     onPress={()=>this.profileClick()}>
-                    <View style={{flexDirection:'column',marginRight:'35%'}}>
+                    <View style={{flexDirection:'column',marginRight:'35%',marginTop:'3%'}}>
                     <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>Guest</Text>
                     <Text
                     onPress={()=>this.profileClick()}
@@ -380,7 +389,7 @@ class MenuPage extends Component {
                     </TouchableOpacity>
     
                     <TouchableOpacity
-                    style={{marginLeft:'3%',marginRight:'3%'}}
+                    style={{marginLeft:'3%',marginRight:'3%',marginTop:'3%'}}
                     onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
                     <Image
                     source={require('../assets/img/bell.png')}/>
@@ -407,12 +416,12 @@ class MenuPage extends Component {
               <TouchableOpacity
                 onPress={()=>this.profileClick()}>
                <Image
-                style={{width:50,height:50,borderRadius:50/2}}
-                source={{uri:this.state.avatar!=""?this.state.avatar:null}}/>
+                style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
+                source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}/>
                             </TouchableOpacity>
                             <TouchableOpacity
                 onPress={()=>this.profileClick()}>
-                <View style={{flexDirection:'column',marginRight:'35%'}}>
+                <View style={{flexDirection:'column',marginRight:'35%',marginTop:'3%'}}>
                 <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>{this.state.username}</Text>
                 <Text
                 onPress={()=>this.profileClick()}
@@ -422,7 +431,7 @@ class MenuPage extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                style={{marginLeft:'3%',marginRight:'3%'}}
+                style={{marginLeft:'3%',marginRight:'3%',marginTop:'3%'}}
                 onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
                 <Image
                 source={require('../assets/img/bell.png')}/>
@@ -439,7 +448,7 @@ class MenuPage extends Component {
               style={{height:'85%'}}
     
     data={this.state.list1}
-    renderItem={(({item})=>this.renderItem(item))
+    renderItem={(({item,index})=>this.renderItem(item,index))
     }
   />
             {/* <FlatList

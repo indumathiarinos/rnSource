@@ -60,7 +60,7 @@ class EmailNotification extends Component {
   getData(){
     setTimeout(() => {
       {this.exploredataGet(this.state.getuserid)}
-    }, 5);
+    }, 1000);
   }
   exploredataGet(userid){
     var json=JSON.stringify({

@@ -15,6 +15,8 @@ import {
   Alert,
   AsyncStorage, LayoutAnimation, FlatList
 } from 'react-native';
+import LoginModal from '../components/loginModal';
+
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMore from 'react-native-read-more-text';
 import Clipboard from '@react-native-community/clipboard';
@@ -142,7 +144,8 @@ class ReadingBook extends Component {
       getSecId:'',
       interactionsComplete: false,
       explore_page:'0',
-      loginPoup:false
+      loginPoup:false,
+      statusReadlater:''
      
 
     }
@@ -150,20 +153,46 @@ class ReadingBook extends Component {
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     // this.onEndReachedCalledDuringMomentum=true;
   }
+  logoutpress=()=>{
+    AsyncStorage.setItem('userid',JSON.stringify(""));
+    AsyncStorage.setItem('typeid',JSON.stringify(""));
+    AsyncStorage.setItem('profile_img',JSON.stringify(""));
+    AsyncStorage.setItem('user_name',JSON.stringify(""));
+    AsyncStorage.setItem('postid',JSON.stringify(""));
+    AsyncStorage.setItem('collectionId',JSON.stringify(""));
+    AsyncStorage.setItem('sectionId',JSON.stringify(""));
+    AsyncStorage.setItem('usertype',JSON.stringify(""));
+    AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+    AsyncStorage.setItem('loginData', JSON.stringify(false));
+    this.props.savelogout();
+    this.props.navigation.closeDrawer();
+    this.props.navigation.navigate('loginSignup');
+  }
   alertPopup(){
-    this.setState({loginPopup:true})
-    setTimeout(() => {
-        this.setState({loginPopup:false})
-    }, 5000);
+    // this.setState({loginPopup:true})
+    this.logoutpress()
+}
+//   alertPopup(){
+//     this.setState({loginPopup:true})
+// }
+closeLoginPopup(){
+ this.setState({loginPopup:false});
+ this.props.savelogin();
+ AsyncStorage.setItem('explore_page',JSON.stringify(0));
+ AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
+ AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+ AsyncStorage.getItem('typeid').then((value) => this.setState({ gettypeid: value })).done();
+ AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
+this.CheckConnectivity()
 }
   async componentDidMount() {
     this.setEmptyClipboard();
     // AsyncStorage.getItem('typeid').then((value) => this.setState({ gettypeid : value })).done();
-    AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
     AsyncStorage.getItem('pagefeed_userid').then((value) => this.setState({ pagefeed_userid: value })).done();
     AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid: value })).done();
     AsyncStorage.getItem('profile_userid').then((value) => this.setState({ profile_userid: value })).done();
     AsyncStorage.getItem('typeid').then((value) => this.setState({ gettypeid: value })).done();
+    AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
     AsyncStorage.getItem('pageorder').then((value) => this.setState({ getcontentpageCount: value })).done();
     AsyncStorage.getItem('contentTopage').then((value) => this.setState({ contentToRead: value })).done();
     AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
@@ -207,10 +236,11 @@ class ReadingBook extends Component {
     setTimeout(() => {
       // this.props.changeRemove()
       this.setState({
-        readlaterPopup: false, exists: false
+        readlaterPopup: false, 
       });
       //   this.props.changeRemove();
-    }, 5000);
+    }, 3000);
+    {this.exploredata(this.state.getpostid,this.state.gettypeid)}
     // this.props.navigation.navigate('readlater');
   }
   readlaterAdd(userid, pageid, typeid) {
@@ -235,7 +265,7 @@ class ReadingBook extends Component {
       .then((responseJson) => {
         //alert(responseText);
         if (responseJson[0].Message == "Already Exist") {
-          this.setState({ exists: true })
+          // this.setState({ exists: true })
         }
         this.setState({ loading: false, collectionModal:false,expanded:false,sectionExpand:false})
         this.readlater()
@@ -418,7 +448,7 @@ class ReadingBook extends Component {
       //   })
       // }
       // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 3000);
+    }, 1000);
   }
   // exploredata(postid,typeid,pagecount){
   //   console.log('josn postid,typeid, pagingcount ',postid,typeid,pagecount)
@@ -473,7 +503,7 @@ class ReadingBook extends Component {
     console.log('post,type,pagecount', this.state.getpostid, this.state.gettypeid, this.pagecounting)
     var json = JSON.stringify(
       {
-        'PostID': this.state.getpostid, 'SP_For': "Read", 'Type_ID': typeid, 'PagingCount': this.pagecounting
+        'PostID': this.state.getpostid, 'SP_For': "Read", 'Type_ID': typeid, 'PagingCount': this.pagecounting,"USERID":this.state.getuserid
         // 'PostID': "3075", 'SP_For': "Read", 'Type_ID': typeid, 'PagingCount': this.pagecounting
 
       });
@@ -495,12 +525,12 @@ class ReadingBook extends Component {
     )
       .then((response) => response.json())
       .then((responseJson) => {
-       
+       console.log(responseJson)
         this.setState({
           readingData: this.state.readingData.concat(responseJson),
           loading: false,
         })
-        console.log('reading data length ', this.state.readingData.length)
+        console.log('reading data length ',responseJson[0].ReadStatus)
 
         this.setState({
           scrollTop:true,
@@ -515,12 +545,13 @@ class ReadingBook extends Component {
           previousPage: responseJson[0].PreviousPage,
           profile_userid: responseJson[0].user_id,
           bgImg: responseJson[0].BackGround_Img,
-          page_id:responseJson[0].page_id
+          page_id:responseJson[0].page_id,
+          exists:responseJson[0].Readstatus=="N"?false:true
 
         })
         console.log('page des ',this.state.description)
        
-        console.log('this description data is ', this.state.avatar, this.state.page_url, this.state.created_at);
+        console.log('this description data is ', this.state.avatar, this.state.page_url, this.state.created_at,"exist",this.state.exists);
 
       })
       .catch((error) => {
@@ -629,8 +660,11 @@ class ReadingBook extends Component {
       </View>
     )
   }
-  addPins() {
-    this.setState({loading:true})
+  addPins= async () => { 
+   const clipboardContent = await Clipboard.getString();
+   this.setState({ copiedData: clipboardContent });
+    if(this.state.copiedData!=""){
+      this.setState({loading:true})
     var json = JSON.stringify({
       "options": "Add", "page_id": this.state.page_id, "type":"type", "collection_id": "", "section_id": "", "Description": this.state.copiedData, "user_id": this.state.getuserid, "SortBy": "Asc"
     });
@@ -658,6 +692,7 @@ class ReadingBook extends Component {
       .catch((error) => {
         console.warn(error);
       });
+    }
   }
   collSecModal = () => {
     // console.log('enters')
@@ -671,12 +706,15 @@ class ReadingBook extends Component {
       })
       this.props.collSecPopup();
       //   this.props.changeRemove();
-    }, 5000);
+    }, 3000);
+  
     // console.log('modal state is ', this.state.popupModal)
   }
-  addBookmark(content) {
-    this.setState({loading:true})
-    this.getCopiedData();
+  addBookmark = async () => { 
+    const clipboardContent = await Clipboard.getString();
+    this.setState({ copiedData: clipboardContent });
+    if(this.state.copiedData!=""){
+      this.setState({loading:true})
     var json = JSON.stringify({
       "UserID": this.state.getuserid, "PageID": this.state.page_id, "Type": "page", "LineData": this.state.copiedData, "Linenumber": "0", "SelectedText": "0"
     });
@@ -700,6 +738,7 @@ class ReadingBook extends Component {
       .catch((error) => {
         console.warn(error);
       });
+    }
   }
   setEmptyClipboard = async () => {
     //To copy the text to clipboard
@@ -832,7 +871,7 @@ class ReadingBook extends Component {
       //     color: '#fff',
       //   },
       // })
-      }, 5000);
+      }, 3000);
     } else if (popup == 'bookmarkPopup' && this.state.bookmarkPopup) {
       setTimeout(() => {
         // this.props.changeRemove()
@@ -841,7 +880,7 @@ class ReadingBook extends Component {
           copiedData: ""
         })
 
-      }, 5000);
+      }, 3000);
     }
     //   console.log('modal state is ', this.state.popupModal)
   }
@@ -868,12 +907,48 @@ class ReadingBook extends Component {
       return (<Image style={{ width: width / 1.5, height: 100 }} resizeMode="cover" source={{ uri: a.src }} />);
     }
   }
-  commentClick(item){
-            AsyncStorage.setItem('typeid',"4")
-              AsyncStorage.setItem('postid',this.state.page_id )
+  commentClick(){
+    console.log('page id , postid ',this.state.getpostid,this.state.page_id);
+    if(this.state.gettypeid==4){
+      AsyncStorage.setItem('postid',this.state.page_id )
+    }else{
+      AsyncStorage.setItem('postid',this.state.getpostid )
+    }
+    AsyncStorage.setItem('typeid',this.state.gettypeid)
+    console.log('comments typeid & postid ',this.state.gettypeid,this.state.getpostid)
+
             this.props.navigation.navigate('comments')
   }
+  likeClick(id) {
+    // let selected;
+   
+        this.setState({ loading: true })
+        var json = JSON.stringify({ "UserID": this.state.getuserid, "Post_Page_ID": id,"TypeID":this.state.gettypeid });
+        fetch("http://162.250.120.20:444/Login/LikesAdd",
+          {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'content-type': 'application/json'
+            },
+            body: json
+          }
+        )
+          .then((response) => response.json())
+          .then((responseJson) => {
+            this.setState({ loading: false,});
+            console.warn(responseJson);
+            this.setState({ like:responseJson[0].Message=='Unlike'?false:true })
+            // console.log('like service called');
+            { this.exploredata(this.state.getpostid,this.state.gettypeid) }
+          })
+          .catch((error) => {
+            console.warn(error);
+          });     
+    
+  }
   gotoCollSec(){
+    AsyncStorage.setItem('coll_name',this.state.popup_title);
     if(this.state.getsecColName=="Collection"){
       // alert('collection popup')
       this.props.navigation.navigate('collectionDetail',{'collId':this.state.getColId})
@@ -975,7 +1050,8 @@ class ReadingBook extends Component {
           }
           {/* <Text style = { styles.Percentage }> { Math.round( this.state.progress_count * 100 ) }% </Text> */}
         </View> : null}
-      {this.state.copiedData == "" ? <View style={styles.headerRow}>
+      {/* {this.state.copiedData == "" ?  */}
+      <View style={styles.headerRow}>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}>
           <Image style={{ width: 80, height: 50 }} source={{ uri: this.state.avatar != "" ? this.state.avatar : null }} />
         </TouchableOpacity>
@@ -997,13 +1073,12 @@ class ReadingBook extends Component {
           <Image style={{ margin: 2, marginRight: '2%', padding: '1%' }} source={require('../assets/img/close.png')} />
         </TouchableOpacity>
 
-      </View> :
+      </View> 
+      {/* :
         <View style={styles.hiddenContainer}>
-          {/* {this.getCopiedData()} */}
           <View style={{ flexDirection: 'row', alignItems: 'center', width: width - 40 }}>
 
             <TouchableOpacity
-            // onPress={this.changemode.bind(this)}
             >
               <Image style={styles.hiddenImgs} source={require('../assets/img/quote.png')} />
             </TouchableOpacity>
@@ -1024,7 +1099,6 @@ class ReadingBook extends Component {
               <Image style={styles.hiddenImgs1} source={require('../assets/img/fbz.png')} />
             </TouchableOpacity>
             <TouchableOpacity
-            // onPress={this.changemode.bind(this)}
             >
               <Image style={styles.hiddenImgs1} source={require('../assets/img/twit.png')} />
             </TouchableOpacity>
@@ -1035,24 +1109,59 @@ class ReadingBook extends Component {
           </TouchableOpacity>
 
         </View>
-      }
+      } */}
+     
       <View 
-      style={{marginRight:'5%'}}
+      style={{marginRight:10}}
       // style={{position:'absolute',right:10,
       //   top:70,padding:'2%',
       // }}
       >
- <TouchableOpacity 
+          <View style={{ flexDirection: 'row',width:width,alignItems:'center',justifyContent:'flex-end'  }}>
+<TouchableOpacity
+// onPress={this.changemode.bind(this)}
+>
+  <Image style={styles.hiddenImgs} source={require('../assets/img/quote.png')} />
+</TouchableOpacity>
+<TouchableOpacity
+  onPress={() =>{this.state.explore_page=='0'? this.addBookmark():this.alertPopup()}}
+>
+  <Image style={{ marginLeft: 5, marginRight: 5 }} source={require('../assets/img/bookmark1.png')} />
+</TouchableOpacity>
+<TouchableOpacity
+  onPress={() =>{this.state.explore_page=='0'? this.addPins():this.alertPopup()}}
+>
+  <Image  style={styles.hiddenImgs} source={require('../assets/img/pins.png')} />
+</TouchableOpacity>
+
+<TouchableOpacity
+onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
+>
+  <Image style={styles.hiddenImgs1} source={require('../assets/img/fbz.png')} />
+</TouchableOpacity>
+<TouchableOpacity
+// onPress={this.changemode.bind(this)}
+>
+  <Image style={styles.hiddenImgs1} source={require('../assets/img/twit.png')} />
+</TouchableOpacity>
+</View>
+
+{/* <TouchableOpacity 
         style={styles.staticPin}
 
           onPress={()=>{this.state.explore_page=='0'?this.getCopiedData():this.alertPopup()}}>
           <Image style={{ width: 20, height: 20,}} source={require('../assets/img/pins.png')} />
-          </TouchableOpacity>
-          {this.state.bookmarkPopup ? <View>
+          </TouchableOpacity>  */}
+        {/* {this.state.bookmarkPopup ? <View>
             <Image style={{ top: '15%', right: 0, position: 'absolute' }} source={require('../assets/img/bigbookmark.png')} />
           </View>
+            : null} */}
+</View>
+        {this.state.bookmarkPopup ? <View>
+            <Image style={{ top: '25%', right: 0, position: 'absolute' }} source={require('../assets/img/bigbookmark.png')} />
+          </View>
             : null}
-      </View>
+      {/* </View> */}
       {/* <WebView
         // source={{html:`<p contenteditable="true" placeholder="Title...">New sample page for event</p><div contenteditable="false" id="Event_1" class="QuickEvent page_padding" style="position: relative;"><img src="../../images/cancel.png" onclick="clearevepromo(1)" id="cancel_1" style="left: 95%; top: 20px;" class="fr-draggable"><section id="eventtoolbar_1" contenteditable="false" class="eventToolbar1" style="display: block;"><i onclick="ToolbarSty('B',currentevenprom)" class="fa fa-bold" aria-hidden="true"></i><i onclick="ToolbarSty('I',currentevenprom)" class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-align-left" onclick="ToolbarSty('left',currentevenprom)" aria-hidden="true"></i><i class="fa fa-align-center" onclick="ToolbarSty('center',currentevenprom)" aria-hidden="true"></i><i class="fa fa-align-right" onclick="ToolbarSty('right',currentevenprom)" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i></section><input type="text" id="titl_1" placeholder="Title" class="col-md-6 col-xs-6 col-lg-6 col-sm-6 form-control event_form" onkeydown="Edit2BackspaceInp(this,event)" onclick="showtool(1)" value="New Event"><br><div class="upload-btn-wrapper"><i class="fa fa-image round_media_btn" aria-hidden="true"></i><input type="file" name="myfile" onchange="getImage(this)" value=""></div><div style="position: relative;"><section id="desctoolbar_1" contenteditable="false" class="eventToolbar2" style="display: block;"><i onclick="DescbarSty('B',currentdescid)" class="fa fa-bold" aria-hidden="true"></i><i onclick="DescbarSty('I',currentdescid)" class="fa fa-italic" aria-hidden="true"></i><i onclick="DescbarSty('U',currentdescid)" class="fa fa-underline" aria-hidden="true"></i><i onclick="DescbarSty('S',currentdescid)" class="fa fa-strikethrough" aria-hidden="true"></i><i onclick="DescbarSty('LI',currentdescid)" class="fa fa-link" aria-hidden="true"></i><i class="fa fa-align-left" onclick="DescbarSty('left',currentdescid)" aria-hidden="true"></i><i class="fa fa-align-center" onclick="DescbarSty('center',currentdescid)" aria-hidden="true"></i><i class="fa fa-align-right" onclick="DescbarSty('right',currentdescid)" aria-hidden="true"></i><i onclick="DescbarSty('IN',currentdescid)" class="fa fa-indent" aria-hidden="true"></i><i onclick="DescbarSty('OU',currentdescid)" class="fa fa-outdent" aria-hidden="true"></i><i onclick="DescbarSty('CO',currentdescid)" class="fa fa-columns" aria-hidden="true"></i><i onclick="DescbarSty('OL',currentdescid)" class="fa fa-list-ol" aria-hidden="true"></i><i onclick="DescbarSty('UL',currentdescid)" class="fa fa-list-ul" aria-hidden="true"></i><i onclick="DescbarSty('LI',currentdescid)" class="fa fa-list" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i></section><textarea id="desc_1" placeholder="Description" style="resize:none;" class="col-md-6 col-xs-6 col-lg-6 col-sm-6 form-control event_form" onclick="Desctool(1)" value="Testing for event">Testing for event</textarea></div><span id="add-date"><span class="event_label" style="margin-right: 70px;">Date:</span><input class="event_form" type="date" style="width:140px;" value="2020-01-15">&nbsp;&nbsp;&nbsp;<input class="event_form" type="type" value="11:30am" onkeydown="Edit2BackspaceInp(this,event)" style="width:85px;"></span><div style="position: relative;"><section id="maptoolbar_1" contenteditable="false" class="eventToolbar3" style="display: block;"><i onclick="MapbarSty('B',this)" class="fa fa-bold" aria-hidden="true"></i><i onclick="MapbarSty('I',this)" class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-map" onclick="MapbarSty('map',this)" aria-hidden="true"></i><span style="display:none"><label>Enter Location</label> <input onkeydown="Edit2BackspaceInp(this,event)" id="Event_location_1" type="text" class="map_input pac-target-input" placeholder="Enter a location" autocomplete="off" value=""></span></section><span class="event_label" style="margin-right: 45px;">Location:</span><input class="event_form" type="text" id="locate_1" placeholder="Location Name" onkeydown="Edit2BackspaceInp(this,event)" onclick="Maptool(1)" style="width:78%;" value=""></div><input class="btn save_event" id="EventBtn_1" onclick="evet()" type="button" value="Save The Date"><br><br><br></div><p>Reminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotion<br></p>`}}
        source={{html:this.state.description}}
@@ -1184,7 +1293,7 @@ class ReadingBook extends Component {
         <TouchableOpacity
           style={{ padding: '3%' }}
           // onPress={()=>this.onPressHandler(item.Post_page_id)}
-          onPress={() =>{this.state.explore_page=='0'?this.likeAdd(this.state.getuserid, this.state.getpostid):this.alertPopup()}}>
+          onPress={() =>{this.state.explore_page=='0'?this.likeClick(this.state.getpostid):this.alertPopup()}}>
 
           {/* {this.renderImage} */}
           {this.state.like == true ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
@@ -1199,7 +1308,7 @@ class ReadingBook extends Component {
         <TouchableOpacity
           style={{ padding: '3%' }}
           onPress={() =>{this.state.explore_page=='0'?
-            this.commentClick(item):this.alertPopup()}}
+            this.commentClick():this.alertPopup()}}
         >
           <Image
 
@@ -1234,19 +1343,16 @@ class ReadingBook extends Component {
           height: 140
         }} />
       </Modal1>
-               <Modal1
-                    animationType={"slide"}
+      <Modal1
+                    // animationType={"slide"}
                     onBackdropPress={() => this.setState({ loginPopup: false})}
                     isVisible={this.state.loginPopup}>
-
-                    <View 
-                        style={{backgroundColor:'#fff', 
-                        alignSelf:'center',
-                        flex:  0.2,
-                        width: width/1.2,}}
-                        >
-                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
-                        </View>
+                <LoginModal
+                       navigation={this.props.navigation}
+                       closeModal={()=>this.closeLoginPopup()}
+                       close={()=>this.setState({loginPopup:false})}
+                       />
+                   
                     </Modal1>
 
       <Modal1 isVisible={this.state.shareModal}
@@ -1325,7 +1431,7 @@ class ReadingBook extends Component {
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                  <Image  source={require('../assets/img/createCol.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1348,8 +1454,8 @@ class ReadingBook extends Component {
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
@@ -1369,9 +1475,9 @@ class ReadingBook extends Component {
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
-                      </View>
+                 <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
+                  </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
                         onPress={this.changeLayout}>
@@ -1455,7 +1561,7 @@ class ReadingBook extends Component {
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/readlater2.png')} />
+                  <Image source={require('../assets/img/readlaternew1.png')} />
                   <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
                   <Divider style={{ backgroundColor: '#707070' }} />
   
@@ -1464,13 +1570,15 @@ class ReadingBook extends Component {
   
             </View>
           </Modal1>
+             
       {/* <Modal
         animationType="slide"
         transparent
         style={{ width: width, alignItems: 'center' }}
         visible={this.state.readlaterPopup}
         onRequestClose={() => {
-          console.log('Modal has been closed.');
+          console.log('Modal has bee
+          n closed.');
         }}> */}
         {this.state.readlaterPopup?
         <View style={{
@@ -1748,7 +1856,9 @@ function mapDispatchToProps(dispatch) {
     changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
     changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' }),
     popupAddCol: () => dispatch({ type: 'ADD_COL' }),
-    collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'})
+    collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'}),
+    savelogin: ()=> dispatch({type:'CHECKLOGIN'}),
+    savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
   }
 };
 

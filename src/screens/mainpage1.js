@@ -1,15 +1,9 @@
 import React, { Component,createRef } from 'react'
 import {
     View,SafeAreaView,Button,Modal,Animated,Keyboard,Platform,ImageBackground,LayoutAnimation, FlatList, BackHandler, RefreshControl, AsyncStorage, Share, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
-    TouchableOpacity, PermissionsAndroid
+    TouchableOpacity,ToastAndroid, PermissionsAndroid
 } from 'react-native';
-import img1 from '../assets/img/bg.png';
-import img2 from '../assets/img/bg.png';
-import img3 from '../assets/img/bg.png';
-import Carousel from '@rhysforyou/react-native-carousel';
-import Carousel2 from './HorizontalCarousel';
-import PageCarousel from './pagesHorizontal';
-import SeriesCarousel from './seriesCarousel';
+import LoginModal from '../components/loginModal';
 import SnapCarousel from 'react-native-snap-carousel';
 import SnackBar from 'react-native-snackbar';
 // import SnackBar from '../components/snackbar';
@@ -93,7 +87,10 @@ class Home extends Component {
             section:'',
             secCollid:'',
             explore_page:'0',
-            loginPopup:false
+            loginPopup:false,
+            loginModal:false,
+            readlaterStatus:'',
+            doubleBackToExitPressedOnce: false
         }
         // this.moveAnimation = new Animated.ValueXY({ x: 0, animated:true})
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -182,18 +179,22 @@ class Home extends Component {
         this.props.navigation.closeDrawer();
         this.props.navigation.navigate('loginSignup');
       }
-    componentDidMount() {
+    async componentDidMount() {
         Keyboard.dismiss();
         BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);  
         AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
+        AsyncStorage.setItem('collectionFilter',"DESC");
+        AsyncStorage.setItem('contentFilter',"ASC");
         AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
         this.CheckConnectivity();
 
     // this.focusListener = this.props.navigation.addListener('willFocus', () => {
-    //     this.CheckConnectivity();
-    // })
+    //            this.CheckConnectivity();  
+    //   })
         // {this.getData()}
     }
+    componentWillMount () { BackHandler.addEventListener ('hardwareBackPress', this.handleBackButtonClick); }
+
     CheckConnectivity(){    
         NetInfo.fetch().then(state => {
       
@@ -201,7 +202,10 @@ class Home extends Component {
           console.log("Is connected cheking?", state.isConnected);
       
           if(state.isConnected==true){
-            {this.getData();}
+            { this.exploredata(this.state.getuserid) }
+            { this.exploredata1(this.state.getuserid) }
+            // {this. exploredataPic(this.state.getuserid)}
+            // {this.getData();}
             // alert(this.state.explore_page,"explore")
           }else{
             alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
@@ -212,15 +216,15 @@ class Home extends Component {
     getData() {
         setTimeout(() => {
             console.log('user id in recommendation page is ',this.state.getuserid);
-
+                // alert(this.state.explore_page)
             { this.exploredata(this.state.getuserid) }
             { this.exploredata1(this.state.getuserid) }
-                },3000)
+                },1000)
     }
     getData1(postid) {
         setTimeout(() => {
             {this.periodIssues(postid)}
-        }, 5)
+        }, 1000)
        
     }
     componentWillUnmount() {
@@ -229,7 +233,18 @@ class Home extends Component {
         // this.focusListener.remove();
       }
       handleBackButtonClick() {
-        BackHandler.exitApp();
+        // BackHandler.exitApp();
+        // // this.props.navigation.goBack();
+
+        //   return true;
+        if(this.state.doubleBackToExitPressedOnce) {
+            BackHandler.exitApp();
+          }
+          ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT);
+          this.setState({ doubleBackToExitPressedOnce: true });
+          setTimeout(() => {
+            this.setState({ doubleBackToExitPressedOnce: false });
+          }, 2000);
           return true;
       }
     //   periodIssues(postid) {
@@ -384,11 +399,12 @@ class Home extends Component {
         }
        
     exploredataPic(userid){
-        // this.setState({loading:true})
+        this.setState({loading:true})
         var json=JSON.stringify({
           'userid':userid
           });
-          console.log('profile',json)
+          console.warn('profile service name "http://162.250.120.20:444/Login/ProfileUpdateGet"',json)
+          console.log('profile service name "http://162.250.120.20:444/Login/ProfileUpdateGet"',json)
           fetch("http://162.250.120.20:444/Login/ProfileUpdateGet",
             {
                 method: 'POST',
@@ -402,7 +418,7 @@ class Home extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 //alert(responseText);
-                // this.setState({loading:false})
+                this.setState({loading:false})
                 console.warn(responseJson)
                 for (let i = 0; i <responseJson.length; i++) {
                   // alert(this.state.bookdetail[0].Image)
@@ -421,6 +437,7 @@ class Home extends Component {
             });
       }
     exploredata(userid) {
+        this.setState({loading:true})
         var json = JSON.stringify({
             'UserId': userid,
         });
@@ -437,7 +454,7 @@ class Home extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 //alert(responseText);
-                this.setState({ expl: responseJson })
+                this.setState({ expl: responseJson,})
                 {this.exploredataPic(this.state.getuserid)}
 
                 console.warn(responseJson)
@@ -450,7 +467,7 @@ class Home extends Component {
 
     exploredata1(userid) {
         var json = JSON.stringify({
-            'UserId': userid,
+            'UserID': userid,
         });
         fetch("http://162.250.120.20:444/Login/HomePage",
             {
@@ -531,6 +548,7 @@ class Home extends Component {
                     //   })
                     // }
                 }
+                this.setState({loading:false})
 
                 // if(this.state.expl11[0].Datafor==='MV'){
                 //   console.warn(this.state.expl1[0].Datafor+'fnjdnjv')
@@ -701,7 +719,8 @@ class Home extends Component {
             });
            
             //   this.props.changeRemove();
-        }, 5000);
+        }, 3000);
+        {this.exploredata1(this.state.getuserid)}
         // this.props.navigation.navigate('readlater');
       }
       readlaterClick(){
@@ -709,7 +728,7 @@ class Home extends Component {
         for(let item of list){
          AsyncStorage.setItem('typeid', item.TypeID);
          AsyncStorage.setItem('postid', item.Post_Page_Id);
-         this.readlaterAdd(this.state.getuserid,item.Post_Page_Id,item.TypeID)
+         this.readlaterAdd(this.state.getuserid,item.Post_Page_Id,item.TypeID,item.Readstatus)
         }
       }
       readlaterAdd(userid,pageid,typeid){
@@ -734,7 +753,7 @@ class Home extends Component {
     .then((responseJson) => {
         //alert(responseText);
         if(responseJson[0].Message=="Already Exist"){
-            this.setState({exists:true})
+            // this.setState({exists:true})
           }
         this.setState({ loading: false })
         // this.readlater();
@@ -881,6 +900,8 @@ collectionBook=(value,collid)=>{
      AsyncStorage.setItem('popup_name',JSON.stringify(value));
      AsyncStorage.setItem('colSec',"Collection");
      AsyncStorage.setItem('colId',JSON.stringify(collid));
+     AsyncStorage.setItem('coll_name', this.state.getsecColName);
+
      if (item.TypeID ==4) {
         // AsyncStorage.setItem('popup_name1',JSON.stringify(value));
          this.collectionAdd(collid,"","",item.Post_Page_Id,this.state.getuserid,item.TypeID,"")
@@ -1013,6 +1034,7 @@ seriesPress = (item) => {
         }
     });
 }
+
 periodicalPress = (item) => {
     let { periodical } = this.state;
     // console.log('items are', item)
@@ -1065,16 +1087,26 @@ return (
 );
 }
 alertPopup(){
-       this.setState({loginPopup:true})
-       setTimeout(() => {
-           this.setState({loginPopup:false})
-       }, 5000);
+    this.logoutpress()
+    //    this.setState({loginPopup:true})
+}
+closeLoginPopup(){
+    this.setState({loginPopup:false});
+    this.props.savelogin();
+    AsyncStorage.setItem('explore_page',JSON.stringify(0));
+    AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
+    AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+
+    AsyncStorage.setItem('collectionFilter',"DESC");
+    AsyncStorage.setItem('contentFilter');
+    this.CheckConnectivity()
 }
 moreClick=(item,funcName)=>{
 // AsyncStorage.setItem('typeid', JSON.stringify(item.TypeID));
 // AsyncStorage.setItem('postid', JSON.stringify(item.Post_Page_Id));
 {this.state.explore_page=='0'?
-this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName})
+this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName,exists:item.Readstatus=='N'?false:true})
+&& console.log('item data',item,'exists',this.state.exists)
 :this.alertPopup()}
 }
 renderColData({item}){
@@ -1149,7 +1181,7 @@ render() {
           <Image source={require('../assets/img/crown.png')} />
           <Text style={{
               color: 'black', justifyContent: "center", marginTop: '5%',
-              alignItems: "center", fontSize: 25, fontWeight: 'bold', color: 'white'
+              alignItems: "center", fontSize: 24, color: 'white',fontFamily:'Montserrat-Bold'
           }} >Our Top Picks</Text>
   
               {/* <BannerCarousel
@@ -1186,10 +1218,10 @@ render() {
                     </ImageBackground>
   
                 </CardView>
-                <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
+                <Text style={styles.selectedTitle}>
                     {item.Title}
                 </Text>
-                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                <Text style={styles.author}>
                     {item.Author}
                 </Text>
                 </TouchableOpacity>
@@ -1215,10 +1247,10 @@ render() {
   
   <View style={styles.overlay}>
   
-  <Text style={{
-      color: 'black',textAlign:'center',fontWeight: '500',fontSize: 25,width:width-40, margin: '2%'
-  }}>Explore these Reads!</Text>
-  <FlatList
+  <Text style={[styles.headline1,{textAlign:'center'}]}>Explore these Reads!</Text>
+       
+                 
+         <FlatList
       data={this.state.expl}
       horizontal={true}
       navigation={this.props.navigation}
@@ -1252,7 +1284,7 @@ render() {
                         resizeMode="stretch"
                         style={{ width: width/4.5, height: 120,borderRadius:10, alignSelf: 'center',paddingRight:80 }} source={{ uri: item.Image3!=""?item.Image3:null }} />
                      </View>
-                     <Text style={{ marginBottom: 5,color:'#fff', fontWeight: 'bold', fontSize: 15,textAlign:'center',marginTop:10}}>
+                     <Text style={{ marginBottom: 5,color:'#fff', fontSize: 16,textAlign:'center',marginTop:10,fontFamily:'AzoSans-Medium'}}>
                         {item.Category_name}
                     </Text>
                     {/* <Image
@@ -1278,9 +1310,7 @@ render() {
   />
   </View>
   <View style={styles.overlay}>
-  <Text style={{
-      color: 'black', textAlign:'left',fontWeight: '500', fontSize: 25,width:width-40, margin: '2%'
-  }}>Publications</Text>
+  <Text style={styles.headline1}>Publications</Text>
   
   <FlatList
        data={this.state.pub}
@@ -1312,10 +1342,10 @@ render() {
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                  <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
-                      {item.Title}
-                  </Text>
-                  <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                  <Text style={styles.selectedTitle}>
+                    {item.Title}
+                </Text>
+                <Text style={styles.author}>
                     {item.Author}
                 </Text>
                   </TouchableOpacity>
@@ -1336,9 +1366,7 @@ render() {
   
   </View>
   <View style={styles.overlay}>
-  <Text style={{
-      color: 'black', textAlign:'left',fontWeight: '500',width:width-40, fontSize: 25, margin: '2%'
-  }}> Pages</Text>
+  <Text style={styles.headline1}>Pages</Text>
   
   <FlatList
       data={this.state.rv}
@@ -1370,13 +1398,13 @@ render() {
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                  <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center'}}>
-                      {item.Title}
-                  </Text>
-                  <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                   <Text style={styles.selectedTitle}>
+                    {item.Title}
+                </Text>
+                <Text style={styles.author}>
                     {item.Author}
                 </Text>
-                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center',fontFamily:'AzoSans-Light',marginTop:0 }}>
                     {item.Pagedate}
                 </Text>
                   </TouchableOpacity>
@@ -1397,9 +1425,7 @@ render() {
   />
   </View>
   <View style={styles.overlay}>
-  <Text style={{
-      color: 'black', fontSize: 25, width:width-40, textAlign:'left',fontWeight: '500',margin: '2%'
-  }}>Series</Text>
+  <Text style={styles.headline1}>Series</Text>
   <FlatList
       horizontal={true}
       data={this.state.series}
@@ -1430,10 +1456,10 @@ render() {
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                  <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
-                      {item.Title}
-                  </Text>
-                  <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                  <Text style={styles.selectedTitle}>
+                    {item.Title}
+                </Text>
+                <Text style={styles.author}>
                     {item.Author}
                 </Text>
                   </TouchableOpacity>
@@ -1455,9 +1481,7 @@ render() {
   
   </View>
   <View style={styles.overlay}>
-  <Text style={{
-      color: 'black', fontSize: 25,  margin: '5%',width:width-40, textAlign:'left',fontWeight: '500',
-  }}>Periodicals</Text>
+  <Text style={styles.headline1}>Periodicals</Text>
   
   <FlatList
       data={this.state.periodical}
@@ -1488,10 +1512,10 @@ render() {
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                  <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
-                      {item.Title}
-                  </Text>
-                  <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                  <Text style={styles.selectedTitle}>
+                    {item.Title}
+                </Text>
+                <Text style={styles.author}>
                     {item.Author}
                 </Text>
                           </TouchableOpacity>
@@ -1512,10 +1536,7 @@ render() {
   </View>
   <LinearGradient style={[styles.overlay1,{marginTop:10}]}
 colors={['#C5F3FB40', '#81EEFF40']}>
-<Text style={{
-    color: '#000', marginTop: '3%',width:width-40, textAlign:'left',fontWeight: '500',marginBottom: '3%',
-     fontSize: 25, 
-}}>Recently Viewed</Text>
+<Text style={styles.headline1}>Recently Viewed</Text>
 
 <FlatList
     data={this.state.recents}
@@ -1543,15 +1564,15 @@ colors={['#C5F3FB40', '#81EEFF40']}>
                 <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle}>
                     <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon") }>
-                            <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
+                            <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop:item.TypeID==1? '2%':'1%' }} source={require('../assets/img/3dots_white.png')} />
                     </TouchableOpacity>
                 </ImageBackground>
 
             </CardView>
-            <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
-                {item.Title}
-            </Text>
-            <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+            <Text style={styles.selectedTitle}>
+                    {item.Title}
+                </Text>
+                <Text style={styles.author}>
                   {item.Author}
               </Text>
             </TouchableOpacity>
@@ -1572,16 +1593,18 @@ autoplay={false}
 />
 
 </LinearGradient>
+{this.state.expl1!=""?
         <TouchableOpacity style={{margin:'10%',padding:'2%',alignSelf:'center'}} onPress={()=>this.goToTop()} 
         >
-          <Image source={require('../assets/img/plus.png')}/>
+          <Image source={require('../assets/img/backTotop1.png')}/>
         </TouchableOpacity>
-      
+      :null}
      </ScrollView>
     {/* {!this.state.collectionModal?null:
       <CollectionPopup
           changeState={this.changeState} visible={this.state.collectionModal}
      />} */}
+       
      <Modal1 isVisible={this.state.collectionModal}
   onBackdropPress={() => this.setState({ collectionModal: false,expanded:false,sectionExpand:false})}>
             <View 
@@ -1603,7 +1626,7 @@ autoplay={false}
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                  <Image  source={require('../assets/img/createCol.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1626,8 +1649,8 @@ autoplay={false}
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                  <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
@@ -1647,8 +1670,8 @@ autoplay={false}
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                  <Image source={require('../assets/img/colliconnew1.png')} />
+                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 2.9   }}>Collections</Text>
                       </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
@@ -1733,7 +1756,7 @@ autoplay={false}
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/readlater2.png')} />
+                  <Image source={require('../assets/img/readlaternew1.png')} />
                   <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
                   <Divider style={{ backgroundColor: '#707070' }} />
   
@@ -1751,18 +1774,15 @@ autoplay={false}
                          }} />
                    </Modal1>
                    <Modal1
-                    animationType={"slide"}
+                    // animationType={"slide"}
                     onBackdropPress={() => this.setState({ loginPopup: false})}
                     isVisible={this.state.loginPopup}>
-
-                    <View 
-                        style={{backgroundColor:'#fff', 
-                        alignSelf:'center',
-                        flex:  0.2,
-                        width: width/1.2,}}
-                        >
-                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
-                        </View>
+                <LoginModal
+                       navigation={this.props.navigation}
+                       closeModal={()=>this.closeLoginPopup()}
+                       close={()=>this.setState({loginPopup:false})}
+                       />
+                   
                     </Modal1>
                    {/* <Modal1
                animationType="slide"
@@ -1801,7 +1821,7 @@ autoplay={false}
  </TouchableOpacity>
 
  <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
-     <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.avatar}}></Image>
+     <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}></Image>
  </TouchableOpacity>
 
 </View>
@@ -1869,6 +1889,29 @@ autoplay={false}
           flexDirection:'row',
           position:'absolute'
       },
+      title:{
+        marginBottom: 3,
+         marginTop: 10,
+          color: '#242126',
+          textAlign:'center',
+          fontFamily:'AzoSans-Regular',
+          fontSize:12
+      },
+      selectedTitle:{
+        marginBottom: 3,
+         marginTop: 10,
+          color: '#242126',
+          textAlign:'center',
+          fontFamily:'AzoSans-Medium',
+          fontSize:16
+      },
+      author:{
+        marginBottom: 5, 
+        fontSize: 12,
+         color: '#707070',
+         textAlign:'center',
+         fontFamily:'AzoSans-Light',
+      },
     //   tabsss:{
     //       margin:'2%',
     //       padding:'2%'
@@ -1917,6 +1960,13 @@ autoplay={false}
           // marginTop:'10%',
           justifyContent: "center",
           alignItems: "center",
+      },
+      headline1:{
+        color: 'black',
+        fontFamily: 'Montserrat-Regular',
+        fontSize: 24,
+        width:width-40, 
+        margin: '2%'
       },
       overlay2: {
           // marginTop:'10%',
@@ -1981,23 +2031,21 @@ autoplay={false}
         tabsss: {
           alignItems: 'center', justifyContent: 'center'
         },
+        active1: {
+            borderRadius: 10,
+    },
         inactiveText: {
           color:'#707070',
           padding: '5%',
-          fontSize: 16,
-          // fontFamily:'regular',
-        },
-        active1: {
-      
-          // backgroundColor: '#27A291',  
-          borderRadius: 10,
-        },
+          fontSize: 14,
+          fontFamily:'AzoSans-Medium'
+         },
+       
         activetext1: {
           padding: '5%',
-          fontSize: 16,
-          // fontWeight: 'bold',
-          // fontFamily:'regular',
-          color: 'white'
+          fontSize: 14,
+          color: 'white',
+          fontFamily:'AzoSans-Medium'
         },
         button: {
           flex: 1,
@@ -2009,13 +2057,13 @@ autoplay={false}
         pubImgStyle:{ 
             width: 130, height: 150,
             borderRadius:15,
-             justifyContent: 'center'
+            //  justifyContent: 'center'
              },
              pageImgStyle:{ 
               elevation:1,
               width: 130, height: 100,
               borderRadius:15,
-               justifyContent: 'center'
+            //    justifyContent: 'center'
                }
   })
   
@@ -2030,7 +2078,9 @@ function mapStateToProps(state){
     return{
         popupAddCol:()=>dispatch({type:'ADD_COL'}),
         collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'}),
-        savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
+        savelogout: ()=> dispatch({type:'CHECKLOGOUT'}),
+        savelogin: ()=> dispatch({type:'CHECKLOGIN'})
+
 
     }
   };

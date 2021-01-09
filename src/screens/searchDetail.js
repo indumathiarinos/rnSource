@@ -82,6 +82,8 @@ class SearchDetail extends Component {
     getuserid:'',
     sortby:'DESC',
     profileSearch:'',
+    explore_page:'0',
+    loginPopup:false
     
 }
 this.arrayholder=[];
@@ -91,13 +93,15 @@ this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 componentDidMount() {
   AsyncStorage.getItem('userid').then((value)=>{this.setState({getuserid:value})})
   AsyncStorage.getItem('searchText').then((value) => this.setState({ text : value })).done();
-  AsyncStorage.getItem('searchFilter').then((value)=>value!=null?this.setState({sortby:value}):"DESC").done();
+  AsyncStorage.getItem('searchFilter').then((value)=>this.setState({sortby:value})).done();
+  AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
   this.CheckConnectivity();
   // alert(this.state.sortby)
   this.focusListener = this.props.navigation.addListener('willFocus', () => {
     AsyncStorage.getItem('userid').then((value)=>{this.setState({getuserid:value})})
   AsyncStorage.getItem('searchText').then((value) => this.setState({ text : value })).done();
-  AsyncStorage.getItem('searchFilter').then((value)=>value!=null?this.setState({sortby:value}):"DESC").done();
+  AsyncStorage.getItem('searchFilter').then((value)=>this.setState({sortby:value})).done();
+  AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
   this.CheckConnectivity();
 
 })
@@ -105,6 +109,28 @@ componentDidMount() {
 }
 componentWillUnmount() {
   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+}
+logoutpress=()=>{
+  AsyncStorage.setItem('userid',JSON.stringify(""));
+  AsyncStorage.setItem('typeid',JSON.stringify(""));
+  AsyncStorage.setItem('profile_img',JSON.stringify(""));
+  AsyncStorage.setItem('user_name',JSON.stringify(""));
+  AsyncStorage.setItem('postid',JSON.stringify(""));
+  AsyncStorage.setItem('collectionId',JSON.stringify(""));
+  AsyncStorage.setItem('sectionId',JSON.stringify(""));
+  AsyncStorage.setItem('usertype',JSON.stringify(""));
+  AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+  AsyncStorage.setItem('loginData', JSON.stringify(false));
+  this.props.savelogout();
+  this.props.navigation.closeDrawer();
+  this.props.navigation.navigate('loginSignup');
+}
+alertPopup(){
+  // this.setState({loginPopup:true})
+  // setTimeout(() => {
+  //     this.setState({loginPopup:false})
+  // }, 5000);
+  this.logoutpress();
 }
 handleBackButtonClick() {
   this.props.navigation.navigate('search')
@@ -134,12 +160,13 @@ getData(){
     console.log('get sectionid in sectionDetail book page ',this.state.sectionId)
     {this.profileService()}
       {this.exploredata()}
-  }, 2);
+  }, 1000);
 }
 exploredata(){
   var json=JSON.stringify(
     {"SearchText":this.state.text,"SortBy":this.state.sortby}
     );
+    console.log(' search page detail publication data json is ',json);
     fetch("http://162.250.120.20:444/Login/Search",
       {
           method: 'POST',
@@ -216,13 +243,22 @@ imgClick=(postid,typeid)=>{
   profileData = profileData.map(e => {
     if (typeid== e.TypeID) {
       console.log('type id postid in search page profile ',typeid,postid)
-        AsyncStorage.setItem('typeid', JSON.stringify(typeid));
-        AsyncStorage.setItem('postid',JSON.stringify(postid));
-        return this.props.navigation.navigate('viewBook');
+      AsyncStorage.setItem('typeid',JSON.stringify(Number(typeid)));
+      AsyncStorage.setItem('postid', JSON.stringify(Number(postid)));
+      if (typeid == 4) {
+        // AsyncStorage.setItem('pagefeedItem',JSON.stringify(item));
+        return this.props.navigation.navigate('readingBook');
+      } else if (typeid == 1) {
+            return this.props.navigation.navigate('viewBook');
+      } else if (typeid == 2) {
+        return this.props.navigation.navigate('periodiViewBook');
+      } else if (typeid == 3) {
+            return this.props.navigation.navigate('seriesViewBook');
+      }
     } else {
-        return e;
+      return e;
     }
-});
+    });
 }
 followService(userid, follower_id) {
   // this.setState({ loading: true })
@@ -312,9 +348,11 @@ SearchFilterFunction(text) {
     var imgSource = this.state.showlikeImg? like:unlike ;
         return (
         
-       
+          <TouchableOpacity  onPress={()=>this.imgClick(item.Post_page_id,item.TypeID)}>
+
           <View style={{ flexDirection: 'row',paddingLeft:'5%',paddingRight:'5%',marginTop:'2%',marginBottom:'2%'
           ,justifyContent:'space-between'}}>
+
           <View style={{flexDirection:'column',width:width/1.8,marginTop:'3%' }}>
 
   <Text style={{fontSize:17,fontWeight:'bold',paddingLeft:'2%'}}> {item.PostLinkTitle} </Text>
@@ -332,19 +370,21 @@ SearchFilterFunction(text) {
 </TouchableOpacity>
 </ImageBackground>
 </TouchableOpacity> */}
- <TouchableOpacity style={{marginRight:'2%'}} onPress={()=>this.imgClick(item.Post_page_id,item.TypeID)}>
+ <TouchableOpacity style={[{marginRight:'2%'},styles.button]} onPress={()=>this.imgClick(item.Post_page_id,item.TypeID)}>
  <ImageBackground source={{uri:item.PostLinkImage!=""?item.PostLinkImage:null}} 
           imageStyle={{ borderRadius: 15 }}
           style={[item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null}]}
              >
              <TouchableOpacity style={{padding:'2%'}}
-         onPress={() => this.refs.modal5.open()}
+         onPress={() => {this.state.explore_page=='0'? this.refs.modal5.open():this.alertPopup()}}
       >
               <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
             </TouchableOpacity>
           </ImageBackground>
           </TouchableOpacity>
-</View>);
+</View>
+</TouchableOpacity>
+);
   
     // var imgSource = this.state.showlikeImg? require('../assets/img/like.png') : require('../assets/img/unlike.png');
   
@@ -369,11 +409,19 @@ SearchFilterFunction(text) {
     // MultiselectItems.push(selectedItemArray);
      this.setState({profileData:list});
    }
+   goToAuthorProfile(id){
+ 
+    AsyncStorage.setItem('profile_userid',id);
+    AsyncStorage.setItem('pagefeed_userid',id);
+    console.log(' profile userid ',id)
+    this.props.navigation.navigate('profileAbout')
+  
+  }
   fullcard1=({item})=>{
     return (
         
       <View style={{ flexDirection: 'row',margin:'3%',justifyContent:'center' }}>
-      <TouchableOpacity style={{marginRight:'3%',alignSelf:'center'}} onPress={()=>this.props.navigation.navigate('profileAbout')}>
+      <TouchableOpacity style={{marginRight:'3%',alignSelf:'center'}} onPress={()=>this.state.explore_page=='0'?this.goToAuthorProfile(item.user_id):this.alertPopup()}>
       <Image style={{width:60,height:60,borderRadius:60/2}} source={{uri:item.avatar!=""?item.avatar:null}}/>
       </TouchableOpacity>
 {/* <Avatar
@@ -391,23 +439,25 @@ SearchFilterFunction(text) {
   {/* <Text style={{ fontSize: 16, color: 'black',textAlign:'left'}}>{item.Post_author}</Text> */}
   </View>
   {item.user_id==this.state.getuserid?<View style={{width: width/2-90}}/>:
+   <TouchableOpacity
+   // style={{marginRight:10}}
+   
+   // onPress={()=>this.onPressHandler(item.Post_page_id)}
+   onPress={()=>{this.state.explore_page=='0'?this.followService(this.state.getuserid,item.user_id):this.alertPopup()}}
+   // onPress={()=>this.selectItem(item)}
+   >
   <LinearGradient  style={[item.Is_Follow=='Followed'?styles.btnview1:styles.btnview]} colors={
              item.Is_Follow=="Followed"? ['#24D4BC', '#27A291']:['#fff','#fff']}>
-  <TouchableOpacity
-  // style={{marginRight:10}}
-  
-  // onPress={()=>this.onPressHandler(item.Post_page_id)}
-  onPress={()=>this.followService(this.state.getuserid,item.user_id)}
-  // onPress={()=>this.selectItem(item)}
-  >
+ 
       <Text style={{color:item.Is_Follow=='Followed'?'#fff':'#27A291',textAlign:'center'}}>{item.Is_Follow}</Text>
 
       {/* {item.isFollowed==true?<Text style={{color:'#fff'}}>Followed</Text>:<Text style={{ color:'#27A291'}}>Follow</Text>} */}
-</TouchableOpacity>
 {/* <TouchableOpacity onPress={() => this.tooltipPress()} style={[!this.state.visible ? styles.btnview : styles.activeBtnview]}>
                           <Text style={[!this.state.visible ? styles.inactive : styles.active]}>{!this.state.visible ? "Follow" : "Followed"}</Text>
                         </TouchableOpacity> */}
 </LinearGradient>
+</TouchableOpacity>
+
   }
   </View>);
 
@@ -682,7 +732,7 @@ style={[!this.state.profilepage?styles.blacktext:styles.headerText]}
 }
 const styles = StyleSheet.create({
   pubImgStyle:{ 
-    elevation:1,
+    // elevation:1,
     width: 130, height: 150,
     borderRadius:15,
     
@@ -690,7 +740,7 @@ const styles = StyleSheet.create({
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
-      elevation:1,
+      // elevation:1,
       width: 130, height: 100,
       borderRadius:15
       // alignItems:'center',
@@ -715,6 +765,15 @@ headerText: {
   fontSize: 16,
   fontWeight: 'bold',
   color:'white'
+},
+button: {
+  shadowColor: 'rgba(0,0,0, .4)', // IOS
+  shadowOffset: { height: 1, width: 1 }, // IOS
+  shadowOpacity: 1, // IOS
+  shadowRadius: 1, //IOS
+  backgroundColor: '#fff',
+  elevation: 2, // Android
+  borderRadius:10,
 },
 topview:{
   height: '10%',
@@ -809,7 +868,9 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
       changeNavRec:()=>dispatch({type:'CHANGE_NAV_REC'}),
-      changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'})
+      changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'}),
+      savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
+
   }
 };
 

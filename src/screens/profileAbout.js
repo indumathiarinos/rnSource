@@ -55,6 +55,8 @@ componentDidMount() {
   // {this.getData()} 
   this.CheckConnectivity();
   this.focusListener = this.props.navigation.addListener('willFocus', () => {
+    AsyncStorage.getItem('profile_userid').then((val) => this.setState({ getuserid: val })).done();
+    AsyncStorage.getItem('userid').then((val) => this.setState({ loginUserid: val })).done();  
     this.CheckConnectivity();
   });
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -85,7 +87,7 @@ getData(){
   setTimeout(() => {
     { this.exploredata() }
 
-  }, 2000);
+  }, 1000);
 }
     renderViewMore(onPress){
         return(
@@ -294,12 +296,14 @@ getData(){
           </View> */}
   <ScrollView>
         <View style={styles.containerStyle} >
-            <ImageBackground style={styles.sliderContainerStyle}
+            <ImageBackground 
+            style={styles.sliderContainerStyle}
               source={{uri:this.state.cover!=""?this.state.cover:null}}
               >
               {/* <Slider/> */}
             </ImageBackground>
           </View> 
+          {/* <Image style={{width:50,height:50}} source={{uri:this.state.cover}}/> */}
  
           <Image style={styles.avatar} source={{uri:this.state.avatar}}/>
           <View style={styles.socialBarContainer2}>
@@ -325,6 +329,7 @@ getData(){
                 }
                 {/* )} */}
               </View>
+            
               <View>
                 <View style={styles.socialBarContainer3}> 
                 <LinearGradient style={styles.buttonContainer2} colors={['#24D4BC', '#27A291']} >
@@ -379,11 +384,8 @@ getData(){
             {/* Lorem ipsum dolor sit amet, in quo dolorum ponderum, nam veri molestie constituto eu. Eum enim tantas sadipscing ne, ut omnes malorum nostrum cum. Errem populo qui ne, ea ipsum antiopam definitionem eos. */}
           </Text>
             </ReadMore>
-                </View>
-
-              
-           
-            
+                </View>           
+                      
               {/* <Text style={styles.description}>
                   Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis, omittam deseruisse consequuntur ius an,</Text> */}
                 
@@ -486,12 +488,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width,
     overflow: 'hidden',
+    width:width,
     height: width / 1.8,
     
   },
   sliderContainerStyle: {
     borderRadius: width,
-    width: width * 2,
+    width: width*2,
     height: width * 2,
     marginLeft: -(width / 2),
     position: 'absolute',

@@ -96,6 +96,7 @@ componentDidMount() {
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
   AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+  AsyncStorage.setItem('searchFilter','DESC');
   console.log('user id in pagefeed page is ',this.state.getuserid);
   // {this.getData()}
   this.CheckConnectivity();
@@ -141,7 +142,7 @@ getData=()=>{
     {this.exploredata(this.state.getuserid)}
     {this.exploredataPopup()}
   //  {this.exploredataPopup()}
-  }, 3);
+  }, 1000);
 }
   toggleTab1() {
     this.setState({
@@ -200,10 +201,11 @@ getData=()=>{
     this.props.navigation.navigate('loginSignup');
   }
   alertPopup(){
-    this.setState({loginPopup:true})
-    setTimeout(() => {
-        this.setState({loginPopup:false})
-    }, 5000);
+    // this.setState({loginPopup:true})
+    // setTimeout(() => {
+    //     this.setState({loginPopup:false})
+    // }, 5000);
+    this.logoutpress();
 }
   pressIcon = (item) => {
     let { expl } = this.state;
@@ -327,7 +329,9 @@ exploredata_Pic(userid){
 popupBookpage=(item)=>{
   AsyncStorage.setItem('typeid',JSON.stringify(item.TypeID));
   AsyncStorage.setItem('postid',JSON.stringify(item.Post_page_id));
-  console.log('post id and type id in search popup ',item.TypeID,item.Post_page_id)
+  console.log('post id and type id in search popup ',item.TypeID,item.Post_page_id);
+  AsyncStorage.setItem('searchText',"")
+
   this.refs.modal4.close();
   if (item.TypeID ==4) {
         return this.props.navigation.navigate('readingBook');
@@ -575,7 +579,8 @@ popupBookpage=(item)=>{
       
        {/* </Content> */}
        <Modal1 isVisible={this.state.reportModal}
-onBackdropPress={() => this.setState({ newModalVisible: false })}>
+onBackdropPress={() =>     this.setState({reportModal:false})
+}>
           <View style={{backgroundColor:'#fff',width:width/2,height:height/18,alignSelf:'center',alignItems:'center',justifyContent:'center'}}>
           <TouchableOpacity onPress={() => this.reportClk()} >
 
@@ -623,7 +628,7 @@ onBackdropPress={() => this.setState({ newModalVisible: false })}>
             {/* <Text>Collection</Text> */}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-           <Image source={require('../assets/img/search.png')}/>
+           <Image source={require('../assets/img/green_search.png')}/>
            {/* <Text>Search</Text> */}
         </TouchableOpacity>
         <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
@@ -632,7 +637,7 @@ onBackdropPress={() => this.setState({ newModalVisible: false })}>
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
             {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-             <Image style={{width:28,height:28,borderRadius:28/2}} source={{uri:this.state.avatar}}></Image>
+            <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}></Image>
              {/* <Text>Menu</Text> */}
              {/* </Drawer> */}
           </TouchableOpacity>
@@ -733,8 +738,8 @@ function mapDispatchToProps(dispatch){
   return{
       popupAddCol:()=>dispatch({type:'ADD_COL'}),
       collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'}),
+      savelogin: ()=> dispatch({type:'CHECKLOGIN'}),
       savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
-
   }
 };
 

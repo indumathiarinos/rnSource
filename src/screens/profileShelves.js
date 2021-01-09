@@ -82,6 +82,7 @@ class ProfileShelves extends Component {
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
   componentWillUnmount() {
+    this.focusListener.remove();
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
   handleBackButtonClick() {
@@ -228,8 +229,11 @@ class ProfileShelves extends Component {
     AsyncStorage.getItem('userid').then((val) => this.setState({ loginUserid: val })).done();
         // {this.getData()}
     this.CheckConnectivity();
-    // { this.exploredata() }
-    // { this.exploredata1() }
+    this.focusListener = this.props.navigation.addListener('willFocus', () => {
+      AsyncStorage.getItem('profile_userid').then((val) => this.setState({ getuserid: val })).done();
+      AsyncStorage.getItem('userid').then((val) => this.setState({ loginUserid: val })).done();  
+      this.CheckConnectivity();
+    });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   }
   CheckConnectivity(){    
@@ -280,7 +284,7 @@ class ProfileShelves extends Component {
       {this.exploredataPic()}
       { this.exData(this.state.getuserid) }
 
-    }, 2000);
+    }, 1000);
   }
   // getData(){
   //   setTimeout(() => {
@@ -1240,7 +1244,7 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                  <Image  source={require('../assets/img/createCol.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1263,8 +1267,8 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                 <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
@@ -1284,8 +1288,8 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                  <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                       </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
@@ -1354,7 +1358,7 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
               flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
               justifyContent: 'center', alignSelf: 'center'
             }}>
-              <Image source={require('../assets/img/readlater2.png')} />
+                  <Image source={require('../assets/img/readlaternew1.png')} />
               <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Read Later</Text>
               <Divider style={{ backgroundColor: '#707070' }} />
 

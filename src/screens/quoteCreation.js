@@ -59,7 +59,7 @@ class CreateSectionEdit extends Component {
         setTimeout(() => {
             console.log('user id is  in create sec ',this.state.getuserid)
             // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-        }, 10)
+        }, 1000)
     }
     
     exploredata(userid,title,privacy,desc,colId){

@@ -68,24 +68,23 @@ handleBackButtonClick() {
 
     //    console.log('after set',this.props.nav);
    }
-   goToContent=(title)=>{
-    if(title=="Latest"){
+   goToContent=(id)=>{
+    if(id==0){
       AsyncStorage.setItem('searchFilter',"DESC");
-      console.log(title);
-    }else if(title=="Most Relevant"){
+    }else if(id==1){
       AsyncStorage.setItem('searchFilter',"MR");
-    }else if(title=="Most Popuplar"){
+    }else if(id==2){
       AsyncStorage.setItem('searchFilter',"MP");
-    }else if(title=="Most Viewed"){
+    }else if(id==3){
       AsyncStorage.setItem('searchFilter',"MV");
     }
-    console.log(title);
+    // console.log(title);
     this.props.navigation.navigate('searchDetail');
 
   }
   renderItems({item}){
     return(
-    <TouchableOpacity onPress={()=>{this.goToContent(item.title)}}>
+    <TouchableOpacity onPress={()=>{this.goToContent(item.id)}}>
     <View style={styles.listdata}>
     <Text style={styles.data}>{item.title}</Text>
  </View>

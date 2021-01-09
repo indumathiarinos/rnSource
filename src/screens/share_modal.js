@@ -87,7 +87,7 @@ componentDidMount() {
   getData() {
     setTimeout(() => {
         { this.exploreData(this.state.getuserid) }
-            }, 5)
+            }, 1000)
   }
   CheckConnectivity(){    
     NetInfo.fetch().then(state => {

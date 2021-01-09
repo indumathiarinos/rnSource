@@ -59,7 +59,7 @@ class CreateSection extends Component {
         setTimeout(() => {
             console.log('user id is  in create sec ',this.state.getuserid)
             // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-        }, 10)
+        }, 1000)
     }
     
     exploredata(userid,title,privacy,desc,colId){
@@ -178,7 +178,7 @@ class CreateSection extends Component {
                        
                 </View>
                 
-                <ScrollView>
+                <ScrollView style={{marginBottom:50}}>
                 <View style={{paddingLeft:'5%',paddingRight:'5%',flex:2}}>
                 
                 <Text style={styles.textTitle}>Section Title</Text>

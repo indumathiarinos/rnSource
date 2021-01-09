@@ -71,7 +71,7 @@ class EditSection extends Component {
             console.log('user id & edit sec Id ',this.state.getuserid,this.state.editSecId)
             {this.getDetails(this.state.getuserid,this.state.editSecId)}
             // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-        }, 10)
+        }, 1000)
     }
     
         changeLayout = () => {
@@ -206,7 +206,7 @@ class EditSection extends Component {
                      </TouchableOpacity>
                       {/* </View> */}
                 </View>
-                <ScrollView>
+                <ScrollView style={{marginBottom:50}}>
                 <View style={{paddingLeft:'5%',paddingRight:'5%',flex:2}}>
                 <Text style={styles.textTitle}>Section Title</Text>
                 <TouchableOpacity style={styles.touchableBtn}>

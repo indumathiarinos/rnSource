@@ -5,7 +5,7 @@ import {
 } from 'react-native'
 import { connect } from "react-redux";
 import ModalBox from 'react-native-modalbox';
-import Toast from 'react-native-easy-toast';
+import BlurModal from '../components/blurModal';
 import Modal1 from 'react-native-modal';
 import LinearGradient from 'react-native-linear-gradient';
 import NetInfo from '@react-native-community/netinfo';
@@ -115,7 +115,7 @@ exploredata(userid){
           console.warn(error);
       });
 }
-componentDidMount() {
+async componentDidMount() {
   // colvalue = this.props.navigation.state.params.collId
   // ? this.props.navigation.state.params.collId
   // : null;
@@ -131,11 +131,14 @@ componentDidMount() {
   console.log('this. sectionId id is ',this.state.collectionId,this.state.sectionId)
   AsyncStorage.getItem('coll_name').then((value) => this.setState({ coll_name : value })).done();
   AsyncStorage.getItem('sec_name').then((value) => this.setState({ sec_name : value })).done();
- 
+  AsyncStorage.setItem('collSecFilter',"DESC");
   AsyncStorage.getItem('coll_Img').then((val) => this.setState({ coll_img: val })).done();
 
   this.CheckConnectivity();
+  this.focusListener = this.props.navigation.addListener('willFocus', () => {
+       this.CheckConnectivity();
 
+})
 BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 }
 
@@ -186,11 +189,11 @@ getData(){
     {this.secCoverData()}
       {this.exploredata(this.state.getuserid)}
       
-  }, 3000);
+  }, 1000);
 }
 componentWillUnmount() {
   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-  // this.focusListener.remove()
+  this.focusListener.remove()
 
 }
 handleBackButtonClick() {
@@ -236,7 +239,7 @@ handleBackButtonClick() {
       }else{
         this.setState({removeUndo:false})
       }
-      }, 5000);
+      }, 3000);
   }
   
   descPage = (item) => {
@@ -306,7 +309,7 @@ handleBackButtonClick() {
           {/* <Image source={item.img} /> */}
           <TouchableOpacity
           onPress={()=>this.descPage(item)}
-          style={{borderRadius:15,backgroundColor:'#fff'}} >
+          style={styles.button} >
           <ImageBackground source={{uri:item.Image}} 
           imageStyle={{ borderRadius: 15 }}
           style={[item.Type==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null}]}
@@ -314,6 +317,7 @@ handleBackButtonClick() {
             <TouchableOpacity
               onPress={() => {
                 this.refs.modal.open() 
+                AsyncStorage.setItem('coll_postid',JSON.stringify(Number(item.collection_post_id)))
               this.setState({currentItem:item,deletedName:item.Title,title:item.Title,})
               AsyncStorage.setItem('edit_title',item.Title);
               // alert(item.title)
@@ -569,7 +573,7 @@ handleBackButtonClick() {
             </TouchableOpacity>
             <TouchableOpacity style={styles.bottombtn} onPress={()=>this.showModal()}>
             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
-            <Image style={styles.iconwidth1} source={require('../assets/img/trash1.png')} />
+            <Image style={styles.iconwidth1} source={require('../assets/img/editRemove.png')} />
               <Text style={styles.modaltext}>Remove</Text>
               </View>
             </TouchableOpacity>
@@ -580,14 +584,8 @@ handleBackButtonClick() {
           </View>
         </ModalBox>
        
-        <Modal
-          animationType="slide"
-          transparent
-          visible={this.state.modalVisible1}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
-            
+        <BlurModal visible={this.state.modalVisible1}
+          children={
        <View style={{
           left:0,right:0,bottom:0,position:'absolute',   
           height:'8%',
@@ -606,11 +604,11 @@ handleBackButtonClick() {
           {/* {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null} */}
            </View>
            
-          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({removeUndo:true})}>
+          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'3%',bottom:5}} onPress={()=>this.setState({removeUndo:true})}>
             <Text style={{fontSize: 16,color:'white',width:50,textDecorationLine:'underline',textAlign:'center'}}>Undo</Text>
          </TouchableOpacity>
-       </View>
-          </Modal>
+       </View>}
+         />
           <Modal1 isVisible={this.state.loading}
         
         // onBackdropPress={() => this.setState({ loading: true })}
@@ -669,8 +667,8 @@ const styles = StyleSheet.create({
     height:20,
   },
   iconwidth1:{
-    width:30,
-    height:30,
+    // width:30,
+    // height:30,
 
   },
   modaltext: {
@@ -734,6 +732,15 @@ const styles = StyleSheet.create({
     //   marginTop:'5%'
 
   },
+  button: {
+    shadowColor: 'rgba(0,0,0, .4)', // IOS
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: '#fff',
+    elevation: 2, // Android
+    borderRadius:10,
+},
   container: {
     position: 'absolute',
     top: 0,

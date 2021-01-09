@@ -59,7 +59,7 @@ CheckConnectivity(){
 getData() {
   setTimeout(() => {
       { this.exploredata(this.state.getuserid) }
-  }, 10)
+  }, 1000)
 }
 exploredata(userid){
 var json=JSON.stringify({

@@ -67,7 +67,7 @@ class Thankyou extends Component {
     getData(){
       setTimeout(() => {
         {this.exploredataPic(this.state.getuserid)}
-      }, 5);
+      }, 1000);
     }
     exploredataPic(userid){
       var json=JSON.stringify({

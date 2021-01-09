@@ -65,7 +65,7 @@ class Offline extends Component {
   getData(){
     setTimeout(() => {
       {this.exploredata(this.state.getuserid)}
-    }, 5);
+    }, 1000);
   }
   handleBackButtonClick() {
     this.backpress()

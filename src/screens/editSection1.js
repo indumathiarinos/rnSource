@@ -112,7 +112,7 @@ export default class EditCollection extends Component {
     getData(){
         setTimeout(() => {
             {this.exploredata(colvalue)}
-        }, 5);
+        }, 1000);
     }
     exploredata(collId) {
         var json=JSON.stringify({
@@ -187,16 +187,16 @@ export default class EditCollection extends Component {
                 {item.SectionID==0? <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
-                        <Image style={{ width: '95%', elevation: 2, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
+                        <Image style={{ width: '95%',height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                            
                     </View>:
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',borderRadius:10 }}
                     >
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                        <Image style={{ width: '75%',  height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                            <View >
+                        <View style={{ flex:1, flexDirection: 'column',marginLeft:0,borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
                                 <Image
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} />
@@ -243,6 +243,7 @@ export default class EditCollection extends Component {
                 // borderColor:'#ccccccc'
             }}>
                 <TouchableOpacity
+                style={styles.button}
                    onPress={() => this.onPressHandler(item.SectionID)}>
                     {/* <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
@@ -261,17 +262,18 @@ export default class EditCollection extends Component {
                 {item.SectionID==0? <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
-                        <Image style={{ width: '95%', elevation: 2, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
+                        <Image style={{ width: '95%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                            
                     </View>:
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',borderRadius:10 }}
                     >
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                        <Image style={{ width: '75%',  height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
+                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', }}>
                             <View >
                                 <ImageBackground
+                                imageStyle={{borderTopRightRadius:10}}
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} >
                             {this.state.selectedId==item.SectionID?<Image style={{alignSelf:'flex-end',margin:'2%'}} source={require('../assets/img/check.png')}/>:null}
@@ -286,6 +288,9 @@ export default class EditCollection extends Component {
                         </View>
                     </View>
                   }
+                  </TouchableOpacity>
+                    <TouchableOpacity
+                   onPress={() => this.onPressHandler(item.SectionID)}>
                  {item.SectionID==0?
                   <View style={{ padding: '2%', margin: '1%' }}>
                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
@@ -414,5 +419,14 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-    }
+    },
+    button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
+    },
 })

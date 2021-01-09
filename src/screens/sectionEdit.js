@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { FloatingAction } from "react-native-floating-action";
 import LinearGradient from 'react-native-linear-gradient';
 console.disableYellowBox = true;
-import HTMLView from 'react-native-htmlview';
+import BlurModal from '../components/blurModal';
 import Modal1 from 'react-native-modal';
 import NetInfo from '@react-native-community/netinfo';
 // import { Button } from 'react-native-paper';
@@ -32,7 +32,6 @@ class SectionEdit extends Component {
         collection: [],
         loading: true,
         getuserid:'',
-        getuserid:'',
         next:false,
         selectedItemArray:[],
         sendingArray:[],
@@ -55,7 +54,8 @@ class SectionEdit extends Component {
         collSourceName:'',
         editPopupState:false,
         editpagetitle:'',
-        undo:false
+        undo:false,
+        getpostid:''
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -124,7 +124,7 @@ class SectionEdit extends Component {
 //         });
 // }
 
-componentDidMount() {
+async componentDidMount() {
     // sourceCollId = this.props.navigation.state.params.collId
     // ? this.props.navigation.state.params.collId
     // : null;
@@ -136,6 +136,8 @@ componentDidMount() {
     // AsyncStorage.getItem('sDetail_secId').then((val) => this.setState({ sourceSecId: val })).done();
     AsyncStorage.getItem('sectionId').then(val =>this.setState({ sourceSecId: val })).done;
     AsyncStorage.getItem('newColl_Id').then(val =>this.setState({ sourceCollId: val })).done;
+    AsyncStorage.getItem('coll_postid').then(val =>this.setState({ getpostid: val })).done;
+
     // AsyncStorage.getItem('collectionId').then((val) => this.setState({ getCollectionId: val })).done();
     console.log('collection userid is ',this.state.getuserid,this.state.getCollectionId)
     AsyncStorage.getItem('edit_title').then((value) => this.setState({ editpagetitle : value })).done();
@@ -172,12 +174,14 @@ handleBackButtonClick() {
 getData() {
     setTimeout(() => {
         AsyncStorage.getItem('bookmarkUserid').then((val)=>{console.log('value is ',val)}).done();
+        this.setState({selectedCol:this.state.sourceCollId,selectedSec:this.state.sourceSecId});
+        this.sectionClick(this.state.selectedCol,"");
         console.log('userid is ',this.state.getuserid);
             {this.collData(this.state.getuserid,"","")};
 
         // { this.exploredata(this.state.getuserid) }
         
-            }, 2000)
+            }, 1000)
 }
 
 componentWillUnmount () {
@@ -225,7 +229,7 @@ componentWillUnmount () {
                 onPress={() => 
                     this.listpress(item.collectionsID)}
             >
-              {item.collectionsID==this.state.selectedCol? <Image source={require('../assets/img/check.png')}/>:<Image source={require('../assets/img/uncheck.png')}/>}
+              {item.collectionsID==this.state.selectedCol? <Image source={require('../assets/img/white_tick.png')}/>:<Image source={require('../assets/img/uncheck.png')}/>}
            </TouchableOpacity>
            <TouchableOpacity
             style={styles.styleList}
@@ -389,14 +393,12 @@ showModal1 = () => {
 editClk() {
     this.setState({loading:true})
     var json = JSON.stringify({
-        "From_C_ID":this.state.sourceCollId,
         "To_C_ID":this.state.selectedCol,
-        "From_S_ID":this.state.sourceSecId,
-        "Action_for":"S",
-        "userid":this.state.getuserid
+        "To_S_ID":this.state.sourceSecId,
+        "POSTID":this.state.getpostid
     });
     console.log('edit clk json',json)
-    fetch("http://162.250.120.20:444/Login/CollectionSectionCopy",
+    fetch("http://162.250.120.20:444/Login/CollectionPostCopy",
         {
             method: 'POST',
             headers: {
@@ -442,7 +444,7 @@ editClk() {
             }
         sectionClick = (collid,value) => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            this.setState({ sectionExpand: !this.state.sectionExpand,next:!this.state.next,collSourceName:value,
+            this.setState({ sectionExpand: !this.state.sectionExpand,next:value!=""?!this.state.next:false,collSourceName:value,
                 selectedCol:collid
             });
             this.secData(this.state.getuserid,collid)
@@ -472,7 +474,7 @@ editClk() {
                 
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#ffff' }}>
                    <View style={{height:'8%',backgroundColor:'#27A291',justifyContent:'center'}}>
-                    <Text style={{color:'#fff',fontWeight:'bold',fontSize:20,textAlign:'center'}}>{this.state.title}</Text>
+                    <Text style={{color:'#fff',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Edit {this.state.editpagetitle}</Text>
                     </View>
                     <ScrollView style={{paddingBottom:'10%',marginBottom:100}}>
                     <View><Text style={{fontSize:24,color:'#000',margin:'2%',padding:'1%'}}>Collection</Text></View>
@@ -497,14 +499,14 @@ editClk() {
                                         ]}
                                      >
                                      <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{this.setState({selectedCol:item.id,secCollid:null,})}}>      
-                                       <Image source={item.id==this.state.selectedCol||item.id==this.state.secCollid? require('../assets/img/check.png'):require('../assets/img/uncheck.png')}/>
+                                       <Image style={{width:20,height:20}} source={item.id==this.state.selectedCol||item.id==this.state.secCollid? require('../assets/img/white_tick.png'):require('../assets/img/uncheck.png')}/>
                                        </TouchableOpacity>
                                        <Text style={[{ fontSize: 17, color: '#707070', textAlign: 'center', width: width/1.5 },{color:  item.id==this.state.selectedCol || item.id==this.state.secCollid ?"#fff":"#707070"}]}>{item.title}</Text>
     
                                        {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                            <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1 ?this.sectionClick(item.id,item.title):null}}>
                                    {/* <Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.SectionStatus==0 || item.id==this.state.selectedCol?require('../assets/img/down-arrow1.png'):require('../assets/img/right-arrow1.png')} /> */}
-                                   <Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.SectionStatus==0?null:require('../assets/img/right-arrow1.png')} />
+                                  {item.SectionStatus==0?null:<Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.id==this.state.selectedCol?require('../assets/img/right-arrow1.png'):require('../assets/img/down-arrow1.png')} />}
                            </TouchableOpacity> 
                            </View>
                            </TouchableOpacity>
@@ -589,7 +591,7 @@ editClk() {
                   <TouchableOpacity onPress={()=>this.gotoCreateColl()}>
                   <View style={{width:width/2-30,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18,alignSelf:'flex-end',}}>
                                 <Text style={{paddingLeft:10}}>Create Collection</Text>
-                                    <Image source={require('../assets/img/plus_white.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
+                                    <Image source={require('../assets/img/plus.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
                                 </View>
                                 </TouchableOpacity>
                                 </View>:
@@ -597,14 +599,14 @@ editClk() {
                                   <TouchableOpacity onPress={this.gotoCreateColl.bind(this)}>
                     <View style={{width:width/2-30,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18}}>
                                     <Text style={{paddingLeft:10}}>Create Collection</Text>
-                                    <Image source={require('../assets/img/plus_white.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
+                                    <Image source={require('../assets/img/plus.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
     
                                 </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={()=>this.gotoCreateSec()}>
                                 <View style={{width:width/2-30,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18}}>
                                 <Text style={{paddingLeft:10}}>Create Section</Text>
-                                    <Image source={require('../assets/img/plus_white.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
+                                    <Image source={require('../assets/img/plus.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
                                 </View>
                                 </TouchableOpacity>
                                 </View>
@@ -637,19 +639,14 @@ editClk() {
                             </TouchableOpacity>
                             <LinearGradient style={{backgroundColor:'#fff',width:width/3.5,padding:'1%',borderRadius:15}} colors={this.state.next?['#24D4BC', '#27A291']:['#fff','#fff']} >
                             <TouchableOpacity 
-                                onPress={() =>this.state.next? this.showModal1():console.log('value is ',value,'value true or false',)}>
+                                onPress={() =>this.state.next? this.showModal1():console.log('value is ','value true or false',)}>
                                 <Text style={[this.state.next?styles.inacitveColor:styles.inacitveStyle]}>Edit</Text>
                             </TouchableOpacity>
                             </LinearGradient>
                         </View>
                     </View>
-                    <Modal
-          animationType="slide"
-          transparent
-          visible={this.state.editPopupState}
-          onRequestClose={() => {
-            console.log('Modal has been closed.');
-          }}>
+                    <BlurModal visible={this.state.editPopupState}
+          children={
               <View style={{
           left:0,right:0,bottom:0,position:'absolute',   
           height:'10%',
@@ -675,8 +672,8 @@ editClk() {
           <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({undo:true})}>
           <Text style={{fontSize: 16,color:'white',textDecorationLine:'underline',}}>Undo</Text>
           </TouchableOpacity>
-       </View>
-        </Modal>
+       </View>}
+        />
                 </SafeAreaView>
             )
         }

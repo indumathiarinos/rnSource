@@ -102,11 +102,11 @@ const {width,height}=Dimensions.get('window');
 // import TopNavigator from './TopNavigator';
 // import {createBottomTabNavigator} from 'react-navigation-tabs';
 const HomeNavigator = createStackNavigator({
-  collectionFilter:{
-    screen:collectionFilter,
+  mainpage:{
+    screen:mainpage,
     navigationOptions:{
-    header:null,
-  },
+      header:null
+    }
   },
   newsfeed:{
     screen:newsfeed,
@@ -114,12 +114,7 @@ const HomeNavigator = createStackNavigator({
     header:null,
   },
   },
-  mainpage:{
-    screen:mainpage,
-    navigationOptions:{
-      header:null
-    }
-  },
+
   collectionDetail:{
     screen:collectionDetail,
     navigationOptions:{
@@ -168,6 +163,12 @@ const HomeNavigator = createStackNavigator({
     navigationOptions:{
       header:null
     }
+  },
+  collectionFilter:{
+    screen:collectionFilter,
+    navigationOptions:{
+    header:null,
+  },
   },
   periodIssuesHeader:{
     screen:periodIssuesHeader,

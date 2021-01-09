@@ -14,6 +14,8 @@ const logger = createLogger();
 let middleware = [];
 middleware = [...middleware, thunk, logger];
 
+
+
 export default createStore(
   rootReducer,
   compose(applyMiddleware(...middleware))

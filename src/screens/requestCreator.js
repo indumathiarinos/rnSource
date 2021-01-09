@@ -97,7 +97,7 @@ class RequestCreator extends Component {
     getData(){
         setTimeout(() => {
             {this.exploredataPic(this.state.getuserid)}
-        }, 5);
+        }, 1000);
     }
   
       goBack=()=>{

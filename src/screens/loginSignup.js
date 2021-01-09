@@ -2,11 +2,9 @@ import React from 'react';
 import { View, SafeAreaView, Text,AsyncStorage, Dimensions,BackHandler, StyleSheet, Image, TouchableOpacity, TextInput, StatusBar, ImageBackground, TouchableOpacityBase, Alert } from 'react-native';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
-import { SimpleAnimation } from 'react-native-simple-animations';
 import LinearGradient from 'react-native-linear-gradient';
 const {width,height}=Dimensions.get('window');
 import Modal from 'react-native-modal';
-import mainpageTabs from './mainpageTabs';
 import { connect } from "react-redux";
 import NetInfo from "@react-native-community/netinfo";
 
@@ -54,23 +52,17 @@ class LoginSignUp extends React.Component {
       borderPass:false,
       loading:false,
       isConnected:false,
-      type:''
+      type:'',
+      time:0
     };
 
-    setTimeout(
-      () =>
-        this.setState({ align: 'flex-start' }, function () {
-          this.setState({
-            alignsecond: true,
-          });
-        }),
-      3000
-    );
+ 
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 componentDidMount() {
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 }
+componentWillMount () { BackHandler.addEventListener ('hardwareBackPress', this.handleBackButtonClick); }
 componentWillUnmount() {
   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 }
@@ -79,7 +71,7 @@ handleBackButtonClick() {
   return true;
 }
 clear=(pagename)=>{
-  this.props.changeNavRec();
+  // this.props.changeNavRec();
   this.props.navigation.navigate(pagename)
   this.setState({email:'',password:''})
 }
@@ -97,6 +89,22 @@ CheckConnectivity(){
     }
    
   });
+}
+sendData=()=>{
+  // alert('Under Development')
+      AsyncStorage.setItem('userid',JSON.stringify(""));
+      AsyncStorage.setItem('typeid',JSON.stringify(""));
+      AsyncStorage.setItem('profile_img',JSON.stringify(""));
+      AsyncStorage.setItem('user_name',JSON.stringify("Guest"));
+      AsyncStorage.setItem('postid',JSON.stringify(""));
+      AsyncStorage.setItem('collectionId',JSON.stringify(""));
+      AsyncStorage.setItem('sectionId',JSON.stringify(""));
+      AsyncStorage.setItem('usertype',JSON.stringify(""));
+      AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+      AsyncStorage.setItem('loginData', JSON.stringify(false));
+      this.props.savelogout();
+      AsyncStorage.setItem('explore_page',JSON.stringify(1));
+      this.props.navigation.navigate('mainpage')
 }
 login=()=>{
   let userStatus;
@@ -142,7 +150,7 @@ console.warn(json+"")
         setTimeout(() => {
           Alert.alert(
             'Status',
-            responseJson.Msg,
+            "Invalid Username & Password",
             [
                    {text: 'OK', onPress: () => 
                   //  this.props.navigation.navigate('loginSignup')
@@ -164,18 +172,8 @@ console.warn(json+"")
           AsyncStorage.setItem('typeid', JSON.stringify(Number(responseJson.UserType)));
           AsyncStorage.setItem('explore_page',JSON.stringify(0));
 
-          console.log('userid & usertype',responseJson.UserID,'',responseJson.UserType)
-          setTimeout(() => {
-          Alert.alert(
-            'Status',
-            "Logged In Successfully",
-            [
-                   {text: 'OK', onPress: () => 
-                    {this.clear('mainpage')}                   
-                  },
-            ]
-        )
-      }, 1000);
+          console.log('userid & usertype',responseJson.UserID,'',responseJson.UserType);
+          {this.clear('mainpage')}                   
 
         // this.props.navigation.navigate('MainpageTabs')
          }else{
@@ -254,7 +252,7 @@ console.warn(json+"")
 
         <TouchableOpacity
           style={styles.exploreBtn}
-          onPress={()=>  alert("Under Developing") }
+          onPress={()=> this.sendData()}
           >
           <Image
             source={require('../assets/img/explore.png')}
@@ -269,7 +267,7 @@ console.warn(json+"")
             source={require('../assets/img/welc.png')}
           />
            <TextInput
-            style={[this.state.email==''?styles.input:styles.input1,{borderColor: !this.state.borderEmail?'#CCCCCC28':'#27A291' }]}
+            style={[this.state.email==''?styles.input:styles.input1,{borderColor: !this.state.borderEmail?'#CCCCCC28':'#27A291'}]}
             onFocus={()=>this.setState({borderEmail:true})}
             onBlur={()=>this.setState({borderEmail:true})}
             onSubmitEditing={()=>this.setState({borderEmail:false})}
@@ -299,7 +297,7 @@ console.warn(json+"")
             ((!email(this.state.email === '')) && (!pass(this.state.password === ''))) ? ['#24D4BC', '#27A291'] : ['#CCCCCC', '#CCCCCC']} >
 
           
-              <Text style={{ color: 'white', fontSize: 19 }}>Login</Text>
+              <Text style={{ color: 'white', fontSize: 16,fontFamily:'AzoSans-Regular'}}>Login</Text>
           </LinearGradient>
           </TouchableOpacity>
 
@@ -313,7 +311,7 @@ console.warn(json+"")
               </Text>
             <View style={styles.row}>
                 <View style={styles.logText}/>
-                <Text style={{color:'#707070',fontSize:17}}>or Log In with</Text>
+                <Text style={{color:'#707070',fontSize:15,fontFamily:'AzoSans-Regular'}}>or Log In with</Text>
                 <View style={styles.logText}/>
             </View>
           <View style={styles.logoContainer}>
@@ -326,7 +324,7 @@ console.warn(json+"")
           </View>
           <TouchableOpacity onPress={()=>this.clear('newSignup')}>
           <View style={styles.btnview1}>
-              <Text style={{color:'#24d4bc',fontSize:17,alignSelf:'center'}}>Don't Have an account?</Text>
+              <Text style={{color:'#24d4bc',fontSize:14,alignSelf:'center',fontFamily:'AzoSans-Regular'}}>Don't Have an account?</Text>
             <TouchableOpacity  onPress={()=>this.clear('newSignup')}>
                 <Text style={styles.boldText}>Sign Up</Text>
                 </TouchableOpacity>
@@ -334,7 +332,7 @@ console.warn(json+"")
           </TouchableOpacity>
             <Text style={styles.smallText}> By continuing you indicate that you have agree to </Text>
             <View style={{ flexDirection: 'row',justifyContent:'center' ,alignItems:'center'}}>
-            <Text>PageVio's </Text>
+            <Text style={{fontSize:12,fontFamily:'AzoSans-Regular'}}>PageVio's </Text>
             <Text
                 onPress={() => this.termsClick()}
                 style={styles.TextStyle}
@@ -360,14 +358,16 @@ console.warn(json+"")
 var styles = StyleSheet.create({
   TextStyle: {
     textAlign: 'center',
-    fontSize: 13,
+    fontSize: 12,
     textDecorationLine: 'underline',
-    color:'#27A291'
+    color:'#27A291',
+    fontFamily:'AzoSans-Regular'
   },
   boldText:{
     color:'#000',
-    fontWeight:'900',
-    fontSize:20,
+    // fontWeight:'900',
+    fontSize:16,
+    fontFamily:'AzoSans-Bold',
     textAlign:'center'
   },
   logText:{
@@ -388,15 +388,17 @@ var styles = StyleSheet.create({
   },
   smallText:{
     color: 'black', 
-    fontSize: 13,
+    fontSize: 12,
+    fontFamily:'AzoSans-Regular',
     marginTop: 5 
   },
   TextStyle1: {
     color: '#24d4bc',
     alignSelf: 'center',
 
-    fontSize: 15,
+    fontSize: 12,
     textDecorationLine: 'underline',
+    fontFamily:'AzoSans-Regular',
     marginTop: 5
   },
   exploreBtn:{
@@ -432,28 +434,28 @@ var styles = StyleSheet.create({
     height: height / 14,
     alignSelf:'center',
     margin:'3%',
-    // fontFamily: 'Azo Sans',
+    fontFamily: 'AzoSans-Regular',
     paddingLeft: '5%',
     borderRadius:18,
     borderWidth:0.5,
     borderColor:'#CCCCCC28',
     backgroundColor: '#CCCCCC28',
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 14,
+    // fontWeight: '500',
   },
   input1: {
     width: width - 80,
     height: height / 14,
     alignSelf:'center',
-    // fontFamily: 'Azo Sans',
+    fontFamily: 'AzoSans-Regular',
     margin: '2%',
     paddingLeft: '5%',
     color: '#fff',
     borderRadius: 18,
     borderColor: '#27A291',
     backgroundColor: '#27A291',
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 14,
+    // fontWeight: '500',
   },
   btnview: {
     height: screenHeight / 12,
@@ -468,9 +470,9 @@ var styles = StyleSheet.create({
       margin:'1%',
     width: screenWidth / 1.3,
     height: screenHeight / 14,
-    // justifyContent: 'center',
+    justifyContent: 'center',
     // marginTop: '2%',
-    // alignItems: 'center',
+    alignItems: 'center',
     borderRadius: 23,
     borderColor:'#24d4bc',
     borderWidth:1
@@ -491,7 +493,9 @@ function mapDispatchToProps(dispatch) {
   return {
     changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
     changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' }),
-    savelogin: ()=> dispatch({type:'CHECKLOGIN'})
+    savelogin: ()=> dispatch({type:'CHECKLOGIN'}),
+    savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
+
 
   }
 };

@@ -32,8 +32,8 @@ componentWillUnmount() {
   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 }
 handleBackButtonClick() {
-    // this.props.navigation.navigate('signin');
-    this.props.navigation.goBack();
+    this.props.navigation.navigate('newSignup');
+    // this.props.navigation.goBack();
       return true;
 } 
     render() {
@@ -68,7 +68,7 @@ handleBackButtonClick() {
                     <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
 
 <TouchableOpacity
-onPress={()=> this.props.navigation.goBack()}><Text style={{ color: 'white', fontSize: 19 }}>Back</Text>
+onPress={()=> this.props.navigation.navigate('loginSignup')}><Text style={{ color: 'white', fontSize: 19 }}>Back</Text>
 </TouchableOpacity>
 </LinearGradient>
                  

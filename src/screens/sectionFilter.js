@@ -98,16 +98,16 @@ handleBackButtonClick() {
     });
     // console.log('profile data 1 value filtered ',this.state.popupData)
   }
-  goToPin=(title)=>{
-    if(title=="Newest"){
+  goToPin=(id)=>{
+    if(id==0){
       AsyncStorage.setItem('collSecFilter',"DESC");
-    }else if(title=="Oldest"){
+    }else if(id==1){
       AsyncStorage.setItem('collSecFilter',"ASC");
-    }else if(title=="Most Popuplar"){
+    }else if(id==2){
       AsyncStorage.setItem('collSecFilter',"MP");
     }
-    console.log(title);
-    AsyncStorage.getItem('collSecFilter').then(val=>console.log('getitem collSecFilter filter data ',val))
+    // console.log(title);
+    // AsyncStorage.getItem('collSecFilter').then(val=>console.log('getitem collSecFilter filter data ',val))
   
     return this.props.navigation.navigate('collectionDetail',{'collId':this.state.collectionId+""});
     
@@ -149,7 +149,7 @@ handleBackButtonClick() {
         data={this.state.pinsFilter}
         keyExtractor={(item,index)=>index.toString()}
         renderItem={({item})=>(
-          <TouchableOpacity onPress={()=>{this.goToPin(item.title)}}>
+          <TouchableOpacity onPress={()=>{this.goToPin(item.id)}}>
           <View style={styles.listdata}>
           <Text style={styles.data}>{item.title}</Text>
        </View>

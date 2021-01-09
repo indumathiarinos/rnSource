@@ -95,14 +95,16 @@ handleBackButtonClick() {
     });
     // console.log('profile data 1 value filtered ',this.state.popupData)
   }
-  goToCollection=(title)=>{
-    if(title=="Newest"){
+  goToCollection=(id)=>{
+    if(id==0){
       AsyncStorage.setItem('collectionFilter',"DESC");
-    }else if(title=="Oldest"){
+    }else if(id==1){
       AsyncStorage.setItem('collectionFilter',"ASC");
-    }else if(title=="Most Popuplar"){
+    }else if(id==2){
       AsyncStorage.setItem('collectionFilter',"MP");
     }
+        // AsyncStorage.getItem('collectionFilter').then(val=>alert(val));
+
     this.props.navigation.navigate('collection');
     
   }
@@ -143,7 +145,7 @@ handleBackButtonClick() {
         data={this.state.collFilter}
         keyExtractor={(item,index)=>index.toString()}
         renderItem={({item})=>(
-          <TouchableOpacity onPress={()=>{this.goToCollection(item.title)}}>
+          <TouchableOpacity onPress={()=>{this.goToCollection(item.id)}}>
           <View style={styles.listdata}>
           <Text style={styles.data}>{item.title}</Text>
        </View>

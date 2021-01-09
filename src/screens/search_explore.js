@@ -83,7 +83,9 @@ class SearchExplore extends Component {
           secCollid:'',
           text:'',
           Category_name:'',
-          collection:''
+          collection:'',
+          explore_page:'0',
+          loginPopup:false
 
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -102,7 +104,10 @@ class SearchExplore extends Component {
     componentDidMount() {
       AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
       AsyncStorage.getItem('category_name').then((value) => this.setState({ Category_name : value })).done();
+      AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+      AsyncStorage.setItem('searchFilter','DESC');
       this.CheckConnectivity();
+
       BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
     CheckConnectivity(){    
@@ -125,7 +130,7 @@ class SearchExplore extends Component {
           // { this.exploredata() }
           { this.exploredata1() }
           {this.exploredataPopup()}
-      }, 3);
+      }, 1000);
     }
       periodIssues(postid) {
         // {"TypeID":"1","Post_PageID":"3"}
@@ -211,6 +216,7 @@ class SearchExplore extends Component {
       exploredata1() {
           var json = JSON.stringify({
               'CategoryName': this.state.Category_name,
+              "User_Id":this.state.getuserid
           });
           console.log('cator ',this.state.Category_name)
           fetch("http://162.250.120.20:444/Login/ExploreCategory",
@@ -586,7 +592,7 @@ class SearchExplore extends Component {
               exists:false
           })
           //   this.props.changeRemove();
-      }, 5000);
+      }, 3000);
       // this.props.navigation.navigate('readlater');
     }
     secData(userid,collid) {
@@ -711,6 +717,28 @@ collData(userid,colid,secid) {
     console.warn(error);
 });
   }
+  logoutpress=()=>{
+    AsyncStorage.setItem('userid',JSON.stringify(""));
+    AsyncStorage.setItem('typeid',JSON.stringify(""));
+    AsyncStorage.setItem('profile_img',JSON.stringify(""));
+    AsyncStorage.setItem('user_name',JSON.stringify(""));
+    AsyncStorage.setItem('postid',JSON.stringify(""));
+    AsyncStorage.setItem('collectionId',JSON.stringify(""));
+    AsyncStorage.setItem('sectionId',JSON.stringify(""));
+    AsyncStorage.setItem('usertype',JSON.stringify(""));
+    AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+    AsyncStorage.setItem('loginData', JSON.stringify(false));
+    this.props.savelogout();
+    this.props.navigation.closeDrawer();
+    this.props.navigation.navigate('loginSignup');
+  }
+  alertPopup(){
+    // this.setState({loginPopup:true})
+    // setTimeout(() => {
+    //     this.setState({loginPopup:false})
+    // }, 5000);
+    this.logoutpress();
+}
   collectionAdd(colid,secid,postid,pageid,userid,type,status){
       var json = JSON.stringify(
         {"collectionid":colid,
@@ -875,7 +903,7 @@ collData(userid,colid,secid) {
     moreClick=(item,funcName)=>{
       // AsyncStorage.setItem('typeid', JSON.stringify(item.TypeID));
       // AsyncStorage.setItem('postid', JSON.stringify(item.Post_Page_Id));
-      this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName})
+    {this.state.explore_page=='0'?this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName}):this.alertPopup()}
   }
       searchfunc=()=>{
         this.setState({newbool:true,searchList:true})
@@ -997,7 +1025,7 @@ collData(userid,colid,secid) {
             marginTop:'2%',marginBottom:'2%'
             }}>
             <TouchableOpacity style={{padding:'2%'}}
-                   onPress={() => { this.setState({reportModal:true,searchList:false})
+                   onPress={() => { this.state.explore_page=='0'?this.setState({reportModal:true,searchList:false}):this.alertPopup()
                     // this.refs.modal4.close()
                    }
                   }
@@ -1225,7 +1253,20 @@ collData(userid,colid,secid) {
     containerCustomStyle={{ marginTop: 30 }}
 />
 </View> 
+                <Modal1
+                    animationType={"slide"}
+                    onBackdropPress={() => this.setState({ loginPopup: false})}
+                    isVisible={this.state.loginPopup}>
 
+                    <View 
+                        style={{backgroundColor:'#fff', 
+                        alignSelf:'center',
+                        flex:  0.2,
+                        width: width/1.2,}}
+                        >
+                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
+                        </View>
+                    </Modal1>
 {/* <ModalBox
           style={{  alignItems: 'center',
           height:"40%",
@@ -1298,7 +1339,7 @@ collData(userid,colid,secid) {
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                  <Image  source={require('../assets/img/createCol.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1321,8 +1362,8 @@ collData(userid,colid,secid) {
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                  <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
@@ -1342,8 +1383,8 @@ collData(userid,colid,secid) {
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                 <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                       </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
@@ -1428,7 +1469,7 @@ collData(userid,colid,secid) {
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/readlater2.png')} />
+                  <Image source={require('../assets/img/readlaternew1.png')} />
                   <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
                   <Divider style={{ backgroundColor: '#707070' }} />
   
@@ -1605,7 +1646,8 @@ function mapDispatchToProps(dispatch){
       changeRemove:()=>dispatch({type:'CHANGE_REMOVE_ITEM1'}),
       changeRemove2:()=>dispatch({type:'CHANGE_REMOVE_ITEM2'}),
       removePopupSection:()=>dispatch({type:'REMOVE_POPUP_SECTION'}),
-      collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'})
+      collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'}),
+      savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
 
   }
 };

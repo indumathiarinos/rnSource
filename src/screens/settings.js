@@ -242,7 +242,7 @@ class Settings extends Component {
   getData() {
     setTimeout(() => {
         { this.exploredata(this.state.getuserid) }
-    }, 5)
+    }, 1000)
 }
 exploredata(userid){
   var json=JSON.stringify({

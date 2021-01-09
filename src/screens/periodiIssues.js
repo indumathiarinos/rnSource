@@ -164,7 +164,7 @@ getData() {
     // {this.exploredata1(this.state.getpostid)}
     console.log('get postid in periodical issues page ',this.state.getperiodicalid,this.state.gettypeid)
       // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-  }, 5)
+  }, 1000)
 }
 
 

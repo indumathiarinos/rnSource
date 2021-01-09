@@ -106,7 +106,7 @@ export default class EditCollection extends Component {
     getData(){
         setTimeout(() => {
             {this.exploredata(this.state.getuserid)}
-        }, 5);
+        }, 1000);
     }
     exploredata(userid) {
         var json = JSON.stringify({
@@ -219,36 +219,38 @@ export default class EditCollection extends Component {
     width: '50%',
     padding: '2%',
     backgroundColor: '#ffff',
-    // borderWidth:0.5,
-    // borderColor:'#ccccccc'
+
 }}>
     <TouchableOpacity
+    style={styles.button}
   onPress={() => this.onPressHandler(item.collectionsID)}>
           
-        <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+        <View style={{flex:1,flexDirection: 'row',  }}
         >
             
             <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                 source={{ uri: item.Image1!=""?item.Image1:null }} />
           
-            <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                {/* <View > */}
+            <View style={{ flex:1, flexDirection: 'column', borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3,marginLeft:'1%', borderColor: '#cccccc',borderTopRightRadius:10 }}>
                     <ImageBackground
                         style={{ height: height / 12, resizeMode: 'cover',  marginBottom: '1%' }}
                         imageStyle={{borderTopRightRadius: 10,}}
                         source={{ uri: item.Image2!=""?item.Image2:null}} >
-                         {this.state.selectedId==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
+                         {<Image style={{alignSelf:'flex-end',margin:'1%'}} source={this.state.selectedId==item.collectionsID?require('../assets/img/check.png'):null}/>}
                     </ImageBackground>
-                {/* </View> */}
+                </View>
                 <View>
 
                     <Image
-                        style={{ height: height / 12, resizeMode: 'cover', borderBottomRightRadius: 10 }}
+                        style={{ height: height / 12, resizeMode: 'cover', borderBottomRightRadius: 10,margin:'1%'}}
                         source={{ uri: item.Image3!=""?item.Image3:null }} />
                 </View>
             </View>
         </View>
-        
+        </TouchableOpacity>
+        <TouchableOpacity
+  onPress={() => this.onPressHandler(item.collectionsID)}>  
         <View style={{ padding: '2%', margin: '1%' }}>
         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
             <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
@@ -256,6 +258,7 @@ export default class EditCollection extends Component {
         </View>
     </TouchableOpacity>
 </View>
+ 
         )
     }
     nextBtn=()=>{
@@ -367,6 +370,15 @@ const styles = StyleSheet.create({
         //   flex:0.5,
         //   marginTop:'5%'
 
+    },
+    button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
     },
     container: {
         position: 'absolute',

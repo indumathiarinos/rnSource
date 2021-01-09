@@ -134,7 +134,7 @@ this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         {this.exploredata(this.state.getpostid)}
         console.log('get postid in seriesview book page ',this.state.getpostid)
           // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-      }, 10)
+      }, 1000)
   }
   
   exploredata(postid) {

@@ -51,7 +51,7 @@ class Contents extends Component {
     AsyncStorage.getItem('typeid').then((value) => this.setState({ gettypeid: value })).done();
     AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
     // alert(this.state.gettypeid,this.state.getpostid)
-    AsyncStorage.getItem('contentFilter').then((value)=>value!=null?filterOption=value:"ASC").done();
+    AsyncStorage.getItem('contentFilter').then((value)=>this.setState({sortingFilter:value})).done();
     console.log('sortingfilter data is ',filterOption,this.state.getpostid,this.state.gettypeid)
     // this.getData()
     this.CheckConnectivity();
@@ -59,7 +59,7 @@ class Contents extends Component {
       AsyncStorage.getItem('typeid').then((value) => this.setState({ gettypeid: value })).done();
       AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
       AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
-      AsyncStorage.getItem('contentFilter').then((value)=>value!=null?filterOption=value:"ASC").done();
+      AsyncStorage.getItem('contentFilter').then((value)=>this.setState({sortingFilter:value})).done();
       console.log('sortingfilter data is ',filterOption)     
        this.CheckConnectivity();
   })
@@ -134,8 +134,9 @@ class Contents extends Component {
 
   getData() {
     setTimeout(() => {
+      // alert(this.state.sortingFilter)
       { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 2)
+    }, 1000)
   }
 
 
@@ -148,7 +149,7 @@ class Contents extends Component {
     var json = JSON.stringify({
       'TypeID': typeid,
       'Post_PageID': postid,
-      "SortBy":filterOption
+      "SortBy":this.state.sortingFilter
     });
     console.log(json,"content filter updated")
     fetch("http://162.250.120.20:444/Login/HelpPublicationContents",
@@ -272,7 +273,7 @@ class Contents extends Component {
             renderItem={({ item }) =>
           
             <TouchableOpacity onPress={() => this.gotoRead(item.page_id)}>
-              <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,height:height/12}} key={item.Content} >
+              <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,height:height/10}} key={item.Content} >
                 <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, marginTop: '2%', marginBottom: '2%' }}>{item.page_title}</Text>
                 <Divider style={{ color: '#707070', width: width - 50, }} />
               </View>

@@ -73,15 +73,7 @@ class Onboarding extends React.Component {
             alignsecond: false,
             loading:false,
         };
-        setTimeout(
-            () =>
-                this.setState({ align: 'flex-start' }, function () {
-                    this.setState({
-                        alignsecond: true,
-                    });
-                }),
-            5000
-        );
+     
 
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -193,7 +185,7 @@ class Onboarding extends React.Component {
                                     //     pass_data: '0',
                                     // })
                                 }>
-                                <Text style={{ color: '#ffff', fontSize: 19 }}>Sign Up</Text>
+                                <Text style={{ color: '#ffff', fontSize: 14, fontFamily:'AzoSans-Regu' }}>Sign Up</Text>
                             </TouchableOpacity>
                         </LinearGradient>
 
@@ -209,7 +201,7 @@ class Onboarding extends React.Component {
                                 //     // })
                                 // }
                             >
-                                <Text style={{ color: '#27A291', fontSize: 19 }}>Explore</Text>
+                                <Text style={{ color: '#27A291', fontSize: 14 }}>Explore</Text>
                             </TouchableOpacity>
                         </LinearGradient>
                     </View>
@@ -290,8 +282,9 @@ const styles = StyleSheet.create({
         bottom: '15%',
         width: width / 1.5,
         color: 'black',
-        fontSize: 18,
+        fontSize: 16,
         alignSelf: 'center',
+        fontFamily:'AzoSans-Light',
 
         textAlign: 'center',
         // marginBottom:'3%'
@@ -299,12 +292,13 @@ const styles = StyleSheet.create({
     txt1: {
         marginTop: '35%',
         color: 'white',
-        fontSize: 25,
+        fontSize: 22,
+        fontFamily:'Montserrat-Regular'
 
     },
     textSignUp: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 14,
 
     },
 

@@ -97,7 +97,7 @@ class Notification extends Component {
   getData=()=>{
     setTimeout(() => {
       { this.exploredata(this.state.getuserid) }
-    }, 5);
+    }, 1000);
   }
 
   exploredata(userid) {
@@ -237,11 +237,11 @@ class Notification extends Component {
 
             </TouchableOpacity>
             </LinearGradient>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('reminders')}>
+            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('reminders')}>
               <Text style={styles.headerText}
 
               >Reminders</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
 
 

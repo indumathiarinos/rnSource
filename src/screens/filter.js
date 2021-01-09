@@ -23,7 +23,7 @@ class Filter extends Component {
   constructor(props){
     super(props)
   this.state = {
-   
+  
     pinsFilter: [
       {
         id: 0,
@@ -41,7 +41,6 @@ class Filter extends Component {
      
     ],
     boolean:false,
-    pinfilter:false
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   this.arrayholder=this.state.pinsFilter;
@@ -98,20 +97,21 @@ handleBackButtonClick() {
     });
     // console.log('profile data 1 value filtered ',this.state.popupData)
   }
-  goToPin=(title)=>{
-    if(title=="Newest"){
+  goToPin=(id)=>{
+    if(id==0){
       AsyncStorage.setItem('pinsFilter',"DESC");
-    }else if(title=="Oldest"){
+    }else if(id==1){
       AsyncStorage.setItem('pinsFilter',"ASC");
-    }else if(title=="Most Popuplar"){
+    }else if(id==2){
       AsyncStorage.setItem('pinsFilter',"MP");
     }
-    console.log(title);
-    AsyncStorage.getItem('pinsFilter').then(val=>console.log('getitem pins filter data ',val))
-  
+    console.log(id);
+    // AsyncStorage.getItem('pinsFilter').then(val=>alert(val));
+
     this.props.navigation.navigate('pins');
     
   }
+
   render() {
 
     return (
@@ -142,23 +142,30 @@ handleBackButtonClick() {
       </TouchableOpacity>
 
           </View>
-   
 <View style={{flex:1,marginTop:'16%'}}>
     <Text style={styles.headline}>Filter by</Text>
     <FlatList
     contentContainerStyle={{marginTop:'5%'}}
         data={this.state.pinsFilter}
         keyExtractor={(item,index)=>index.toString()}
-        renderItem={({item})=>(
-          <TouchableOpacity onPress={()=>{this.goToPin(item.title)}}>
-          <View style={styles.listdata}>
-          <Text style={styles.data}>{item.title}</Text>
-       </View>
-          </TouchableOpacity>
+        renderItem={({item})=>{
+          return(
+            <TouchableOpacity activeOpacity={.7} style={styles.listdata} 
+            onPress={()=>{
+              this.goToPin(item.id)}}
+            >
+            {/* <View style={styles.listdata}> */}
+            <Text style={styles.data}>{item.title}</Text>
+         {/* </View> */}
+            </TouchableOpacity>
+          )
+        }
+         
        
-        )}
+        }
 
       />
+
     </View>
     
       </SafeAreaView>

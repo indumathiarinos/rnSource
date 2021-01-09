@@ -7,13 +7,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import img1 from '../assets/img/cover1.png';
 import img2 from '../assets/img/cover2.png';
 import img3 from '../assets/img/cover3.png';
-import Carousel from '@rhysforyou/react-native-carousel';
-import {
-    Container,
-    Content,
-    Footer,
-    FooterTab
-} from "native-base";
+import BlurModal from '../components/blurModal'
+ 
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
 import Modal1 from 'react-native-modal';
@@ -112,7 +107,7 @@ CheckConnectivity(){
 getData(){
     setTimeout(() => {
         {this.exploredata(this.state.getuserid)}
-    }, 5);
+    }, 1000);
 }
 exploredata(userid) {
     var json = JSON.stringify({
@@ -253,7 +248,7 @@ componentWillUnmount() {
                 this.setState({undo:false})
               }    
               this.props.navigation.navigate('collection');
-        }, 5000);
+        }, 3000);
     }
       deleteFunc=()=>{
           // this.props.changeRemove2();
@@ -291,24 +286,24 @@ componentWillUnmount() {
   //                 </TouchableOpacity>
   //             </View>
   <View style={{
-      // flex:1,
-      width: '50%',
-      padding: '2%',
-      backgroundColor: '#ffff',
-      // borderWidth:0.5,
-      // borderColor:'#ccccccc'
-  }}>
-      <TouchableOpacity
+    // flex:1,
+    width: '50%',
+    padding: '2%',
+    backgroundColor: '#ffff',
+
+}}>
+    <TouchableOpacity
+    style={styles.button}
     onPress={() => this.onPressHandler(item.collectionsID)}>
             
-          <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+          <View style={{flex:1,flexDirection: 'row', }}
           >
               
-              <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+              <Image style={{ width: '75%',  height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                   source={{ uri: item.Image1!=""?item.Image1:null }} />
             
-              <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                  {/* <View > */}
+              <View style={{ flex:1, flexDirection: 'column',borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
                       <ImageBackground
                       imageStyle={{borderTopRightRadius: 10}}
                           style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
@@ -316,7 +311,7 @@ componentWillUnmount() {
                            {/* {this.state.selectedColid==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/close.png')}/>:null} */}
                           {item.abc==true?<Image style={{alignSelf:'flex-end',position:'absolute',margin:'1%',width:35,height:35}} source={require('../assets/img/remove-delete.png')}/>:null}
                       </ImageBackground>
-                  {/* </View> */}
+                  </View>
                   <View>
   
                       <Image
@@ -325,7 +320,9 @@ componentWillUnmount() {
                   </View>
               </View>
           </View>
-          
+          </TouchableOpacity>
+          <TouchableOpacity
+    onPress={() => this.onPressHandler(item.collectionsID)}>
           <View style={{ padding: '2%', margin: '1%' }}>
           <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
               <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
@@ -379,19 +376,14 @@ componentWillUnmount() {
                           </TouchableOpacity>
                           <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedColid!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                           <TouchableOpacity 
-                              onPress={() =>this.showModal()}>
+                              onPress={() =>{this.state.selectedColid!=""?this.showModal():null}}>
                               <Text style={[this.state.selectedColid!=""?styles.inacitveColor:styles.inacitveStyle]}>Delete</Text>
                           </TouchableOpacity>
                           </LinearGradient>
                       </View>
                   </View>
-                  <Modal
-                        animationType="slide"
-                        transparent
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            console.log('Modal has been closed.');
-                        }}>
+                  <BlurModal visible={this.state.modalVisible}
+          children={
                         <View style={{
                             left: 0, right: 0, bottom: 0, position: 'absolute',
                             height: '10%',
@@ -409,9 +401,8 @@ componentWillUnmount() {
                             </TouchableOpacity>
 
 
-                        </View>
-                    </Modal>
-
+                        </View>}
+                        />
                   <Modal1 isVisible={this.state.loading}  >
                               <Image source={require('../assets/gif/logo.gif')} style={{
                                   alignSelf: 'center',
@@ -480,6 +471,15 @@ componentWillUnmount() {
           width: '100%',
           height: '100%',
       },
+      button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
+    },
       image: {
           flex: 1,
       }

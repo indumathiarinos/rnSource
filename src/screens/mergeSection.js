@@ -115,7 +115,7 @@ CheckConnectivity(){
     getData(){
         setTimeout(() => {
             {this.exploredata(colvalue)}
-        }, 1);
+        }, 1000);
     }
     exploredata(collectionId){
         var json=JSON.stringify({
@@ -185,8 +185,7 @@ CheckConnectivity(){
          let sectionData=[...this.state.sectionData];
          for(let data of sectionData){
            if(data.SectionID==id){
-               this.setState({selectedMergeId:id,selectedMergeName:data.Page_Post_Title})
-               alert(this.state.selectedMergeName)
+               this.setState({selectedMergeId:this.state.selectedMergeId==id?"":id,selectedMergeName:title})
             //  data.abc=(data.abc==null)?true:!data.abc;
             //  (data.abc)?this.state.selectedItemArray.push(data):this.state.selectedItemArray.pop(data);
             //  console.log('selected item array ',this.state.selectedItemArray)
@@ -215,7 +214,8 @@ CheckConnectivity(){
                 // borderColor:'#ccccccc'
             }}>
                 <TouchableOpacity
-                    onPress={() => this.onPressHandler(item.SectionID)}>
+                style={styles.button}
+                    onPress={() => this.onPressHandler(item.SectionID,item.Title)}>
                     {/* <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
@@ -233,16 +233,16 @@ CheckConnectivity(){
                 {item.SectionID==0? <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
-                        <Image style={{ width: '95%', elevation: 2, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
+                        <Image style={{ width: '95%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                            
                     </View>:
                     <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
                     >
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                        <Image style={{ width: '75%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                            <View >
+                        <View style={{ flex:1, flexDirection: 'column', borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
                                 <ImageBackground
                                 imageStyle={{ borderTopRightRadius: 10}}
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
@@ -258,7 +258,12 @@ CheckConnectivity(){
                         </View>
                     </View>
                   }
-                 {item.SectionID==0?
+                 
+                </TouchableOpacity>
+                <TouchableOpacity
+                      onPress={() => this.onPressHandler(item.SectionID,item.Title)}>
+
+                {item.SectionID==0?
                   <View style={{ padding: '2%', margin: '1%' }}>
                     <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.Author}</Text>
@@ -277,7 +282,7 @@ CheckConnectivity(){
     nextBtn=()=>{
         AsyncStorage.setItem('MergeSecFromId',JSON.stringify(this.state.selectedMergeId))
        {this.props.navigation.navigate('subSectionMerge',{'collId':colvalue})}
-       AsyncStorage.setItem('SecMergeFromName',JSON.stringify(this.state.selectedMergeName))
+       AsyncStorage.setItem('SecMergeFromName',this.state.selectedMergeName)
 
         // this.props.navigation.navigate('subCollectionMerge',
         // {pass_data:this.sendingItem(this.state.selectedItemArray)}
@@ -309,16 +314,16 @@ CheckConnectivity(){
                 <View style={styles.bottomLine}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around',alignItems:'center' }}>
                         <TouchableOpacity style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}}
-                              onPress={() => 
+                              onPress={() => this.state.selectedMergeId==""?
                             //   this.props.navigation.navigate('collectionDetail',{'collId':colvalue})
-                            this.props.navigation.goBack()
+                            this.props.navigation.goBack():null
                               }>
                               <Text style={[this.state.selectedMergeId==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
   
                           </TouchableOpacity>
                           <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedMergeId!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                           <TouchableOpacity 
-                              onPress={() =>this.nextBtn()}>
+                              onPress={() => this.state.selectedMergeId!=""?this.nextBtn():null}>
                               <Text style={[this.state.selectedMergeId!=""?styles.inacitveColor:styles.inacitveStyle]}>Next</Text>
                           </TouchableOpacity>
                         </LinearGradient>
@@ -389,6 +394,15 @@ const styles = StyleSheet.create({
         left: 0,
         width: '100%',
         height: '100%',
+    },
+    button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
     },
     image: {
         flex: 1,

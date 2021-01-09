@@ -159,7 +159,7 @@ class CreateCollection extends Component {
                      </TouchableOpacity>
                       {/* </View> */}
                 </View>
-                <ScrollView>
+                <ScrollView style={{marginBottom:50}}>
                 <View style={{paddingLeft:'5%',paddingRight:'5%',flex:2}}>
                 <Text style={styles.textTitle}>Collection Title</Text>
                 <TouchableOpacity style={styles.touchableBtn}>
@@ -240,7 +240,7 @@ class CreateCollection extends Component {
                      style={styles.desctouchableBtn}
                     // style={{justifyContent:'center',color:'#CCCCCC',fontSize:18}}
                     >Add Title</Text> */}
-            <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%',marginBottom:'10%' }}>{this.state.descdata.length}/250</Text>
+            <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%',}}>{this.state.descdata.length}/250</Text>
                 {/* <Text style={{padding:'3%'}}>
                 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
                 </Text> */}                                     

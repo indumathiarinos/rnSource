@@ -107,11 +107,11 @@ class BooksPin extends Component {
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
-componentDidMount() {
+async componentDidMount() {
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
   AsyncStorage.getItem('pinsFilter').then((val) => this.setState({ SortBy: val })).done();
-
+  AsyncStorage.setItem('contentFilter',"ASC");
   console.log('user id ',this.state.getuserid,this.state.SortBy);
 //    AsyncStorage.getItem('sectionPin').then((val) =>Alert(val)).done();
 
@@ -145,7 +145,7 @@ CheckConnectivity(){
 getData() {
   setTimeout(() => {
       { this.exploreData(this.state.getuserid) }
-          }, 5)
+          }, 1000)
 }
 exploreData(userid) {
   this.setState({loading:true})
@@ -217,7 +217,7 @@ renderItem_card({ item }) {
           // alignItems:'center',alignSelf:"center",justifyContent:'center'
            }}>
               <View style={{ width: width / 3-20, height: height / 5.2, flex:1,alignItems: 'center', justifyContent: 'center' }}>
-                  <Text numberOfLines={5} style={{width: width / 3 - 30,height:height/5.2,textAlign:'center',marginTop:5,marginBottom:5}}>{item.description}</Text>
+                  <Text numberOfLines={5} style={{width: width / 3 - 30,textAlign:'center',marginTop:5,marginBottom:5,alignSelf:'center'}}>{item.description}</Text>
               </View>
 {/* <View style={{ marginLeft:10,marginRight:10,  alignItems: 'center', justifyContent: 'center' }}>
                   <Text>{item.description}</Text>

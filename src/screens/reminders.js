@@ -96,7 +96,7 @@ class Reminders extends Component {
   getData=()=>{
     setTimeout(() => {
       { this.exploredata(this.state.getuserid,"Select","") }
-    }, 5);
+    }, 1000);
   }
   CheckConnectivity(){    
     NetInfo.fetch().then(state => {
@@ -120,7 +120,7 @@ class Reminders extends Component {
       this.setState({
         modalVisible: false
       })
-      }, 5000);
+      }, 3000);
   }
   exploredata(userid,action,pkid) {
     this.setState({loading:true})

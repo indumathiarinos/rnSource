@@ -16,7 +16,8 @@ import NetInfo from '@react-native-community/netinfo';
 import ViewMoreText from 'react-native-view-more-text';
 import { connect } from "react-redux";
 import SnackBar from 'react-native-snackbar';
-
+import LoginModal from '../components/loginModal';
+import BlurModal from '../components/blurModal';
 import { ceil } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 // import Toast1 from 'react-native-tiny-toast'
@@ -54,7 +55,7 @@ class NewsFeed extends Component {
       collectionModal: false,
       loading: true,
       selectedItemLike: [],
-      pagingCount: 1,
+      pagingCount: Number(1),
       collection: '',
       currentItem: '',
       curFuncName: '',
@@ -74,13 +75,14 @@ class NewsFeed extends Component {
       section:'',
       secCollid:'',
       explore_page:'0',
-      loginPoup:false
+      loginPoup:false,
+      customlikeCount:false
       
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.onEndReachedCalledDuringMomentum = true,
-    this.pageCountVal = 0;
+    this.pageCountVal = 1;
 
   }
   renderViewMore(onPress) {
@@ -128,11 +130,33 @@ class NewsFeed extends Component {
     // console.log('share click ',Share.Social.INSTAGRAM,this.state.shareId)
     Share.shareSingle(shareOptions2);
   }
+  logoutpress=()=>{
+    AsyncStorage.setItem('userid',JSON.stringify(""));
+    AsyncStorage.setItem('typeid',JSON.stringify(""));
+    AsyncStorage.setItem('profile_img',JSON.stringify(""));
+    AsyncStorage.setItem('user_name',JSON.stringify(""));
+    AsyncStorage.setItem('postid',JSON.stringify(""));
+    AsyncStorage.setItem('collectionId',JSON.stringify(""));
+    AsyncStorage.setItem('sectionId',JSON.stringify(""));
+    AsyncStorage.setItem('usertype',JSON.stringify(""));
+    AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+    AsyncStorage.setItem('loginData', JSON.stringify(false));
+    this.props.savelogout();
+    this.props.navigation.closeDrawer();
+    this.props.navigation.navigate('loginSignup');
+  }
   alertPopup(){
-    this.setState({loginPopup:true})
-    setTimeout(() => {
-        this.setState({loginPopup:false})
-    }, 5000);
+    // this.setState({loginPopup:true})
+    this.logoutpress()
+}
+closeLoginPopup(){
+ this.setState({loginPopup:false});
+ this.props.savelogin();
+ AsyncStorage.setItem('explore_page',JSON.stringify(0));
+ AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid : value })).done();
+ AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+ AsyncStorage.setItem('collectionFilter',"DESC");
+ this.CheckConnectivity();
 }
   twitter = () => {
     this.setState({ shareModal: false});
@@ -204,7 +228,7 @@ class NewsFeed extends Component {
     this.setState({ loading: true })
     var json = JSON.stringify({
       // 'UserId': userid,
-      "PagingCount": this.state.pagingCount
+      "PagingCount": this.pageCountVal
     });
     console.log('pagefeed passing data value is ', json)
     fetch("http://162.250.120.20:444/Login/PageFeed",
@@ -230,7 +254,9 @@ class NewsFeed extends Component {
           feeding: this.state.feeding.concat(responseJson),
           //adding the new data with old one available in Data Source of the List
           loading: false,
-          getpagingCount:responseJson[0].Pagingcounts
+          getpagingCount:responseJson[0].Pagingcounts,
+          
+
           //updating the loading state to false
         });
         console.warn(responseJson)
@@ -244,7 +270,7 @@ class NewsFeed extends Component {
     return (
       <Text key={index} style={{ color: '#27A291',
       //  marginTop: -18, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={handlePress}>
-      marginTop: -16, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={()=>this.pressIcon(item)}>
+      marginTop: -19, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={()=>this.pressIcon(item)}>
         Read more
           </Text>
     );
@@ -279,7 +305,7 @@ class NewsFeed extends Component {
     )
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({ loading: false });
+        this.setState({ loading: false,customlikeCount:!this.state.customlikeCount });
         console.warn(responseJson);
         console.log('like service called');
         { this.exploredata() }
@@ -430,7 +456,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
         (data.isSelect) ? this.state.selectedItemArray.push(data) : this.state.selectedItemArray.pop(data);
         console.log('sel item array ', this.state.selectedItemArray);
         this.setState({ loading: true })
-        var json = JSON.stringify({ "UserID": this.state.getuserid, "PageID": id });
+        var json = JSON.stringify({ "UserID": this.state.getuserid, "Post_Page_ID": id,"TypeID":data.TypeID });
         fetch("http://162.250.120.20:444/Login/LikesAdd",
           {
             method: 'POST',
@@ -443,7 +469,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
         )
           .then((response) => response.json())
           .then((responseJson) => {
-            this.setState({ loading: false });
+            this.setState({ loading: false,customlikeCount:!this.state.customlikeCount });
             console.warn(responseJson);
             // console.log('like service called');
             // { this.exploredata() }
@@ -472,7 +498,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
       tab3: false,
       tab4: false
     });
-    {this.props.nav==1?this.props.navigation.navigate('newsfeed'):this.props.navigation.navigate('mainpage')}
+    this.props.navigation.navigate('mainpage')
   }
   toggleTab2() {
     this.setState({
@@ -502,7 +528,11 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
       tab4: true
     });
     // this.props.navigation.navigate('menu')
-    this.props.navigation.openDrawer()
+    // this.props.navigation.openDrawer()
+    {this.state.explore_page=='0'?
+    this.props.navigation.openDrawer():
+   this.logoutpress()
+  }
   }
   componentWillUnmount() {
     
@@ -553,13 +583,14 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
             console.warn(error);
         });
   }
-  componentDidMount() {
+  async componentDidMount() {
     AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
     AsyncStorage.getItem('typeid').then((val) => this.setState({ gettypeid: val })).done();
     AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
+    AsyncStorage.setItem('collectionFilter',"DESC");
+    this.CheckConnectivity();
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     // this.getData();
-    this.CheckConnectivity();
     // { this.exploredata(this.state.getuserid) }
   };
   CheckConnectivity() {
@@ -581,7 +612,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
       console.log('pagefeed user id is ', this.state.getuserid);
       { this.exploredata() }
       { this.exploredataPic(this.state.getuserid) }
-    }, 5)
+    }, 1000)
   }
   toast = () => {
     this.setState({ toastvisible: true })
@@ -597,11 +628,12 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
       // this.props.changeRemove()
       this.setState({
         readlaterPopup: false,
-        exists: false
+        // exists: false
       });
      
       //   this.props.changeRemove();
-    }, 5000);
+    }, 3000);
+    
     // this.props.navigation.navigate('readlater');
   }
   readlaterClick(){
@@ -634,10 +666,12 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
       .then((response) => response.json())
       .then((responseJson) => {
         //alert(responseText);
-        if (responseJson[0].Message == "Already Exist") {
-          this.setState({ exists: true })
-        }
-        this.setState({ loading: false })
+        // if (responseJson[0].Message == "Already Exist") {
+        //   this.setState({ exists: true })
+        // }else{
+        //   this.setState({exists:false})
+        // }
+        this.setState({ loading: false, })
         // this.readlater();
         this.setState({ collectionModal: false,expanded:false,sectionExpand:false });
 
@@ -716,9 +750,10 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
       });
   }
   commentClick(item){
-              AsyncStorage.setItem('typeid',"4");
+              AsyncStorage.setItem('typeid',JSON.stringify(Number(item.TypeID)));
               AsyncStorage.setItem('postid', item.Post_Page_Id);
-              console.log('comments page id is ', item.Post_Page_Id)
+              console.log('comments page id is ',this.state.gettypeid, item.Post_Page_Id);
+              console.log('comment typeid postid ',item.Post_Page_Id)
               this.props.navigation.navigate('comments')
   }
   collectionBook = (value, colid) => {
@@ -735,6 +770,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
          AsyncStorage.setItem('popup_name',JSON.stringify(value));
          AsyncStorage.setItem('colSec',"Collection");
          AsyncStorage.setItem('colId',JSON.stringify(colid));
+         AsyncStorage.setItem('coll_name', JSON.stringify(this.state.getsecColName));
       if (item.TypeID == 4) {
 
         this.collectionAdd(colid, "", "", item.Post_Page_Id, this.state.getuserid, item.TypeID, "")
@@ -846,6 +882,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
     this.setState({ shareId:id,shareModal: !this.state.shareModal,})
   }
   goToAuthorProfile(id){
+ 
     AsyncStorage.setItem('profile_userid',id);
     AsyncStorage.setItem('pagefeed_userid',id);
     console.log(' profile userid ',id)
@@ -859,33 +896,22 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
     // var imgSource = this.state.showlikeImg? require('../assets/img/like.png') : require('../assets/img/unlike.png');
     return (
       <View style={{ width: width, flex: 1, backgroundColor: '#fff', }}>
-
         <View style={{ flexDirection: 'row', margin: '3%', justifyContent: 'space-around' }}>
-          <TouchableOpacity onPress={() =>this.goToAuthorProfile(item.UserID) }>
-            <Image style={{ width: 50, height: 50, borderRadius: 50 / 2,resizeMode:'cover'}} resizeMode="cover"
-              // source={require('../assets/img/user.png')}
+          <TouchableOpacity onPress={() =>{this.state.explore_page=='0'?this.goToAuthorProfile(item.UserID):this.logoutpress() }}>
+            <Image style={styles.userImg} 
               source={{ uri: item.User_Images != "" ? item.User_Images : null }}
             />
           </TouchableOpacity>
-          {/* <Avatar
-            rounded
-            size='medium'
-            overlayContainerStyle={{ borderColor: '#24D4BC', borderWidth: 1 }}
-            // style={{ borderWidth: 2,  borderTopLeftRadius: 1, borderStyle:'solid' }}
-            icon={{ name: 'user', type: 'font-awesome' }}
-            onPress={() => console.log("Works!")}
-            activeOpacity={0.7}
-          // containerStyle={{marginLeft:'1%'}}
-          /> */}
-          <View style={{ flexDirection: 'column', width: width / 2 + 70, top: 5 }}>
-            <TouchableOpacity onPress={() =>this.goToAuthorProfile(item.UserID) }>
-            <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold', textAlign: 'left' }}>{item.Username}</Text>
+  
+          <View style={{ flexDirection: 'column', width: width / 2 + 70,backgroundColor:item.Username==""?'#f9f9f9':null,justifyContent:'space-around'}}>
+            <TouchableOpacity onPress={() =>{this.state.explore_page=='0'?this.goToAuthorProfile(item.UserID):this.logoutpress() }}>
+            <Text style={styles.username}>{item.Username}</Text>
             </TouchableOpacity>
-            <Text style={{ fontSize: 15, color: '#707070', textAlign: 'left' }}>Published a {item.TypeID == 4 ? "page" : "publication"} {item.Publisheddate}</Text>
+            <Text style={styles.date}>Published a {item.TypeID == 4 ? "page" : "publication"} on {item.Publisheddate}</Text>
           </View>
           {/* {this.state.explore_page=='0'? */}
 
-          <TouchableOpacity style={{ padding: '2%' }}
+          <TouchableOpacity style={{ padding: '1%' }}
             // onPress={() => this.refs.modal5.open()}
             onPress={() =>{this.state.explore_page=='0'? this.toggle_newModal():this.alertPopup()}}
           >
@@ -893,8 +919,11 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
           </TouchableOpacity>
           {/* :null} */}
         </View>
+        <TouchableOpacity onPress={() => this.pressIcon(item)}>
         <Text numberOfLines={2}
-          style={{ fontSize: 20, color: 'black', fontWeight: 'bold', alignSelf: 'flex-start', marginLeft: '8%', marginRight: '8%', marginTop: '2%' }}>{item.Title}</Text>
+          style={styles.title}>{item.Title}</Text>
+        </TouchableOpacity>
+      
         <TouchableOpacity
           onPress={() => this.pressIcon(item)}
         //  onPress={()=>this.props.navigate.navigate('readingBook')}
@@ -906,7 +935,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
             activeOpacity={0.7}
           /> */}
           <ImageBackground
-            style={{width:width,height:550,alignSelf: 'center',marginTop:'2%',resizeMode:'cover' }}
+            style={{width:width,height:item.TypeID==4?217:514,alignSelf: 'center',marginTop:'2%',resizeMode:'cover' }}
             source={{uri:item.Images != "" ? item.Images : null }}
             onPress={() => console.log("Works!")}
             activeOpacity={0.7}
@@ -915,7 +944,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
 
         <View style={{ backgroundColor: '#F9F9F9', paddingLeft: '5%', paddingRight: '5%', paddingTop: '2%', paddingBottom: '2%' }}>
           <ReadMore
-                  numberOfLines={3}
+                  numberOfLines={item.DescriptionContent.length<200?1:3}
                   renderTruncatedFooter={(handlePress1,index)=>this._renderTruncatedFooter(handlePress1,index,item)}
                   renderRevealedFooter={this._renderRevealedFooter}
                   onReady={this._handleTextReady}>
@@ -923,57 +952,19 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
                   {item.DescriptionContent}
                         </Text>
                 </ReadMore>
-          {/* <ViewMoreText
-      numberOfLines={3}
-      renderViewMore={this.renderViewMore}
-      renderViewLess={this.renderViewLess}
-      textStyle={{textAlign: 'center'}}
-      >
-           <HTMLView
-        value={item.Description}/>
-     </ViewMoreText> */}
-          {/* <FlatList
-            data={item.Data}
-            extraData={this.state}
-            renderItem={(item) => this.descriptionList(item)}
-            keyExtractor={(item, index) => index.toString()} /> */}
-          {/* <HTMLView
-        value={item.Description}/> */}
-          {/* <ReadMore
-            numberOfLines={3}
-            renderTruncatedFooter={this._renderTruncatedFooter}
-            renderRevealedFooter={this._renderRevealedFooter}
-            onReady={this._handleTextReady}>
-      <Text> */}
-          {/* <HTMLView
-        value={item.Description}></HTMLView> */}
+               </View>
 
-          {/* <Text style={styles.description}>
-              Lorem ipsum dolor sit amet, in quo dolorum ponderum, nam veri molestie constituto eu. Eum enim tantas sadipscing ne, ut omnes malorum nostrum cum. Errem populo qui ne, ea ipsum antiopam definitionem eos.
-          </Text> */}
-          {/* </ReadMore> */}
-          {/* <Text style={{fontSize:17,marginLeft:'5%',marginRight:'5%',padding:'2%'}}
-          numberOfLines={3}>
-          The  cost to orchestrate an act of terrorism compared to the potential costs as a result of a successful terror attack is insignificant in comparison. The terrorist attacks in the United States on 11 September, 2001 (“9/11”) cost the terrorists about US$500,000 to stage, claimed 3,000 lives and the total losses of life and property cost insurance companies approximately US$40 billion. This direct cost pales in comparison to the indirect costs. Tip #1: Call those women out! Shopping centres and restaurants across the country were closed for at least 24 hours, high-risk office buildings (such as the former Sears Tower in Chicago) were evacuated; planes were grounded; and the stock market ceased trading for four consecutive days. The effects were not only felt in New York.
-          </Text> */}
-          {/* <Text style={{color:'#27A291',textDecorationLine: 'underline',alignSelf:'flex-end',marginRight:'5%',marginTop:'-7%',backgroundColor:'#F9F9F9'}}>Read more</Text> */}
-        </View>
-
-        {/* <Divider style={{ backgroundColor: 'gray', borderWidth: 0.7, borderColor: 'gray' }} /> */}
-        {/* {this.state.explore_page=='0'? */}
-        <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', }}>
+            <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', }}>
           <TouchableOpacity
             style={{ padding: '3%' }}
             onPress={() => {this.state.explore_page=='0'?
               this.likeClick(item.Post_Page_Id):this.alertPopup()
               // this.selectItem(item)
             }}
-          // onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
           >
-            {/* {this.renderImage} */}
             <View>
-              {item.isSelect == true ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
-              <Text style={{ color: item.isSelect ? '#27A291' : '#707070', fontSize: 10,textAlign:'center' }}>{item.likescount}</Text>
+              {item.isSelect && this.state.customlikeCount ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
+              <Text style={{ color: item.isSelect ? '#27A291' : '#707070', fontSize: 10,textAlign:'center' }}>{this.state.customlikeCount?Number(item.likescount)+1:item.likescount}</Text>
             </View>
             {/* <Image
               source={imgSource}
@@ -987,17 +978,15 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
             style={{ padding: '3%' }}
             onPress={() => {this.state.explore_page=='0'?
               this.commentClick(item):this.alertPopup()
-            }}
-          >
+            }}>
             <Image
-
               source={require('../assets/img/comment1.png')} />
           </TouchableOpacity>
           <TouchableOpacity
             style={{ padding: '3%' }}
             // onPress={() => this.refs.modal4.open()} 
-            onPress={() =>{this.state.explore_page=='0'? this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon" }):this.alertPopup()}}
-          // onPress={() =>this.props.navigation.navigate('createCollection')} 
+            onPress={() =>{this.state.explore_page=='0'? this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon",exists:item.Readstatus=="N"?false:true }):this.alertPopup()}}
+            // onPress={() =>this.props.navigation.navigate('createCollection')} 
           >
             <Image source={require('../assets/img/plus.png')} />
           </TouchableOpacity>
@@ -1009,11 +998,9 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
             } >
             <Image source={require('../assets/img/share.png')} />
           </TouchableOpacity>
-
         </View>
         {/* :null} */}
         <Divider style={{ borderColor: '#707070' }} />
-
       </View>);
   }
   // filter_page = () => {
@@ -1035,9 +1022,10 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
     }
 }
   handleMore=()=>{
-    console.log('onend reached called')
-    this.setState({pagingCount:this.state.pagingCount+1})
-    if(this.state.pagingCount<this.state.getpagingCount){
+    this.pageCountVal=this.pageCountVal+1;
+    // this.setState({pagingCount:Number(this.pageCountVal)+1})
+    console.log('onend reached called console pagingcount & getpagicount value ,local value ',this.pageCountVal,this.state.getpagingCount)
+    if(this.pageCountVal<this.state.getpagingCount){
     this.exploredata();
     }
   //   if(!this.onEndReachedCalledDuringMomentum){
@@ -1097,19 +1085,21 @@ style={{marginBottom:'10%'}}
             // onMomentumScrollEnd={()=>{ this.onEndReachedCalledDuringMomentum = true; this.handleMore()}}
             // onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false; }}
         />
+        {this.state.feeding.length!=0?
           <TouchableOpacity style={{margin:'5%',padding:'2%',alignSelf:'center'}} onPress={()=>this.goToTop()} 
       >
-        <Image source={require('../assets/img/plus.png')}/>
-      </TouchableOpacity>
-      
+        <Image source={require('../assets/img/backTotop1.png')}/>
+      </TouchableOpacity>:null}
+      {this.state.feeding.length!=0?
       <View style={{alignSelf:'center',alignItems:'center',justifyContent:'center',marginBottom:'5%'}}>
       <LinearGradient style={{width:width/3,borderRadius:5,height:20,alignItems:'center',justifyContent:'center'}}
                 colors={['#24D4BC', '#27A291']} >
                 <TouchableOpacity onPress={()=>this.handleMore()}>
-              <Text style={{fontSize:15,color:'#fff'}}>See more Feeds</Text>
+              <Text style={{fontSize:14,color:'#fff',fontFamily:'AzoSans-Regular'}}>See more Feeds</Text>
               </TouchableOpacity>
               </LinearGradient>
       </View>
+      :null}
     
       </ScrollView>
      
@@ -1129,15 +1119,7 @@ style={{marginBottom:'10%'}}
         <Modal1 isVisible={this.state.collectionModal}
   onBackdropPress={() => this.setState({ collectionModal: false,expanded:false,sectionExpand:false})}>
             <View 
-            style={{backgroundColor:'#fff', alignItems: 'center',
-            justifyContent:'center',
-            alignSelf:'center',
-            flex: !this.state.expanded ? 0.3 : 0.4,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            borderBottomLeftRadius: 5,
-            borderBottomEndRadius: 5,
-            width: 300,}}
+            style={[styles.addCollModal,{flex: !this.state.expanded ? 0.3 : 0.4}]}
             >
             <TouchableOpacity
                 style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
@@ -1147,7 +1129,7 @@ style={{marginBottom:'10%'}}
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
+                  <Image  source={require('../assets/img/createCol.png')} />
                   <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
   
                 </View>
@@ -1170,8 +1152,8 @@ style={{marginBottom:'10%'}}
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                 <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
@@ -1191,8 +1173,9 @@ style={{marginBottom:'10%'}}
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                  <Image style={{width:30,height:30}} source={require('../assets/img/coll_create.png')} />
-                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 3 }}>Collections</Text>
+                       <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
+
                       </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
@@ -1277,7 +1260,7 @@ style={{marginBottom:'10%'}}
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/readlater2.png')} />
+                  <Image source={require('../assets/img/readlaternew1.png')} />
                   <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
                   <Divider style={{ backgroundColor: '#707070' }} />
   
@@ -1286,29 +1269,25 @@ style={{marginBottom:'10%'}}
   
             </View>
           </Modal1>
-        <Modal1 isVisible={this.state.loading}
-
-        // onBackdropPress={() => this.setState({ loading: true })}
-        >
-          <Image source={require('../assets/gif/logo.gif')} style={{
-            alignSelf: 'center',
-            width: 140,
-            height: 140
-          }} />
-        </Modal1>
+          <BlurModal visible={this.state.loading}
+          children={
+            <Image source={require('../assets/gif/logo.gif')} style={{
+              alignSelf: 'center',
+              width: 140,
+              height: 140
+            }} />
+          }/>
+      
         <Modal1
-                    animationType={"slide"}
+                    // animationType={"slide"}
                     onBackdropPress={() => this.setState({ loginPopup: false})}
                     isVisible={this.state.loginPopup}>
-
-                    <View 
-                        style={{backgroundColor:'#fff', 
-                        alignSelf:'center',
-                        flex:  0.2,
-                        width: width/1.2,}}
-                        >
-                            <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
-                        </View>
+                <LoginModal
+                       navigation={this.props.navigation}
+                       closeModal={()=>this.closeLoginPopup()}
+                       close={()=>this.setState({loginPopup:false})}
+                       />
+                   
                     </Modal1>
         <Modal1 isVisible={this.state.shareModal}
           onBackdropPress={() => this.setState({ shareModal: false })}>
@@ -1372,20 +1351,15 @@ style={{marginBottom:'10%'}}
           onRequestClose={() => {
             console.log('Modal has been closed.');
           }}> */}
-          {this.state.readlaterPopup?
-          <View style={{
-            left: 0, right: 0, bottom: '6%', position: 'absolute',
-            height: '8%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#27A291',
-          }}>
+          <BlurModal visible={this.state.readlaterPopup}
+          children={
+          
+          <View style={styles.readlaterModal}>
             <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
 
             <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
           </View>
-          :null}
+          }/>
         {/* </Modal> */}
             {/* <View style={{bottom:"8%",left:0,right:0, position:'absolute',width:width,height:25,marginBottom:5,marginTop:5,alignItems:'center',justifyContent:'center'}}>
             
@@ -1396,6 +1370,7 @@ style={{marginBottom:'10%'}}
               </TouchableOpacity>
               </LinearGradient>
             </View> */}
+           
             <View style={styles.bottomBar}>
                         <TouchableOpacity
                             style={styles.tabsss}
@@ -1417,7 +1392,7 @@ style={{marginBottom:'10%'}}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
                             {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                            <Image style={{ width: 28, height: 28,borderRadius:28/2 }} source={{uri:this.state.avatar}}></Image>
+                            <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}></Image>
                             {/* <Text>Menu</Text> */}
                             {/* </Drawer> */}
                         </TouchableOpacity>
@@ -1428,12 +1403,7 @@ style={{marginBottom:'10%'}}
 
 }
 const styles = StyleSheet.create({
-  headline: {
-    fontSize: 18,
-    textAlign: 'center',
-    backgroundColor: 'black',
-    color: 'white'
-},
+
 tabs: {
     flexDirection: 'row',
     padding: '2%',
@@ -1446,13 +1416,40 @@ container: {
     backgroundColor: '#fff',
 
   },
-  fragment:{
-    backgroundColor: '#fff', 
-    flex: 0.9
+
+  userImg:{
+    width: 40,
+     height: 40,
+      borderRadius: 20,
+      resizeMode:'cover'
+  },
+  username:{
+    fontSize: 12,
+    color: 'black',
+    fontFamily: 'Montserrat-Bold',
+    textAlign: 'left'
+  },
+  date:{
+    fontSize: 12,
+    fontFamily:'AzoSans-Regular',
+     color: '#707070', 
+     textAlign: 'left',
+  },
+  title:{
+    fontSize: 16,
+     color: 'black',
+      fontFamily: 'Montserrat-Bold',
+       alignSelf: 'flex-start',
+        marginLeft: '8%',
+         marginRight: '8%',
+          marginTop: '2%'
+  },
+  description:{
+    fontSize:14,
+    fontFamily:'AzoSans-Regular'
   },
   header:{
     flexDirection: 'row', 
-    // flex: 0.5,
     height:'9%',
     top:0,
     left:0,
@@ -1470,19 +1467,16 @@ container: {
   inactiveText: {
     color:'#707070',
     padding: '5%',
-    fontSize: 16,
-    // fontFamily:'regular',
+    fontSize: 14,
+    fontFamily:'AzoSans-Medium',
   },
   active: {
-
-    // backgroundColor: '#27A291',  
     borderRadius: 10,
   },
   activetext: {
     padding: '5%',
-    fontSize: 16,
-    // fontWeight: 'bold',
-    // fontFamily:'regular',
+    fontSize: 14,
+    fontFamily:'AzoSans-Medium',
     color: 'white'
   },
   button: {
@@ -1503,9 +1497,7 @@ container: {
     flexDirection:'row',
     position:'absolute'
 },
-// tabsss:{
-//     margin:'2%'
-// },
+
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -1513,24 +1505,38 @@ container: {
   modaltext: {
     fontSize: 18,
     alignSelf: 'center',
-    // padding: '4%',
     color: '#707070'
   },
 
   modal5: {
-    // flex:0.2
     height: height / 18,
     width: width / 1.3,
   },
-  headerText: {
-    padding: '5%',
-    fontSize: 16,
-    fontWeight: 'bold'
+  readlaterModal:{
+    left: 0,
+     right: 0, 
+     bottom: '6%', 
+     position: 'absolute',
+    height: '8%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#27A291',
   },
+  addCollModal:{
+    backgroundColor:'#fff',
+    alignItems: 'center',
+    justifyContent:'center',
+    alignSelf:'center',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 5,
+    borderBottomEndRadius: 5,
+    width: 300
+  }
 })
 function mapStateToProps(state) {
   return {
-    nav: state.apiReducer.nav,
     addCol: state.apiReducer.addCol,
     collSec: state.apiReducer.collSec
 
@@ -1540,10 +1546,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
-    changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' }),
+  
     popupAddCol: () => dispatch({ type: 'ADD_COL' }),
-    collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'})
+    collSecPopup:() =>dispatch({type:'COLLSEC_POPUP'}),
+    savelogin: ()=> dispatch({type:'CHECKLOGIN'}),
+    savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
 
   }
 };

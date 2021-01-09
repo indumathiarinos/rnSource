@@ -146,7 +146,7 @@ showModal = () => {
           popupModal: false
       })
       //   this.props.changeRemove();
-  }, 5000);
+  }, 3000);
   console.log('modal state is ', this.state.popupModal)
 }
 componentWillUnmount() {
@@ -180,7 +180,7 @@ getData1() {
     console.log('get postid in periodical book page ',this.state.getperiodicalid,this.state.gettypeid)
     {this.exploredata(1,this.state.getperiodicalid)}
       // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-  }, 5)
+  }, 1000)
 }
 
 

@@ -24,31 +24,31 @@ class Collection extends Component {
             actions: [
                 {
                     text: "Create Collection",
-                    icon: require("../assets/img/collection/createColl.png"),
+                    icon: require("../assets/img/collection/create.png"),
                     name: "createCollection",
                     position: 5
                 },
                 {
                     text: "Merge Collection",
-                    icon: require("../assets/img/plus.png"),
+                    icon: require("../assets/img/collection/merge.png"),
                     name: "mergeCollection",
                     position: 4
                 },
                 {
                     text: "Edit Collection",
-                    icon: require("../assets/img/collection/edited.png"),
+                    icon: require("../assets/img/collection/edit.png"),
                     name: "editCollection1",
                     position: 3
                 },
                 {
                     text: "Remove Collection",
-                    icon: require("../assets/img/collection/close.png"),
+                    icon: require("../assets/img/collection/remove.png"),
                     name: "removeCollection",
                     position: 2
                 },
                 {
                     text: "Filter Options",
-                    icon: require("../assets/img/plus.png"),
+                    icon: require("../assets/img/collection/filter.png"),
                     name: "filter_date",
                     position: 1
                 }
@@ -132,9 +132,32 @@ class Collection extends Component {
             this.props.mergePopup();
 
             //   this.props.changeRemove();
-        }, 5000);
+        }, 3000);
         //   this.props.mergePopup();
         //   console.log('modal state is ',this.props.mergePopup())
+    }
+    async componentDidMount() {
+        AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
+        console.log('collection userid is ', this.state.getuserid)
+        AsyncStorage.setItem('bookmarkUserid', this.state.getuserid);
+        AsyncStorage.setItem('pinsFilter',"DESC");
+        AsyncStorage.setItem('collSecFilter',"DESC");
+        AsyncStorage.setItem('sectionId',JSON.stringify(""));
+        // AsyncStorage.setItem('collectionFilter',"DESC");
+        AsyncStorage.getItem('collectionFilter').then((val) =>this.setState({ collFilter: val }) ).done();
+        // AsyncStorage.setItem('collectionId','');
+        // AsyncStorage.setItem('col_id','');
+        this.CheckConnectivity();
+
+        this.focusListener = this.props.navigation.addListener('willFocus', () => {
+            AsyncStorage.setItem('collSecFilter',"DESC");
+
+            AsyncStorage.getItem('collectionFilter').then((val) =>this.setState({ collFilter: val })).done();
+
+            this.CheckConnectivity();
+
+        })
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
     coll_CoverData() {
         var json = JSON.stringify({
@@ -216,10 +239,10 @@ class Collection extends Component {
         this.setState({ loading: true })
         var json = JSON.stringify({
             'UserID': userid,
-            // "SortBy":this.state.collFilter
-            "SortBy": "DESC"
+            "SortBy":this.state.collFilter
+            // "SortBy": "DESC"
         });
-        console.log('json ', +json)
+        // alert(json)
         fetch("http://162.250.120.20:444/Login/Collection",
             {
                 method: 'POST',
@@ -243,24 +266,7 @@ class Collection extends Component {
             });
     }
 
-    async componentDidMount() {
-        AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
-        console.log('collection userid is ', this.state.getuserid)
-        AsyncStorage.setItem('bookmarkUserid', this.state.getuserid);
-        AsyncStorage.setItem('collectionFilter',"DESC");
-        AsyncStorage.getItem('collectionFilter').then((val) => val != null ? this.setState({ collFilter: val }) : "DESC").done();
-        // AsyncStorage.setItem('collectionId','');
-        // AsyncStorage.setItem('col_id','');
-        this.CheckConnectivity();
-
-        this.focusListener = this.props.navigation.addListener('willFocus', () => {
-            AsyncStorage.getItem('collectionFilter').then((val) => val != null ? this.setState({ collFilter: val }) : "DESC").done();
-
-            this.CheckConnectivity();
-
-        })
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-    }
+   
 
     // componentDidUpdate(){
     //     // {this.getData()}
@@ -292,7 +298,7 @@ class Collection extends Component {
             { this.coll_CoverData() }
             { this.exploredata(this.state.getuserid) }
 
-        }, 3000)
+        }, 1000)
     }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -306,26 +312,13 @@ class Collection extends Component {
                 width: '50%',
                 padding: '2%',
                 backgroundColor: '#ffff',
-                // borderWidth:0.5,
-                // borderColor:'#ccccccc'
+
             }}>
                 <TouchableOpacity
+                style={styles.button}
                     onPress={() => this.pressIcon(item)}>
-                    {/* <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
-                //  onPress={()=>this.press(item)}
-                >
-                    <Image style={{ width: '95%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
-                        source={{ uri: item.CoverImg!=""?item.CoverImg:null }} />
-                       
-                </View>
-                <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-                    <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
-                    <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
-                </View> */}
-
-                    {/* three grids images */}
-                    <View style={{ flex: 1, flexDirection: 'row', backgroundColor: '#ffff', borderRadius: 10, elevation: 2, borderColor: '#cccccc' }}
+                   
+                    <View style={[{ flex: 1, flexDirection: 'row' }]}
                     >
                         <Image style={{ width: '75%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1 != "" ? item.Image1 : null }} />
@@ -342,10 +335,13 @@ class Collection extends Component {
                             </View>
                         </View>
                     </View>
-                    <View style={{ padding: '2%', margin: '1%' }}>
-                        <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-                        <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
-                        <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
+                   
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.pressIcon(item)}>
+                <View style={{ padding: '2%', margin: '1%' }}>
+                        <Text numberOfLines={2} style={{ fontSize: 16, fontFamily: 'AzoSans-Medium' }}>{item.Title}</Text>
+                        <Text style={styles.subtitle}>{item.PublicationCount} publications</Text>
+                        <Text style={styles.subtitle}>{item.PageCount} pages</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -374,17 +370,17 @@ class Collection extends Component {
 
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', }}
+                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image1!=""?null:'#27A291' }}
                         source={{ uri: item.Image1 != "" ? item.Image1 : null }}
                     />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', }}
+                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image2!=""?null:'#27A291' }}
                         source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', alignItems: 'center', justifyContent: 'center', }}
+                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', alignItems: 'center',backgroundColor:item.Image3!=""?null:'#27A291', justifyContent: 'center', }}
                         source={{ uri: item.Image3 != "" ? item.Image3 : null }}
                     />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', }}
+                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image4!=""?null:'#27A291' }}
                         source={{ uri: item.Image4 != "" ? item.Image4 : null }} />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', }}
+                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image5!=""?null:'#27A291' }}
                         source={{ uri: item.Image5 != "" ? item.Image5 : null }} />
                 </View>
 
@@ -409,11 +405,15 @@ class Collection extends Component {
                     <ScrollView horizontal={true}
                         showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingLeft: '8%', paddingRight: '5%', flexDirection: 'row', width: width, justifyContent: 'center', alignItems: 'center', }}>
                         <LinearGradient style={{ borderRadius: 10 }} colors={
-                            ['#24D4BC', '#27A291']}>
+                            ['#27A291', '#27A291']}>
                             <TouchableOpacity >
                                 <Text style={styles.activeText}>Collection</Text>
                             </TouchableOpacity>
                         </LinearGradient>
+                        {/* <LinearGradient colors={
+                            ['#24D4BC', '#27A291']}>
+                           
+                        </LinearGradient> */}
                         <TouchableOpacity style={{ alignItems: 'center' }}
                             onPress={() => {
                                 this.props.navigation.navigate('pins')
@@ -464,7 +464,7 @@ class Collection extends Component {
                     <View style={styles.overlay} />
 
                     <View style={{ position: 'absolute', top: 70, alignItems: 'center', width: width, justifyContent: 'center', }}>
-                        <Text style={{ textAlign: 'center', color: '#fff', fontWeight: 'bold', fontSize: 18 }}>Library</Text>
+                        <Text style={{ textAlign: 'center', color: '#fff', fontFamily: 'AzoSans-Bold', fontSize: 24 }}>Library</Text>
 
                     </View>
                     <FlatList
@@ -486,17 +486,16 @@ class Collection extends Component {
 
                 </ScrollView >
                 <FloatingAction
-                    style={{ color: '#24D4BC' }}
+                    style={{ color: '#27A291' }}
                     position={'right'}
                     //    tintColor={'#27A291'}
-                    distanceToEdge={45}
+                    distanceToEdge={50}
                     ref={(ref) => { this.floatingAction = ref; }}
                     actions={this.state.actions}
                     color={'#24D4BC'}
                     onPressItem={name => {
-                        AsyncStorage.setItem('EditCreateColl', JSON.stringify(false));
                         this.props.navigation.navigate(name)
-                        console.log(`selected button: ${name}`);
+                        // console.log(`selected button: ${name}`);
                     }}
                 />
                 <Modal1 isVisible={this.state.loading}  >
@@ -574,7 +573,7 @@ const styles = StyleSheet.create({
     bottomBar: {
         backgroundColor: '#fff',
         alignItems: 'center',
-        height: '6%',
+        // height: '6%',
         bottom: 0,
         left: 0,
         right: 0,
@@ -583,11 +582,14 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     tabsss: {
-        alignItems: 'center', justifyContent: 'center'
+        alignItems: 'center', 
+        justifyContent: 'center'
     },
-    // tabsss:{
-    //     margin:'2%'
-    // },
+    subtitle:{
+        color: '#707070',
+        fontSize:12,
+        fontFamily:'AzoSans-Light'
+    },
     TouchableOpacityStyle: {
         position: 'absolute',
         width: 50,
@@ -616,6 +618,15 @@ const styles = StyleSheet.create({
 
 
     },
+    button: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        backgroundColor: '#fff',
+        elevation: 2, // Android
+        borderRadius:10,
+    },
     overlay: {
         flex: 1,
         position: 'absolute',
@@ -628,14 +639,15 @@ const styles = StyleSheet.create({
     },
     activeText: {
         padding: '5%',
-        fontSize: 16,
+        fontSize: 14,
         color: 'white',
-        fontWeight: 'bold'
+        fontFamily: 'AzoSans-Medium'
     },
     headerText: {
         padding: '5%',
-        fontSize: 16,
-        fontWeight: 'bold'
+        fontSize: 14,
+        color:'#707070',
+        fontFamily:'AzoSans-Medium'
     },
     backgroundContainer: {
         position: 'absolute',

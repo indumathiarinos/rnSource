@@ -61,7 +61,8 @@ class Comments extends Component {
             commentCounts:'',
             commentText:'',
             gettypeid:'',
-            getpageid:''
+            getpageid:'',
+            customlike:false
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -90,12 +91,12 @@ class Comments extends Component {
       }
     getData() {
         setTimeout(() => {
-            {this.state.gettypeid==4?this.setState({getpageid:this.state.postpageid,getpostid:''}):this.setState({getpostid:"0",getpageid:''})}
+            {this.state.gettypeid==4?this.setState({getpageid:this.state.postpageid,getpostid:''}):this.setState({getpostid:this.state.postpageid,getpageid:''})}
             { this.exploredata() }
-        }, 5)
+        }, 1000)
     }
     exploredata(){
-        var json=JSON.stringify({"pageID":this.state.getpageid,"PostID":"0"});
+        var json=JSON.stringify({"pageID":this.state.getpageid,"PostID":this.state.getpostid});
         console.log('get json ',json,'type id ',this.state.gettypeid)
           fetch("http://162.250.120.20:444/Login/CommentGet",
             {
@@ -112,8 +113,6 @@ class Comments extends Component {
                 //alert(responseText);1
                 this.setState({comments: responseJson,loading:false,
                 commentCounts:responseJson[0].COUNTS})
-              
-
                 console.warn(responseJson)
             })
             .catch((error) => {
@@ -188,7 +187,29 @@ class Comments extends Component {
                 (comments.like) ? this.state.selectedItemLike.push(comments) : this.state.selectedItemLike.pop(comments);
                 console.log('selected item array ', this.state.selectedItemLike)
                 console.log("data.selected" + comments.like, 'id', comments.commentID);
-
+                this.setState({ loading: true })
+                var json = JSON.stringify({ "UserID": this.state.getuserid, "Post_Page_ID": this.state.postpageid,"TypeID":this.state.gettypeid });
+               console.log('value json ',json)
+                fetch("http://162.250.120.20:444/Login/LikesAdd",
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'content-type': 'application/json'
+                    },
+                    body: json
+                  }
+                )
+                  .then((response) => response.json())
+                  .then((responseJson) => {
+                    this.setState({ loading: false,customlike:!this.state.customlike });
+                    console.warn(responseJson);
+                    // console.log('like service called');
+                    { this.exploredata() }
+                  })
+                  .catch((error) => {
+                    console.warn(error);
+                  });
                 //   this.state.selectedItem.length!=0? this.setState({showlikeImg:true}):this.setState({showlikeImg:false});
 
                 // console.log("id"+id);
@@ -203,7 +224,7 @@ class Comments extends Component {
     }
     AllComments({ item,index }) {
             return (
-                <View style={styles.container}>
+                <View style={index==0?styles.selectedContainer:styles.container}>
                 <View style={styles.heading1}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('profileAbout')}>
                         <Image style={styles.image} source={{ uri: item.avatar!=""?item.avatar:null }} />
@@ -224,10 +245,11 @@ class Comments extends Component {
                                     {/* <Image
                                     source={imgSource}
                                 /> */}
-                                    {item.like == true ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
+                                    {item.like & this.state.customlike == true ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
 
                                     <Text style={styles.textPadding}>Like</Text>
                                 </View>
+                                <Text style={{color:'#707070',marginLeft:5,}}>{item.CommentLike!=0?item.CommentLike:null}</Text>
 
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.imgGap}
@@ -384,7 +406,8 @@ class Comments extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={(item,index)=>this.AllComments(item,index)} />
 
-                {height>this.scrollViewContent_height?
+                {/* {height>this.scrollViewContent_height? */}
+                {this.state.comments.length>3?
                         <TouchableOpacity onPress={()=>this.goToTop()} style={styles.loadBtn}>
                             <View style={styles.cmtBtnrow}>
                             <Text style={styles.prevCommentBtn}>Load Previous Comments</Text>
@@ -506,6 +529,18 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         marginBottom:10
     },
+    selectedContainer: {
+        paddingLeft: 19,
+        paddingRight: 16,
+        paddingVertical: 12,
+        borderTopRightRadius: 40,
+        borderBottomEndRadius: 40,
+        borderBottomLeftRadius: 40,
+        borderWidth: 1,
+        margin: 10,
+        borderColor:'#27A291',
+        borderWidth:2,
+    },
     cmtBtnrow:{
         flexDirection:'row',
         justifyContent:'space-around',
@@ -540,7 +575,9 @@ const styles = StyleSheet.create({
         borderBottomEndRadius: 40,
         borderBottomLeftRadius: 40,
         borderWidth: 1,
-        margin: 10
+        margin: 10,
+        borderColor:'#cccccc'
+
 
     },
     content: {

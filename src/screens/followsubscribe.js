@@ -283,7 +283,7 @@ exploredata(userid){
         }
         
       //  { this.getData()}
-        }, 3000);
+        }, 1000);
   
     console.log('undo state ',this.state.undo)
    

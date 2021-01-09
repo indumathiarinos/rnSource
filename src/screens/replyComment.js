@@ -112,11 +112,11 @@ class ReplyComments extends Component {
       }
     getData() {
         setTimeout(() => {
-            {this.state.gettypeid==4?this.setState({getpageid:this.state.postpageid,getpostid:''}):this.setState({getpostid:"0",getpageid:''})}
+            {this.state.gettypeid==4?this.setState({getpageid:this.state.postpageid,getpostid:''}):this.setState({getpostid:this.state.postpageid,getpageid:''})}
 
             { this.exploredata() }
            
-        }, 5)
+        }, 1000)
     }
     exploredata(){
         var json=JSON.stringify({"pageID":this.state.getpageid,"PostID":this.state.getpostid});
@@ -255,7 +255,7 @@ class ReplyComments extends Component {
 
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.imgGap}
-                                onPress={() => this.onPressHandler1(item.commentID)}
+                                // onPress={() => this.onPressHandler1(item)}
                             // onPress={() => this.setState({ replyImg: !this.state.replyImg })}
                             >
                                 <View style={styles.bottomReply}>
@@ -280,18 +280,23 @@ class ReplyComments extends Component {
           );
       }
     
-    onPressHandler1(commentID) {
+    onPressHandler1(item) {
         // let selected;
         let list = [...this.state.comments];
         for (let comments of list) {
-            if (comments.commentID == commentID) {
+            if (comments.commentID == item.commentID) {
 
                 comments.reply = (comments.reply == null) ? true : !comments.reply;
 
                 (comments.abc) ? this.state.selectedItemReply.push(comments) : this.state.selectedItemReply.pop(comments);
                 console.log('selected item array ', this.state.selectedItemReply)
                 console.log("data.selected" + comments.reply, 'id', comments.commentID);
-
+                // AsyncStorage.setItem('userComment',JSON.stringify(item));
+                // console.log('comment id and get async com id ',item+' ');
+                // // alert('reply comment ',item)
+                // AsyncStorage.getItem('userComment').then((value)=>console.log('async value is ',value)).done();
+                //   //   this.state.selectedItem.length!=0? this.setState({showlikeImg:true}):this.setState({showlikeImg:false});
+                //   this.props.navigation.navigate('replyComment');
                 //   this.state.selectedItem.length!=0? this.setState({showlikeImg:true}):this.setState({showlikeImg:false});
 
                 // console.log("id"+id);
@@ -304,6 +309,10 @@ class ReplyComments extends Component {
         // MultiselectItems.push(selectedItemArray);
         this.setState({ comments: list });
     }
+    goToTop = () => {
+        console.log('scrollview content height ',this.scrollViewContent_height,'normal height ',height)
+        this.scroll.scrollTo({x: 0, y: 0, animated: true});
+     }
     commentReplyAdd(){
         this.setState({loading:true})
         var json=JSON.stringify({
@@ -381,6 +390,8 @@ class ReplyComments extends Component {
 
                 {/* <View  style={styles.root}> */}
                 <ScrollView
+                 onContentSizeChange={(width, height) => { this.scrollViewContent_height = height }}
+                ref={(c)=>this.scroll=c}
                 // style={{marginBottom:'20%'}}
                 >
                     <Text style={styles.headline}>Comments</Text>
@@ -414,19 +425,16 @@ class ReplyComments extends Component {
                                 </View>
 
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.imgGap}
+                            {/* <TouchableOpacity style={styles.imgGap}
                                 onPress={() => this.onPressHandler1(item.commentID)}
-                            // onPress={() => this.setState({ replyImg: !this.state.replyImg })}
                             >
                                 <View style={styles.bottomReply}>
                                     {this.state.getComReply== true ? <Image source={require('../assets/img/commentcolor.png')} />:<Image source={require('../assets/img/comment1.png')} />}
 
-                                    {/* <Image
-                                    source={replyImg} /> */}
                                     <Text style={styles.textPadding}>Reply</Text>
                                 </View>
 
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                         <Text style={styles.time}>{this.state.date}</Text>
@@ -450,6 +458,15 @@ class ReplyComments extends Component {
                         }}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={(item,index)=>this.AllComments(item,index)} />
+                         {this.state.comments.length>2?
+                        <TouchableOpacity onPress={()=>this.goToTop()} style={styles.loadBtn}>
+                            <View style={styles.cmtBtnrow}>
+                            <Text style={styles.prevCommentBtn}>Load Previous Comments</Text>
+                            <Image style={{alignSelf:'center',}} source={require('../assets/img/comment1.png')} />
+
+                            </View>
+                        </TouchableOpacity>
+                        :null}
                 </ScrollView>
                 {/* </View> */}
                 {/* <View style={styles.bottomLine}> */}
@@ -498,6 +515,7 @@ class ReplyComments extends Component {
                        height: 140
                        }} />
                  </Modal>
+                
                 {/* </TouchableOpacity> */}
 
                 {/* <View style={styles.SectionStyle}>
@@ -570,7 +588,20 @@ const styles = StyleSheet.create({
         borderBottomEndRadius: 40,
         borderBottomLeftRadius: 40,
         borderWidth: 1,
-        margin: 30
+        margin: 30,
+        borderColor:'#cccccc'
+    },
+    cmtBtnrow:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+        width:width/1.7,height:height/20,
+       
+    },
+    prevCommentBtn:{
+        fontSize:15,
+        color:'#27A291',
+
     },
     selectedContainer: {
         paddingLeft: 19,
@@ -583,6 +614,21 @@ const styles = StyleSheet.create({
         margin: 10,
         borderColor:'#27A291',
         borderWidth:2,
+    },
+    loadBtn:{
+        backgroundColor:'#fff',
+        alignSelf:'center',
+        justifyContent:'center',
+        alignItems:'center',
+        borderRadius:15,
+        shadowColor: '#000',
+        backgroundColor: 'white',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 0},
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        marginBottom:10
     },
     replyContainer: {
         paddingRight: 19,

@@ -70,7 +70,7 @@ class SeriesViewBook extends Component {
       {this.exploredata(this.state.gettypeid,this.state.getpostid)}
       console.log('get postid in seriesview book page ',this.state.getpostid)
         // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 10)
+    }, 1000)
 }
 showModal = () => {
   console.log('enters')
@@ -83,7 +83,7 @@ showModal = () => {
           popupModal: false
       })
       //   this.props.changeRemove();
-  }, 5000);
+  }, 3000);
   console.log('modal state is ', this.state.popupModal)
 }
 CheckConnectivity(){    

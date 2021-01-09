@@ -67,7 +67,7 @@ class EditCollection extends Component {
             console.log('user id is  in edit coll ',this.state.getuserid,this.state.editColId)
             {this.getDetails(this.state.getuserid,this.state.editColId)}
             // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-        }, 3)
+        }, 1000)
     }
     CheckConnectivity1(){    
         NetInfo.fetch().then(state => {
@@ -206,7 +206,7 @@ class EditCollection extends Component {
                        
                 </View>
                 
-                <ScrollView>
+                <ScrollView style={{marginBottom:50}}>
                 <View style={{paddingLeft:'5%',paddingRight:'5%',flex:2}}>
                 
                 <Text style={styles.textTitle}>Collection Title</Text>

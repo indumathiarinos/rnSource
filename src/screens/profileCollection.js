@@ -61,8 +61,10 @@ class ProfileCollection extends Component {
     // {this.getData()}
     this.CheckConnectivity();
     this.focusListener = this.props.navigation.addListener('willFocus', () => {
-        this.CheckConnectivity();
-    })
+      AsyncStorage.getItem('profile_userid').then((val) => this.setState({ getuserid: val })).done();
+      AsyncStorage.getItem('userid').then((val) => this.setState({ loginUserid: val })).done();  
+      this.CheckConnectivity();
+    });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
     componentWillUnmount() {
@@ -89,7 +91,7 @@ class ProfileCollection extends Component {
     setTimeout(() => {
       {this.exploredata()}
       {this.exploredataCol(this.state.getuserid)}
-    }, 2000);
+    }, 1000);
   }
 exploredata(){
   var json=JSON.stringify({"UserID":this.state.getuserid,"View_UserID":this.state.loginUserid});

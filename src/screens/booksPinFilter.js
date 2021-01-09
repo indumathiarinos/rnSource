@@ -4,9 +4,7 @@ import {SafeAreaView,
   TouchableOpacity, PermissionsAndroid,Flatlist
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
-import img1 from '../assets/img/searchimg1.png';
-import img2 from '../assets/img/searchimg2.png';
-import img3 from '../assets/img/searchimg3.png';
+
 import { connect } from "react-redux";
 
 import Carousel from '@rhysforyou/react-native-carousel';
