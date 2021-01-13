@@ -127,7 +127,7 @@ class CreateCollection extends Component {
                 this.setState({backBtnActive:true})
             }
         }
-        backpress=()=>{ 
+        backpress=()=>{  
             console.log('goto sectionedit ',this.state.gotoSectionEdit);
 
             // if(this.state.gotoSectionEdit){
@@ -166,7 +166,8 @@ class CreateCollection extends Component {
                 <TextInput
                 textAlignVertical={'top'}
                 onChangeText={(text)=>this.setState({title:text})}
-                placeholder="Add a Title" style={{ textAlign:'center',fontSize:18,justifyContent:'center',height: 50,borderRadius:20,backgroundColor:'#F9F9F9',width:width/2  }} />
+                placeholderTextColor={'#CCCCCC'}
+                placeholder="Add Title" style={{ textAlign:'center',fontSize:16,justifyContent:'center',height: 50,borderRadius:20,backgroundColor:'#F9F9F9',width:width/2,fontFamily:'AzoSans-Regular'  }} />
 
                 </TouchableOpacity>
                 <Text style={styles.textTitle1}>Privacy</Text>
@@ -187,7 +188,7 @@ class CreateCollection extends Component {
                         onPress={this.changeLayout}>
                  <View>
                     {!this.state.expanded?<View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{color:'#707070',textAlign:'center',fontSize:18,width:width-120,}}>{this.state.dropdownText}</Text>
+                    <Text style={styles.dropdownText}>{this.state.dropdownText}</Text>
                     <Image 
                     source={require('../assets/img/dropdown.png')}/>
                     </View>:
@@ -197,7 +198,7 @@ class CreateCollection extends Component {
                         <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                     <Text 
                     onPress={()=>this.setState({dropdownText:'Public',expanded:!this.state.expanded})}
-                    style={{color:'#707070',fontSize:18,width:width-120,textAlign:'center'}}>Public</Text>
+                    style={styles.dropdownText}>Public</Text>
                     <Image 
                     style={{width:20}}
                     source={imgSource}/>
@@ -205,7 +206,7 @@ class CreateCollection extends Component {
                     <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',padding:'2%'}}>
                     <Text 
                     onPress={()=>this.setState({dropdownText:'Private',expanded:!this.state.expanded})}
-                    style={{color:'#707070',fontSize:18,width:width-120,textAlign:'center'}}>Private</Text>
+                    style={styles.dropdownText}>Private</Text>
                     <Image 
                     style={{width:20}}
                     source={imgSource1}/>
@@ -223,9 +224,9 @@ class CreateCollection extends Component {
                 </TouchableOpacity>
                 <View style={{flexDirection:'row',justifyContent:'center'}}>
                 <Text style={styles.descTextTitle}>Description</Text>
-                <Text style={{color:'#707070',fontSize:18,
+                <Text style={{color:'#707070',fontSize:16,
                         textAlign:'center',
-                        fontWeight:'bold',
+                        fontFamily:'AzoSans-Regular',
                         padding:'5%',
                         marginLeft:'-5%',
                         marginTop:'5%'
@@ -233,14 +234,15 @@ class CreateCollection extends Component {
                 </View>
                 <TextInput multiline textAlignVertical={'top'}
                     maxLength={250}
+                    placeholderTextColor={'#CCCCCC'}
                     placeholder="Add Description" 
                     onChangeText={(text)=>this.setState({descdata:text})}
-                    style={{ padding:'5%',textAlign: 'left' ,justifyContent:'center',height: 150,borderRadius:20,backgroundColor:'#F9F9F9' }} />
+                    style={{ padding:'5%',textAlign: 'left' ,justifyContent:'center',height: 150,borderRadius:20,backgroundColor:'#F9F9F9',fontSize:16,fontFamily:'AzoSans-Regular' }} />
                     {/* <Text 
                      style={styles.desctouchableBtn}
                     // style={{justifyContent:'center',color:'#CCCCCC',fontSize:18}}
                     >Add Title</Text> */}
-            <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%',}}>{this.state.descdata.length}/250</Text>
+            <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%',fontFamily:'AzoSans-Regular',fontSize:8,}}>{this.state.descdata.length}/250</Text>
                 {/* <Text style={{padding:'3%'}}>
                 It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
                 </Text> */}                                     
@@ -252,7 +254,7 @@ class CreateCollection extends Component {
                                   onPress={()=>this.CheckConnectivity()}>
               {/* onPress={()=>this.props.navigation.navigate('collection')}> */}
               <View style={{flexDirection:'row'}}>
-               <Text style={{color:'#707070',alignSelf:'center',textAlign:'right',fontSize:18,paddingRight:'2%'}}>Save</Text>
+               <Text style={{color:'#707070',alignSelf:'center',textAlign:'right',fontSize:16,fontFamily:'AzoSans-Regular',paddingRight:'2%'}}>Save</Text>
                <Image style={{width:30,height:30,alignSelf:'center'}} source={require('../assets/img/saveIcon.png')} />
                  
                </View>
@@ -334,40 +336,40 @@ touchableBtn1:{
          borderBottomColor:'#707070'
      
     },
+    dropdownText:{
+        color:'#707070',textAlign:'center',width:width-120, fontSize:16,
+        fontFamily:'AzoSans-Regular',
+    },
     heading:{
         width:width-50,
         paddingLeft:50,
         // backgroundColor:'pink',
         textAlign:'center',
-        fontSize:20,
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'Montserrat-Bold',
         color:'#27A291'
     },
     textTitle:{
-        fontSize:18,
         textAlign:'center',
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'AzoSans-Medium',
         padding:'5%',
     },
     textTitle1:{
-        fontSize:18,
         textAlign:'center',
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'AzoSans-Medium',
         padding:'5%',
         marginTop:'10%'
     },
     descTextTitle:{
-        fontSize:18,
         textAlign:'center',
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'AzoSans-Medium', 
         padding:'5%',
         marginTop:'5%'
     },
-    headerText: {
-        padding: '5%',
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
+   
     backgroundContainer: {
         position: 'absolute',
         top: 0,

@@ -22,14 +22,16 @@ class SubCollectionMerge extends Component {
         super(props)
         this.state = {
         list: [],
+        getuserid:'',
         selectedItemArray:[],
+        selectedSecid:'',
+        selectedIds:[],
         next:false,
         mergeFromId:'',
         mergeToId:'',
         mergeName:'',
         loading:true,
         // loading:true,
-        getuserid:'',
         sectionData:'',
         getColId:'',
         mergeModal:false,
@@ -82,7 +84,7 @@ class SubCollectionMerge extends Component {
           console.log("Is connected cheking?", state.isConnected);
       
           if(state.isConnected==true){
-            {this.mergeSection(this.state.mergeFromId,this.state.mergeToId)}
+            {this.mergeSection(this.state.mergeFromId,this.state.selectedSecid)}
         }else{
             alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
         }
@@ -97,12 +99,10 @@ class SubCollectionMerge extends Component {
     mergeSection(fromId,ToId) {
         this.setState({loading:true})
         var json = JSON.stringify(
-            {
-                "From_C_ID":fromId,
-                "To_C_ID":ToId,
-                "Action_for":"Section"
-            }
+            {"From_C_ID":"","To_C_ID":"","From_S_ID":ToId,"To_S_ID":fromId,"Action_for":"Section","UserID":this.state.getuserid}
+
         );
+        console.log('json ',json)
         fetch("http://162.250.120.20:444/Login/MergeCollection",
             {
                 method: 'POST',
@@ -148,28 +148,25 @@ class SubCollectionMerge extends Component {
     }
     onPressHandler(id) {
         // let selected;
-        // this.setState({list:list2})
-
-        // console.log('onpress list ',list2)
-        let sectionData=[...this.state.sectionData];
-        for(let data of sectionData){
-           if(data.SectionID==id){
-               this.setState({mergeToId:id,mergeName:data.Title})
-                
-            //  data.abc=(data.abc==null)?true:!data.abc;
-            
-            //  (data.abc)?this.state.selectedItemArray.push(data):this.state.selectedItemArray.pop(data);
-            // //  console.log('selected sub item array ',this.state.selectedItemArray)
-            // //   console.log("data.selected"+data.abc,'id',data.id);
-              
-            //   this.state.selectedItemArray.length!=0? this.setState({next:true}):this.setState({next:false});
-            
+         let sectionData=[...this.state.sectionData];
+         for(let data of sectionData){
+            if(data.SectionID==id){
+            // this.setState({selectedColid:id,deletedName:data.Title})
+            // console.log('id ',this.state.selectedColid)
+            //uncommented====
+             data.abc=(data.abc==null)?true:!data.abc;
+             (data.abc)?this.state.selectedItemArray.push(data.Title):this.state.selectedItemArray.pop(data.Title);
+             (data.abc)?this.state.selectedIds.push(data.SectionID):this.state.selectedIds.pop(data.SectionID);
+             console.log('selected item array ',this.state.selectedItemArray);
+             console.log('selected item array ',this.state.selectedIds)
+             let ids= this.state.selectedIds.join(',');
+             let names = this.state.selectedItemArray.join(',');
+             console.log(ids+""+names+"");
+             this.setState({next:this.state.selectedItemArray.length>0?true:false,mergeName:names,selectedSecid:ids})
              break;
            }
          }
-         this.setState({sectionData})
-
-        //  this.setState({list:this.state.list});
+         this.setState({sectionData});
        }
        exploredata(collectionId){
         var json=JSON.stringify({
@@ -222,7 +219,6 @@ class SubCollectionMerge extends Component {
 
     renderItem_card({ item }) {
         // const value = item;
-      
         return (
             <View style={{
                 // flex:1,
@@ -232,10 +228,9 @@ class SubCollectionMerge extends Component {
                 // borderWidth:0.5,
                 // borderColor:'#ccccccc'
             }}>
-
                 <TouchableOpacity
                 style={styles.button}
-                    onPress={() => this.onPressHandler(item.SectionID)}>
+                   onPress={() => this.onPressHandler(item.SectionID)}>
                     {/* <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
@@ -250,28 +245,26 @@ class SubCollectionMerge extends Component {
                     </View> */}
       
                 {/* three grids images */}
-
-                {/* {item.SectionID==0? 
-                <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
+                {item.SectionID==0? <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
                     //  onPress={()=>this.press(item)}
                     >
-                        <Image style={{ width: '95%', elevation: 2, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
+                        <Image style={{ width: '95%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10,borderTopRightRadius:10,borderBottomRightRadius:10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                            
-                    </View>: */}
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+                    </View>:
+                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',borderRadius:10 }}
                     >
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                        <Image style={{ width: '75%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                            <View >
+                        <View style={{ flex:1, flexDirection: 'column',  borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                  <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
                                 <ImageBackground
-                                                                imageStyle={{ borderTopRightRadius: 10}}
-
+                                imageStyle={{borderTopRightRadius:10}}
                                     style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                     source={{ uri: item.Image2!=""?item.Image2:null}} >
-                         {this.state.mergeToId==item.SectionID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
-                                        </ImageBackground>
+                        {item.abc==true?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
+  
+                                </ImageBackground>
                             </View>
                             <View>
                                 <Image
@@ -280,26 +273,27 @@ class SubCollectionMerge extends Component {
                             </View>
                         </View>
                     </View>
-                  {/* } */}
-                 {/* {item.SectionID==0?
+                  }
+                  </TouchableOpacity>
+                    <TouchableOpacity
+                   onPress={() => this.onPressHandler(item.SectionID)}>
+                 {item.SectionID==0?
                   <View style={{ padding: '2%', margin: '1%' }}>
                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Page_Post_Title}</Text>
                         <Text style={{ color: '#707070' }}>{item.Author}</Text>
                     </View>
-                 : */}
-                 </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => this.onPressHandler(item.SectionID)}>
-                   <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-                        <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
-                        <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
-                    </View>
-                    {/* } */}
+                 :
+                 <View style={{ padding: '2%', margin: '1%' }}>
+                 <Text numberOfLines={2}style={{ fontSize: 16, fontFamily: 'AzoSans-Medium' }}>{item.Title}</Text>
+                     <Text style={{ color: '#707070',fontSize: 12, fontFamily: 'AzoSans-Light'  }}>{item.PublicationCount} publications</Text>
+                     <Text style={{ color: '#707070',fontSize: 12, fontFamily: 'AzoSans-Light'  }}>{item.PageCount} pages</Text>
+                 </View>}
                 </TouchableOpacity>
             </View>
         )
-    }
+      }
+
+
     mergeFunc=()=>{
         // this.props.changeRemove2();
         // AsyncStorage.setItem('removePopup', true);
@@ -318,7 +312,7 @@ class SubCollectionMerge extends Component {
 
                 <View style={{height:'8%',backgroundColor:'#27A291',justifyContent:'center'}}>
                 {/* {value=='mergeCollection'?   */}
-                <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection(s) to Merge</Text>
+                <Text style={{color:'white',fontFamily:'Montserrat-Bold',fontSize:16,textAlign:'center'}}>Select Section(s) to Merge</Text>
                     {/* : value=='EditCollection1'? <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection to Edit</Text>:<Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection to Remove</Text> */}
                 {/* } */}
                 </View>
@@ -340,16 +334,16 @@ class SubCollectionMerge extends Component {
                 <View style={styles.bottomLine}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around',alignItems:'center' }}>
                         <TouchableOpacity style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}}
-                              onPress={() =>    this.props.navigation.goBack()
+                              onPress={() => this.state.selectedSecid==""? this.props.navigation.goBack():null
                                 // this.props.navigation.navigate('mergeSection')
                               }>
-                              <Text style={[this.state.mergeToId==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
+                              <Text style={[this.state.selectedSecid==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
   
                           </TouchableOpacity>
-                          <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.mergeToId!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
+                          <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedSecid!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                           <TouchableOpacity 
-                              onPress={() =>this.showModal1()}>
-                              <Text style={[this.state.mergeToId!=""?styles.inacitveColor:styles.inacitveStyle]}>Next</Text>
+                              onPress={() =>this.state.selectedSecid!=""? this.showModal1():null}>
+                              <Text style={[this.state.selectedSecid!=""?styles.inacitveColor:styles.inacitveStyle]}>Merge</Text>
                           </TouchableOpacity>
                         </LinearGradient>
                     </View>
@@ -363,11 +357,11 @@ class SubCollectionMerge extends Component {
                             justifyContent: 'center',
                             backgroundColor: '#27A291',
                         }}>
-                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeFromName} - {this.state.mergeName} </Text>
+                            <Text style={{ color: '#fff', fontSize: 16,fontFamily:'AzoSans-Bold', textAlign: 'center',margin:5 }}>Merged - {this.state.mergeFromName} - {this.state.mergeName} </Text>
                             <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%',padding:'2%' }}
                             onPress={()=>this.setState({undo:true})}
                             >
-                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                                <Text style={{ fontSize: 12,fontFamily:'AzoSans-Regular', color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
                             </TouchableOpacity>
                         </View>}
                         />
@@ -386,13 +380,13 @@ class SubCollectionMerge extends Component {
 }
 const styles = StyleSheet.create({
     textStyle:{ 
-        color: 'black', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#707070', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     inacitveStyle:{ 
-        color: '#c2c2c2', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#cccccc', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular',paddingLeft: '4%'
     },
     inacitveColor:{ 
-        color: '#fff', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#fff', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     bottomLine: {
 

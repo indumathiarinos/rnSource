@@ -185,7 +185,7 @@ class Collection extends Component {
             });
     }
     exploredata_Pic(userid) {
-        this.setState({ loading: true })
+        // this.setState({ loading: true })
         var json = JSON.stringify({
             'userid': userid
         });
@@ -486,7 +486,7 @@ class Collection extends Component {
 
                 </ScrollView >
                 <FloatingAction
-                    style={{ color: '#27A291' }}
+                    style={{ color: '#27A291',fontSize:10,fontFamily:'AzoSans-Regular' }}
                     position={'right'}
                     //    tintColor={'#27A291'}
                     distanceToEdge={50}

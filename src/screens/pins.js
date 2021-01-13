@@ -452,7 +452,7 @@ class Pins extends Component {
                     />
                      <View style={styles.overlay}/>
                     <View style={{position:'absolute',top:70,alignItems:'center',width:width,justifyContent:'center',}}>
-                <Text style={{ textAlign: 'center', color:'#fff', fontWeight: 'bold', fontSize: 18 }}>Pins</Text>
+                <Text style={{ textAlign: 'center', color:'#fff', fontFamily: 'AzoSans-Bold', fontSize: 24 }}>Pins</Text>
 
                 </View>
                     <FlatList

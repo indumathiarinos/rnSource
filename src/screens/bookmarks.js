@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { View,SafeAreaView,AsyncStorage,ImageBackground,FlatList,Modal, RefreshControl,BackHandler, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import { connect } from "react-redux";
 // import ReadMore from 'react-native-read-more-text';
-import ReadMore from './Readmore';
-import ReadMoreText from 'react-native-read-more-text';
+import ReadMoreText from './Readmore';
+// import ReadMoreText from 'react-native-read-more-text';
 import BlurModal from '../components/blurModal';
 import Modal1 from "react-native-modal";
 import LinearGradient from 'react-native-linear-gradient';
@@ -403,7 +403,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
           <Text style={{fontSize:16,fontFamily:'Montserrat-Bold'}}>{item.Titel}</Text>
           </View>
      <TouchableOpacity onPress={()=>this.removeItem(item)}>
-     <Image style={{width:50,height:50}} source={require('../assets/img/trashicon.png')} />
+     <Image style={{width:40,height:40}} source={require('../assets/img/trashicon.png')} />
 
            </TouchableOpacity>
                        </View>
@@ -560,19 +560,19 @@ _renderTruncatedFooter = (handlePress,index,item) => {
             height:'10%', 
             alignItems:'center',
             justifyContent:'center',
-            backgroundColor: 'red',
+            backgroundColor: '#E74C3C',
   }}>
          
          <View style={{flexDirection:'row',justifyContent:'center'}}>
-                <Text style={{color:'#fff',fontSize:18,textAlign:'center',}} >Removed - </Text>
-                <Text numberOfLines={2} style={{color:'#fff',fontSize:18,textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
+                <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Bold',textAlign:'center',}} >Removed - </Text>
+                <Text numberOfLines={2} style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Medium',textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
   
               </View>         
            
           <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
-          onPress={()=> this.setState({undo:true})}
+          onPress={()=>this.undoFunc()}
           >
-              <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
+              <Text style={{fontSize: 16,fontFamily:'AzoSans-Regular',color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
            </TouchableOpacity>
             
             </View>}
@@ -624,11 +624,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute'
 },
-headerText: {
-  padding: '5%',
-  fontSize: 16,
-  fontWeight: 'bold'
-},
+
 staticheader: {
   // paddingRight:'2%',
   flexDirection: 'row',
@@ -640,11 +636,17 @@ staticheader: {
   borderBottomColor:'#707070'
 
 },
-activeText:{
+activeText: {
   padding: '5%',
-  fontSize: 16,
+  fontSize: 14,
   color: 'white',
-  fontWeight: 'bold'
+  fontFamily: 'AzoSans-Medium'
+},
+headerText: {
+  padding: '5%',
+  fontSize: 14,
+  color:'#707070',
+  fontFamily:'AzoSans-Medium'
 },
 tabsss: {
   alignItems: 'center', 

@@ -1271,7 +1271,7 @@ render() {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    style={{ backgroundColor: '#fa376b',padding:'3%'}}
+                    style={{ backgroundColor:index%2==0?'#1C4A7E':'#C65135',padding:'3%'}}
                     cornerRadius={10}>
                          <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                          <Image
@@ -1670,7 +1670,7 @@ autoplay={false}
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                  <Image source={require('../assets/img/colliconnew1.png')} />
+                  <Image source={require('../assets/img/coll_white1.png')} />
                         <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 2.9   }}>Collections</Text>
                       </View>
                       <TouchableOpacity

@@ -251,11 +251,11 @@ export default class EditCollection extends Component {
         </TouchableOpacity>
         <TouchableOpacity
   onPress={() => this.onPressHandler(item.collectionsID)}>  
-        <View style={{ padding: '2%', margin: '1%' }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-            <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
-            <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
-        </View>
+       <View style={{ padding: '2%', margin: '1%' }}>
+                    <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', }}>{item.Title}</Text>
+                        <Text style={{ color: '#707070',fontSize: 12,fontFamily:'AzoSans-Light', }}>{item.PublicationCount} publications</Text>
+                        <Text style={{ color: '#707070',fontSize: 12,fontFamily:'AzoSans-Light', }}>{item.PageCount} pages</Text>
+                    </View>
     </TouchableOpacity>
 </View>
  
@@ -275,7 +275,7 @@ export default class EditCollection extends Component {
             <SafeAreaView style={{ flex: 2, backgroundColor: '#ffff' }}>
 
                 <View style={{height:'8%',backgroundColor:'#27A291',justifyContent:'center'}}>
-               <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection to Edit</Text>
+               <Text style={{color:'white',fontFamily:'Montserrat-Bold',fontSize:16,textAlign:'center'}}>Select Collection to Edit</Text>
                 </View>
                 <ScrollView style={{marginBottom:'10%'}}>
 
@@ -326,13 +326,13 @@ export default class EditCollection extends Component {
 }
 const styles = StyleSheet.create({
     textStyle:{ 
-        color: 'black', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#707070', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     inacitveStyle:{ 
-        color: '#c2c2c2', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#cccccc', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular',paddingLeft: '4%'
     },
     inacitveColor:{ 
-        color: '#fff', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#fff', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     bottomLine: {
 

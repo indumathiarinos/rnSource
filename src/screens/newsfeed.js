@@ -228,7 +228,9 @@ closeLoginPopup(){
     this.setState({ loading: true })
     var json = JSON.stringify({
       // 'UserId': userid,
-      "PagingCount": this.pageCountVal
+      "PagingCount": this.pageCountVal,
+      "UserID":this.state.getuserid
+
     });
     console.log('pagefeed passing data value is ', json)
     fetch("http://162.250.120.20:444/Login/PageFeed",
@@ -452,9 +454,9 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
     for (let data of feeding) {
       if (data.Post_Page_Id == id) {
 
-        data.isSelect = (data.isSelect == null) ? true : !data.isSelect;
-        (data.isSelect) ? this.state.selectedItemArray.push(data) : this.state.selectedItemArray.pop(data);
-        console.log('sel item array ', this.state.selectedItemArray);
+    //     data.isSelect = (data.isSelect == null) ? true : !data.isSelect;
+    //     (data.isSelect) ? this.state.selectedItemArray.push(data) : this.state.selectedItemArray.pop(data);
+    //     console.log('sel item array ', this.state.selectedItemArray);
         this.setState({ loading: true })
         var json = JSON.stringify({ "UserID": this.state.getuserid, "Post_Page_ID": id,"TypeID":data.TypeID });
         fetch("http://162.250.120.20:444/Login/LikesAdd",
@@ -469,8 +471,13 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
         )
           .then((response) => response.json())
           .then((responseJson) => {
+         if(responseJson[0].msg=="Success"){
+           data.Likestatus=responseJson[0].Message=='Like'?'Y':'N';
+           data.likescount=responseJson[0].Message=='Like'?Number(data.likescount)+1:Number(data.likescount)-1;
+
             this.setState({ loading: false,customlikeCount:!this.state.customlikeCount });
             console.warn(responseJson);
+         }
             // console.log('like service called');
             // { this.exploredata() }
           })
@@ -942,7 +949,7 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
           />
         </TouchableOpacity>
 
-        <View style={{ backgroundColor: '#F9F9F9', paddingLeft: '5%', paddingRight: '5%', paddingTop: '2%', paddingBottom: '2%' }}>
+        <View style={{ backgroundColor: '#F9F9F9', paddingLeft: '5%', paddingRight: '5%', paddingTop: '2%',  }}>
           <ReadMore
                   numberOfLines={item.DescriptionContent.length<200?1:3}
                   renderTruncatedFooter={(handlePress1,index)=>this._renderTruncatedFooter(handlePress1,index,item)}
@@ -954,17 +961,19 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
                 </ReadMore>
                </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', }}>
+            <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '1%',paddingBottom:0, }}>
           <TouchableOpacity
-            style={{ padding: '3%' }}
+            // style={{ padding: '3%' }}
             onPress={() => {this.state.explore_page=='0'?
               this.likeClick(item.Post_Page_Id):this.alertPopup()
               // this.selectItem(item)
             }}
           >
-            <View>
-              {item.isSelect && this.state.customlikeCount ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
-              <Text style={{ color: item.isSelect ? '#27A291' : '#707070', fontSize: 10,textAlign:'center' }}>{this.state.customlikeCount?Number(item.likescount)+1:item.likescount}</Text>
+            <View styles={{backgroundColor:'pink'}}>
+              {
+              item.Likestatus=='Y'
+               ? <Image style={{width:10,height:10,margin:2}} source={require('../assets/img/like.png')} /> : <Image  style={styles.group} source={require('../assets/img/like-icon.png')} />}
+              <Text style={{ color: item.Likestatus=='Y' ? '#27A291' : '#707070', fontSize: 10,textAlign:'center' }}>{item.likescount}</Text>
             </View>
             {/* <Image
               source={imgSource}
@@ -975,28 +984,29 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
             onPress={()=>this.setState({showlikeImg:!this.state.showlikeImg})}  
            source={imgSource}/> */}
           <TouchableOpacity
-            style={{ padding: '3%' }}
+            // style={{ padding: '3%' }}
             onPress={() => {this.state.explore_page=='0'?
               this.commentClick(item):this.alertPopup()
             }}>
             <Image
-              source={require('../assets/img/comment1.png')} />
+             style={styles.group} source={require('../assets/img/comments-icon.png')} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ padding: '3%' }}
+            // style={{ padding: '3%' }}
             // onPress={() => this.refs.modal4.open()} 
             onPress={() =>{this.state.explore_page=='0'? this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon",exists:item.Readstatus=="N"?false:true }):this.alertPopup()}}
             // onPress={() =>this.props.navigation.navigate('createCollection')} 
           >
-            <Image source={require('../assets/img/plus.png')} />
+            <Image style={styles.group} source={require('../assets/img/add-to-icon.png')} />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ padding: '3%' }} onPress={() =>
+            // style={{ padding: '3%' }}
+             onPress={() =>
               {this.state.explore_page=='0'?
               this.sharepress(item.Post_Page_Id):this.alertPopup()}
               // this.refs.modal6.open()
             } >
-            <Image source={require('../assets/img/share.png')} />
+            <Image  style={styles.group} source={require('../assets/img/share-icon.png')} />
           </TouchableOpacity>
         </View>
         {/* :null} */}
@@ -1173,7 +1183,7 @@ style={{marginBottom:'10%'}}
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                       <Image  source={require('../assets/img/colliconnew1.png')} />
+                  <Image source={require('../assets/img/coll_white1.png')} />
                       <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
 
                       </View>
@@ -1415,6 +1425,10 @@ container: {
     flex: 1,
     backgroundColor: '#fff',
 
+  },
+  group:{
+    width:40,
+    height:40
   },
 
   userImg:{

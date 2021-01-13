@@ -406,9 +406,10 @@ render() {
 
         <SafeAreaView style={{ flex: 2, backgroundColor: '#ffff' }}>
 
-            <View style={{height:'8%',backgroundColor:'red',justifyContent:'center'}}>
-                <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Pin(s) to Remove</Text>
-            </View>
+<View style={{height:'8%',backgroundColor:'#E74C3C',justifyContent:'center'}}>
+                      <Text style={{color:'white',  fontSize:16,
+        fontFamily:'Montserrat-Bold',textAlign:'center'}}>Select Pin(s) to Remove</Text>
+                  </View>
             <ScrollView style={{marginBottom:'14%'}}>
 
 
@@ -453,7 +454,7 @@ render() {
                             height: '10%',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'red',
+                            backgroundColor: '#E74C3C',
                         }}>
                             <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed {this.state.selectedItemArray.length>1?"Pins":"Pin"} - {this.state.deletedName} </Text>
 

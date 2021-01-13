@@ -217,7 +217,8 @@ renderItem_card({ item }) {
           // alignItems:'center',alignSelf:"center",justifyContent:'center'
            }}>
               <View style={{ width: width / 3-20, height: height / 5.2, flex:1,alignItems: 'center', justifyContent: 'center' }}>
-                  <Text numberOfLines={5} style={{width: width / 3 - 30,textAlign:'center',marginTop:5,marginBottom:5,alignSelf:'center'}}>{item.description}</Text>
+                  <Text numberOfLines={5} style={{width: width / 3 - 30,textAlign:'center',marginTop:5,marginBottom:5,alignSelf:'center', fontSize: 12,
+                  fontFamily:'AzoSans-Italic',}}>{item.description}</Text>
               </View>
 {/* <View style={{ marginLeft:10,marginRight:10,  alignItems: 'center', justifyContent: 'center' }}>
                   <Text>{item.description}</Text>
@@ -286,9 +287,9 @@ renderItem_card({ item }) {
               onPress={this.headerBtnClk}>
               <Text style={{
                 padding: '5%',
-                fontSize: 16,
+                fontSize: 14,
+                fontFamily:'AzoSans-Medium',
                 color: 'white',
-                fontWeight: 'bold'
               }}
                 // onPress={() => this.props.navigation.navigate('books_pin')}
               >Pins</Text>
@@ -297,7 +298,7 @@ renderItem_card({ item }) {
             {/* </View> */}
             {/* </View> */}
           </View>
-          <TouchableOpacity onPress={() => this.backpress()}>
+          <TouchableOpacity style={{ margin: 5 }} onPress={() => this.backpress()}>
             <Image source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
@@ -456,8 +457,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     padding: '5%',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    fontFamily:'AzoSans-Medium',
   },
   rectangle: {
     width: 150,

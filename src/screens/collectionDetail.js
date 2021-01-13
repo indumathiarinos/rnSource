@@ -589,8 +589,9 @@ readsItems({ item }) {
         justifyContent: 'space-between'
       }}>
         <View style={{ flexDirection: 'column',width:width/1.8-40, }}>
-          <Text numberOfLines={2} style={{ fontSize: 18, color: '#000' }}>{item.Page_Post_Title}</Text>
-          <Text style={{ color: '#707070' }}>{item.Author}</Text>
+          <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000' }}>{item.Page_Post_Title}</Text>
+          <Text style={{ color: '#707070',fontFamily:'AzoSans-Light',fontSize:12
+         }}>{item.Author}</Text>
         </View>
         {/* <Image source={item.img} /> */}
         <TouchableOpacity
@@ -717,7 +718,7 @@ readsItems({ item }) {
                     />
                     {this.state.readsData.length>0?
                     <View style={{alignItems:'center'}}>
-                    <Text style={{color:'#000',width:width-40,textAlign:'left',margin:'2%',fontSize: 24,fontFamily: 'Montserrat'}}>Reads</Text>
+                    <Text style={{color:'#000',width:width-40,textAlign:'left',margin:'2%',fontSize: 24,fontFamily: 'Montserrat-Medium'}}>Reads</Text>
                     <View style={{width:width-40,height:1,backgroundColor:'#27A291'}}/>
                     </View>:null}
                     <FlatList
@@ -731,8 +732,8 @@ readsItems({ item }) {
           />
                 </ScrollView>
                      <FloatingAction
-                       style={{color:'#24D4BC'}}
-                       position={'right'}
+                    style={{ color: '#27A291',fontSize:10,fontFamily:'AzoSans-Regular' }}
+                    position={'right'}
                        distanceToEdge={50}
                         ref={(ref) => { this.floatingAction = ref; }}
                         actions={this.state.actions}

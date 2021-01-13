@@ -15,6 +15,7 @@ class CommentsLike extends Component {
   constructor(props){
     super(props)
   this.state = {
+    commentsLike:[],
     list: [
       {
         id: 0,
@@ -77,13 +78,41 @@ class CommentsLike extends Component {
         title: "Honey Bee",
       }
     ],
+    commentId:''
     
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
-ccomponentDidMount() {
-  // {this.exploredata()}
+exploredata(){
+  var json=JSON.stringify({
+    // "C_ID":this.state.commentId,
+    "C_ID":"48",
+    "R_ID":""});
+  console.log('get json ',json)
+    fetch("http://162.250.120.20:444/Login/CommentLikeView",
+      {
+          method: 'POST',
+          headers:  {
+              'Accept': 'application/json',
+              'content-type': 'application/json'
+          },
+          body: json
+      }
+  )
+      .then((response) => response.json())
+      .then((responseJson) => {
+          //alert(responseText);1
+          this.setState({commentsLike: responseJson,loading:false})
+          console.warn(responseJson)
+      })
+      .catch((error) => {
+          console.warn(error);
+      });
+}
+componentDidMount() {
+  AsyncStorage.getItem('commentId').then((val)=>this.setState({commentId:val})).done();
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  this.getData();
 }
 componentWillUnmount() {
   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -93,33 +122,10 @@ handleBackButtonClick() {
   return true;
 } 
 
-
-exploredata(){
-  var json=JSON.stringify({
-    'UserId': '2',
-    });
-    fetch("http://162.250.120.20:444/Login/FollowerSubscribed",
-      {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'content-type': 'application/json'
-          },
-          body: json
-      }
-  )
-      .then((response) => response.json())
-      .then((responseJson) => {
-          //alert(responseText);
-          this.setState({follows: responseJson,loading:false})
-          console.warn(responseJson)
-          console.warn("followersubs")
-
-          //alert(this.state.data.status)  
-      })
-      .catch((error) => {
-          console.warn(error);
-      });
+getData(){
+  setTimeout(() => {
+    {this.exploredata()}
+  }, 1000);
 }
 
 backpress=()=>{
@@ -131,10 +137,10 @@ backpress=()=>{
 renderCard({ item }) {
 return (
   <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', margin: '2%', }}>
-   <Image style={{width:50,height:50,borderRadius:50/2,padding:'2%'}} source={require('../assets/img/user.png')}/>
+   <Image style={{width:40,height:40,borderRadius:20,marginRight:16}} source={{uri:item.avatar}}/>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between',alignItems:'center', paddingLeft: '5%', paddingRight: '2%', flex: 1, }}>
-      <Text style={{ textAlign: 'left', fontSize: 16, fontWeight: 'bold',marginTop:'-2%' }}
-      >{item.title}</Text>
+      <Text style={{ textAlign: 'left', fontSize: 14, fontFamily: 'Montserrat-Bold',marginTop:'-2%' }}
+      >{item.username}</Text>
     </View>
   </View>
 )
@@ -146,7 +152,7 @@ return (
      <View style={{ height: '7%',flexDirection:'row',backgroundColor: '#ffff',elevation:1,justifyContent:'space-between',alignItems:'center'  }}>
       <TouchableOpacity style={{marginLeft:'5%'}} >
         <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
-        <Text style={{color:'#27A291',fontSize:18,marginRight:'4%'}}>367 Likes</Text>
+        <Text style={{color:'#27A291',fontSize:16,fontFamily:'AzoSans-Regular',marginRight:'4%'}}>{this.state.commentsLike.length} Likes</Text>
         <Image source={require('../assets/img/like.png')}/>
         </View>
       </TouchableOpacity>
@@ -154,7 +160,7 @@ return (
       style={{justifyContent:'center',paddingRight:'3%'}}
       onPress={()=>this.backpress()}
       >
-      <Image style={{marginTop:'5%',}} source={require('../assets/img/close.png')}/>
+      <Image style={{margin:17}} source={require('../assets/img/close.png')}/>
       </TouchableOpacity>
 
   </View>
@@ -162,7 +168,7 @@ return (
 
     <ScrollView style={{ flex: 1,backgroundColor:'#ffff' }}>
       <FlatList
-        data={this.state.list}
+        data={this.state.commentsLike}
         navigation={this.props.navigation}
         renderItem={this.renderCard.bind(this)}
         style={{ margin: '2%' }}

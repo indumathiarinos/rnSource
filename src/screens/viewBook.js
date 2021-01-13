@@ -278,16 +278,18 @@ class ViewBook extends Component {
   _renderTruncatedFooter = (handlePress) => {
     return (
       <View 
-      style={{ marginTop: '-5%' }}>
+      // style={{ marginTop: '-5%' }}
+      >
         <TouchableOpacity
         // onPress={() => !this.state.hidePic?this.setState({ hidePic: true}):this.setState({hidePic:false})}
         >
-          <Text style={{
-            color: '#27A291',
-            alignSelf: "flex-end",
-            textDecorationLine: 'underline',
-            backgroundColor: '#fff'
-          }} onPress={handlePress}>
+          <Text 
+            style={{
+              color: '#27A291',
+              alignSelf: "flex-end",
+              textDecorationLine: 'underline',
+            }}
+           onPress={handlePress}>
             Read more
           </Text>
         </TouchableOpacity>
@@ -403,6 +405,7 @@ class ViewBook extends Component {
           post_translator: responseJson[0].post_translator,
           isbn: responseJson[0].post_isbn_years,
           exists:responseJson[0].Readstatus=='N'?false:true,
+          likeStatus:responseJson[0].Likestatus
           // visible:this.state.Is_Follow=="Follow"?false:true
         })
         //  Title: "SNOW WHITE AND THE SEVEN DWARF"
@@ -741,7 +744,7 @@ class ViewBook extends Component {
           .then((responseJson) => {
             this.setState({ loading: false,});
             console.warn(responseJson);
-            this.setState({ likeStatus:responseJson[0].Message=='Unlike'?false:true })
+            // this.setState({ likeStatus:responseJson[0].Message=='Unlike'?false:true })
             // console.log('like service called');
             { this.exploredata(this.state.gettypeid,this.state.getpostid) }
           })
@@ -801,7 +804,7 @@ class ViewBook extends Component {
                   padding: '5%',
                   fontSize: 16,
                   color: 'white',
-                  fontWeight: 'bold'
+                  fontFamily:'AzoSans-Medium'
                 }}
                   onPress={() => this.props.navigation.navigate('viewBook')}
                 >Description</Text>
@@ -827,13 +830,13 @@ class ViewBook extends Component {
             {/* </View> */}
             {/* </View> */}
           </View>
-          <TouchableOpacity style={{ padding: '3%', marginRight: '3%' }} onPress={() => this.backpress()}>
+          <TouchableOpacity style={{ margin: 14 }} onPress={() => this.backpress()}>
             <Image source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
         {/* <View style={styles.header}>
 </View> */}
-        <ScrollView style={{ marginBottom: '8%' }}>
+        <ScrollView >
           <View style={styles.containerStyle} >
             <ImageBackground style={styles.sliderContainerStyle}
               source={{ uri: this.state.img == "" ? null : this.state.img }}
@@ -868,7 +871,7 @@ class ViewBook extends Component {
           <View style={styles.body}>
             <View style={styles.bodyContent}>
               <Text style={styles.name}>{this.state.title}</Text>
-            {
+            {/* {
               this.state.content.length<100?
               (<ReadMore1
                 numberOfLines={3}
@@ -892,10 +895,44 @@ class ViewBook extends Component {
                 {this.state.content}
               </Text>
             </ReadMore>)
-            }
+            } */}
+           {this.state.content.length>408?<ReadMore
+              numberOfLines={5}
+              renderTruncatedFooter={this._renderTruncatedFooter}
+              renderRevealedFooter={this._renderRevealedFooter}
+              onReady={this._handleTextReady}>
+              <Text
+                numberOfLines={5}
+                style={styles.description}>
+                {this.state.content}
+              </Text>
+            </ReadMore>
+            :
+            <View>
+            <Text
+            numberOfLines={5}
+            style={styles.description}>
+            {this.state.content}
+          </Text>
+            {this.state.content.length>0?
+              <TouchableOpacity
+             onPress={() => this.props.navigation.navigate('report')}>
+               <View style={{flexDirection: 'row',width:width-40,margin:'1%',marginTop:14,
+               padding: '0.5%'}}>
+               <Image style={{ marginRight: '2%',marginTop:'2%' }} source={require('../assets/img/flag.png')} />
+               <Text style={[styles.text1,{fontSize:14}]}>Report</Text>
+             </View>
+             </TouchableOpacity>:null}
+             </View>
+          }
+         
+            {/* <TouchableOpacity onPress={()=>console.log('get lenth ',this.state.content.length)}>
+              <Text>get length</Text>
+            </TouchableOpacity> */}
               
               {/* {this.state.content.length>100?
     <ReadMore
+
       numberOfLines={3}
       renderTruncatedFooter={this._renderTruncatedFooter}
       renderRevealedFooter={this._renderRevealedFooter}
@@ -977,15 +1014,14 @@ onPress={() => this.props.navigation.navigate('report')}>
                 </TouchableOpacity>
               </LinearGradient>
               {!this.state.downloadState ?
-                (<View style={{ marginTop: '2%', }}>
+                (
                   <View
-                    style={{ margin: 10, }}
                   // style={{backgroundColor:'pink',}}
                   >
                     {/* <View style={{flexDirection:'column',backgroundColor:'pink'}}> */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                       <View style={styles.info1}>
-                        <Image style={{ marginRight: '4%', }} source={require('../assets/img/eye.png')} />
+                        <Image style={{ marginRight: '4%',marginTop:3 }} source={require('../assets/img/eye.png')} />
                         <Text style={styles.text1}> {this.state.totalviews}</Text>
                       </View>
                       <View style={styles.info2}>
@@ -1003,8 +1039,8 @@ onPress={() => this.props.navigation.navigate('report')}>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                       <View style={styles.info1}>
-                        <Text style={styles.text1}>Copy Rights : </Text>
-                        <Text numberOfLines={2} style={[styles.text1, { width: width / 4 }]}>{this.state.copyrights}</Text>
+                        {/* <Text style={styles.text1}> </Text> */}
+                        <Text numberOfLines={1} style={[styles.text1]}>{this.state.copyrights}</Text>
                         {/* <Image source={require('../assets/img/open-book.png')} /> */}
                       </View>
                       <View style={styles.info2}>
@@ -1031,16 +1067,16 @@ onPress={() => this.props.navigation.navigate('report')}>
               <Text style={{ fontSize: 15, textAlign: 'left', }}>Joe Wong</Text>
             </View>
           </View>)} */}
-                  </View>
                   {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems:'center'}}> */}
 
                   <View style={styles.logoContainer}>
 
-                    <TouchableOpacity style={{ marginLeft: 10 }}
+                    <TouchableOpacity 
                       onPress={() => { this.state.explore_page == '0' ? this.goToAuthorProfile() : this.alertPopup() }}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Image style={{ width: 30, height: 30, borderRadius: 30 / 2 }} source={{ uri: this.state.user_img != "" ? this.state.user_img : null }} />
-                        <Text style={styles.text2}>{this.state.author}</Text>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                    width:width/2,}}>
+                        <Image style={{ width: 40, height: 40, borderRadius: 40 / 2 }} source={{ uri: this.state.user_img != "" ? this.state.user_img : null }} />
+                        <Text style={[styles.text2,{width:width/2-40}]}>{this.state.author}</Text>
                       </View>
 
                     </TouchableOpacity>
@@ -1048,9 +1084,8 @@ onPress={() => this.props.navigation.navigate('report')}>
                     <View>
                       {/* {this.state.explore_page=='0'? */}
 
-                      <View>
 
-                        {this.state.user_id == this.state.getuserid ? <View style={{ width: width / 3.2, }} /> :
+                        {this.state.user_id == this.state.getuserid ? <View style={{ width: width / 2-40, }} /> :
                           <TouchableOpacity onPress={() => { this.state.explore_page == '0' ? this.followService(this.state.getuserid, this.state.user_id) : this.alertPopup() }} style={[this.state.Is_Follow == "Follow" ? styles.btnview : styles.activeBtnview]}>
                             <Text style={[this.state.Is_Follow == "Follow" ? styles.inactive : styles.active]}>{this.state.Is_Follow}</Text>
                           </TouchableOpacity>
@@ -1066,68 +1101,63 @@ onPress={() => this.props.navigation.navigate('report')}>
                       {/* :null} */}
                     </View>
 
-                  </View>
 
                   {/* </View> */}
                 </View>) : (
                   // <View>
-                  <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginBottom: '5%' }}>
+                  <View style={{ flexDirection: 'column', justifyContent: 'space-between',}}>
 
 
                     <View style={styles.logoContainer1}>
 
-                      <TouchableOpacity
-                        onPress={() => this.goToAuthorProfile()}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Image style={{ width: 30, height: 30, borderRadius: 30 / 2 }} source={{ uri: this.state.user_img != "" ? this.state.user_img : null }} />
-                          <Text style={styles.text2}>{this.state.author}</Text>
-                        </View>
-
-                      </TouchableOpacity>
-
-                      <View>
-                        <View>
-
-                          <TouchableOpacity onPress={() => this.tooltipPress()} style={[!this.state.visible ? styles.btnview : styles.activeBtnview]}>
-                            <Text style={[!this.state.visible ? styles.inactive : styles.active]}>{!this.state.visible ? "Follow" : "Followed"}</Text>
-                          </TouchableOpacity>
-                          {this.state.tooltip ? <View style={styles.talkBubble}>
-                            <View style={styles.talkBubbleSquare}>
-                              <Text style={styles.talkBubbleMessage}>Followed {this.state.author}</Text>
-                            </View>
-                            <View style={styles.talkBubbleTriangle} />
-                          </View> : null}
-
-                        </View>
-
+                    <TouchableOpacity 
+                      onPress={() => { this.state.explore_page == '0' ? this.goToAuthorProfile() : this.alertPopup() }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                    width:width/2}}>
+                        <Image style={{ width: 40, height: 40, borderRadius: 40 / 2 }} source={{ uri: this.state.user_img != "" ? this.state.user_img : null }} />
+                        <Text style={[styles.text2,{width:width/2-40}]}>{this.state.author}</Text>
                       </View>
 
+                    </TouchableOpacity>
+
+
+                      <View>
+                      <TouchableOpacity onPress={() => { this.state.explore_page == '0' ? this.followService(this.state.getuserid, this.state.user_id) : this.alertPopup() }} style={[this.state.Is_Follow == "Follow" ? styles.btnview : styles.activeBtnview]}>
+                            <Text style={[this.state.Is_Follow == "Follow" ? styles.inactive : styles.active]}>{this.state.Is_Follow}</Text>
+                          </TouchableOpacity>
+                          {this.state.tooltip ? <View style={styles.talkBubble}>
+                          <View style={styles.talkBubbleSquare}>
+                            <Text style={styles.talkBubbleMessage}>Followed {this.state.author}</Text>
+                          </View>
+                          <View style={styles.talkBubbleTriangle} />
+                        </View> : null}
+                        </View>
                     </View>
 
 
                     <View style={{ margin: '4%', paddingLeft: '5%' }}>
                       <View style={{ flexDirection: 'row', }}>
                         <Text style={styles.authText}>Author</Text>
-                        <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}>{this.state.post_author}</Text>
+                        <Text style={styles.authorResText}>{this.state.post_author}</Text>
                       </View>
                       <View style={{ flexDirection: 'row', }}>
                         <Text style={styles.authText}>Editor</Text>
-                        <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}>{this.state.post_editor}</Text>
+                        <Text style={styles.authorResText}>{this.state.post_editor}</Text>
                       </View>
                       <View style={{ flexDirection: 'row', }}>
                         <Text style={styles.authText}>Illustrator</Text>
-                        <Text style={{ width: width / 2, textAlign: 'left', fontSize: 16, fontWeight: 'bold', }}>{this.state.post_illustrator}</Text>
+                        <Text style={styles.authorResText}>{this.state.post_illustrator}</Text>
                       </View>
                       <View style={{ flexDirection: 'row', }}>
                         <Text style={styles.authText}>Translator</Text>
-                        <Text style={{ width: width / 2, textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}>{this.state.post_translator}</Text>
+                        <Text style={styles.authorResText}>{this.state.post_translator}</Text>
                       </View>
                     </View>
                     <View style={{ margin: '4%', marginBottom: '10%' }} >
                       {/* <View style={{flexDirection:'column',backgroundColor:'pink'}}> */}
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                         <View style={styles.info1}>
-                          <Image style={{ marginRight: '4%', top: "5%", marginTop: "2%" }} source={require('../assets/img/eye.png')} />
+                          <Image style={{marginRight: '4%',marginTop:3 }} source={require('../assets/img/eye.png')} />
                           <Text style={styles.text1}> {this.state.totalviews}</Text>
                         </View>
                         <View style={styles.info2}>
@@ -1145,7 +1175,7 @@ onPress={() => this.props.navigation.navigate('report')}>
                       </View>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                         <View style={styles.info1}>
-                          <Text style={styles.text1}>'Copy Rights' : {this.state.copyrights}</Text>
+                          <Text style={styles.text1}>{this.state.copyrights}</Text>
                           <Image source={require('../assets/img/open-book.png')} />
                         </View>
                         <View style={styles.info2}>
@@ -1243,7 +1273,7 @@ onPress={() => this.props.navigation.navigate('report')}>
                     <View style={{
                       flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}>
-                    <Image  source={require('../assets/img/colliconnew1.png')} />
+                  <Image source={require('../assets/img/coll_white1.png')} />
                       <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
                     <TouchableOpacity
@@ -1442,10 +1472,11 @@ onPress={() => this.props.navigation.navigate('report')}>
             onPress={() => { this.state.explore_page == '0' ? this.likeClick(this.state.getpostid): this.alertPopup() }}
           >
             {/* {this.renderImage} */}
-            <Image
-
-              source={this.state.likeStatus?require('../assets/img/like.png'):require('../assets/img/unlike.png')}
+            {this.state.likeStatus=='Y'? <Image
+                style={{marginTop:12}}
+              source={require('../assets/img/small_like.png')}/> : <Image style={styles.group} source={require('../assets/img/like-icon.png')}
             />
+        }
           </TouchableOpacity>
           {/* <Image
   onPress={()=>this.setState({showlikeImg:!this.state.showlikeImg})}  
@@ -1455,8 +1486,8 @@ onPress={() => this.props.navigation.navigate('report')}>
   onPress={() =>this.commentClick()}
 >
   <Image
-
-    source={require('../assets/img/comment1.png')} />
+  style={styles.group}
+    source={require('../assets/img/comments-icon.png')} />
 </TouchableOpacity>
           <TouchableOpacity
             style={{ padding: '1%' }}
@@ -1465,7 +1496,8 @@ onPress={() => this.props.navigation.navigate('report')}>
               ) : this.alertPopup()
             }}          // onPress={() =>this.props.navigation.navigate('createCollection')} 
           >
-            <Image source={require('../assets/img/plus.png')} />
+            <Image   style={styles.group}
+ source={require('../assets/img/add-to-icon.png')} />
           </TouchableOpacity>
           <TouchableOpacity
             style={{ padding: '1%' }}
@@ -1473,7 +1505,8 @@ onPress={() => this.props.navigation.navigate('report')}>
             onPress={() => { this.state.explore_page == '0' ? this.setState({ shareModal: !this.state.shareModal }) : this.alertPopup() }}
           >
 
-            <Image source={require('../assets/img/share.png')} />
+            <Image   style={styles.group}
+ style={styles.group} source={require('../assets/img/share-icon.png')} />
           </TouchableOpacity>
         </View>
         {/* :null} */}
@@ -1553,8 +1586,15 @@ const styles = StyleSheet.create({
   authText: {
     width: width / 4,
     textAlign: 'left',
-    fontSize: 16,
-    color: '#707070'
+    fontSize: 12,
+    color: '#000',
+    fontFamily:'AzoSans-Light'
+  },
+  authorResText:{
+    width: width / 2,
+     textAlign: 'left',
+      fontSize: 12,
+       fontFamily:'AzoSans-Medium'
   },
   bgwhite: {
     backgroundColor: '#27A291',
@@ -1567,9 +1607,9 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     width: width,
+    margin:'3%',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: '1%',
     marginBottom: '20%'
   },
   logoContainer1: {
@@ -1577,6 +1617,12 @@ const styles = StyleSheet.create({
     width: width,
     justifyContent: 'space-around',
     marginTop: '5%',
+    margin:'3%',
+
+  },
+  group:{
+    width:40,
+    height:40
   },
   text3: {
     color: '#000',
@@ -1597,19 +1643,21 @@ const styles = StyleSheet.create({
   btnText: {
     color: 'white',
     paddingLeft: '8%',
-    fontSize: 18
+    fontSize: 12,
+    fontFamily:'AzoSans-Regular'
   },
   text1: {
     color: '#707070',
-    // paddingLeft:'5%',
-    fontSize: 14,
+    fontFamily:'AzoSans-Regular',
+        // paddingLeft:'5%',
+    fontSize: 12,
     alignSelf: 'center',
   },
   text2: {
     color: '#000',
-    fontSize: 18,
+    fontSize: 14,
     marginLeft: '3%',
-    fontWeight: 'bold',
+    fontFamily:'Montserrat-Bold',
     alignSelf: 'center',
 
   },
@@ -1619,8 +1667,8 @@ const styles = StyleSheet.create({
     // shadowOpacity: 0.1,
     // shadowRadius: 1,
     elevation: 2,
-    width: width / 3.2,
-    height: height / 19,
+    width: 100,
+    height:30,
     maxWidth: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -1633,8 +1681,8 @@ const styles = StyleSheet.create({
     // shadowOpacity: 0.1,
     // shadowRadius: 1,
     elevation: 1,
-    width: width / 3,
-    height: height / 19,
+    width: 100,
+    height: 30,
     maxWidth: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
@@ -1660,8 +1708,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     padding: '5%',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    color:'#707070',
+    fontFamily:'AzoSans-Medium'
   },
   rectangle: {
     width: 150,
@@ -1696,10 +1745,8 @@ const styles = StyleSheet.create({
   avatar: {
     width: 120,
     height: 80 * 2,
-    borderRadius: 50,
     // borderRadius: 20,
     padding: '3%',
-    // backgroundColor: "pink",
     alignSelf: 'center',
     marginBottom: 10,
     position: 'absolute',
@@ -1725,15 +1772,16 @@ const styles = StyleSheet.create({
     // marginTop: 30
   },
   name: {
-    fontSize: 22,
-    color: "#000",
-    fontWeight: '700',
+    fontSize: 16,
+    color: "#000000",
+    fontFamily:'Montserrat-Bold',
     marginBottom: '2%',
     textAlign: 'center',
     padding: '1%'
   },
   body: {
-    marginTop: '25%',
+    marginTop: width / 4,
+    // marginTop: '10%',
   },
   container1: {
     flexDirection: "row",
@@ -1753,7 +1801,8 @@ const styles = StyleSheet.create({
     color: "#00BFFF",
   },
   description: {
-    fontSize: 15,
+    fontSize: 12,
+    fontFamily:'AzoSans-Regular',
     marginLeft: '3%', marginRight: '3%'
 
   },
@@ -1786,7 +1835,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 2, // <- zIndex here
     flex: 1,
-    left: 5,
+    left: 5,  
     top: 60,
   },
   talkBubbleSquare: {
@@ -1859,8 +1908,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     color: '#000',
-    width: width / 2 - 10,
-    padding: '0.5%'
+    width: width / 2 - 30,
+    marginLeft:"5%",
+    padding: '0.5%',
     // alignItems: 'center',
   },
   info2: {
@@ -1868,9 +1918,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     // flex:1,
     // backgroundColor:'skyblue',
-    width: width / 2 - 10,
+    width: width / 2 - 30,
     marginLeft: '1%',
-    padding: '0.5%'
+    marginRight:'5%',
+      padding: '0.5%'
 
     // alignItems: 'center',
   },
@@ -1896,8 +1947,8 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: "#fff",
   },
-  inactive: { color: '#27A291', fontSize: 17 },
-  active: { color: '#fff', fontSize: 17 }
+  inactive: { color: '#27A291', fontSize: 14,fontFamily:'AzoSans-Regular' },
+  active: { color: '#fff', fontSize: 14,fontFamily:'AzoSans-Regular' }
 
 });
 const mapStateToProps = state => ({

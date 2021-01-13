@@ -234,9 +234,9 @@ class Contents extends Component {
                 onPress={this.headerBtnClk}>
                 <Text style={{
                   padding: '5%',
-                  fontSize: 16,
+                  fontSize: 14,
+                  fontFamily:'AzoSans-Medium',
                   color: 'white',
-                  fontWeight: 'bold'
                 }}
 
                 >Contents</Text>
@@ -274,7 +274,7 @@ class Contents extends Component {
           
             <TouchableOpacity onPress={() => this.gotoRead(item.page_id)}>
               <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,height:height/10}} key={item.Content} >
-                <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, marginTop: '2%', marginBottom: '2%' }}>{item.page_title}</Text>
+                <Text style={{ color: 'black', textAlign: 'left',  fontSize: 12,fontFamily:'AzoSans-Medium', marginTop: '2%', marginBottom: '2%' }}>{item.page_title}</Text>
                 <Divider style={{ color: '#707070', width: width - 50, }} />
               </View>
               </TouchableOpacity>
@@ -330,8 +330,8 @@ const styles = StyleSheet.create({
 
   headerText: {
     padding: '5%',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    fontFamily:'AzoSans-Medium',
   },
 
 

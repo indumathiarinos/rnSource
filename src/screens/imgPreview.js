@@ -336,7 +336,7 @@ class PreView extends Component {
         <View style={{flexDirection:'row',position:'absolute',height:"8%",top:0,left:0,right:0,backgroundColor:'gray'}}>
           <Text style={{color:'#fff',marginLeft:'2%',alignSelf:'center',fontSize:17,textAlign:'center',width:width/1.1,}}>{title}</Text>
          <TouchableOpacity style={{marginRight:'2%',alignItems:'center',justifyContent:'center'}} onPress={()=>this.props.navigation.navigate('viewBook')}>
-          <Image source={require('../assets/img/close.png')}/>
+          <Image style={{width:30,height:30,marginRight:20}} source={require('../assets/img/close-button.png')}/>
           </TouchableOpacity>
         </View>}
         <Image 
@@ -351,29 +351,35 @@ class PreView extends Component {
            style={{ padding: '1%' }}
            onPress={() => this.likeClick(this.state.getpostid)}
          >
-           <Image
-              source={this.state.likeStatus?require('../assets/img/like.png'):require('../assets/img/unlike.png')}
+           {this.state.likeStatus?
+ <Image
+//  style={{marginTop:12}}
+ source={
+require('../assets/img/liked.png')
+ }/>:
+           <Image 
+           source={require('../assets/img/like_outline.png')}
               />
+           }
          </TouchableOpacity>
          <TouchableOpacity
-           style={{ padding: '1%' }}
            onPress={() => this.commentClick()}
          >
-           <Image
-             source={require('../assets/img/comment1.png')} />
+           <Image 
+          style={{width:25,height:25,marginTop:8}}
+             source={require('../assets/img/message.png')} />
          </TouchableOpacity>
          <TouchableOpacity
-           style={{ padding: '1%' }}
-          onPress={()=>this.setState({collectionModal:true})}
+                 onPress={()=>this.setState({collectionModal:true})}
          >
-           <Image source={require('../assets/img/plus1.png')} />
+           <Image style={{width:25,height:25,marginTop:5}}
+           source={require('../assets/img/add_white.png')} />
          </TouchableOpacity>
-         <TouchableOpacity
-           style={{ padding: '1%' }}
+         <TouchableOpacity 
 
            onPress={() =>this.setState({shareModal:true})}
          >
-           <Image source={require('../assets/img/share.png')} />
+           <Image  style={styles.group} source={require('../assets/img/share_white.png')} />
          </TouchableOpacity>
        </View>
        }
@@ -627,6 +633,10 @@ const styles=StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
+  },
+  group:{
+    width:40,
+    height:40,
   },
 })
 

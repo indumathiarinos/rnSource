@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, SafeAreaView, Text,AsyncStorage, Dimensions,BackHandler, StyleSheet, Image, TouchableOpacity, TextInput, StatusBar, ImageBackground, TouchableOpacityBase, Alert } from 'react-native';
+import { View, SafeAreaView, Text,AsyncStorage, Dimensions,BackHandler, StyleSheet, Image, TouchableOpacity, TextInput, StatusBar, ImageBackground, ScrollView, Alert } from 'react-native';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 import LinearGradient from 'react-native-linear-gradient';
@@ -249,7 +249,7 @@ console.warn(json+"")
       <SafeAreaView
         style={styles.container}>
                 <StatusBar barStyle='dark-content' backgroundColor="#fff" hidden={false} />
-
+        <ScrollView>
         <TouchableOpacity
           style={styles.exploreBtn}
           onPress={()=> this.sendData()}
@@ -350,6 +350,7 @@ console.warn(json+"")
                   >
                 <Image source={require('../assets/gif/logo.gif')} style = {styles.gif} />
                  </Modal>
+                 </ScrollView>
       </SafeAreaView >
     );
   }

@@ -1383,7 +1383,7 @@ collData(userid,colid,secid) {
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                 <Image  source={require('../assets/img/colliconnew1.png')} />
+                  <Image source={require('../assets/img/coll_white1.png')} />
                       <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                       </View>
                       <TouchableOpacity

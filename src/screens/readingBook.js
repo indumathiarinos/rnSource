@@ -27,7 +27,8 @@ import { Divider } from 'react-native-elements';
 import { connect } from "react-redux";
 // import RNSelectableText from 'react-native-selectable-text';
 // import HTMLView from 'react-native-htmlview';
-import HTMLView from 'react-native-render-html';
+// import HTMLView from 'react-native-render-html';
+import HTMLView from 'react-native-htmlview';
 import HTMLView1 from 'react-native-htmlview';
 import WebView from 'react-native-webview';
 import NetInfo from '@react-native-community/netinfo';
@@ -145,7 +146,8 @@ class ReadingBook extends Component {
       interactionsComplete: false,
       explore_page:'0',
       loginPoup:false,
-      statusReadlater:''
+      statusReadlater:'',
+      likestatus:''
      
 
     }
@@ -546,7 +548,8 @@ this.CheckConnectivity()
           profile_userid: responseJson[0].user_id,
           bgImg: responseJson[0].BackGround_Img,
           page_id:responseJson[0].page_id,
-          exists:responseJson[0].Readstatus=="N"?false:true
+          exists:responseJson[0].Readstatus=="N"?false:true,
+          likeStatus:responseJson[0].Likestatus
 
         })
         console.log('page des ',this.state.description)
@@ -663,8 +666,8 @@ this.CheckConnectivity()
   addPins= async () => { 
    const clipboardContent = await Clipboard.getString();
    this.setState({ copiedData: clipboardContent });
-    if(this.state.copiedData!=""){
-      this.setState({loading:true})
+   if(this.state.copiedData.trim().length>0){
+    this.setState({loading:true})
     var json = JSON.stringify({
       "options": "Add", "page_id": this.state.page_id, "type":"type", "collection_id": "", "section_id": "", "Description": this.state.copiedData, "user_id": this.state.getuserid, "SortBy": "Asc"
     });
@@ -713,7 +716,7 @@ this.CheckConnectivity()
   addBookmark = async () => { 
     const clipboardContent = await Clipboard.getString();
     this.setState({ copiedData: clipboardContent });
-    if(this.state.copiedData!=""){
+    if(this.state.copiedData.trim().length>0){
       this.setState({loading:true})
     var json = JSON.stringify({
       "UserID": this.state.getuserid, "PageID": this.state.page_id, "Type": "page", "LineData": this.state.copiedData, "Linenumber": "0", "SelectedText": "0"
@@ -1012,6 +1015,20 @@ this.CheckConnectivity()
   //    this.readlaterAdd(this.state.getuserid,item.Post_Page_Id,item.TypeID)
   //   }
   // }
+  _renderNode(node, index, siblings, parent, defaultRenderer) {
+    if (node.name === 'img') {
+              const data = node.attribs;
+      return (
+                  <Image
+                        key={index}
+                        source={{uri: data.src}}
+                        resizeMode="contain"
+                        style={{ height: 500, width: 500}}
+                      />
+                  );
+  
+      }
+      }
   render() {
     // AsyncStorage.getItem('3dots1').then((newval) => this.setState({ popup_val1: newval })).done();
     // if (this.state.popup_val1 == 1) {
@@ -1053,7 +1070,7 @@ this.CheckConnectivity()
       {/* {this.state.copiedData == "" ?  */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}>
-          <Image style={{ width: 80, height: 50 }} source={{ uri: this.state.avatar != "" ? this.state.avatar : null }} />
+          <Image style={{ width: 43, height: 43 }} source={{ uri: this.state.avatar != "" ? this.state.avatar : null }} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.contentClick():this.alertPopup()}}>
           <Text numberOfLines={2} style={styles.pageTitle}>{this.state.page_url}</Text>
@@ -1121,17 +1138,17 @@ this.CheckConnectivity()
 <TouchableOpacity
 // onPress={this.changemode.bind(this)}
 >
-  <Image style={styles.hiddenImgs} source={require('../assets/img/quote.png')} />
+  <Image style={styles.hiddenImgs} source={require('../assets/img/quote_icon.png')} />
 </TouchableOpacity>
 <TouchableOpacity
   onPress={() =>{this.state.explore_page=='0'? this.addBookmark():this.alertPopup()}}
 >
-  <Image style={{ marginLeft: 5, marginRight: 5 }} source={require('../assets/img/bookmark1.png')} />
+  <Image  style={styles.hiddenImgs} source={require('../assets/img/bookmark-icon.png')} />
 </TouchableOpacity>
 <TouchableOpacity
   onPress={() =>{this.state.explore_page=='0'? this.addPins():this.alertPopup()}}
 >
-  <Image  style={styles.hiddenImgs} source={require('../assets/img/pins.png')} />
+  <Image  style={styles.hiddenImgs} source={require('../assets/img/pin-icon.png')} />
 </TouchableOpacity>
 
 <TouchableOpacity
@@ -1188,8 +1205,11 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
             : null} */}
        
           <HTMLView
-            html={this.state.description}
-            textSelectable={this.state.explore_page=='0'?true:false}
+            // html={this.state.description}
+            value={this.state.description}
+            renderNode={this._renderNode}
+            nodeComponentProps={{selectable: this.state.explore_page=='0'?true:false}}
+            // textSelectable={this.state.explore_page=='0'?true:false}
              />
      
           <View style={styles.nextPreviousView}>
@@ -1296,7 +1316,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           onPress={() =>{this.state.explore_page=='0'?this.likeClick(this.state.getpostid):this.alertPopup()}}>
 
           {/* {this.renderImage} */}
-          {this.state.like == true ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />}
+          {this.state.likeStatus=='Y' == true ? <Image source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')} />}
           {/* <Image
             source={imgSource}
           /> */}
@@ -1311,8 +1331,8 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
             this.commentClick():this.alertPopup()}}
         >
           <Image
-
-            source={require('../assets/img/comment1.png')} />
+          style={styles.group}
+            source={require('../assets/img/comments-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity
           style={{ padding: '3%' }}
@@ -1322,14 +1342,14 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           }}
         // onPress={() =>this.props.navigation.navigate('createCollection')} 
         >
-          <Image source={require('../assets/img/plus.png')} />
+          <Image style={styles.group} source={require('../assets/img/add-to-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity
           style={{ padding: '3%' }} onPress={() =>{this.state.explore_page=='0'?
             this.setState({ shareModal: !this.state.shareModal }):this.alertPopup()}
             // this.refs.modal6.open()
           }>
-          <Image source={require('../assets/img/share.png')} />
+          <Image style={styles.group} source={require('../assets/img/share-icon.png')} />
         </TouchableOpacity>
       </View> 
         }
@@ -1475,7 +1495,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                 <Image  source={require('../assets/img/colliconnew1.png')} />
+                  <Image source={require('../assets/img/coll_white1.png')} />
                       <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                   </View>
                       <TouchableOpacity
@@ -1670,14 +1690,14 @@ headerRow:{
 },
 pageTitle:{
   color: '#27A291', 
-  fontSize: 18, 
-  width: width / 2
+  fontSize: 12, 
+  fontFamily:'Montserrat-Bold',
+  width: width / 2,
+  textAlign:'left'
 },
 hiddenImgs:{
-  width: 20,
-   height: 20,
-    marginLeft: 5,
-     marginRight: 5
+  width: 40,
+   height: 30,
 },
 hiddenImgs1:{
   width: 30,
@@ -1685,9 +1705,13 @@ hiddenImgs1:{
     marginLeft: 3,
      marginRight: 3
 },
+group:{
+  width:40,
+  height:40
+},
 closeBtn:{
-  margin: 2, 
-  marginRight: '2%', 
+  margin: 14, 
+  // marginRight: '2%', 
   alignSelf: 'flex-end'
 },
 hiddenContainer:{

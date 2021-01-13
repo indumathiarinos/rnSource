@@ -18,7 +18,7 @@ import img2 from '../assets/img/cover2.png';
 import img3 from '../assets/img/cover3.png';
 import ViewMoreText from 'react-native-view-more-text';
 // import ReadMore from 'react-native-read-more-text';
-import ReadMore from './Readmore';
+import ReadMore from 'react-native-read-more-text';
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from "react-redux";
 import ModalBox from 'react-native-modalbox';
@@ -277,8 +277,12 @@ backpress=()=>{
                     </View>
                 </View>
                 <View style={{ padding: '2%', margin: '1%' }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-                    <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
+                <Text style={{  color: "#000000",
+      fontSize: 16,
+    fontFamily:'AzoSans-Medium'}}>{item.Title}</Text>
+                    <Text style={{ color: '#707070',
+      fontSize: 12,
+    fontFamily:'AzoSans-Light' }}>{item.PublicationCount} publications</Text>
                     <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
                 </View>
             </TouchableOpacity>
@@ -360,9 +364,9 @@ backpress=()=>{
             <TouchableOpacity 
               onPress={this.headerBtnClk}>
   <Text style={{ padding: '5%',
-    fontSize: 16,
-    color:'white',
-    fontWeight: 'bold'}}
+  color: "#fff",
+  fontSize: 14,
+fontFamily:'AzoSans-Medium'}}
               onPress={() => this.props.navigation.navigate('profileCollection')}
             >Collection</Text>
   
@@ -402,7 +406,7 @@ backpress=()=>{
                     onPress={()=>this.followService(this.state.loginUserid,this.state.getuserid)}
                     // onPress={()=>this.setState({followHighlight:!this.state.followHighlight})}
                     >
-                      <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:17,fontWeight:'bold'}}>{this.state.Is_Follow}</Text>                
+                      <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:16,fontWeight:'AzoSans-Regular'}}>{this.state.Is_Follow}</Text>                
                     </TouchableOpacity>  
                     </LinearGradient>
                   }
@@ -428,26 +432,29 @@ backpress=()=>{
                 <Text style={styles.info}>{this.state.headline}</Text>
               
                 <View style={styles.socialBarContainer}>
-                      
-                      <TouchableOpacity style={styles.socialBarButton}>
-                      <Text  style={{color:'#707070'}}>{this.state.followers}</Text>
-                        <Image style={{marginLeft:5}}
-                        // style={styles.icon}
-                         source={require('../assets/img/profile.png')}/>
-                      </TouchableOpacity>
-                      <View style={styles.divider}>
-                      </View>      
-                      <TouchableOpacity 
+                    
+                    <TouchableOpacity style={styles.socialBarButton}
+                     >
+                    <Text  style={{color:'#707070',fontSize: 12,
+  fontFamily:'AzoSans-Regular'}}>{this.state.followers}</Text>
+                      <Image style={{marginLeft:5}}
+                      // style={styles.icon}
+                       source={require('../assets/img/profile.png')}/>
+                    </TouchableOpacity>
+                    <View style={styles.divider}>
+                    </View>      
+                    <TouchableOpacity 
                     // onPress={()=>this.refs.modal6.open()}
                      style={styles.socialBarButton}>
-                         <Text style={{color:'#707070'}}>80.1k(SN)</Text>
-                      {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
-                      <Image style={styles.icon} source={require('../assets/img/share.png')}/>
-                      {/* </TouchableOpacity> */}
-                        
-                      </TouchableOpacity>
-                    
-                  </View>
+                    <Text style={{color:'#707070',fontSize: 12,
+  fontFamily:'AzoSans-Regular'}}>80.1k(SN)</Text>
+                    {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
+                    <Image style={styles.icon} source={require('../assets/img/share.png')}/>
+                    {/* </TouchableOpacity> */}
+                      
+                    </TouchableOpacity>
+                  
+                </View>
                   <View
                   style={{marginTop:30}}>
                     <Text
@@ -563,7 +570,9 @@ backpress=()=>{
     headerText: {
       padding: '5%',
       fontSize: 16,
-      fontWeight: 'bold'
+      color: "#000000",
+    fontSize: 14,
+  fontFamily:'AzoSans-Medium'
     },
     header:{
       backgroundColor: "#00BFFF",
@@ -611,23 +620,25 @@ backpress=()=>{
     },
     bodyContent: {
       alignItems: 'center',
-      // padding:20,
+       padding:10,
       // backgroundColor:'skyblue'
     },
-    name:{
-      fontSize:19,
-      color: "#000",
-      fontWeight: "bold"
+  name:{
+      color:"#000",
+      fontSize: 16,
+      fontFamily:'Montserrat-Bold'
     },
     name1:{
-      fontSize:25,
+      fontSize:24,
       color: "#000",
       // fontWeight: "bold",
-      textAlign:'left'
+      textAlign:'left',
+      fontFamily:'Montserrat-Light'
     },
     info:{
-      fontSize:16,
-      color: "#000",
+      color: "#000000",
+      fontSize: 12,
+    fontFamily:'AzoSans-Medium'
     },
     description:{
       fontSize:15,

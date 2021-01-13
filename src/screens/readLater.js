@@ -432,11 +432,11 @@ _renderTruncatedFooter = (handlePress,index,item) => {
        
             <View style={{ flexDirection: 'row',justifyContent:'space-between',alignSelf:'center',width:'90%',marginTop:'5%' }}>
             <View style={{flexDirection:'column',width:'80%'}}>
-            <Text style={{color:'#707070',fontSize:16,marginBottom:'1%'}}>{item.updated_date}</Text>
-            <Text style={{fontSize:18,fontWeight:'bold'}}>{item.Titel}</Text></View>
+            <Text style={{color:'#707070',fontSize:12,fontFamily:'AzoSans-Regular', marginBottom:'1%'}}>{item.updated_date}</Text>
+            <Text style={{fontSize:16,fontFamily:'Montserrat-Bold'}}>{item.Titel}</Text></View>
            
      <TouchableOpacity onPress={()=>this.removeItem(item)}>
-     <Image style={{width:50,height:50}} source={require('../assets/img/trashicon.png')} />
+     <Image style={{width:40,height:40}} source={require('../assets/img/trashicon.png')} />
 
            </TouchableOpacity>
                        </View>
@@ -453,8 +453,8 @@ _renderTruncatedFooter = (handlePress,index,item) => {
           </TouchableOpacity>
             <TouchableOpacity onPress={()=>this.goToAuthorProfile(item.USERID)}>
             <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start',margin:'3%'}}>
-              <Image style={{width:35,height:35,borderRadius:35/2}} source={{uri:item.avatar}}/>
-              <Text style={{marginLeft:'2%',fontWeight:'bold',fontSize:17}}>{item.User_name}</Text>
+              <Image style={{width:40,height:40,borderRadius:20}} source={{uri:item.avatar}}/>
+              <Text style={{marginLeft:17,fontFamily:'Montserrat-Bold',fontSize:14}}>{item.User_name}</Text>
               </View>
             </TouchableOpacity>
           {/* <View style={{backgroundColor:'#F9F9F9',alignItems:'center',paddingLeft:'2%',paddingRight:'2%'}}>
@@ -593,19 +593,19 @@ onPress={() => this.bookmarkPress()}
             height:'10%', 
             alignItems:'center',
             justifyContent:'center',
-            backgroundColor: 'red',
+            backgroundColor: '#E74C3C',
   }}>
          
          <View style={{flexDirection:'row',justifyContent:'center'}}>
-                <Text style={{color:'#fff',fontSize:18,textAlign:'center',}} >Removed - </Text>
-                <Text numberOfLines={2} style={{color:'#fff',fontSize:18,textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
+                <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Bold',textAlign:'center',}} >Removed - </Text>
+                <Text numberOfLines={2} style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Medium',textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
   
               </View>         
            
           <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
           onPress={()=>this.undoFunc()}
           >
-              <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
+              <Text style={{fontSize: 16,fontFamily:'AzoSans-Regular',color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
            </TouchableOpacity>
             
             </View>}
@@ -657,10 +657,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute'
 },
+activeText: {
+  padding: '5%',
+  fontSize: 14,
+  color: 'white',
+  fontFamily: 'AzoSans-Medium'
+},
 headerText: {
   padding: '5%',
-  fontSize: 16,
-  fontWeight: 'bold'
+  fontSize: 14,
+  color:'#707070',
+  fontFamily:'AzoSans-Medium'
 },
 staticheader: {
   // paddingRight:'2%',

@@ -625,14 +625,14 @@ handleBackButtonClick() {
 }
 const styles = StyleSheet.create({
   pubImgStyle:{ 
-    elevation:1,
+    // elevation:1,
     width: 130, height: 150,
     borderRadius:15
     // alignItems:'center',
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
-      elevation:1,
+      // elevation:1,
       width: 130, height: 100,
       borderRadius:15
       // alignItems:'center',

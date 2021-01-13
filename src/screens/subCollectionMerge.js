@@ -23,6 +23,8 @@ class SubCollectionMerge extends Component {
         this.state = {
         list: [],
         selectedItemArray:[],
+        selectedIds:[],
+        selectedColid:'',
         next:false,
         mergeFromId:'',
         mergeToId:'',
@@ -33,7 +35,8 @@ class SubCollectionMerge extends Component {
         collection:'',
         mergeModal:false,
         undo:false,
-        mergeFromName:''
+        mergeFromName:'',
+        getuserid:''
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -44,7 +47,7 @@ class SubCollectionMerge extends Component {
         this.CheckConnectivity();
         AsyncStorage.getItem('MergeFromId').then((val)=>{this.setState({mergeFromId:val})}).done();
         AsyncStorage.getItem('MergeFromName').then((val)=>{this.setState({mergeFromName:val})}).done();
-
+        AsyncStorage.getItem('userid').then((val)=>{this.setState({getuserid:val})}).done();
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
       }
       CheckConnectivity(){    
@@ -68,7 +71,7 @@ class SubCollectionMerge extends Component {
       
           if(state.isConnected==true){
               console.log('mergefrom id and mergeto id ',this.state.mergeFromId,this.state.mergeToId)
-            {this.mergeCollection(this.state.mergeFromId,this.state.mergeToId)}
+            {this.mergeCollection(this.state.mergeFromId,this.state.selectedColid)}
         }else{
             alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
         }
@@ -114,16 +117,14 @@ class SubCollectionMerge extends Component {
     mergeCollection(fromId,ToId) {
         var json = JSON.stringify(
             {
-                "From_C_ID":fromId,
-                "To_C_ID":ToId,
-                "Action_for":"Collection"
+                "From_C_ID":fromId,"To_C_ID":ToId,"From_S_ID":"","To_S_ID":"0","Action_for":"Collection","UserID":this.state.getuserid
             }
         );
         console.log('json is',json);
         fetch("http://162.250.120.20:444/Login/MergeCollection",
             {
                 method: 'POST',
-                headers: {
+                headers: { 
                     'Accept': 'application/json',
                     'content-type': 'application/json'
                 },
@@ -144,29 +145,26 @@ class SubCollectionMerge extends Component {
     }
     onPressHandler(id) {
         // let selected;
-        // this.setState({list:list2})
-
-        // console.log('onpress list ',list2)
-        //  let list=[...this.state.list];
-        let collection=[...this.state.collection];
+         let collection=[...this.state.collection];
          for(let data of collection){
            if(data.collectionsID==id){
-               console.log('id is ',id)
-               this.setState({mergeToId:this.state.mergeToId==id?"":id,mergeName:data.Title})
-            //    console.log('merge to id in merge collection',this.state.mergeToId)
-
-            //  data.abc=(data.abc==null)?true:!data.abc;
-            //  console.log('merge to id ',this.state.mergeToId);
-            //  (data.abc)?this.state.selectedItemArray.push(data):this.state.selectedItemArray.pop(data);
-            //  console.log('selected sub item array ',this.state.selectedItemArray)
-            //   console.log("data.selected"+data.abc,'id',data.id);
-              
-            //   this.state.selectedItemArray.length!=0? this.setState({next:true}):this.setState({next:false});
+            // this.setState({selectedColid:id,deletedName:data.Title})
+            // console.log('id ',this.state.selectedColid)
+            //uncommented====
+             data.abc=(data.abc==null)?true:!data.abc;
+            
+             (data.abc)?this.state.selectedItemArray.push(data.Title):this.state.selectedItemArray.pop(data.Title);
+             (data.abc)?this.state.selectedIds.push(data.collectionsID):this.state.selectedIds.pop(data.collectionsID);
+             console.log('selected item array ',this.state.selectedItemArray);
+             console.log('selected item array ',this.state.selectedIds)
+             let ids= this.state.selectedIds.join(',');
+             let names = this.state.selectedItemArray.join(',');
+             console.log(ids+""+names+"");
+             this.setState({next:this.state.selectedItemArray.length>0?true:false,mergeName:names,selectedColid:ids})
              break;
            }
          }
-         this.setState({collection})
-        //  this.setState({list:this.state.list});
+         this.setState({collection});
        }
        exploredata(userid) {
         var json = JSON.stringify({
@@ -215,62 +213,84 @@ class SubCollectionMerge extends Component {
             }
         });
     }
-
     renderItem_card({ item }) {
         // const value = item;
         return (
-            <View style={{
-                // flex:1,
-                width: '50%',
-                padding: '2%',
-                backgroundColor: '#ffff',
+//             <View style={{
+//                 // flex:1,
+//                 width: '50%',
+//                 padding: '2%',
+//                 backgroundColor: '#ffff',
+//             }}>
+//                 <TouchableOpacity
+//                     onPress={() => this.onPressHandler(item.collectionsID)}>
+//                     <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff' }}
+//                     //  onPress={()=>this.press(item)}
+//                     > 
+//                     <ImageBackground
+//  style={{ width: '100%', height: height / 6, resizeMode: 'cover'}}
+//  imageStyle={{borderRadius:10}}              
+//        source={{ uri: item.CoverImg!=""?item.CoverImg:null}} >
+                //    {this.state.selectedColid==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/close.png')}/>:null}
+//                 </ImageBackground>
+//                     </View>
+//                     <View style={{ padding: '2%', margin: '1%' }}>
+//                         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
+//                         <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
+//                         <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
+//                     </View>
+
+             
+//                 </TouchableOpacity>
+//             </View>
+<View style={{
+  // flex:1,
+  width: '50%',
+  padding: '2%',
+  backgroundColor: '#ffff',
+
+}}>
+  <TouchableOpacity
+  style={styles.button}
+  onPress={() => this.onPressHandler(item.collectionsID)}>
+          
+        <View style={{flex:1,flexDirection: 'row', }}
+        >
             
-            }}>
-                <TouchableOpacity
-                style={styles.button}
-              onPress={() => this.onPressHandler(item.collectionsID)}>
-                      
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
-                    >
-                        
-                        <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
-                            source={{ uri: item.Image1!=""?item.Image1:null }} />
-                      
-                        <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
-                            {/* <View > */}
-                                <ImageBackground
-                                imageStyle={{ borderTopRightRadius: 10,}}
-                                    style={{ height: height / 12, resizeMode: 'cover', marginBottom: '1%' }}
-                                    source={{ uri: item.Image2!=""?item.Image2:null}} >
-                                     {this.state.mergeToId==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
-                                </ImageBackground>
-                            {/* </View> */}
-                            <View>
-            
-                                <Image
-                                    style={{ height: height / 12, resizeMode: 'cover', borderBottomRightRadius: 10 }}
-                                    source={{ uri: item.Image3!=""?item.Image3:null }} />
-                            </View>
-                        </View>
-                    </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-              onPress={() => this.onPressHandler(item.collectionsID)}>
-                    <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-                        <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
-                        <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
-                    </View>
-                </TouchableOpacity>
+            <Image style={{ width: '75%',  height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                source={{ uri: item.Image1!=""?item.Image1:null }} />
+          
+            <View style={{ flex:1, flexDirection: 'column',borderLeftWidth: 0.3, borderColor: '#cccccc' }}>
+                <View style={{ borderBottomWidth: 0.3, borderColor: '#cccccc' }}>
+                    <ImageBackground
+                    imageStyle={{borderTopRightRadius: 10}}
+                        style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
+                        source={{ uri: item.Image2!=""?item.Image2:null}} >
+                         {/* {this.state.selectedColid==item.collectionsID?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/close.png')}/>:null} */}
+                        {item.abc==true?<Image style={{alignSelf:'flex-end',margin:'1%'}} source={require('../assets/img/check.png')}/>:null}
+                    </ImageBackground>
+                </View>
+                <View>
+
+                    <Image
+                        style={{ height: height / 12, resizeMode: 'cover', borderBottomRightRadius: 10 }}
+                        source={{ uri: item.Image3!=""?item.Image3:null }} />
+                </View>
             </View>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+  onPress={() => this.onPressHandler(item.collectionsID)}>
+     <View style={{ padding: '2%', margin: '1%' }}>
+                  <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', }}>{item.Title}</Text>
+                      <Text style={{ color: '#707070',fontSize: 12,fontFamily:'AzoSans-Light', }}>{item.PublicationCount} publications</Text>
+                      <Text style={{ color: '#707070',fontSize: 12,fontFamily:'AzoSans-Light', }}>{item.PageCount} pages</Text>
+                  </View>
+    </TouchableOpacity>
+</View>
         )
     }
-    mergeFunc=()=>{
-        // this.props.changeRemove2();
-        // AsyncStorage.setItem('removePopup', true);
-        console.log('merge to id ',this.state.mergeToId)
-        this.CheckConnectivity1();
-    }
+
     render() {
         // const { navigate } = this.props.navigation;
         // const value = this.props.navigation.state.params.pass_data
@@ -284,7 +304,7 @@ class SubCollectionMerge extends Component {
 
                 <View style={{height:'8%',backgroundColor:'#27A291',justifyContent:'center'}}>
                 {/* {value=='mergeCollection'?   */}
-                <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection(s) to Merge</Text>
+                <Text style={{color:'white',fontSize:16,fontFamily:'Montserrat-Bold',textAlign:'center'}}>Select Collection(s) to Merge</Text>
                     {/* : value=='EditCollection1'? <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection to Edit</Text>:<Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection to Remove</Text> */}
                 {/* } */}
 
@@ -310,17 +330,17 @@ class SubCollectionMerge extends Component {
                 <View style={styles.bottomLine}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around',alignItems:'center' }}>
                         <TouchableOpacity style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}}
-                            onPress={() =>this.state.mergeToId==""? 
+                            onPress={() =>this.state.selectedColid==""? 
                             // this.props.navigation.navigate('mergeCollection')
                             this.props.navigation.goBack()
                             :console.log('value is ','value true or false',)}>
-                            <Text style={[this.state.mergeToId==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
+                            <Text style={[this.state.selectedColid==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
 
                         </TouchableOpacity>
-                        <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.mergeToId!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
+                        <LinearGradient style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}} colors={this.state.selectedColid!=""?['#24D4BC', '#27A291']:['#fff','#fff']} >
                         <TouchableOpacity 
-                            onPress={() =>this.state.mergeToId!=""?this.showModal1():null}>
-                            <Text style={[this.state.mergeToId!=""?styles.inacitveColor:styles.inacitveStyle]}>Next</Text>
+                            onPress={() =>this.state.selectedColid!=""?this.showModal1():null}>
+                            <Text style={[this.state.selectedColid!=""?styles.inacitveColor:styles.inacitveStyle]}>Merge</Text>
                         </TouchableOpacity>
                         </LinearGradient>
                     </View>
@@ -341,11 +361,11 @@ class SubCollectionMerge extends Component {
                             justifyContent: 'center',
                             backgroundColor: '#27A291',
                         }}>
-                            <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Merged - {this.state.mergeFromName} - {this.state.mergeName} </Text>
+                            <Text style={{ color: '#fff', fontSize: 16,fontFamily:'AzoSans-Bold', textAlign: 'center',margin:5 }}>Merged - {this.state.mergeFromName} - {this.state.mergeName} </Text>
                             <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%',padding:'2%' }}
                             onPress={()=>this.setState({undo:true})}
                             >
-                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                                <Text style={{ fontSize: 12,fontFamily:'AzoSans-Regular', color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
                             </TouchableOpacity>
                         </View>}
                         />
@@ -356,13 +376,13 @@ class SubCollectionMerge extends Component {
 }
 const styles = StyleSheet.create({
     textStyle:{ 
-        color: 'black', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#707070', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     inacitveStyle:{ 
-        color: '#c2c2c2', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#cccccc', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular',paddingLeft: '4%'
     },
     inacitveColor:{ 
-        color: '#fff', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#fff', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     bottomLine: {
 

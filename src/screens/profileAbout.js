@@ -15,7 +15,8 @@ import {
 import ModalBox from 'react-native-modalbox';
 import ViewMoreText from 'react-native-view-more-text';
 // import ReadMore from 'react-native-read-more-text';
-import ReadMore from './Readmore';
+//import ReadMore from 'react-native-read-more-text';
+import ReadMore from "./Readmore"
 
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
@@ -102,9 +103,25 @@ getData(){
  
       _renderTruncatedFooter = (handlePress) => {
         return (
-          <Text style={{color: '#27A291',textDecorationLine:'underline',marginTop: -18, alignSelf:"flex-end",backgroundColor:'#fff',paddingLeft:5}} onPress={handlePress}>
+          <View 
+      // style={{ marginTop: '-5%' }}
+      >
+        <TouchableOpacity
+        // onPress={() => !this.state.hidePic?this.setState({ hidePic: true}):this.setState({hidePic:false})}
+        >
+          <Text 
+            style={{
+              color: '#27A291',
+              alignSelf: "flex-end",
+              textDecorationLine: 'underline',
+              backgroundColor: '#fff'
+            }}
+           onPress={handlePress}>
             Read more
           </Text>
+        </TouchableOpacity>
+      </View>
+
         );
       }
       fb = () => {
@@ -231,7 +248,9 @@ getData(){
           onPress={() => this.props.navigation.navigate('report')}>
           <View style={styles.info1}>
             <Image style={{ marginRight: '10%' }} source={require('../assets/img/flag.png')} />
-            <Text style={styles.text1}>Report</Text>
+            <Text style={{color: "#707070",
+    fontSize: 12,
+  fontFamily:'AzoSans-Regular'}}>Report</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity 
@@ -268,7 +287,8 @@ getData(){
 <Text style={{ padding: '5%',
   fontSize: 16,
   color:'white',
-  fontWeight: 'bold'}}
+  fontSize: 14,
+  fontFamily:'AzoSans-Medium'}}
             onPress={() =>this.goToAuthorProfile()}
           >About</Text>
             </TouchableOpacity>
@@ -315,18 +335,17 @@ getData(){
                 <Text style={{color:'#27A291',fontWeight:'bold',fontSize:18}}>Follow</Text>                
               </TouchableOpacity>  
               ):( */}
-               {this.state.loginUserid==this.state.getuserid?null:
-                  <LinearGradient style={styles.buttonContainer} colors={this.state.Is_Follow=="Followed"?['#24D4BC', '#27A291']:['#fff','#fff']} >
-                  <TouchableOpacity 
-                  // style={styles.buttonContainer}
-                  //following id userid, follower id whom going to follow
-                  onPress={()=>this.followService(this.state.loginUserid,this.state.getuserid)}
-                  // onPress={()=>this.setState({followHighlight:!this.state.followHighlight})}
-                  >
-                    <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:17,fontWeight:'bold'}}>{this.state.Is_Follow}</Text>                
-                  </TouchableOpacity>  
-                  </LinearGradient>
-                }
+                              {this.state.loginUserid==this.state.getuserid?null:
+                    <LinearGradient style={styles.buttonContainer} colors={this.state.Is_Follow=="Followed"?['#24D4BC', '#27A291']:['#fff','#fff']} >
+                    <TouchableOpacity 
+                    // style={styles.buttonContainer}
+                    onPress={()=>this.followService(this.state.loginUserid,this.state.getuserid)}
+                    // onPress={()=>this.setState({followHighlight:!this.state.followHighlight})}
+                    >
+                      <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:16,fontWeight:'AzoSans-Regular'}}>{this.state.Is_Follow}</Text>                
+                    </TouchableOpacity>  
+                    </LinearGradient>
+                  }
                 {/* )} */}
               </View>
             
@@ -335,7 +354,9 @@ getData(){
                 <LinearGradient style={styles.buttonContainer2} colors={['#24D4BC', '#27A291']} >
               <TouchableOpacity
               onPress={()=>this.setState({shareModal:!this.state.shareModal})}>
-                <Text style={{color:'#fff',fontSize:17,fontWeight:'bold'}}>Share</Text> 
+                <Text style={{color:'#fff',fontSize: 16,
+  color:'white',
+  fontFamily:'AzoSans-Regular'}}>Share</Text> 
               </TouchableOpacity>
               </LinearGradient>
               </View> 
@@ -354,7 +375,8 @@ getData(){
                     
                     <TouchableOpacity style={styles.socialBarButton}
                      >
-                    <Text  style={{color:'#707070'}}>{this.state.followers}</Text>
+                    <Text  style={{color:'#707070',fontSize: 12,
+  fontFamily:'AzoSans-Regular'}}>{this.state.followers}</Text>
                       <Image style={{marginLeft:5}}
                       // style={styles.icon}
                        source={require('../assets/img/profile.png')}/>
@@ -364,7 +386,8 @@ getData(){
                     <TouchableOpacity 
                     // onPress={()=>this.refs.modal6.open()}
                      style={styles.socialBarButton}>
-                    <Text style={{color:'#707070'}}>80.1k(SN)</Text>
+                    <Text style={{color:'#707070',fontSize: 12,
+  fontFamily:'AzoSans-Regular'}}>80.1k(SN)</Text>
                     {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
                     <Image style={styles.icon} source={require('../assets/img/share.png')}/>
                     {/* </TouchableOpacity> */}
@@ -374,15 +397,16 @@ getData(){
                 </View>
                 <View
                 style={{marginTop:30}}>
-                <ReadMore
+            <ReadMore
               numberOfLines={3}
               renderTruncatedFooter={this._renderTruncatedFooter}
               renderRevealedFooter={this._renderRevealedFooter}
               onReady={this._handleTextReady}>
-             <Text style={styles.description}>
-               {this.state.about}
-            {/* Lorem ipsum dolor sit amet, in quo dolorum ponderum, nam veri molestie constituto eu. Eum enim tantas sadipscing ne, ut omnes malorum nostrum cum. Errem populo qui ne, ea ipsum antiopam definitionem eos. */}
-          </Text>
+              <Text
+                numberOfLines={3}
+                style={styles.description}>
+                {this.state.about}
+              </Text>
             </ReadMore>
                 </View>           
                       
@@ -460,7 +484,7 @@ getData(){
                        </Modal>
         <View style={styles.bottomBar}>
           <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
-          <Image source={require('../assets/img/world.png')}/>
+          <Image style={styles.icon} source={require('../assets/img/world.png')}/>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
           <Image style={styles.icon} source={require('../assets/img/insta.png')}/>
@@ -508,8 +532,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     padding: '5%',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    fontFamily:'AzoSans-Medium'
   },
   header:{
     backgroundColor: "#00BFFF",
@@ -548,25 +572,21 @@ const styles = StyleSheet.create({
     // marginTop:10
   },
   name:{
-    fontSize:22,
-    color:"#FFFFFF",
-    fontWeight:'600',
+    color:"#000",
+    fontSize: 16,
+    fontFamily:'Montserrat-Bold'
   },
   body:{
     // marginTop:5,
   },
   bodyContent: {
     alignItems: 'center',
-    padding:20,
-  },
-  name:{
-    fontSize:22,
-    color: "#000",
-    fontWeight: "700"
+    padding:10,
   },
   info:{
-    fontSize:16,
     color: "#000000",
+    fontSize: 12,
+  fontFamily:'AzoSans-Medium'
   },
   info1: {
     flexDirection: 'row',
@@ -576,7 +596,8 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   description:{
-    fontSize:15,
+    fontSize:12,
+  fontFamily:'AzoSans-Regular'
   },
   buttonContainer: {
     marginTop:20,
@@ -653,9 +674,10 @@ const styles = StyleSheet.create({
     backgroundColor:'#707070'
   },
   icon: {
-    width:25,
+    width:30,
     marginLeft:5,
-    height:25,
+    height:30,
+    resizeMode:'contain'
   },
   icon1: {
     width:20,

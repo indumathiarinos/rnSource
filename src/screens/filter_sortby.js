@@ -313,8 +313,9 @@ const styles = StyleSheet.create({
   },
   data:{
     color:'#707070',
-    fontSize:19,
-    textAlign:'center',
+    fontSize:16,
+    fontFamily:'AzoSans-Regular',
+        textAlign:'center',
     padding:'4%'
 
 

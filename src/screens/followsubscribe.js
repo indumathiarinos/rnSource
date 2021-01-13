@@ -283,7 +283,7 @@ exploredata(userid){
         }
         
       //  { this.getData()}
-        }, 1000);
+        }, 3000);
   
     console.log('undo state ',this.state.undo)
    
@@ -308,17 +308,20 @@ exploredata(userid){
                     <Image style={{width:50,height:50,borderRadius:50/2,padding:'2%'}} source={{uri:item.userImg}}/>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',alignItems:'center', paddingLeft: '5%', paddingRight: '2%', flex: 1, }}>
-          <Text style={{ textAlign: 'left', fontSize: 16, fontWeight: 'bold',marginTop:'-2%' }}
+          <Text style={{ textAlign: 'left',marginTop:'-2%', fontSize: 14,
+          fontFamily:'Montserrat-Bold' }}
           // style={{ fontSize: 18,backgroundColor:'green', color: 'black', fontWeight: 'bold',width:width,alignSelf:'center',textAlign:'left'}}
           >{item.Username}</Text>
 
           <TouchableOpacity 
           onPress={()=> this.removeItem(item)}
           // onPress={()=>this.showModal(item)}
-          style={{  backgroundColor: '#27A291', elevation: 2, alignItems: 'center', justifyContent: 'center', width: width / 2 - 90, height: height / 16, alignSelf: 'center', borderRadius: 20 }}
+          style={{  backgroundColor: '#27A291', elevation: 2, alignItems: 'center', justifyContent: 'center', width: 83, height: 30, alignSelf: 'center', borderRadius: 20 }}
           // style={{backgroundColor:'#27A291',elevation:2,marginTop:'0.5%',alignItems:'center',width:width/2-90,height:height/16,alignSelf:'center',borderRadius:20}}
           >
-            <Text style={{ color: '#ffff' }}>{item.follower_subscriber}</Text>
+            <Text style={{  fontSize: 14,
+          color: 'white',
+          fontFamily:'AzoSans-Medium' }}>{item.follower_subscriber}</Text>
           </TouchableOpacity>
         </View>
 
@@ -361,8 +364,9 @@ exploredata(userid){
           <TouchableOpacity
             onPress={this.headerBtnClk}>
             <Text style={{  padding: '5%',
-  fontSize: 16,textAlign:'center',
-  fontWeight: 'bold',color:'white'}}
+  fontSize: 14,
+  color: 'white',
+  fontFamily:'AzoSans-Medium',color:'white'}}
             >Followed/Subscribed</Text>
 
           </TouchableOpacity>
@@ -372,7 +376,7 @@ exploredata(userid){
           style={{justifyContent:'center',paddingRight:'1%',marginRight:'3%'}}
           onPress={()=>this.backpress()}
           >
-          <Image style={{marginTop:'5%',}} source={require('../assets/img/close.png')}/>
+          <Image style={{marginTop:'5%'}} source={require('../assets/img/close.png')}/>
           </TouchableOpacity>
 
           </View>
@@ -412,13 +416,16 @@ exploredata(userid){
 }}>
        {/* <Text style={{color:'#fff',fontSize:18,textAlign:'center'}}>{!this.state.follow_subscribe_name=='Followed'?'Unfollowed':'UnSubscribed'} - {this.state.deletedName} </Text> */}
 
-<Text style={{color:'#fff',fontSize:18,textAlign:'center'}}> Unfollowed - {this.state.deletedName} </Text>
+<Text style={{fontSize:16,textAlign:'center',
+          color: 'white',
+          fontFamily:'AzoSans-Bold'}}> Unfollowed - {this.state.deletedName} </Text>
          
          
         <TouchableOpacity style={{alignSelf:'center',marginRight:'2%'}} 
         onPress={()=>this.setState({undo:true})}
         >
-            <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
+            <Text style={{fontSize: 16, color: '#fff',textDecorationLine:'underline',
+          fontFamily:'AzoSans-Regular'}}>Undo</Text>
          </TouchableOpacity>
           
           </View>

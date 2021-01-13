@@ -112,7 +112,8 @@ class Comments extends Component {
             .then((responseJson) => {
                 //alert(responseText);1
                 this.setState({comments: responseJson,loading:false,
-                commentCounts:responseJson[0].COUNTS})
+                commentCounts:responseJson[0].COUNTS});
+                AsyncStorage.setItem('commentId',JSON.stringify(Number(responseJson[0].commentID)))
                 console.warn(responseJson)
             })
             .catch((error) => {
@@ -233,9 +234,9 @@ class Comments extends Component {
                 </View>
                 <View style={styles.content}>
 
-                    <Text rkType='primary3 mediumLine'>{item.text}</Text>
-
-                    <View style={{ flexDirection: 'row', justifyContent: "space-between", paddingTop: '5%' }}>
+                    <Text style={styles.contentText} rkType='primary3 mediumLine'>{item.text}</Text>
+                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: "space-between",marginLeft:17,marginRight:17,}}>
                         <View style={styles.bottomReply}>
                             <TouchableOpacity
                                 onPress={() => this.onPressHandler2(item.commentID)}
@@ -249,7 +250,7 @@ class Comments extends Component {
 
                                     <Text style={styles.textPadding}>Like</Text>
                                 </View>
-                                <Text style={{color:'#707070',marginLeft:5,}}>{item.CommentLike!=0?item.CommentLike:null}</Text>
+                                <Text style={{color:'#707070',}}>{item.CommentLike!=0?item.CommentLike:null}</Text>
 
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.imgGap}
@@ -269,11 +270,10 @@ class Comments extends Component {
 
                         <Text style={styles.time}>{item.created_at}</Text>
                     </View>
-                    <View style={styles.heading1}>
+                    {/* <View style={styles.heading1}>
 
 
-                    </View>
-                </View>
+                    </View> */}
             </View>
           );
       }
@@ -350,7 +350,7 @@ class Comments extends Component {
             <SafeAreaView style={{ flex: 1, backgroundColor: '#ffff' }}>
 
                 <View style={{
-                    height: '8%', backgroundColor: '#ffff', alignItems: 'center',
+                    height: 50, backgroundColor: '#ffff', alignItems: 'center',
                     justifyContent: 'space-between', flexDirection: 'row',
                     paddingLeft: '5%', paddingRight: '5%', borderEndColor: '#707070', borderEndWidth: 0.5
                 }}>
@@ -378,7 +378,7 @@ class Comments extends Component {
                         </View>
 
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.backpress()}>
+                    <TouchableOpacity style={{margin:17}} onPress={() => this.backpress()}>
                         <Image source={require('../assets/img/close.png')} />
                     </TouchableOpacity>
                     {/* </View> */}
@@ -446,7 +446,7 @@ class Comments extends Component {
                         <TouchableOpacity style={{ height:height/13,marginTop:'1%'}} onPress={() => this.setState({ viewModal: !this.state.viewModal })}
                         >
                             <View style={{ flexDirection: 'row',marginTop:'5%',alignItems:'center',width: width / 2 ,justifyContent:'space-around'}}>
-                                <Text style={{color:'#24d4bc',fontSize:18}}
+                                <Text style={{color:'#24d4bc',fontSize:16,fontFamily:'AzoSans-Regular'}}
                                 >View by</Text>
                                 <Image
                                     source={require('../assets/img/dropdown.png')} />
@@ -561,7 +561,10 @@ const styles = StyleSheet.create({
         padding: 2
     },
     textnormal: {
-        fontSize: 18
+        fontSize:16,
+        fontFamily:'AzoSans-Regular',
+        color:'#707070',
+        marginRight:5
     },
     imgMove: {
         // marginRight:60,
@@ -581,8 +584,12 @@ const styles = StyleSheet.create({
 
     },
     content: {
-        marginLeft: 16,
-        marginTop: 10
+        margin:14,
+    },
+    contentText:{
+        fontSize:14,
+        fontFamily:'AzoSans-Regular'
+
     },
     contentHeader: {
         flexDirection: 'row',
@@ -594,10 +601,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#CCCCCC"
     },
     image: {
-        width: 35,
-        height: 35,
-        borderRadius: 20,
-        marginLeft: 10,
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        margin: 10,
         // borderColor:'#CCCCCC',
         // borderWidth:0.5
     },
@@ -606,29 +613,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     time: {
-        fontSize: 11,
-        color: "#808080",
+        fontSize: 12,
+        color: "#707070",
+        fontFamily:'AzoSans-Light'
     },
     name: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginLeft: 20
+        fontSize: 14,
+        fontFamily: "Montserrat-Bold",
     },
     bottomReply: {
         flexDirection: 'row',
-
-
     },
     textPadding: {
-        marginLeft: '8%',
-        color: '#707070'
+        marginLeft:5,
+        color: '#707070',
+        fontSize:12,
+        fontFamily:'AzoSans-Light'
     },
     imgGap: {
-        marginLeft: '4%'
+        marginLeft:20
     },
     headline: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontFamily: 'Montserrat-Light',
         textAlign: 'center',
         margin: '4%',
         padding: '4%'

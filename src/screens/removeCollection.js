@@ -323,11 +323,11 @@ componentWillUnmount() {
           </TouchableOpacity>
           <TouchableOpacity
     onPress={() => this.onPressHandler(item.collectionsID)}>
-          <View style={{ padding: '2%', margin: '1%' }}>
-          <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-              <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
-              <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
-          </View>
+       <View style={{ padding: '2%', margin: '1%' }}>
+                    <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', }}>{item.Title}</Text>
+                        <Text style={{ color: '#707070',fontSize: 12,fontFamily:'AzoSans-Light', }}>{item.PublicationCount} publications</Text>
+                        <Text style={{ color: '#707070',fontSize: 12,fontFamily:'AzoSans-Light', }}>{item.PageCount} pages</Text>
+                    </View>
       </TouchableOpacity>
   </View>
           )
@@ -343,8 +343,9 @@ componentWillUnmount() {
   
               <SafeAreaView style={{ flex: 2, backgroundColor: '#ffff' }}>
   
-                  <View style={{height:'8%',backgroundColor:'red',justifyContent:'center'}}>
-                      <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Collection(s) to Remove</Text>
+                  <View style={{height:'8%',backgroundColor:'#E74C3C',justifyContent:'center'}}>
+                      <Text style={{color:'white',  fontSize:16,
+        fontFamily:'Montserrat-Bold',textAlign:'center'}}>Select Collection(s) to Remove</Text>
                   </View>
                   <ScrollView style={{marginBottom:'10%'}}>
   
@@ -387,17 +388,19 @@ componentWillUnmount() {
                         <View style={{
                             left: 0, right: 0, bottom: 0, position: 'absolute',
                             height: '10%',
+                            width:width,
+                            // height:'8%',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'red',
+                            backgroundColor: '#E74C3C',
                         }}>
-                            <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed - {this.state.deletedName} </Text>
+                            <Text numberOfLines={2} style={{ color: '#fff', fontSize: 16, textAlign: 'center',fontFamily:'AzoSans-Bold' }}>Removed - {this.state.deletedName} </Text>
 
 
                             <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
                             onPress={()=>this.setState({undo:true})}
                             >
-                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
+                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline',fontFamily:'AzoSans-Regular' }}>Undo</Text>
                             </TouchableOpacity>
 
 
@@ -418,15 +421,15 @@ componentWillUnmount() {
   
   }
   const styles = StyleSheet.create({
-      textStyle:{ 
-          color: 'black', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
-      },
-      inacitveStyle:{ 
-          color: '#c2c2c2', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
-      },
-      inacitveColor:{ 
-          color: '#fff', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
-      },
+    textStyle:{ 
+        color: '#707070', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
+    },
+    inacitveStyle:{ 
+        color: '#cccccc', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular',paddingLeft: '4%'
+    },
+    inacitveColor:{ 
+        color: '#fff', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
+    },
       bottomLine: {
   
           height: '8%',

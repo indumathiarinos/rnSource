@@ -210,8 +210,7 @@ CheckConnectivity(){
                 width: '50%',
                 padding: '2%',
                 backgroundColor: '#ffff',
-                // borderWidth:0.5,
-                // borderColor:'#ccccccc'
+            
             }}>
                 <TouchableOpacity
                 style={styles.button}
@@ -237,7 +236,7 @@ CheckConnectivity(){
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
                            
                     </View>:
-                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
+                    <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',borderRadius:10 }}
                     >
                         <Image style={{ width: '75%', height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
@@ -270,9 +269,9 @@ CheckConnectivity(){
                     </View>
                  :
                    <View style={{ padding: '2%', margin: '1%' }}>
-                    <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: 'bold' }}>{item.Title}</Text>
-                        <Text style={{ color: '#707070' }}>{item.PublicationCount} publications</Text>
-                        <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
+                    <Text numberOfLines={2}style={{ fontSize: 16, fontFamily: 'AzoSans-Medium' }}>{item.Title}</Text>
+                        <Text style={{ color: '#707070',fontSize: 12, fontFamily: 'AzoSans-Light'  }}>{item.PublicationCount} publications</Text>
+                        <Text style={{ color: '#707070',fontSize: 12, fontFamily: 'AzoSans-Light'  }}>{item.PageCount} pages</Text>
                     </View>}
                 </TouchableOpacity>
             </View>
@@ -294,7 +293,7 @@ CheckConnectivity(){
         return (
             <SafeAreaView style={{ flex: 2, backgroundColor: '#ffff' }}>
                 <View style={{height:'8%',backgroundColor:'#27A291',justifyContent:'center'}}>
-             <Text style={{color:'white',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Select Master Section</Text>
+                <Text style={{color:'white',fontSize:16,fontFamily:'Montserrat-Bold',textAlign:'center'}}>Select Master Section</Text>
                 </View>
                 <ScrollView style={{marginBottom:'10%'}}>
                     <FlatList
@@ -343,13 +342,13 @@ CheckConnectivity(){
 }
 const styles = StyleSheet.create({
     textStyle:{ 
-        color: 'black', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#707070', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     inacitveStyle:{ 
-        color: '#c2c2c2', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#cccccc', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular',paddingLeft: '4%'
     },
     inacitveColor:{ 
-        color: '#fff', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+        color: '#fff', textAlign: 'center', fontSize: 16,fontFamily:'AzoSans-Regular', paddingLeft: '4%'
     },
     bottomLine: {
 

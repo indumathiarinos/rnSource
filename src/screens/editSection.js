@@ -213,9 +213,10 @@ class EditSection extends Component {
                 <TextInput
                 textAlignVertical={'top'}
                 onChangeText={(text)=>this.setState({title:text})}
-                placeholder="Add a Title"
                 value={this.state.title}
-                style={{ textAlign:'left',fontSize:18,justifyContent:'center',height: 50,borderRadius:20,backgroundColor:'#F9F9F9' }} />
+                placeholder="Add Title"
+                placeholderTextColor={'#CCCCCC'}
+                 style={{ textAlign:'center',fontSize:16,justifyContent:'center',height: 50,borderRadius:20,backgroundColor:'#F9F9F9',width:width/2,fontFamily:'AzoSans-Regular'  }} />
 
                 </TouchableOpacity>
                 <Text style={styles.textTitle1}>Privacy</Text>
@@ -237,7 +238,7 @@ class EditSection extends Component {
                  <View>
                         
                     {!this.state.expanded?<View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{color:'#707070',textAlign:'center',fontSize:18,width:width-120,}}>{this.state.dropdownText}</Text>
+                    <Text style={styles.dropdownText}>{this.state.dropdownText}</Text>
                     <Image 
                     source={require('../assets/img/dropdown.png')}/>
                     </View>:
@@ -248,7 +249,7 @@ class EditSection extends Component {
                         <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                     <Text 
                     onPress={()=>this.setState({dropdownText:'Public',expanded:!this.state.expanded})}
-                    style={{color:'#707070',fontSize:18,width:width-120,textAlign:'center'}}>Public</Text>
+                    style={styles.dropdownText}>Public</Text>
                     <Image 
                     style={{width:20}}
                     source={imgSource}/>
@@ -256,7 +257,7 @@ class EditSection extends Component {
                     <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',padding:'2%'}}>
                     <Text 
                     onPress={()=>this.setState({dropdownText:'Private',expanded:!this.state.expanded})}
-                    style={{color:'#707070',fontSize:18,width:width-120,textAlign:'center'}}>Private</Text>
+                    style={styles.dropdownText}>Private</Text>
                     <Image 
                     style={{width:20}}
                     source={imgSource1}/>
@@ -274,9 +275,9 @@ class EditSection extends Component {
                 </TouchableOpacity>
                 <View style={{flexDirection:'row',justifyContent:'center'}}>
                 <Text style={styles.descTextTitle}>Description</Text>
-                <Text style={{color:'#707070',fontSize:18,
+                <Text style={{color:'#707070',fontSize:16,
         textAlign:'center',
-        fontWeight:'bold',
+        fontFamily:'AzoSans-Regular',
         padding:'5%',
         marginLeft:'-5%',
         marginTop:'5%'
@@ -287,7 +288,8 @@ class EditSection extends Component {
                 placeholder="Add Description" 
                 onChangeText={(text)=>this.setState({descdata:text})}
                 value={this.state.descdata}
-                style={{ padding:'5%',textAlign: 'left' ,justifyContent:'center',height: 150,borderRadius:20,backgroundColor:'#F9F9F9' }} />
+                placeholderTextColor={'#CCCCCC'}
+                style={{ padding:'5%',textAlign: 'left' ,justifyContent:'center',height: 150,borderRadius:20,backgroundColor:'#F9F9F9',fontSize:16,fontFamily:'AzoSans-Regular' }} />
 
                
                     {/* <Text 
@@ -295,7 +297,7 @@ class EditSection extends Component {
                     // style={{justifyContent:'center',color:'#CCCCCC',fontSize:18}}
                     >Add Title</Text> */}
                    
-                <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%',marginBottom:'10%' }}>{this.state.descdata.length}/250</Text>
+                   <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%',marginBottom:'10%',fontFamily:'AzoSans-Regular',fontSize:8,}}>{this.state.descdata.length}/250</Text>
 
                     
                 {/* <Text style={{padding:'3%'}}>
@@ -308,7 +310,7 @@ class EditSection extends Component {
                                        onPress={()=>this.saveBtn()}>
 
                    <View style={{flexDirection:'row'}}>
-                    <Text style={{color:'#707070',alignSelf:'center',textAlign:'right',fontSize:18,paddingRight:'2%'}}>Save</Text>
+                    <Text style={{color:'#707070',alignSelf:'center',textAlign:'right',fontSize:16,fontFamily:'AzoSans-Regular',paddingRight:'2%'}}>Save</Text>
                     <Image style={{width:30,height:30,alignSelf:'center'}} source={require('../assets/img/saveIcon.png')} />
                       
                     </View>
@@ -388,32 +390,36 @@ touchableBtn1:{
          borderBottomColor:'#707070'
      
     },
+    dropdownText:{
+        color:'#707070',textAlign:'center',width:width-120, fontSize:16,
+        fontFamily:'AzoSans-Regular',
+    },
     heading:{
         width:width-50,
         paddingLeft:50,
         // backgroundColor:'pink',
         textAlign:'center',
-        fontSize:20,
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'Montserrat-Bold',
         color:'#27A291'
     },
     textTitle:{
-        fontSize:18,
+        fontSize:16,
         textAlign:'center',
-        fontWeight:'bold',
+        fontFamily:'AzoSans-Medium',
         padding:'5%',
     },
     textTitle1:{
-        fontSize:18,
+        fontSize:16,
         textAlign:'center',
-        fontWeight:'bold',
+        fontFamily:'AzoSans-Medium',
         padding:'5%',
         marginTop:'10%'
     },
     descTextTitle:{
-        fontSize:18,
+        fontSize:16,
+        fontFamily:'AzoSans-Medium', 
         textAlign:'center',
-        fontWeight:'bold',
         padding:'5%',
         marginTop:'5%'
     },

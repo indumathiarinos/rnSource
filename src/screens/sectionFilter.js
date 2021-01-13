@@ -116,16 +116,17 @@ handleBackButtonClick() {
 
     return (
       <SafeAreaView style={{flex:2,backgroundColor:'#ffff'}}>
-      <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', }}>
-        <View>
+      <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'space-around',alignSelf:'center',marginLeft:20 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center',width:width-70, }}>
+        <View style={{alignItems:'center',justifyContent:'center'}}>
           <TextInput style={styles.input} 
                 placeholder="Search"
                 onChangeText={text => this.SearchFilterFunction(text)}
                 value={this.state.text}
                 underlineColorAndroid='gray'
-                placeholder="Search"
+                placeholderTextColor={'#707070'}
                 />
-                {Platform.OS=='ios'?<View style={{width:width-80,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
+                {Platform.OS=='ios'?<View style={{width:width-110,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
                 <TouchableOpacity style={styles.touchableButton} 
               >
@@ -133,10 +134,11 @@ handleBackButtonClick() {
                   source={require('../assets/img/search1.png')}
                   />
                </TouchableOpacity>
+               </View>
                <TouchableOpacity
               onPress={()=>this.backpress()}>
       <Image
-        style={{ alignSelf: 'center' }}
+        style={{ alignSelf: 'center', }}
        source={require('../assets/img/close.png')}/>
       </TouchableOpacity>
 
@@ -184,22 +186,26 @@ const styles = StyleSheet.create({
      padding:'2%'
   },
   touchableButton: {
-    position: 'absolute',
-    right: 55,
-    height: 25,
-    width: 35,
-    padding: 2
+    // position: 'absolute',
+    right: 30,
+    // height: 25,
+    // width: 35,
+    // padding: 2
   },
   input:{
-    width:width-80,
+    width:width-110,
     backgroundColor:"#fff",
-   
+    fontFamily:'AzoSans-Regular',
+    fontSize:16,
     padding:10,
-    margin:5
+    margin:5,
+    color:'#000',
+    alignSelf:'center'
   },
   data:{
     color:'#707070',
-    fontSize:19,
+    fontSize:16,
+    fontFamily:'AzoSans-Regular',
     textAlign:'center',
     padding:'4%'
 
@@ -256,8 +262,8 @@ const styles = StyleSheet.create({
         // marginLeft:'-5%'
       },
       headline:{
-        fontSize:22,
-        fontWeight:'bold',
+        fontSize:20,
+        fontFamily:'Montserrat-Bold',
         textAlign:'center',
 
         marginTop:'5%'

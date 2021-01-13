@@ -945,7 +945,7 @@ render() {
                 onPress={()=>this.followService(this.state.loginUserid,this.state.getuserid)}
                 // onPress={()=>this.setState({followHighlight:!this.state.followHighlight})}
                 >
-                  <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:17,fontWeight:'bold'}}>{this.state.Is_Follow}</Text>                
+                  <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:16,fontWeight:'AzoSans-Regular'}}>{this.state.Is_Follow}</Text>                
                 </TouchableOpacity>  
                 </LinearGradient>
               }
@@ -1288,7 +1288,7 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
                       <View style={{
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
-                  <Image  source={require('../assets/img/colliconnew1.png')} />
+                  <Image source={require('../assets/img/coll_white1.png')} />
                       <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                       </View>
                       <TouchableOpacity
