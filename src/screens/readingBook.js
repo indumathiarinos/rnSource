@@ -1311,12 +1311,11 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
         </View>
         : <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: this.state.modeState == 'light' ? '#fff' : '#000' }}>
         <TouchableOpacity
-          style={{ padding: '3%' }}
           // onPress={()=>this.onPressHandler(item.Post_page_id)}
           onPress={() =>{this.state.explore_page=='0'?this.likeClick(this.state.getpostid):this.alertPopup()}}>
 
           {/* {this.renderImage} */}
-          {this.state.likeStatus=='Y' == true ? <Image source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')} />}
+          {this.state.likeStatus=='Y' == true ? <Image style={{marginTop:10,marginLeft:5}} source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')} />}
           {/* <Image
             source={imgSource}
           /> */}
@@ -1326,7 +1325,6 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           onPress={()=>this.setState({showlikeImg:!this.state.showlikeImg})}  
          source={imgSource}/> */}
         <TouchableOpacity
-          style={{ padding: '3%' }}
           onPress={() =>{this.state.explore_page=='0'?
             this.commentClick():this.alertPopup()}}
         >
@@ -1335,7 +1333,6 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
             source={require('../assets/img/comments-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ padding: '3%' }}
           // onPress={() => this.refs.modal4.open()} 
           onPress={() =>{this.state.explore_page=='0'?
             this.setState({ collectionModal: !this.state.collectionModal }):this.alertPopup()
@@ -1345,7 +1342,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           <Image style={styles.group} source={require('../assets/img/add-to-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ padding: '3%' }} onPress={() =>{this.state.explore_page=='0'?
+          onPress={() =>{this.state.explore_page=='0'?
             this.setState({ shareModal: !this.state.shareModal }):this.alertPopup()}
             // this.refs.modal6.open()
           }>
@@ -1833,7 +1830,7 @@ bottomBar: {
   position: 'absolute',
   left: 0,
   right: 0,
-  bottom: 0
+  bottom: 0,
 },
 
 bottomBtn: {

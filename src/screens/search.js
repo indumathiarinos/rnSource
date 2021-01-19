@@ -345,6 +345,19 @@ popupBookpage=(item)=>{
  }
 
 }
+tags(name){
+  let varcolordot = "";
+  if(name==='Education'){
+      varcolordot='#1C4A7E'
+  }else if(name==='Illustration'){
+      varcolordot='#c65135'
+  }else if(name==='Fiction'){
+      varcolordot='#741c7e'
+  }else if(name==='Comics'){
+      varcolordot="#c65135"
+  }
+  return varcolordot;
+}
   renderItem_card({ item }) {
     return (
     
@@ -362,7 +375,7 @@ popupBookpage=(item)=>{
             <CardView
                 cardElevation={2}
                 cardMaxElevation={2}
-                style={{ backgroundColor: '#fa376b',padding:'2%'}}
+                style={{ backgroundColor: this.tags(item.Category_name),padding:'2%'}}
                 cornerRadius={10}>
                      <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                      <Image

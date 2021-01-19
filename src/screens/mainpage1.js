@@ -1086,6 +1086,19 @@ return (
     </View>
 );
 }
+tags(name){
+    let varcolordot = "";
+    if(name==='Education'){
+        varcolordot='#1C4A7E'
+    }else if(name==='Illustration'){
+        varcolordot='#c65135'
+    }else if(name==='Fiction'){
+        varcolordot='#741c7e'
+    }else if(name==='Comics'){
+        varcolordot="#c65135"
+    }
+    return varcolordot;
+}
 alertPopup(){
     this.logoutpress()
     //    this.setState({loginPopup:true})
@@ -1271,7 +1284,7 @@ render() {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    style={{ backgroundColor:index%2==0?'#1C4A7E':'#C65135',padding:'3%'}}
+                    style={{ backgroundColor:this.tags(item.Category_name),padding:'3%'}}
                     cornerRadius={10}>
                          <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                          <Image
