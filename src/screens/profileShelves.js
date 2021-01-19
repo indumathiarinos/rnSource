@@ -908,9 +908,9 @@ render() {
               onPress={this.headerBtnClk}>
               <Text style={{
                 padding: '5%',
-                fontSize: 16,
-                color: 'white',
-                fontWeight: 'bold'
+                fontSize: 14,
+                color: '#fff',
+                fontFamily: 'AzoSans-Medium'
               }}
                 onPress={() => this.props.navigation.navigate('profileShelves')}
               >Shelves</Text>
@@ -945,7 +945,7 @@ render() {
                 onPress={()=>this.followService(this.state.loginUserid,this.state.getuserid)}
                 // onPress={()=>this.setState({followHighlight:!this.state.followHighlight})}
                 >
-                  <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:16,fontWeight:'AzoSans-Regular'}}>{this.state.Is_Follow}</Text>                
+                  <Text style={{color:this.state.Is_Follow=="Followed"?'#fff':'#27A291',fontSize:16,fontFamily:'AzoSans-Regular'}}>{this.state.Is_Follow}</Text>                
                 </TouchableOpacity>  
                 </LinearGradient>
               }
@@ -955,7 +955,7 @@ render() {
               <LinearGradient style={styles.buttonContainer2} colors={['#24D4BC', '#27A291']} >
             <TouchableOpacity
             onPress={()=>this.setState({shareModal:!this.state.shareModal})}>
-              <Text style={{color:'#fff',fontSize:17,fontWeight:'bold'}}>Share</Text> 
+              <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>Share</Text> 
             </TouchableOpacity>
             </LinearGradient>
             </View> 
@@ -983,8 +983,9 @@ render() {
                   <TouchableOpacity 
                     // onPress={()=>this.refs.modal6.open()}
                      style={styles.socialBarButton}>
-                        <Text style={{color:'#707070'}}>80.1k(SN)</Text>
-                  {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
+                <Text style={{color:'#707070',fontSize: 12,
+                  fontFamily:'AzoSans-Regular'}}>80.1k(SN)</Text>
+                    {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
                   <Image style={styles.icon} source={require('../assets/img/share.png')}/>
                   {/* </TouchableOpacity> */}
                     
@@ -1477,26 +1478,170 @@ sliderContainerStyle: {
   elevation:1,
   backgroundColor:'#fff',
   resizeMode:'cover'
-},
+
+  },
 headerText: {
   padding: '5%',
-  fontSize: 16,
-  fontWeight: 'bold'
+  color: "#707070",
+fontSize: 14,
+fontFamily:'AzoSans-Medium'
 },
-header: {
+header:{
   backgroundColor: "#00BFFF",
-  height: 180,
+  height:180,
 },
-staticheader: {
-  flexDirection: 'row',
+staticheader:{
+  flexDirection:'row',
   // justifyContent: 'center', 
   alignItems: 'center',
   height: '8%',
   backgroundColor: '#ffff',
-  elevation: 1,
-  borderBottomColor: '#707070'
+   elevation:1,
+   borderBottomColor:'#707070'
 
 
+},
+avatar: {
+  width: 110,
+  height: 110,
+  borderRadius: 63,
+  borderWidth: 2,
+  borderColor: "white",
+  marginBottom:10,
+  position: 'absolute',
+  flexDirection: 'row',
+  justifyContent:'center',
+  alignSelf:'center',
+  alignItems: 'center',
+  marginTop: width /3.4  //actual marginTop:130
+},
+bottomBar: {
+  flexDirection: 'row',
+  justifyContent: 'space-around',
+  alignItems: 'center',
+  backgroundColor: 'transparent',
+  marginTop:30
+},
+// name:{
+//   fontSize:22,
+//   color:"#FFFFFF",
+//   fontWeight:'600',
+// },
+body:{
+  // marginTop:10,
+},
+bodyContent: {
+  alignItems: 'center',
+   padding:10,
+  // backgroundColor:'skyblue'
+},
+name:{
+  color:"#000",
+  fontSize: 16,
+  fontFamily:'Montserrat-Bold'
+},
+name1:{
+  fontSize:24,
+  color: "#000",
+  // fontWeight: "bold",
+  textAlign:'left',
+  fontFamily:'Montserrat-Light'
+},
+info:{
+  color: "#000000",
+  fontSize: 12,
+fontFamily:'AzoSans-Medium'
+},
+description:{
+  fontSize:15,
+},
+buttonContainer: {
+  marginTop:20,
+  height:35,
+  justifyContent: 'center',
+  alignItems: 'center',
+  width:100,
+  borderRadius:30,
+  marginLeft:10,
+  marginRight:10,
+  backgroundColor: "#FFFF",
+  elevation:3
+
+},
+buttonContainer1: {
+  marginTop:20,
+  height:45,
+  marginLeft:100,
+  marginRight:10,
+  alignItems: 'center',
+  justifyContent: 'center',
+  width:100,
+  borderRadius:30,
+  backgroundColor: "#ffff",
+ 
+},
+buttonContainer2: {
+  marginTop:20,
+  height:35,
+  marginLeft:100,
+  marginRight:10,
+  alignItems: 'center',
+  justifyContent: 'center',
+  width:100,
+  borderRadius:30,
+  backgroundColor: "#27A291",
+ 
+},
+socialBarContainer3: {
+  justifyContent: 'flex-end',
+  flexDirection: 'row',
+},
+socialBarContainer: {
+  flexDirection: 'row',
+  flex: 1,
+  marginTop:5
+},
+socialBarContainer2: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent:'space-between',
+},
+socialBarSection: {
+  justifyContent: 'center',
+  flexDirection: 'row',
+  flex: 1,
+},
+socialBarlabel: {
+  marginLeft: 8,
+  alignSelf: 'flex-end',
+  justifyContent: 'center',
+},
+socialBarButton:{
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+divider:{
+  width:2,
+  height:20,
+  marginLeft:5,
+  marginRight:5,
+  marginTop:'1%',
+  backgroundColor:'#707070'
+},
+icon: {
+  width:25,
+  marginLeft:5,
+  height:25,
+},
+btnAction: {
+  height:45,
+  width:45,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius:22,
+  backgroundColor: "#fff",
 },
 // overlay:{
 //   // marginTop:'10%',
@@ -1513,142 +1658,8 @@ centerText: {
   //  fontWeight: 'bold',
   margin: '5%'
 },
-avatar: {
-  width: 110,
-  height: 110,
-  borderRadius: 63,
-  borderWidth: 2,
-  borderColor: "white",
-  marginBottom: 10,
-  position: 'absolute',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignSelf: 'center',
-  alignItems: 'center',
-  marginTop: width / 3.4 //actual marginTop:130
-},
-bottomBar: {
-  flexDirection: 'row',
-  justifyContent: 'space-around',
-  alignItems: 'center',
-  backgroundColor: 'transparent',
-  marginTop: 30
-},
-name: {
-  fontSize: 22,
-  color: "#FFFFFF",
-  fontWeight: '600',
-},
-body: {
-  // marginTop: 20,
-},
-bodyContent: {
-  alignItems: 'center',
-  padding: 10,
-},
-name: {
-  fontSize: 22,
-  color: "#000",
-  fontWeight: "700"
-},
-info: {
-  fontSize:16,
-  color: "#000000",
-  // fontWeight: 'bold'
-},
-description: {
-  fontSize: 15,
-},
-buttonContainer: {
-  marginTop: 20,
-  height: 35,
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: 100,
-  borderRadius: 30,
-  marginLeft: 10,
-  marginRight: 10,
-  backgroundColor: "#fFFF",
-  elevation: 3
 
-},
-buttonContainer1: {
-  marginTop: 20,
-  height: 35,
-  marginLeft: 100,
-  marginRight: 10,
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 100,
-  borderRadius: 30,
-  backgroundColor: "#ffff",
 
-},
-buttonContainer2: {
-  marginTop: 20,
-  height: 35,
-  marginLeft: 100,
-  marginRight: 10,
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 100,
-  borderRadius: 30,
-  backgroundColor: "#27A291",
-
-},
-socialBarContainer3: {
-  justifyContent: 'flex-end',
-  flexDirection: 'row',
-},
-socialBarContainer: {
-  flexDirection: 'row',
-  flex: 1,
-  marginTop: 5
-},
-socialBarContainer2: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-},
-socialBarSection: {
-  justifyContent: 'center',
-  flexDirection: 'row',
-  flex: 1,
-},
-socialBarlabel: {
-  marginLeft: 8,
-  alignSelf: 'flex-end',
-  justifyContent: 'center',
-},
-socialBarButton: {
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-divider: {
-  width: 2,
-  height: 20,
-  marginLeft: 5,
-  marginRight: 5,
-  // marginTop: '1%',
-  backgroundColor: '#707070'
-},
-icon: {
-  // width:25,
-  // height:25,
-  // flex:1,
-  marginLeft: 5,
-
-},
-btnAction: {
-  height: 45,
-  width: 45,
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: 22,
-  backgroundColor: "#fff",
-},
 });
 function mapStateToProps(state) {
   return {

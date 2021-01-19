@@ -16,7 +16,7 @@ import ModalBox from 'react-native-modalbox';
 import ViewMoreText from 'react-native-view-more-text';
 // import ReadMore from 'react-native-read-more-text';
 //import ReadMore from 'react-native-read-more-text';
-import ReadMore from "./Readmore"
+import ReadMore from "./Readmore";
 
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
@@ -285,7 +285,6 @@ getData(){
           <TouchableOpacity
             onPress={this.headerBtnClk}>
 <Text style={{ padding: '5%',
-  fontSize: 16,
   color:'white',
   fontSize: 14,
   fontFamily:'AzoSans-Medium'}}
@@ -355,7 +354,7 @@ getData(){
               <TouchableOpacity
               onPress={()=>this.setState({shareModal:!this.state.shareModal})}>
                 <Text style={{color:'#fff',fontSize: 16,
-  color:'white',
+  color:'#fff',
   fontFamily:'AzoSans-Regular'}}>Share</Text> 
               </TouchableOpacity>
               </LinearGradient>
@@ -512,27 +511,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width,
     overflow: 'hidden',
-    width:width,
-    height: width / 1.8,
-    
+    height: width / 2.2,
   },
   sliderContainerStyle: {
     borderRadius: width,
-    width: width*2,
+    width: width * 2,
     height: width * 2,
     marginLeft: -(width / 2),
     position: 'absolute',
     bottom: 0,
+    overflow: 'hidden',
     elevation:1,
     backgroundColor:'#fff',
-    overflow: 'hidden',
     resizeMode:'cover'
-
-    // backgroundColor: 'pink'
-  },
+    },
   headerText: {
     padding: '5%',
     fontSize: 14,
+    color:'#707070',
     fontFamily:'AzoSans-Medium'
   },
   header:{
@@ -562,7 +558,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignSelf:'center',
     alignItems: 'center',
-    marginTop:width / 2.6 //actual marginTop:130
+    marginTop: width /3.4  //actual marginTop:130
   },
   bottomBar: {
     flexDirection: 'row',

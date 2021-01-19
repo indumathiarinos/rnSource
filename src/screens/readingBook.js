@@ -1179,9 +1179,9 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           </View>
             : null}
       {/* </View> */}
-      {/* <WebView
+      <WebView
         // source={{html:`<p contenteditable="true" placeholder="Title...">New sample page for event</p><div contenteditable="false" id="Event_1" class="QuickEvent page_padding" style="position: relative;"><img src="../../images/cancel.png" onclick="clearevepromo(1)" id="cancel_1" style="left: 95%; top: 20px;" class="fr-draggable"><section id="eventtoolbar_1" contenteditable="false" class="eventToolbar1" style="display: block;"><i onclick="ToolbarSty('B',currentevenprom)" class="fa fa-bold" aria-hidden="true"></i><i onclick="ToolbarSty('I',currentevenprom)" class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-align-left" onclick="ToolbarSty('left',currentevenprom)" aria-hidden="true"></i><i class="fa fa-align-center" onclick="ToolbarSty('center',currentevenprom)" aria-hidden="true"></i><i class="fa fa-align-right" onclick="ToolbarSty('right',currentevenprom)" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i></section><input type="text" id="titl_1" placeholder="Title" class="col-md-6 col-xs-6 col-lg-6 col-sm-6 form-control event_form" onkeydown="Edit2BackspaceInp(this,event)" onclick="showtool(1)" value="New Event"><br><div class="upload-btn-wrapper"><i class="fa fa-image round_media_btn" aria-hidden="true"></i><input type="file" name="myfile" onchange="getImage(this)" value=""></div><div style="position: relative;"><section id="desctoolbar_1" contenteditable="false" class="eventToolbar2" style="display: block;"><i onclick="DescbarSty('B',currentdescid)" class="fa fa-bold" aria-hidden="true"></i><i onclick="DescbarSty('I',currentdescid)" class="fa fa-italic" aria-hidden="true"></i><i onclick="DescbarSty('U',currentdescid)" class="fa fa-underline" aria-hidden="true"></i><i onclick="DescbarSty('S',currentdescid)" class="fa fa-strikethrough" aria-hidden="true"></i><i onclick="DescbarSty('LI',currentdescid)" class="fa fa-link" aria-hidden="true"></i><i class="fa fa-align-left" onclick="DescbarSty('left',currentdescid)" aria-hidden="true"></i><i class="fa fa-align-center" onclick="DescbarSty('center',currentdescid)" aria-hidden="true"></i><i class="fa fa-align-right" onclick="DescbarSty('right',currentdescid)" aria-hidden="true"></i><i onclick="DescbarSty('IN',currentdescid)" class="fa fa-indent" aria-hidden="true"></i><i onclick="DescbarSty('OU',currentdescid)" class="fa fa-outdent" aria-hidden="true"></i><i onclick="DescbarSty('CO',currentdescid)" class="fa fa-columns" aria-hidden="true"></i><i onclick="DescbarSty('OL',currentdescid)" class="fa fa-list-ol" aria-hidden="true"></i><i onclick="DescbarSty('UL',currentdescid)" class="fa fa-list-ul" aria-hidden="true"></i><i onclick="DescbarSty('LI',currentdescid)" class="fa fa-list" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i></section><textarea id="desc_1" placeholder="Description" style="resize:none;" class="col-md-6 col-xs-6 col-lg-6 col-sm-6 form-control event_form" onclick="Desctool(1)" value="Testing for event">Testing for event</textarea></div><span id="add-date"><span class="event_label" style="margin-right: 70px;">Date:</span><input class="event_form" type="date" style="width:140px;" value="2020-01-15">&nbsp;&nbsp;&nbsp;<input class="event_form" type="type" value="11:30am" onkeydown="Edit2BackspaceInp(this,event)" style="width:85px;"></span><div style="position: relative;"><section id="maptoolbar_1" contenteditable="false" class="eventToolbar3" style="display: block;"><i onclick="MapbarSty('B',this)" class="fa fa-bold" aria-hidden="true"></i><i onclick="MapbarSty('I',this)" class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-map" onclick="MapbarSty('map',this)" aria-hidden="true"></i><span style="display:none"><label>Enter Location</label> <input onkeydown="Edit2BackspaceInp(this,event)" id="Event_location_1" type="text" class="map_input pac-target-input" placeholder="Enter a location" autocomplete="off" value=""></span></section><span class="event_label" style="margin-right: 45px;">Location:</span><input class="event_form" type="text" id="locate_1" placeholder="Location Name" onkeydown="Edit2BackspaceInp(this,event)" onclick="Maptool(1)" style="width:78%;" value=""></div><input class="btn save_event" id="EventBtn_1" onclick="evet()" type="button" value="Save The Date"><br><br><br></div><p>Reminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotion<br></p>`}}
-       source={{html:this.state.description}}
+       source={{uri:this.state.gettypeid=='4'?'https://www.pagevio.com/sample-page/'+this.state.getpostid:'https://www.pagevio.com/publication-page-text/'+this.state.getpostid}}
         style={{flex:1 }}
         // startInLoadingState
         // domStorageEnabled
@@ -1189,8 +1189,8 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
         // allowUniversalAccessFromFileURLs
         // injectedJavaScript={INJECTEDJAVASCRIPT}
         // allowFileAccess
-      /> */}
-      {!this.state.contentVisible ?
+      />
+      {/* {!this.state.contentVisible ?
         <ScrollView
           contentContainerStyle={styles.scroll}
           ref={(c) => {this.scroll = c}}
@@ -1198,20 +1198,6 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           onScroll={this.UpdateProgressBar}
           onLayout={(event) => this.scrollView_height = (event.nativeEvent.layout.height)}
           scrollEventThrottle={12} >
-
-          {/* {this.state.bookmarkPopup ? <View>
-            <Image style={{ top: '15%', right: 0, position: 'absolute' }} source={require('../assets/img/bigbookmark.png')} />
-          </View>
-            : null} */}
-       
-          <HTMLView
-            // html={this.state.description}
-            value={this.state.description}
-            renderNode={this._renderNode}
-            nodeComponentProps={{selectable: this.state.explore_page=='0'?true:false}}
-            // textSelectable={this.state.explore_page=='0'?true:false}
-             />
-     
           <View style={styles.nextPreviousView}>
             {this.state.previousPage!="" ?
               <TouchableOpacity onPress={() => this.handleLess()}>
@@ -1230,11 +1216,6 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           </View>
           
 
-
-
-          {/* {this.state.pagefeedData!="" || this.state.readingData!=""?
-                    ( */}
-
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
               <TouchableOpacity
                 onPress={() =>{this.state.explore_page=='0'?this.goToAuthorProfile():this.alertPopup()}}
@@ -1247,33 +1228,27 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                 onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}
               >
                 <Text style={[this.state.modeState == 'light' ? styles.title : theme[this.state.modeState].title]}>
-                  {this.state.author} {/* {item.Username} */}
+                  {this.state.author}
                 </Text>
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', 
-            flex:1, justifyContent:'space-between'
-            // margin: 5
-            , marginBottom: 80
+            flex:1, justifyContent:'space-between',marginBottom: 80
              }}>
 
               <View 
               style={{ flexDirection: 'row',}}
-              // flex:1, 
-              // // height: 40, width: width / 2 ,
-              //  justifyContent: 'center', alignItems: 'center', marginBottom: 30 }}
-               >
+                           >
                 <Text style={[this.state.modeState == 'light' ? styles.dateText : theme[this.state.modeState].dateText]}>
                   Published:</Text>
                 <Text
                   numberOfLines={2} style={[this.state.modeState == 'light' ? styles.dateText1 : theme[this.state.modeState].dateText1]}>
 
-                  {this.state.created_at} {/* {item.Username} */}
+                  {this.state.created_at}
                 </Text>
               </View>
               <View 
                               style={{ flexDirection: 'row',}}
-              // style={{ flexDirection: 'row', width: width / 2 - 10, marginLeft: 10, height: 40, justifyContent: 'center', alignItems: 'center', marginBottom: 30 }}
               >
                   <Text style={[this.state.modeState == 'light' ? styles.dateText : theme[this.state.modeState].dateText]}>
                   Released Date:</Text>
@@ -1281,7 +1256,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                   numberOfLines={2}
                   style={[this.state.modeState == 'light' ? styles.dateText1 : theme[this.state.modeState].dateText1]}>
 
-                  {this.state.created_at} {/* {item.Username} */}
+                  {this.state.created_at}
                 </Text>
               </View>
             </View>         
@@ -1302,7 +1277,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           contentContainerStyle={{ alignItems: 'center',}}
           keyExtractor={(item, index) => index} />
                   </ScrollView>
-      }
+      } */}
         {this.state.contentVisible ? <View style={styles.bottomBar}>
           <TouchableOpacity
             style={styles.bottomBtn}>
@@ -1311,20 +1286,12 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
         </View>
         : <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: this.state.modeState == 'light' ? '#fff' : '#000' }}>
         <TouchableOpacity
-          // onPress={()=>this.onPressHandler(item.Post_page_id)}
+          style={{ padding: '3%' }}
           onPress={() =>{this.state.explore_page=='0'?this.likeClick(this.state.getpostid):this.alertPopup()}}>
-
-          {/* {this.renderImage} */}
-          {this.state.likeStatus=='Y' == true ? <Image style={{marginTop:10,marginLeft:5}} source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')} />}
-          {/* <Image
-            source={imgSource}
-          /> */}
-
+          {this.state.likeStatus=='Y' == true ? <Image source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')} />}
         </TouchableOpacity>
-        {/* <Image
-          onPress={()=>this.setState({showlikeImg:!this.state.showlikeImg})}  
-         source={imgSource}/> */}
         <TouchableOpacity
+          style={{ padding: '3%' }}
           onPress={() =>{this.state.explore_page=='0'?
             this.commentClick():this.alertPopup()}}
         >
@@ -1333,18 +1300,16 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
             source={require('../assets/img/comments-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity
-          // onPress={() => this.refs.modal4.open()} 
+          style={{ padding: '3%' }}
           onPress={() =>{this.state.explore_page=='0'?
             this.setState({ collectionModal: !this.state.collectionModal }):this.alertPopup()
           }}
-        // onPress={() =>this.props.navigation.navigate('createCollection')} 
         >
           <Image style={styles.group} source={require('../assets/img/add-to-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>{this.state.explore_page=='0'?
+          style={{ padding: '3%' }} onPress={() =>{this.state.explore_page=='0'?
             this.setState({ shareModal: !this.state.shareModal }):this.alertPopup()}
-            // this.refs.modal6.open()
           }>
           <Image style={styles.group} source={require('../assets/img/share-icon.png')} />
         </TouchableOpacity>
@@ -1352,7 +1317,6 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
         }
       <Modal1 isVisible={this.state.loading}
 
-      // onBackdropPress={() => this.setState({ loading: true })}
       >
         <Image source={require('../assets/gif/logo.gif')} style={{
           alignSelf: 'center',
@@ -1830,7 +1794,7 @@ bottomBar: {
   position: 'absolute',
   left: 0,
   right: 0,
-  bottom: 0,
+  bottom: 0
 },
 
 bottomBtn: {

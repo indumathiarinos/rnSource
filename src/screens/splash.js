@@ -32,7 +32,7 @@ class SplashScreen extends React.Component {
     setTimeout(
       () =>
       {this.props.checklogin ==0 ? this.props.navigation.navigate('Onboarding'):this.props.navigation.navigate('mainpage') },
-      5000
+      2000
     );
     // {this.getData()}
   }

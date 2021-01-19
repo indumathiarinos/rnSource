@@ -971,8 +971,9 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
           >
             <View styles={{backgroundColor:'pink'}}>
               {
-              item.Likestatus=='Y'? <Image style={{width:15,height:15,marginLeft:15,marginTop:10,marginBottom:3}} source={require('../assets/img/like1.png')}/> : <Image  style={styles.group} source={require('../assets/img/like-icon.png')} />}
-              <Text style={{ color: item.Likestatus=='Y' ? '#27A291' : '#707070', fontSize: 10,textAlign:'center',marginLeft:item.Likestatus=='Y'?15:0 }}>{item.likescount}</Text>
+              item.Likestatus=='Y'
+               ? <Image style={{width:10,height:10,margin:2}} source={require('../assets/img/like.png')} /> : <Image  style={styles.group} source={require('../assets/img/like-icon.png')} />}
+              <Text style={{ color: item.Likestatus=='Y' ? '#27A291' : '#707070', fontSize: 10,textAlign:'center' }}>{item.likescount}</Text>
             </View>
             {/* <Image
               source={imgSource}
@@ -1392,7 +1393,7 @@ style={{marginBottom:'10%'}}
                             {/* <Text>Collection</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                            <Image source={require('../assets/img/search.png')} />
+                        <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/search.png')} />
                             {/* <Text>Search</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
@@ -1432,9 +1433,9 @@ container: {
 
   userImg:{
     width: 40,
-    height: 40,
-    borderRadius: 20,
-    resizeMode:'cover'
+     height: 40,
+      borderRadius: 20,
+      resizeMode:'cover'
   },
   username:{
     fontSize: 12,

@@ -416,7 +416,7 @@ fontFamily:'AzoSans-Medium'}}
                   <LinearGradient style={styles.buttonContainer2} colors={['#24D4BC', '#27A291']} >
                 <TouchableOpacity
                 onPress={()=>this.setState({shareModal:!this.state.shareModal})}>
-                  <Text style={{color:'#fff',fontSize:17,fontWeight:'bold'}}>Share</Text> 
+              <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>Share</Text> 
                 </TouchableOpacity>
                 </LinearGradient>
                 </View> 
@@ -569,8 +569,7 @@ fontFamily:'AzoSans-Medium'}}
       },
     headerText: {
       padding: '5%',
-      fontSize: 16,
-      color: "#000000",
+      color: "#707070",
     fontSize: 14,
   fontFamily:'AzoSans-Medium'
     },

@@ -5,7 +5,8 @@ import { Divider,ListItem } from 'react-native-elements';
 import Modal1 from 'react-native-modal';
 import NetInfo from '@react-native-community/netinfo';
 import {connect} from 'react-redux';
-
+// import Svg from 'react-native-svg';
+import FollowSvg from '../assets/img/followsub.svg';
 console.disableYellowBox = true;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
 const width = Dimensions.get('window').width;
@@ -18,12 +19,12 @@ class MenuPage extends Component {
       {
         id:1,
         title:'Followed/Subscribed',
-        img:require('../assets/img/followsub.png')
+        img:require('../assets/img/followsub1.png')
       },
       {
         id:2,
         title:'QR Code Reader',
-        img:require('../assets/img/qrcode.png')
+        img:require('../assets/img/qrcode1.png')
     
       },
       {
@@ -34,7 +35,7 @@ class MenuPage extends Component {
       {
         id:4,
         title:'Offline',
-        img:require('../assets/img/offline.png')
+        img:require('../assets/img/offline1.png')
     
       },
       // {
@@ -45,7 +46,7 @@ class MenuPage extends Component {
       {
         id:5,
         title:'Settings',
-        img:require('../assets/img/settings.png')
+        img:require('../assets/img/settings1.png')
     
       },
     ],
@@ -53,18 +54,18 @@ class MenuPage extends Component {
       {
         id:1,
         title:'Followed/Subscribed',
-        img:require('../assets/img/followsub.png')
+        img:require('../assets/img/followsub1.png')
       },
       {
         id:2,
         title:'QR Code Reader',
-        img:require('../assets/img/qrcode.png')
+        img:require('../assets/img/qrcode1.png')
     
       },
       {
         id:4,
         title:'Offline',
-        img:require('../assets/img/offline.png')
+        img:require('../assets/img/offline1.png')
     
       },
       // {
@@ -75,7 +76,7 @@ class MenuPage extends Component {
       {
         id:5,
         title:'Settings',
-        img:require('../assets/img/settings.png')
+        img:require('../assets/img/settings1.png')
     
       },
     ],
@@ -156,9 +157,10 @@ class MenuPage extends Component {
       >
         <View style={{flexDirection:'row',alignItems:'center'}}
    >
-       <Image
-            
-            style={{margin:'2%',padding:'2%'}} source={item.img}/>
+     <FollowSvg width="20"
+    height="30" />
+       {/* <Image
+            style={{margin:'2%',padding:'2%'}} source={item.img}/> */}
             <Text style={{marginLeft:'5%',color:'#707070'}}>{item.title}</Text>
             </View>
 
@@ -264,8 +266,9 @@ class MenuPage extends Component {
       {/* <View style={{}}> */}
       <View style={{flexDirection:'row',alignItems:'center'}}
    >
+     {/* <FollowSvg/> */}
        <Image 
-            style={{margin:'2%',padding:'2%',marginLeft:item.id==1?'1%':'2%'}} source={item.img}/>
+            style={{marginLeft:item.id==1?'1%':'2%',width:40,height:40}} resizeMode='contain' source={item.img}/>
             <Text style={{marginLeft:item.id==1?'3%':'5%',color:'#707070'}}>{item.title}</Text>
             </View>
 

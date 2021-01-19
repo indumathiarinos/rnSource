@@ -101,7 +101,8 @@ class ViewBook extends Component {
       explore_page: '0',
       loginPopup: false,
       undo:false,
-      likeStatus:''
+      likeStatus:'',
+      scrollend:false
       // Image: "https://arinos.co.uk/uploads/publication-cover/1581929254.jpg"
       // Title: "SNOW WHITE AND THE SEVEN DWARF"
       // Content: "Once upon a time . . . in a great castle, a Prince’s daughter grew up happy and contented, in spite of a jealous stepmother. She was very pretty, with blue eyes and long black hair. Her skin was delicate and fair, and so she was called Snow White. Everyone was quite sure she would become very beautiful. Though her stepmother was a wicked woman, she too was very beautiful, and the magic mirror told her this every day, whenever she asked it"
@@ -169,8 +170,11 @@ class ViewBook extends Component {
         // }
         { this.exploredata(this.state.gettypeid, this.state.getpostid) }
         if (this.state.Is_Follow == "Follow") {
+         
           this.setState({
             tooltip: !this.state.tooltip,
+            scrollend:true
+
             // visible:true,
 
           });
@@ -773,6 +777,7 @@ class ViewBook extends Component {
     const like = require('../assets/img/like.png');
     const unlike = require('../assets/img/unlike.png');
     var imgSource = this.state.showlikeImg ? like : unlike;
+    !this.state.scrollend?null: this.scroll.scrollTo({ y:height});
     //  value = this.props.navigation.state.params.pass_data
     //   ? this.props.navigation.state.params.pass_data
     //   : null;
@@ -836,7 +841,7 @@ class ViewBook extends Component {
         </View>
         {/* <View style={styles.header}>
 </View> */}
-        <ScrollView >
+        <ScrollView style={{marginBottom:'8%'}} ref={(node)=>this.scroll=node} >
           <View style={styles.containerStyle} >
             <ImageBackground style={styles.sliderContainerStyle}
               source={{ uri: this.state.img == "" ? null : this.state.img }}
@@ -870,7 +875,7 @@ class ViewBook extends Component {
             </TouchableOpacity> : null}
           <View style={styles.body}>
             <View style={styles.bodyContent}>
-              <Text style={styles.name}>{this.state.title}</Text>
+              <Text numberOfLines={1} style={styles.name}>{this.state.title}</Text>
             {/* {
               this.state.content.length<100?
               (<ReadMore1
@@ -917,7 +922,7 @@ class ViewBook extends Component {
             {this.state.content.length>0?
               <TouchableOpacity
              onPress={() => this.props.navigation.navigate('report')}>
-               <View style={{flexDirection: 'row',width:width-40,margin:'1%',marginTop:14,
+               <View style={{flexDirection: 'row',width:width-40,margin:'3%',marginBottom:0,marginTop:14,
                padding: '0.5%'}}>
                <Image style={{ marginRight: '2%',marginTop:'2%' }} source={require('../assets/img/flag.png')} />
                <Text style={[styles.text1,{fontSize:14}]}>Report</Text>
@@ -1016,31 +1021,31 @@ onPress={() => this.props.navigation.navigate('report')}>
               {!this.state.downloadState ?
                 (
                   <View
-                  // style={{backgroundColor:'pink',}}
+                  style={{margin:'3%'}}
                   >
                     {/* <View style={{flexDirection:'column',backgroundColor:'pink'}}> */}
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                       <View style={styles.info1}>
-                        <Image style={{ marginRight: '4%',marginTop:3 }} source={require('../assets/img/eye.png')} />
+                        <Image style={{marginTop:3,marginLeft:'3%' }} source={require('../assets/img/eye.png')} />
                         <Text style={styles.text1}> {this.state.totalviews}</Text>
                       </View>
                       <View style={styles.info2}>
-                        <Image style={{ marginRight: '2%' }} source={require('../assets/img/section.png')} />
+                        <Image style={{ marginRight: '2%',marginLeft:'3%' }} source={require('../assets/img/section.png')} />
                         <Text style={styles.text1}>{this.state.partname}</Text>
                       </View>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                       <View style={styles.info1}>
-                        <Text style={styles.text1}>Published: {this.state.updateddate}</Text>
+                        <Text style={[styles.text1,{marginLeft:'3%'}]}>Published: {this.state.updateddate}</Text>
                       </View>
                       <View style={styles.info2}>
-                        <Text style={styles.text1}>Release Date: {this.state.releasedate}</Text>
+                        <Text style={[styles.text1]}>Release Date: {this.state.releasedate}</Text>
                       </View>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                       <View style={styles.info1}>
                         {/* <Text style={styles.text1}> </Text> */}
-                        <Text numberOfLines={1} style={[styles.text1]}>{this.state.copyrights}</Text>
+                        <Text numberOfLines={1} style={[styles.text1,{marginLeft:'3%'}]}>{this.state.copyrights}</Text>
                         {/* <Image source={require('../assets/img/open-book.png')} /> */}
                       </View>
                       <View style={styles.info2}>
@@ -1076,7 +1081,7 @@ onPress={() => this.props.navigation.navigate('report')}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                     width:width/2,}}>
                         <Image style={{ width: 40, height: 40, borderRadius: 40 / 2 }} source={{ uri: this.state.user_img != "" ? this.state.user_img : null }} />
-                        <Text style={[styles.text2,{width:width/2-40}]}>{this.state.author}</Text>
+                        <Text style={[styles.text2,{width:width/2.7,marginLeft:'2%',}]}>{this.state.author}</Text>
                       </View>
 
                     </TouchableOpacity>
@@ -1115,7 +1120,7 @@ onPress={() => this.props.navigation.navigate('report')}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                     width:width/2}}>
                         <Image style={{ width: 40, height: 40, borderRadius: 40 / 2 }} source={{ uri: this.state.user_img != "" ? this.state.user_img : null }} />
-                        <Text style={[styles.text2,{width:width/2-40}]}>{this.state.author}</Text>
+                        <Text style={[styles.text2,{width:width/2-40,marginLeft:'1%'}]}>{this.state.author}</Text>
                       </View>
 
                     </TouchableOpacity>
@@ -1607,7 +1612,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     width: width,
-    margin:'3%',
+    margin:'4%',
     justifyContent: 'space-around',
     alignItems: 'center',
     marginBottom: '20%'
@@ -1617,7 +1622,7 @@ const styles = StyleSheet.create({
     width: width,
     justifyContent: 'space-around',
     marginTop: '5%',
-    margin:'3%',
+    margin:'4%',
 
   },
   group:{
@@ -1651,6 +1656,8 @@ const styles = StyleSheet.create({
     fontFamily:'AzoSans-Regular',
         // paddingLeft:'5%',
     fontSize: 12,
+    // width:width/2,
+    backgroundColor:'skyblue',
     alignSelf: 'center',
   },
   text2: {
@@ -1674,7 +1681,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 23,
     backgroundColor: '#fff',
-    margin: '3%'
+    margin: '2%',
+    marginTop:0,
+    marginBottom:'4%'
   },
   activeBtnview: {
     // shadowOffset: {  width: width/3,  height: height / 16,},
@@ -1704,8 +1713,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     overflow: 'hidden',
-    // backgroundColor: 'pink'
-  },
+    elevation:1,
+    backgroundColor:'#fff',
+    resizeMode:'cover'
+  
+    },
   headerText: {
     padding: '5%',
     fontSize: 14,
@@ -1775,12 +1787,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
     fontFamily:'Montserrat-Bold',
-    marginBottom: '2%',
+    marginBottom: '1%',
     textAlign: 'center',
     padding: '1%'
   },
   body: {
-    marginTop: width / 4,
+    marginTop: width / 8,
     // marginTop: '10%',
   },
   container1: {
@@ -1831,12 +1843,13 @@ const styles = StyleSheet.create({
 
   },
   talkBubble: {
-    backgroundColor: 'transparent',
     position: 'absolute',
-    zIndex: 2, // <- zIndex here
+
+    // zIndex: 2, // <- zIndex here
     flex: 1,
-    left: 5,  
-    top: 60,
+    // left: 5,  
+    top: 40,
+    right:30
   },
   talkBubbleSquare: {
     width: width / 2.5,
@@ -1848,8 +1861,8 @@ const styles = StyleSheet.create({
   },
   talkBubbleTriangle: {
     position: 'absolute',
-    top: -8,
-    left: 50,
+    top: -7,
+    right: 3,
     width: 0,
     height: 0,
     borderTopWidth: 0,
@@ -1908,9 +1921,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     color: '#000',
-    width: width / 2 - 30,
-    marginLeft:"5%",
-    padding: '0.5%',
+    width: width / 2,
+    marginLeft:"3%",
+    // padding: '0.5%',
     // alignItems: 'center',
   },
   info2: {
@@ -1918,10 +1931,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     // flex:1,
     // backgroundColor:'skyblue',
-    width: width / 2 - 30,
+    width: width / 2,
     marginLeft: '1%',
-    marginRight:'5%',
-      padding: '0.5%'
+    marginRight:'3%',
+      // padding: '0.5%',
 
     // alignItems: 'center',
   },

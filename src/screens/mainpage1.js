@@ -1086,19 +1086,6 @@ return (
     </View>
 );
 }
-tags(name){
-    let varcolordot = "";
-    if(name==='Education'){
-        varcolordot='#1C4A7E'
-    }else if(name==='Illustration'){
-        varcolordot='#c65135'
-    }else if(name==='Fiction'){
-        varcolordot='#741c7e'
-    }else if(name==='Comics'){
-        varcolordot="#c65135"
-    }
-    return varcolordot;
-}
 alertPopup(){
     this.logoutpress()
     //    this.setState({loginPopup:true})
@@ -1220,7 +1207,7 @@ render() {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    cornerRadius={5}>
+                    cornerRadius={8}>
                     <ImageBackground source={{ uri: item.Images!=''?item.Images:null }} style={{ width: 130, height: 150, jsutifyContent: 'center',resizeMode:'cover'}}>
                        {/* {this.state.explore_page=='0'? */}
                         <TouchableOpacity
@@ -1231,10 +1218,10 @@ render() {
                     </ImageBackground>
   
                 </CardView>
-                <Text style={styles.selectedTitle}>
+                <Text numberOfLines={3} style={styles.selectedTitle}>
                     {item.Title}
                 </Text>
-                <Text style={styles.author}>
+                <Text numberOfLines={1} style={styles.author}>
                     {item.Author}
                 </Text>
                 </TouchableOpacity>
@@ -1284,7 +1271,7 @@ render() {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    style={{ backgroundColor:this.tags(item.Category_name),padding:'3%'}}
+                    style={{ backgroundColor:index%2==0?'#1C4A7E':'#C65135',padding:'3%'}}
                     cornerRadius={10}>
                          <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                          <Image
@@ -1355,10 +1342,10 @@ render() {
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                  <Text style={styles.selectedTitle}>
+                  <Text numberOfLines={3} style={styles.selectedTitle}>
                     {item.Title}
                 </Text>
-                <Text style={styles.author}>
+                <Text numberOfLines={1} style={styles.author}>
                     {item.Author}
                 </Text>
                   </TouchableOpacity>
@@ -1403,21 +1390,21 @@ render() {
                   <CardView
                       cardElevation={2}
                       cardMaxElevation={2}
-                      cornerRadius={5}>
-                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 130, height: 100, jsutifyContent: 'center',resizeMode:'cover' }}>
+                      cornerRadius={8}>
+                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 165, height: 100, jsutifyContent: 'center',resizeMode:'cover' }}>
                           <TouchableOpacity
                               onPress={() => this.moreClick(item,"pressIcon") }>
                               <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                   <Text style={styles.selectedTitle}>
+                  <Text numberOfLines={2} style={styles.selectedTitle}>
                     {item.Title}
                 </Text>
-                <Text style={styles.author}>
+                <Text numberOfLines={1} style={styles.author}>
                     {item.Author}
                 </Text>
-                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center',fontFamily:'AzoSans-Light',marginTop:0 }}>
+                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'left',fontFamily:'AzoSans-Light',marginTop:0 }}>
                     {item.Pagedate}
                 </Text>
                   </TouchableOpacity>
@@ -1428,8 +1415,8 @@ render() {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={130}
-      itemHeight={80}
+      itemWidth={165}
+      itemHeight={100}
       snapToInterval={20}
       contentContainerCustomStyle={{marginLeft:-80}}
       snapToAlignment={'start'}
@@ -1437,7 +1424,7 @@ render() {
       containerCustomStyle={{ marginTop: 30,backgroundColor:"transparent",marginBottom:0}}
   />
   </View>
-  <View style={styles.overlay}>
+  {/* <View style={styles.overlay}>
   <Text style={styles.headline1}>Series</Text>
   <FlatList
       horizontal={true}
@@ -1461,7 +1448,7 @@ render() {
                   <CardView
                       cardElevation={2}
                       cardMaxElevation={2}
-                      cornerRadius={5}>
+                      cornerRadius={8}>
                       <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 130, height: 120, jsutifyContent: 'center',resizeMode:'cover' }}>
                           <TouchableOpacity
                               onPress={() => this.moreClick(item,"seriesPress") }>
@@ -1469,10 +1456,10 @@ render() {
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                  <Text style={styles.selectedTitle}>
+                  <Text numberOfLines={3} style={styles.selectedTitle}>
                     {item.Title}
                 </Text>
-                <Text style={styles.author}>
+                <Text numberOfLines={1} style={styles.author}>
                     {item.Author}
                 </Text>
                   </TouchableOpacity>
@@ -1517,7 +1504,7 @@ render() {
                   <CardView
                       cardElevation={2}
                       cardMaxElevation={2}
-                      cornerRadius={5}>
+                      cornerRadius={8}>
                       <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 130, height: 120, jsutifyContent: 'center',resizeMode:'cover' }}>
                           <TouchableOpacity
                                   onPress={() => this.moreClick(item,"periodicalPress") }>
@@ -1525,10 +1512,10 @@ render() {
                           </TouchableOpacity>
                       </ImageBackground>
                   </CardView>
-                  <Text style={styles.selectedTitle}>
+                  <Text numberOfLines={3} style={styles.selectedTitle}>
                     {item.Title}
                 </Text>
-                <Text style={styles.author}>
+                <Text numberOfLines={1} style={styles.author}>
                     {item.Author}
                 </Text>
                           </TouchableOpacity>
@@ -1546,7 +1533,7 @@ render() {
       onSnapToItem={(index) => this.snapItem(index, 'period')}
       containerCustomStyle={{ marginTop: 30 }}
   />
-  </View>
+  </View> */}
   <LinearGradient style={[styles.overlay1,{marginTop:10}]}
 colors={['#C5F3FB40', '#81EEFF40']}>
 <Text style={styles.headline1}>Recently Viewed</Text>
@@ -1572,7 +1559,7 @@ colors={['#C5F3FB40', '#81EEFF40']}>
             <CardView
                 cardElevation={2}
                 cardMaxElevation={2}
-                cornerRadius={5}>
+                cornerRadius={8}>
                     
                 <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle}>
                     <TouchableOpacity
@@ -1582,12 +1569,12 @@ colors={['#C5F3FB40', '#81EEFF40']}>
                 </ImageBackground>
 
             </CardView>
-            <Text style={styles.selectedTitle}>
+            <Text numberOfLines={3} style={styles.selectedTitle}>
                     {item.Title}
                 </Text>
-                <Text style={styles.author}>
-                  {item.Author}
-              </Text>
+                <Text numberOfLines={1} style={styles.author}>
+                    {item.Author}
+                </Text>
             </TouchableOpacity>
         </View>
 
@@ -1826,11 +1813,11 @@ autoplay={false}
 
 
  <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
- <Image source={require('../assets/img/collection.png')} />
+ <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
  </TouchableOpacity>
     
  <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-     <Image source={require('../assets/img/search.png')} />
+     <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/search.png')} />
  </TouchableOpacity>
 
  <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
@@ -1914,15 +1901,16 @@ autoplay={false}
         marginBottom: 3,
          marginTop: 10,
           color: '#242126',
-          textAlign:'center',
+          textAlign:'left',
           fontFamily:'AzoSans-Medium',
-          fontSize:16
+          fontSize:16,
+        //   marginRight:1,
       },
       author:{
         marginBottom: 5, 
         fontSize: 12,
          color: '#707070',
-         textAlign:'center',
+         textAlign:'left',
          fontFamily:'AzoSans-Light',
       },
     //   tabsss:{
@@ -1976,10 +1964,11 @@ autoplay={false}
       },
       headline1:{
         color: 'black',
-        fontFamily: 'Montserrat-Regular',
+        fontFamily: 'Montserrat-Light',
         fontSize: 24,
         width:width-40, 
-        margin: '2%'
+        margin: '2%',
+        marginTop:'4%'
       },
       overlay2: {
           // marginTop:'10%',

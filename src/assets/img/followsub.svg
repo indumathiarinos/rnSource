@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="34.788" height="20.716" viewBox="0 0 34.788 20.716">
+  <g id="Followed-Subscribed-icon" transform="translate(0.5)">
+    <g id="Group_17206" data-name="Group 17206" transform="translate(0 3.172)">
+      <g id="Group_15161" data-name="Group 15161">
+        <path id="Path_12286" data-name="Path 12286" d="M33.146,245.348a4.36,4.36,0,1,1-4.36-4.361A4.36,4.36,0,0,1,33.146,245.348Zm0,0" transform="translate(-22.032 -240.988)" fill="none" stroke="#707070" stroke-width="1"/>
+        <path id="Path_12287" data-name="Path 12287" d="M6.754,382.805c-3.73,0-6.754,2.625-6.754,5.862v1.16a1,1,0,0,0,1.063.922H12.445a1,1,0,0,0,1.063-.922v-1.16c0-3.238-3.024-5.862-6.754-5.862Zm0,0" transform="translate(0 -373.993)" fill="none" stroke="#707070" stroke-width="1"/>
+      </g>
+    </g>
+    <g id="Group_17404" data-name="Group 17404" transform="translate(20.281 3.172)">
+      <g id="Group_15161-2" data-name="Group 15161">
+        <path id="Path_12286-2" data-name="Path 12286" d="M33.146,245.348a4.36,4.36,0,1,1-4.36-4.361A4.36,4.36,0,0,1,33.146,245.348Zm0,0" transform="translate(-22.032 -240.988)" fill="none" stroke="#707070" stroke-width="1"/>
+        <path id="Path_12287-2" data-name="Path 12287" d="M6.754,382.805c-3.73,0-6.754,2.625-6.754,5.862v1.16a1,1,0,0,0,1.063.922H12.445a1,1,0,0,0,1.063-.922v-1.16c0-3.238-3.024-5.862-6.754-5.862Zm0,0" transform="translate(0 -373.993)" fill="none" stroke="#707070" stroke-width="1"/>
+      </g>
+    </g>
+    <g id="Group_17403" data-name="Group 17403" transform="translate(8.351)">
+      <g id="Group_15161-3" data-name="Group 15161">
+        <path id="Path_12286-3" data-name="Path 12286" d="M35.206,246.379a5.39,5.39,0,1,1-5.39-5.391A5.391,5.391,0,0,1,35.206,246.379Zm0,0" transform="translate(-21.466 -240.988)" fill="#707070"/>
+        <path id="Path_12287-3" data-name="Path 12287" d="M8.349,382.805C3.738,382.805,0,386.05,0,390.052v1.434a1.236,1.236,0,0,0,1.314,1.14H15.385a1.236,1.236,0,0,0,1.314-1.14v-1.434c0-4-3.738-7.247-8.35-7.247Zm0,0" transform="translate(0 -371.911)" fill="#707070"/>
+      </g>
+    </g>
+  </g>
+</svg>
