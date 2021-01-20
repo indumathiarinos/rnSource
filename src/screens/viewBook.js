@@ -796,7 +796,7 @@ class ViewBook extends Component {
             <Image source={require('../assets/img/download.png')} />
           </TouchableOpacity>
           {/* :null} */}
-          <View style={{ flexDirection: 'row', width: width - 70, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width/1.3, justifyContent: 'center', alignItems: 'center' }}>
             <LinearGradient style={{ borderRadius: 10 }} colors={
               ['#24D4BC', '#27A291']}>
               <TouchableOpacity
@@ -836,7 +836,7 @@ class ViewBook extends Component {
             {/* </View> */}
           </View>
           <TouchableOpacity style={{ margin: 14 }} onPress={() => this.backpress()}>
-            <Image source={require('../assets/img/close.png')} />
+          <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
         {/* <View style={styles.header}>
@@ -1020,21 +1020,21 @@ onPress={() => this.props.navigation.navigate('report')}>
               </LinearGradient>
               {!this.state.downloadState ?
                 (
-                  <View
-                  style={{margin:'3%'}}
+                  <View 
+                  // style={{margin:'3%'}}
                   >
                     {/* <View style={{flexDirection:'column',backgroundColor:'pink'}}> */}
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center',alignItems:'center' }}>
                       <View style={styles.info1}>
-                        <Image style={{marginTop:3,marginLeft:'3%' }} source={require('../assets/img/eye.png')} />
+                        <Image style={{marginTop:3,marginLeft:5 }} source={require('../assets/img/eye.png')} />
                         <Text style={styles.text1}> {this.state.totalviews}</Text>
                       </View>
                       <View style={styles.info2}>
-                        <Image style={{ marginRight: '2%',marginLeft:'3%' }} source={require('../assets/img/section.png')} />
+                        <Image style={{ marginRight: '2%', }} source={require('../assets/img/section.png')} />
                         <Text style={styles.text1}>{this.state.partname}</Text>
                       </View>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center',alignItems:'center' }}>
                       <View style={styles.info1}>
                         <Text style={[styles.text1,{marginLeft:'3%'}]}>Published: {this.state.updateddate}</Text>
                       </View>
@@ -1042,7 +1042,7 @@ onPress={() => this.props.navigation.navigate('report')}>
                         <Text style={[styles.text1]}>Release Date: {this.state.releasedate}</Text>
                       </View>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center',alignItems:'center' }}>
                       <View style={styles.info1}>
                         {/* <Text style={styles.text1}> </Text> */}
                         <Text numberOfLines={1} style={[styles.text1,{marginLeft:'3%'}]}>{this.state.copyrights}</Text>
@@ -1126,17 +1126,18 @@ onPress={() => this.props.navigation.navigate('report')}>
                     </TouchableOpacity>
 
 
-                      <View>
-                      <TouchableOpacity onPress={() => { this.state.explore_page == '0' ? this.followService(this.state.getuserid, this.state.user_id) : this.alertPopup() }} style={[this.state.Is_Follow == "Follow" ? styles.btnview : styles.activeBtnview]}>
+                     
+                    {this.state.user_id == this.state.getuserid ? <View style={{ width: width / 2-40, }} /> :
+                          <TouchableOpacity onPress={() => { this.state.explore_page == '0' ? this.followService(this.state.getuserid, this.state.user_id) : this.alertPopup() }} style={[this.state.Is_Follow == "Follow" ? styles.btnview : styles.activeBtnview]}>
                             <Text style={[this.state.Is_Follow == "Follow" ? styles.inactive : styles.active]}>{this.state.Is_Follow}</Text>
                           </TouchableOpacity>
-                          {this.state.tooltip ? <View style={styles.talkBubble}>
+                        }
+                        {this.state.tooltip ? <View style={styles.talkBubble}>
                           <View style={styles.talkBubbleSquare}>
                             <Text style={styles.talkBubbleMessage}>Followed {this.state.author}</Text>
                           </View>
                           <View style={styles.talkBubbleTriangle} />
                         </View> : null}
-                        </View>
                     </View>
 
 
@@ -1158,11 +1159,11 @@ onPress={() => this.props.navigation.navigate('report')}>
                         <Text style={styles.authorResText}>{this.state.post_translator}</Text>
                       </View>
                     </View>
-                    <View style={{ margin: '4%', marginBottom: '10%' }} >
+                    <View style={{ marginBottom: '10%' }} >
                       {/* <View style={{flexDirection:'column',backgroundColor:'pink'}}> */}
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'center',alignItems:'center' }}>
                         <View style={styles.info1}>
-                          <Image style={{marginRight: '4%',marginTop:3 }} source={require('../assets/img/eye.png')} />
+                          <Image style={{marginLeft:5,marginTop:3 }} source={require('../assets/img/eye.png')} />
                           <Text style={styles.text1}> {this.state.totalviews}</Text>
                         </View>
                         <View style={styles.info2}>
@@ -1170,17 +1171,17 @@ onPress={() => this.props.navigation.navigate('report')}>
                           <Text style={styles.text1}>{this.state.partname}</Text>
                         </View>
                       </View>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'center',alignItems:'center' }}>
                         <View style={styles.info1}>
-                          <Text style={styles.text1}>Published : {this.state.updateddate}</Text>
+                        <Text style={[styles.text1,{marginLeft:'3%'}]}>Published: {this.state.updateddate}</Text>
                         </View>
                         <View style={styles.info2}>
-                          <Text style={styles.text1}>Release Date : {this.state.releasedate}</Text>
+                          <Text style={[styles.text1]}>Release Date : {this.state.releasedate}</Text>
                         </View>
                       </View>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'center',alignItems:'center' }}>
                         <View style={styles.info1}>
-                          <Text style={styles.text1}>{this.state.copyrights}</Text>
+                          <Text style={[styles.text1,{marginLeft:'3%'}]}>{this.state.copyrights}</Text>
                           <Image source={require('../assets/img/open-book.png')} />
                         </View>
                         <View style={styles.info2}>
@@ -1657,13 +1658,13 @@ const styles = StyleSheet.create({
         // paddingLeft:'5%',
     fontSize: 12,
     // width:width/2,
-    backgroundColor:'skyblue',
+    // backgroundColor:'skyblue',
     alignSelf: 'center',
   },
   text2: {
     color: '#000',
     fontSize: 14,
-    marginLeft: '3%',
+    // marginLeft: '3%',
     fontFamily:'Montserrat-Bold',
     alignSelf: 'center',
 
@@ -1792,7 +1793,7 @@ const styles = StyleSheet.create({
     padding: '1%'
   },
   body: {
-    marginTop: width / 8,
+    marginTop: width / 5,
     // marginTop: '10%',
   },
   container1: {
@@ -1919,22 +1920,27 @@ const styles = StyleSheet.create({
   },
   info1: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    width:width/2,
+    // justifyContent: 'flex-start',
     color: '#000',
-    width: width / 2,
-    marginLeft:"3%",
-    // padding: '0.5%',
+    // width: width / 2,
+    // marginLeft:"3%",
+    padding: '0.5%',
+    paddingLeft:'3%',
+
     // alignItems: 'center',
   },
   info2: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
     // flex:1,
     // backgroundColor:'skyblue',
     width: width / 2,
-    marginLeft: '1%',
-    marginRight:'3%',
-      // padding: '0.5%',
+
+    // marginLeft: '1%',
+    // marginRight:'3%',
+      padding: '0.5%',
+      paddingRight:'3%',
 
     // alignItems: 'center',
   },

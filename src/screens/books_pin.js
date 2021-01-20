@@ -211,13 +211,13 @@ handleBackButtonClick() {
 renderItem_card({ item }) {
   const value = item;
   return (
-      <View style={{ width:width/3-20, elevation: 3,margin:10, }} >
+      <View style={{ width:width/3-10,margin:5, }} >
           <TouchableOpacity onPress={()=>this.pressIcon(item)} >
-            <View style={{ elevation: 2, backgroundColor: '#fff', borderRadius: 10,
+            <View style={{ backgroundColor: '#fff', borderRadius: 10,
           // alignItems:'center',alignSelf:"center",justifyContent:'center'
            }}>
               <View style={{ width: width / 3-20, height: height / 5.2, flex:1,alignItems: 'center', justifyContent: 'center' }}>
-                  <Text numberOfLines={5} style={{width: width / 3 - 30,textAlign:'center',marginTop:5,marginBottom:5,alignSelf:'center', fontSize: 12,
+                  <Text numberOfLines={5} style={{width: width / 3 - 30,textAlign:'left',marginTop:5,marginBottom:5,alignSelf:'center', fontSize: 12,    color:'#707070',
                   fontFamily:'AzoSans-Italic',}}>{item.description}</Text>
               </View>
 {/* <View style={{ marginLeft:10,marginRight:10,  alignItems: 'center', justifyContent: 'center' }}>
@@ -226,7 +226,7 @@ renderItem_card({ item }) {
                         {/* <HTMLView style={{width:width/2-30,height:height/6,alignSelf:'center',padding:'5%'}} value={item.page_title}/> */}
 
               </View>
-              <Text style={{ fontSize: 15,width: width / 3 - 30,fontWeight: 'bold',textAlign:'center',marginTop:5,marginBottom:5}}>{item.page_url}</Text>
+              <Text style={{ fontSize: 15,width: width / 3 - 30,fontFamily: 'AzoSans-Italic', color:'#707070',textAlign:'center',marginTop:5,marginBottom:5}}>{item.page_url}</Text>
               </TouchableOpacity>
 
           {/* <View style={{ alignItems: 'center', marginLeft: '15%', marginBottom: 5, marginTop: 5}}> */}
@@ -260,9 +260,11 @@ renderItem_card({ item }) {
           <TouchableOpacity
           onPress={()=>this.props.navigation.navigate('booksPinFilter')}
           >
-            <Image source={require('../assets/img/filter.png')} />
-          </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width - 60, justifyContent: 'center', alignItems: 'center' }}>
+        <Image
+            style={{ alignSelf: 'center',width:50,height:50}}
+            source={require('../assets/img/filter.png')}/>   
+                   </TouchableOpacity>
+          <View style={{ flexDirection: 'row', width: width/1.4, justifyContent: 'center', alignItems: 'center' }}>
            
           <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('viewBook')}>
               <Text style={styles.headerText}
@@ -282,7 +284,7 @@ renderItem_card({ item }) {
 
             <TouchableOpacity style={{
               backgroundColor: '#27A291',
-              borderRadius: 20,
+              borderRadius: 10,
             }}
               onPress={this.headerBtnClk}>
               <Text style={{
@@ -299,7 +301,7 @@ renderItem_card({ item }) {
             {/* </View> */}
           </View>
           <TouchableOpacity style={{ margin: 5 }} onPress={() => this.backpress()}>
-            <Image source={require('../assets/img/close.png')} />
+          <Image style={{ alignSelf: 'center',width:50,height:50,paddingRight:'3%' }} source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
         {/* <View style={styles.header}>
@@ -389,7 +391,8 @@ const styles = StyleSheet.create({
   },
   bottomText:{
     color:'#ffff',
-    fontSize:18
+    fontSize:14,
+    fontFamily:'AzoSans-Regular'
   },
   logoContainer:{
     flexDirection: 'row',
@@ -458,6 +461,7 @@ const styles = StyleSheet.create({
   headerText: {
     padding: '5%',
     fontSize: 14,
+    color:'#707070',
     fontFamily:'AzoSans-Medium',
   },
   rectangle: {

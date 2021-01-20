@@ -971,9 +971,8 @@ fetch("http://162.250.120.20:444/Login/CollectionSectionDD",
           >
             <View styles={{backgroundColor:'pink'}}>
               {
-              item.Likestatus=='Y'
-               ? <Image style={{width:10,height:10,margin:2}} source={require('../assets/img/like.png')} /> : <Image  style={styles.group} source={require('../assets/img/like-icon.png')} />}
-              <Text style={{ color: item.Likestatus=='Y' ? '#27A291' : '#707070', fontSize: 10,textAlign:'center' }}>{item.likescount}</Text>
+              item.Likestatus=='Y'? <Image style={{width:15,height:15,marginLeft:15,marginTop:10,marginBottom:3}} source={require('../assets/img/like1.png')}/> : <Image  style={styles.group} source={require('../assets/img/like-icon.png')} />}
+              <Text style={{ color: item.Likestatus=='Y' ? '#27A291' : '#707070', fontSize: 10,textAlign:'center',marginLeft:item.Likestatus=='Y'?15:0 }}>{item.likescount}</Text>
             </View>
             {/* <Image
               source={imgSource}
@@ -1129,19 +1128,26 @@ style={{marginBottom:'10%'}}
         <Modal1 isVisible={this.state.collectionModal}
   onBackdropPress={() => this.setState({ collectionModal: false,expanded:false,sectionExpand:false})}>
             <View 
-            style={[styles.addCollModal,{flex: !this.state.expanded ? 0.3 : 0.4}]}
+            style={{backgroundColor:'#fff', alignItems: 'center',
+            justifyContent:'center',
+            alignSelf:'center',
+            flex: !this.state.expanded ? 0.3 : 0.4,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            borderBottomLeftRadius: 5,
+            borderBottomEndRadius: 5,
+            width: 300,}}
             >
-            <TouchableOpacity
-                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
+              <TouchableOpacity
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,justifyContent:'center'}}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
+                  flexDirection: 'row', alignItems: 'center', width: 200,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image  source={require('../assets/img/createCol.png')} />
-                  <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
-  
+                  <Image style={{alignSelf:'center'}}  source={require('../assets/img/createCol.png')} />
+                  <Text style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#27A291',marginTop:5, width: width / 2.5,alignSelf:'center',marginLeft:'2%'}}>Create Collection</Text>
                 </View>
               </TouchableOpacity>
   
@@ -1162,8 +1168,8 @@ style={{marginBottom:'10%'}}
                      width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                     >
-                 <Image  source={require('../assets/img/colliconnew1.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
+                  <Image  source={require('../assets/img/colliconnew1.png')} />
+                      <Text style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
@@ -1184,8 +1190,7 @@ style={{marginBottom:'10%'}}
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
                   <Image source={require('../assets/img/coll_white1.png')} />
-                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
-
+                        <Text style={{fontSize: 14,fontFamily:'AzoSans-Regular', color: '#ffff', marginLeft: '5%', width: width / 2.9   }}>Collections</Text>
                       </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
@@ -1193,27 +1198,27 @@ style={{marginBottom:'10%'}}
                         <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
                       </TouchableOpacity>
                     </View>
-                    <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
+                 <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
                      <FlatList
                           data={this.state.collection}
                           keyExtractor={(item,index)=>index.toString()}
                           renderItem={({item})=>(
                               <View>
                               <TouchableOpacity
-                                 style={{backgroundColor:'#f0f0f0',width:300,}}
+                                 style={{backgroundColor:'#f0f0f0',}}
                                    onPress={() => this.collectionBook(item.title,item.id)}>
                                    <View style={{
                                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                    }}>
-                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
-                                     <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
+                                     <Text numberOfLines={1} style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 180 }}>{item.title}</Text>
+                                     <Image style={{ alignSelf: 'center', marginLeft: '0%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
                          <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                                  <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
                          </TouchableOpacity> 
                          </View>
                          </TouchableOpacity>
                                  <Divider style={{ backgroundColor: '#707070',borderWidth:0.2 }} />
-                      {this.state.sectionExpand && item.id==this.state.secCollid
+                         {this.state.sectionExpand && item.id==this.state.secCollid
                         //  item.id==this.state.secCollid
                       //    item.SectionStatus==1
                          ?
@@ -1231,7 +1236,7 @@ style={{marginBottom:'10%'}}
                              <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                  {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                      {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1271,7 +1276,7 @@ style={{marginBottom:'10%'}}
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
                   <Image source={require('../assets/img/readlaternew1.png')} />
-                  <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
+                  <Text style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
                   <Divider style={{ backgroundColor: '#707070' }} />
   
                 </View>
@@ -1385,11 +1390,11 @@ style={{marginBottom:'10%'}}
                         <TouchableOpacity
                             style={styles.tabsss}
                             onPress={() => this.toggleTab1()}>
-                            <Image source={require('../assets/img/logo.png')} />
+     <Image style={{width:25,height:25}} source={require('../assets/img/logo.png')} />
                             {/* <Text>Home</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                            <Image source={require('../assets/img/collection.png')} />
+                        <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
                             {/* <Text>Collection</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
@@ -1433,9 +1438,9 @@ container: {
 
   userImg:{
     width: 40,
-     height: 40,
-      borderRadius: 20,
-      resizeMode:'cover'
+    height: 40,
+    borderRadius: 20,
+    resizeMode:'cover'
   },
   username:{
     fontSize: 12,

@@ -114,32 +114,29 @@ handleBackButtonClick() {
 
     return (
       <SafeAreaView style={{flex:1,backgroundColor:'#ffff'}}>
-      
-      {/* <View style={styles.topview}> */}
-      <View style={{flexDirection:'row'}}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+       <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center',width:width}}>
+       <View style={{flexDirection:'row',alignItems: 'center',width:width/1.1,justifyContent:'center'}}>
+        <View>
         <TextInput
-          style={styles.textInputStyle}
-          onChangeText={text => this.SearchFilterFunction(text)}
-          value={this.state.text}
-          underlineColorAndroid='#707070'
-          placeholder="Search"
-        />
-        <Icon
-          style={{ marginLeft: '-8%' }}
-          size={20}
-          name='ios-search'>
-
-        </Icon>
-      </View>
-      <TouchableOpacity
+              style={styles.input}
+              onChangeText={value =>this.SearchFilterFunction(value)}
+              value={this.state.text}
+              underlineColorAndroid={'#707070'}
+              // underlineColorAndroid='black'
+              placeholder="Search"
+            />
+                {Platform.OS=='ios'?<View style={{width:width/1.6,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
+          </View>      
+          <TouchableOpacity  style={styles.touchableButton} onPress={()=>this.SearchFilterFunction(this.state.text)}>
+            <Image style={{width:20,height:20}} source={require('../assets/img/searchicon.png')}/>
+            </TouchableOpacity>
+</View>
+          <TouchableOpacity
+              style={{alignSelf:'center',alignItems:'flex-end',}}
               onPress={()=>this.backpress()}>
-      <Image
-        style={{ alignSelf: 'center' }}
-       source={require('../assets/img/close.png')}/>
-      </TouchableOpacity>
-      </View>
-    {/* </View> */}
+                  <Image style={{ alignSelf: 'center',width:50,height:50,}} source={require('../assets/img/close.png')} />
+          </TouchableOpacity>
+         </View>
    
 <View style={{flex:1,marginTop:'16%'}}>
     <Text style={styles.headline}>Filter by</Text>
@@ -167,9 +164,11 @@ handleBackButtonClick() {
     }
 const styles = StyleSheet.create({
   topview:{
-    // height: '10%',
+    height: '10%',
+    width:width,
      backgroundColor: '#ffff', 
     elevation:3,
+    flex:0.5,
     flexDirection: 'row',
     alignItems:'center',
      justifyContent: 'space-around',
@@ -180,13 +179,29 @@ const styles = StyleSheet.create({
      position:'absolute',
      padding:'2%'
   },
+  input:{
+    width:width/1.6,
+    backgroundColor:"#fff",
+    fontFamily:'AzoSans-Regular',
+    fontSize:16,
+    // padding:10,
+    margin:5
+  },
+  touchableButton: {
+    position: 'absolute',
+    right: 55,
+    height: 25,
+    width: 25,
+    alignItems:'center',
+    justifyContent:'center'
+    // padding: 2
+  },
   data:{
     color:'#707070',
-    fontSize:19,
+    fontSize:16,
+    fontFamily:'AzoSans-Regular',
     textAlign:'center',
     padding:'4%'
-
-
   },
   listdata:{
     backgroundColor:'#F9F9F9',
@@ -239,13 +254,14 @@ const styles = StyleSheet.create({
         // marginLeft:'-5%'
       },
       headline:{
-        fontSize:22,
-        fontWeight:'bold',
+        fontSize:20,
+        fontFamily:'Montserrat-Bold',
         textAlign:'center',
 
         marginTop:'5%'
 
       }
+   
 })
 
 export default BooksPinFilter;

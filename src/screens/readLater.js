@@ -451,8 +451,8 @@ _renderTruncatedFooter = (handlePress,index,item) => {
             activeOpacity={0.7}
           />
           </TouchableOpacity>
-            <TouchableOpacity onPress={()=>this.goToAuthorProfile(item.USERID)}>
-            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start',margin:'3%'}}>
+            <TouchableOpacity style={{backgroundColor:'#F9F9F9',width:width}} onPress={()=>this.goToAuthorProfile(item.USERID)}>
+            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-start',margin:'3%',}}>
               <Image style={{width:40,height:40,borderRadius:20}} source={{uri:item.avatar}}/>
               <Text style={{marginLeft:17,fontFamily:'Montserrat-Bold',fontSize:14}}>{item.User_name}</Text>
               </View>
@@ -532,7 +532,8 @@ onPress={() => this.bookmarkPress()}
 </ScrollView>
 <TouchableOpacity style={{paddingLeft:'2%',paddingRight:'2%',width:width/10
 ,alignSelf:'center'}} onPress={()=>this.backpress()}>
-<Image source={require('../assets/img/close.png')} />
+    <Image
+        style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
 </TouchableOpacity>
 </View>
 <ScrollView style={{marginBottom:'10%'}}>
@@ -621,20 +622,21 @@ onPress={() => this.bookmarkPress()}
                         {/* <Text>Home</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                    <Image source={require('../assets/img/collection.png')} />
+                    <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
                         {/* <Text>Collection</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                        <Image style={{ width: 28, height: 28 }} source={require('../assets/img/search.png')} />
+                    <Image
+                       style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/search.png')} />
                         {/* <Text>Search</Text> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
+                    <TouchableOpacity style={[styles.tabsss]} onPress={() => this.toggleTab4()}>
                         {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
                         {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2 }} source={{ uri: this.state.avatarProfile }}></Image>
+                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2,borderColor: '#27A291', borderWidth: 1  }} source={{ uri: this.state.avatarProfile }}></Image>
                         {/* <Text>Menu</Text> */}
                         {/* </Drawer> */}
                     </TouchableOpacity>
@@ -649,7 +651,7 @@ const styles = StyleSheet.create({
   bottomBar: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    // height: '6%',
+    height: '6%',
     bottom: 0,
     left: 0,
     right: 0,

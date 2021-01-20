@@ -428,7 +428,8 @@ class Pins extends Component {
                     </TouchableOpacity>
                     </ScrollView>
                     <TouchableOpacity style={{ paddingLeft: '2%', paddingRight: '2%', width: width / 10, alignSelf: 'center' }} onPress={() => this.backpress()}>
-                    <Image source={require('../assets/img/close.png')} />
+                    <Image
+                         style={{ alignSelf: 'center',width:50,height:50 }}source={require('../assets/img/close.png')} />
                     </TouchableOpacity>
                     </View>
                 <ScrollView 
@@ -503,20 +504,21 @@ class Pins extends Component {
                         {/* <Text>Home</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                    <Image source={require('../assets/img/collection.png')} />
+                    <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
                         {/* <Text>Collection</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                        <Image style={{ width: 28, height: 28 }} source={require('../assets/img/search.png')} />
+                    <Image
+                        style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/search.png')} />
                         {/* <Text>Search</Text> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
+                    <TouchableOpacity style={[styles.tabsss, ]} onPress={() => this.toggleTab4()}>
                         {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
                         {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2 }} source={{ uri: this.state.avatar }}></Image>
+                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2,borderColor: '#27A291', borderWidth: 1  }} source={{ uri: this.state.avatar }}></Image>
                         {/* <Text>Menu</Text> */}
                         {/* </Drawer> */}
                     </TouchableOpacity>

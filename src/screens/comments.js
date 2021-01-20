@@ -378,8 +378,8 @@ class Comments extends Component {
                         </View>
 
                     </TouchableOpacity>
-                    <TouchableOpacity style={{margin:17}} onPress={() => this.backpress()}>
-                        <Image source={require('../assets/img/close.png')} />
+                    <TouchableOpacity  onPress={() => this.backpress()}>
+                    <Image style={{ alignSelf: 'flex-end',width:50,height:50,backgroundColor:'pink' }} source={require('../assets/img/close.png')} />
                     </TouchableOpacity>
                     {/* </View> */}
                 </View>

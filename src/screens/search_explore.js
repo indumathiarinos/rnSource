@@ -912,7 +912,6 @@ collData(userid,colid,secid) {
       SearchFilterFunction(text) {
         {this.exploredataPopup()}
         // this.refs.modal4.open();
-        this.setState({searchList:true})
         //passing the inserted text in textinput
         // console.log('array holder ',this.arrayholder)
         const newData = this.arrayholder.filter(function(item) {
@@ -928,6 +927,7 @@ collData(userid,colid,secid) {
           popupData: newData,
           text: text,
         });
+        {this.state.text==""?null:this.setState({searchList:true})}
         // console.log('profile data 1 value filtered ',this.state.popupData)
       }
  render() {
@@ -939,7 +939,8 @@ collData(userid,colid,secid) {
 
     return (
       <SafeAreaView style={{backgroundColor:'#fff',flex:1}}>
-          <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center',width:width}}>
+       <View style={{flexDirection:'row',alignItems: 'center',width:width/1.1,justifyContent:'center'}}>
         <View>
         <TextInput
               style={styles.input}
@@ -949,22 +950,25 @@ collData(userid,colid,secid) {
               // underlineColorAndroid='black'
               placeholder="Search"
             />
-                {Platform.OS=='ios'?<View style={{width:width-80,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
+                {Platform.OS=='ios'?<View style={{width:width/1.6,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
-          <TouchableOpacity  style={styles.touchableButton} onPress={()=>this.SearchFilterFunction(this.state.text)}>
-            <Image style={{width:20,height:20}} source={require('../assets/img/search.png')}/>
+          <TouchableOpacity style={styles.touchableButton} 
+                onPress={()=>{this.state.text.length>0?this.SearchFilterFunction(this.state.text): AsyncStorage.setItem('searchText',this.state.searchText)
+                AsyncStorage.setItem('searchFilter',"Desc");
+                this.props.navigation.navigate('searchDetail')
+             }}>
+            <Image style={{width:20,height:20}} source={require('../assets/img/searchicon.png')}/>
             </TouchableOpacity>
-
+</View>
           <TouchableOpacity
-              style={{alignSelf:'center'}}
+              style={{alignSelf:'center',alignItems:'flex-end',}}
               onPress={()=>this.backpress()}>
           <Image
-            source={require('../assets/img/close.png')}>
+            source={require('../assets/img/closeicon.png')}>
           </Image>
           </TouchableOpacity>
-         
+         </View>
 
-          </View>
        
 
 
@@ -973,7 +977,7 @@ collData(userid,colid,secid) {
 
 
 <View style={{flex:1}}>
-<TouchableOpacity style={{backgroundColor:'#27A291',width:width,padding:'3%',alignSelf:'center'}}><Text style={{fontSize:16,color:'white',textAlign:'center'}}>Suggestions for '{this.state.text}'</Text></TouchableOpacity>
+<TouchableOpacity style={{backgroundColor:'#27A291',width:width,padding:'3%',alignSelf:'center',}}><Text style={{color:'white',textAlign:'center',fontFamily:'Montserrat-Bold',fontSize:16}}>Suggestions for '{this.state.text}'</Text></TouchableOpacity>
           {/* <FlatList
             data={this.state.popupData}
             keyExtractor={(item,index)=>index.toString()}
@@ -1013,10 +1017,10 @@ collData(userid,colid,secid) {
               <View style={{ flexDirection: 'row',paddingLeft:'3%',paddingRight:'3%',justifyContent:'space-between'}}>
                     <View style={{flexDirection:'column',width:width/1.5,marginTop:'3%' }}>
 
-            <Text style={{fontSize:17,fontWeight:'bold',paddingLeft:'2%'}}>
+            <Text numberOfLines={1} style={{fontSize:16,fontFamily:'AzoSans-Medium',paddingLeft:'2%'}}>
                {item.PostLinkTitle}
                 </Text>
-            <Text style={{fontSize:16,marginTop:10,color:'#707070',paddingLeft:'3%'}}>
+            <Text style={{fontSize:12,fontFamily:'AzoSans-Light',marginTop:10,color:'#707070',paddingLeft:'3%'}}>
             {item.Post_author}    
             </Text>
             </View>
@@ -1047,7 +1051,7 @@ collData(userid,colid,secid) {
         // this.refs.modal4.close();
       }}>
           <View style={{flexDirection:'row',marginTop:'1%',marginBottom:'1%',justifyContent:'flex-end',alignItems:'flex-end',alignContent:'flex-end',marginRight:'5%'}}>
-          <Text style={{color:'#707070',marginRight:'2%'}}>See All</Text>
+          <Text style={{color:'#707070',marginRight:'2%',fontFamily:'AzoSans-Regular',fontSize:12}}>See All</Text>
             <Image style={{marginRight:'2%',}}  source={require('../assets/img/right_arrow.png')}/>
           </View>
         </TouchableOpacity>
@@ -1057,9 +1061,8 @@ collData(userid,colid,secid) {
      ref={(c) => {this.scroll = c}}
    >
  <View style = {styles.overlay}>  
-  <Text style={{ color: '#707070',marginTop:'3%',marginLeft:'3%',alignSelf:'flex-start',
-    textAlign:'left', fontSize: 26, }} onPress={this.ShareMessage} >Publications</Text>
-          <View style={{width:width-40,height:1,margin:'2%',backgroundColor:'#27A291',alignSelf:'flex-start'}}/>
+  <Text style={styles.headline1} onPress={this.ShareMessage} >Publications</Text>
+  <View style={{ height: 1, width: width - 40, backgroundColor: '#27A291' }} />
 
                   {/* <View style={{width:width-30,height:1,marginLeft:'3%',marginTop:'1%',backgroundColor:'#24D4BC',alignSelf:'flex-start'}}/> */}
 
@@ -1082,10 +1085,10 @@ collData(userid,colid,secid) {
                         </TouchableOpacity>
                     </ImageBackground>
                 </CardView>
-                <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
+                <Text numberOfLines={3} style={styles.selectedTitle}>
                     {item.title}
                 </Text>
-                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                <Text numberOfLines={1} style={styles.author}>
                   {item.author}
               </Text>
                 </TouchableOpacity>
@@ -1107,10 +1110,9 @@ collData(userid,colid,secid) {
            
 
 <View style = {styles.overlay}>   
-<Text style={{ color: '#707070',marginTop:'3%',marginLeft:'3%',alignSelf:'flex-start',
-    textAlign:'left', fontSize: 26, }}>Pages</Text>
+<Text  style={styles.headline1}>Pages</Text>
      {/* <View style={{width:width-30,height:1,marginLeft:'3%',marginTop:'1%',backgroundColor:'#24D4BC',alignSelf:'flex-start'}}/> */}
-     <View style={{width:width-40,height:1,margin:'2%',backgroundColor:'#27A291',alignSelf:'flex-start'}}/>
+     <View style={{ height: 1, width: width - 40, backgroundColor: '#27A291' }} />
 
  
  <SnapCarousel
@@ -1134,13 +1136,13 @@ collData(userid,colid,secid) {
                         </TouchableOpacity>
                     </ImageBackground>
                 </CardView>
-                <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center'}}>
+                <Text numberOfLines={2} style={styles.selectedTitle}>
                     {item.title}
                 </Text>
-                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+                <Text numberOfLines={1} style={styles.author}>
                   {item.author}
               </Text>
-              <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
+              <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'left',fontFamily:'AzoSans-Light',marginTop:0 }}>
                   {item.Dat}
               </Text>
             </View>
@@ -1152,7 +1154,7 @@ collData(userid,colid,secid) {
     autoplay={false}
     enableMomentum={true}
     sliderWidth={Dimensions.get('window').width}
-    itemWidth={130}
+    itemWidth={165}
     itemHeight={100}
     snapToInterval={20}
     contentContainerCustomStyle={{marginLeft:-80}}
@@ -1161,10 +1163,9 @@ collData(userid,colid,secid) {
 />
 
 </View>
- <View style = {styles.overlay}>   
- <Text style={{ color: '#707070',marginTop:'3%',marginLeft:'3%',alignSelf:'flex-start',
-    textAlign:'left', fontSize: 26, }}>Series</Text>
-          <View style={{width:width-40,height:1,margin:'2%',backgroundColor:'#27A291',alignSelf:'flex-start'}}/>
+ {/* <View style = {styles.overlay}>   
+ <Text  style={styles.headline1}>Series</Text>
+  <View style={{ height: 1, width: width - 40, backgroundColor: '#27A291' }} />
  
       <SnapCarousel
     data={this.state.series}
@@ -1185,11 +1186,11 @@ collData(userid,colid,secid) {
                         </TouchableOpacity>
                     </ImageBackground>
                 </CardView>
-                <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
-                    {item.Title}
+                     <Text numberOfLines={3} style={styles.selectedTitle}>
+                    {item.title}
                 </Text>
-                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
-                  {item.Author}
+                <Text numberOfLines={1} style={styles.author}>
+                  {item.author}
               </Text>
                 </TouchableOpacity>
             </View>
@@ -1208,9 +1209,8 @@ collData(userid,colid,secid) {
 
 </View>
 <View style = {styles.overlay}>   
-<Text style={{ color: '#707070',marginTop:'3%',marginLeft:'3%',alignSelf:'flex-start',
-    textAlign:'left', fontSize: 26, }}>Periodicals</Text>
-          <View style={{width:width-40,height:1,margin:'2%',backgroundColor:'#27A291',alignSelf:'flex-start'}}/>
+<Text  style={styles.headline1}>Periodicals</Text>
+  <View style={{ height: 1, width: width - 40, backgroundColor: '#27A291' }} />
  
               <SnapCarousel
   data={this.state.periodical}
@@ -1231,11 +1231,11 @@ collData(userid,colid,secid) {
                         </TouchableOpacity>
                     </ImageBackground>
                 </CardView>
-                <Text style={{ marginBottom: 3, marginTop: 10, fontWeight: 'bold', fontSize: 15, color: '#242126',textAlign:'center' }}>
-                    {item.Title}
+                    <Text numberOfLines={3} style={styles.selectedTitle}>
+                    {item.title}
                 </Text>
-                <Text style={{ marginBottom: 10, fontSize: 12, color: '#707070',textAlign:'center' }}>
-                  {item.Author}
+                <Text numberOfLines={1} style={styles.author}>
+                  {item.author}
               </Text>
                         </TouchableOpacity>
 
@@ -1252,7 +1252,7 @@ collData(userid,colid,secid) {
       contentContainerCustomStyle={{marginLeft:-80}}
     containerCustomStyle={{ marginTop: 30 }}
 />
-</View> 
+</View>  */}
                 <Modal1
                     animationType={"slide"}
                     onBackdropPress={() => this.setState({ loginPopup: false})}
@@ -1535,14 +1535,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 55,
     height: 25,
-    width: 35,
-    padding: 2
+    width: 25,
+    alignItems:'center',
+    justifyContent:'center'
+    // padding: 2
   },
   input:{
-    width:width-80,
+    width:width/1.6,
     backgroundColor:"#fff",
-   
-    padding:10,
+    fontFamily:'AzoSans-Regular',
+    fontSize:16,
+
+    // padding:10,
     margin:5
   },
     modal: {
@@ -1614,11 +1618,29 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: '-80%'
     },
-    headline: {
-        fontSize: 18,
-        textAlign: 'center',
-        backgroundColor: 'black',
-        color: 'white'
+    headline1:{
+      color: 'black',
+      fontFamily: 'Montserrat-Light',
+      fontSize: 24,
+      width:width-40, 
+      margin: '2%',
+      marginTop:'4%'
+    },
+    selectedTitle:{
+      marginBottom: 3,
+       marginTop: 10,
+        color: '#242126',
+        textAlign:'left',
+        fontFamily:'AzoSans-Medium',
+        fontSize:16,
+      //   marginRight:1,
+    },
+    author:{
+      marginBottom: 5, 
+      fontSize: 12,
+       color: '#707070',
+       textAlign:'left',
+       fontFamily:'AzoSans-Light',
     },
     tabs: {
         flexDirection: 'row',

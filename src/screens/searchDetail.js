@@ -92,15 +92,15 @@ this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
 componentDidMount() {
   AsyncStorage.getItem('userid').then((value)=>{this.setState({getuserid:value})})
-  AsyncStorage.getItem('searchText').then((value) => this.setState({ text : value })).done();
+  AsyncStorage.getItem('searchText').then((value) => this.setState({ text : value==null?"":value })).done();
   AsyncStorage.getItem('searchFilter').then((value)=>this.setState({sortby:value})).done();
   AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
   this.CheckConnectivity();
   // alert(this.state.sortby)
   this.focusListener = this.props.navigation.addListener('willFocus', () => {
     AsyncStorage.getItem('userid').then((value)=>{this.setState({getuserid:value})})
-  AsyncStorage.getItem('searchText').then((value) => this.setState({ text : value })).done();
-  AsyncStorage.getItem('searchFilter').then((value)=>this.setState({sortby:value})).done();
+    AsyncStorage.getItem('searchText').then((value) => this.setState({ text : value==null?"":value })).done();
+    AsyncStorage.getItem('searchFilter').then((value)=>this.setState({sortby:value})).done();
   AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
   this.CheckConnectivity();
 
@@ -355,8 +355,8 @@ SearchFilterFunction(text) {
 
           <View style={{flexDirection:'column',width:width/1.8,marginTop:'3%' }}>
 
-  <Text style={{fontSize:17,fontWeight:'bold',paddingLeft:'2%'}}> {item.PostLinkTitle} </Text>
-  <Text style={{fontSize:16,marginTop:10,color:'#707070',paddingLeft:'3%'}}>
+  <Text numberOfLines={1} style={{fontFamily:'AzoSans-Medium',fontSize:14,paddingLeft:'2%',width:width/2}}> {item.PostLinkTitle} </Text>
+  <Text numberOfLines={1} style={{fontFamily:'AzoSans-Light',fontSize:12,marginTop:10,color:'#707070',paddingLeft:'3%',width:width/4}}>
        {item.Post_author} {/* Packaging Design - Bite Me: Packaging Insults Chewers as They... Grab a Piece of Tooth-Shaped Gum */}
     </Text>
   </View>
@@ -372,7 +372,7 @@ SearchFilterFunction(text) {
 </TouchableOpacity> */}
  <TouchableOpacity style={[{marginRight:'2%'},styles.button]} onPress={()=>this.imgClick(item.Post_page_id,item.TypeID)}>
  <ImageBackground source={{uri:item.PostLinkImage!=""?item.PostLinkImage:null}} 
-          imageStyle={{ borderRadius: 15 }}
+          imageStyle={{ borderRadius: 8 }}
           style={[item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null}]}
              >
              <TouchableOpacity style={{padding:'2%'}}
@@ -435,7 +435,7 @@ SearchFilterFunction(text) {
   // containerStyle={{marginLeft:'1%'}}
   /> */}
   <View style={{flexDirection:'column',width:width/2,alignItems:'flex-start',justifyContent:'center'}}>
-  <Text style={{ fontSize: 18, color: 'black', fontWeight: 'bold',textAlign:'left',}}>{item.username}</Text>
+  <Text numberOfLines={2} style={{ fontSize: 14, color: 'black', fontFamily: 'Montserrat-Bold',textAlign:'left',}}>{item.username}</Text>
   {/* <Text style={{ fontSize: 16, color: 'black',textAlign:'left'}}>{item.Post_author}</Text> */}
   </View>
   {item.user_id==this.state.getuserid?<View style={{width: width/2-90}}/>:
@@ -449,7 +449,7 @@ SearchFilterFunction(text) {
   <LinearGradient  style={[item.Is_Follow=='Followed'?styles.btnview1:styles.btnview]} colors={
              item.Is_Follow=="Followed"? ['#24D4BC', '#27A291']:['#fff','#fff']}>
  
-      <Text style={{color:item.Is_Follow=='Followed'?'#fff':'#27A291',textAlign:'center'}}>{item.Is_Follow}</Text>
+      <Text style={{color:item.Is_Follow=='Followed'?'#fff':'#27A291',textAlign:'center',fontFamily:'AzoSans-Medium',fontSize:14}}>{item.Is_Follow}</Text>
 
       {/* {item.isFollowed==true?<Text style={{color:'#fff'}}>Followed</Text>:<Text style={{ color:'#27A291'}}>Follow</Text>} */}
 {/* <TouchableOpacity onPress={() => this.tooltipPress()} style={[!this.state.visible ? styles.btnview : styles.activeBtnview]}>
@@ -541,30 +541,30 @@ SearchFilterFunction(text) {
                            AsyncStorage.setItem('searchText'," ")
                  this.props.navigation.navigate('searchFilter')}}>
           <Image
-            style={{ alignSelf: 'center' }}
+            style={{ alignSelf: 'center',width:50,height:50}}
             source={require('../assets/img/filter.png')}>
           </Image>
           </TouchableOpacity>
-        <View>
+        <View style={{width:width/1.5,alignItems:'center',}}>
           <TextInput
            style={styles.input} 
            value={!this.state.profilepage? this.state.text:this.state.profileSearch}
-           underlineColorAndroid='black'
+           underlineColorAndroid={this.state.text!=""|| this.state.profileSearch!=""?'#27A291':'#707070'}
            placeholder="Search Here"
            onChangeText={(text)=>this.SearchFilterFunction(text)}
                 />
-                {Platform.OS=='ios'?<View style={{width:width-80,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
+                {Platform.OS=='ios'?<View style={{width:width/1.6,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
                 <TouchableOpacity style={styles.touchableButton} 
               >
                 <Image style={{width:20,height:20}}
-                  source={require('../assets/img/search1.png')}
+                  source={this.state.text!="" || this.state.profileSearch!=""?require('../assets/img/greensearch.png'):require('../assets/img/searchicon.png')}
                   />
                </TouchableOpacity>
                <TouchableOpacity
               onPress={()=>this.backpress()}>
       <Image
-        style={{ alignSelf: 'center' }}
+        style={{ alignSelf: 'center',width:50,height:50 }}
        source={require('../assets/img/close.png')}/>
       </TouchableOpacity>
       </View>
@@ -576,7 +576,7 @@ style={[!this.state.profilepage?styles.highlight:styles.highlight1]}
             // onPress={this.headerBtnClk}
             >
 <Text 
-style={[!this.state.profilepage?styles.headerText:styles.blacktext]}
+style={[!this.state.profilepage?styles.headerText:styles.blacktext,{fontFamily:'AzoSans-Medium',fontSize:14}]}
 
 // style={{ padding: '5%',
 //   fontSize: 16,
@@ -586,12 +586,12 @@ style={[!this.state.profilepage?styles.headerText:styles.blacktext]}
 
             </TouchableOpacity>
           <TouchableOpacity
-style={[!this.state.profilepage?styles.highlight1:styles.highlight]}
+style={[!this.state.profilepage?styles.highlight1:styles.highlight,]}
 // style={[!this.state.profilepage?styles.highlight:styles.highlight1]}
            onPress={()=>this.profilePress()}
            >
           <Text 
-style={[!this.state.profilepage?styles.blacktext:styles.headerText]}
+style={[!this.state.profilepage?styles.blacktext:styles.headerText,{fontFamily:'AzoSans-Medium',fontSize:14}]}
             
             >Profiles</Text>
           </TouchableOpacity>
@@ -741,7 +741,7 @@ const styles = StyleSheet.create({
      },
      pageImgStyle:{ 
       // elevation:1,
-      width: 130, height: 100,
+      width: 125, height: 70,
       borderRadius:15
       // alignItems:'center',
       //  jsutifyContent: 'center'
@@ -763,7 +763,6 @@ const styles = StyleSheet.create({
 headerText: {
   padding: '5%',
   fontSize: 16,
-  fontWeight: 'bold',
   color:'white'
 },
 button: {
@@ -793,16 +792,19 @@ topview:{
 },
 touchableButton: {
   position: 'absolute',
-  right: 55,
-  height: 25,
+  right: 65,
+  height: 40,
   width: 35,
-  padding: 2
+  padding: 2,
+  alignItems:'center',
+  justifyContent:'center'
 },
 input:{
-  width:width-80,
+  width:width/1.6,
   backgroundColor:"#fff",
- 
-  padding:10,
+  fontFamily:'AzoSans-Regular',
+  fontSize:16,
+  // padding:10,
   margin:5
 },
 textInputStyle: {
@@ -854,8 +856,7 @@ textInputStyle: {
   blacktext:{
      padding: '5%',
   fontSize: 16,
-  color:'black',
-  fontWeight: 'bold'
+  color:'#707070',
   }
 })
 function mapStateToProps(state){

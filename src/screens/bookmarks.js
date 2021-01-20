@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { View,SafeAreaView,AsyncStorage,ImageBackground,FlatList,Modal, RefreshControl,BackHandler, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import { connect } from "react-redux";
 // import ReadMore from 'react-native-read-more-text';
-import ReadMoreText from './Readmore';
-// import ReadMoreText from 'react-native-read-more-text';
+// import ReadMoreText from './Readmore';
+import ReadMoreText from 'react-native-read-more-text';
 import BlurModal from '../components/blurModal';
 import Modal1 from "react-native-modal";
 import LinearGradient from 'react-native-linear-gradient';
@@ -412,7 +412,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
                        onPress={() => this.goToRead(item)} 
                          >
             <ImageBackground
-            style={{width:width,height: 550,alignSelf: 'center',marginTop:'2%'}}
+            style={{width:width,height: item.Type_Id=='4'?217:550,alignSelf: 'center',marginTop:'2%'}}
             source={{uri:item.Cover_Image}}
             onPress={() => console.log("Works!")}
             activeOpacity={0.7}
@@ -499,17 +499,18 @@ _renderTruncatedFooter = (handlePress,index,item) => {
   </ScrollView>
   <TouchableOpacity style={{paddingLeft:'2%',paddingRight:'2%',width:width/10
   ,alignSelf:'center'}} onPress={()=>this.backpress()}>
-  <Image source={require('../assets/img/close.png')} />
+ <Image
+        style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
   </TouchableOpacity>
   </View>
-<ScrollView style={{marginBottom:'10%'}}>
+<ScrollView>
       <FlatList
           legacyImplementation={false}
           data={this.state.reading}
           navigation={this.props.navigation}
           renderItem={this.fullcard.bind(this)}
           enableEmptySections={false}
-          contentContainerStyle={{ marginTop: '1%', }}
+          contentContainerStyle={{ marginTop: '1%',marginBottom:'15%' }}
           extraData={this.state}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -588,20 +589,21 @@ _renderTruncatedFooter = (handlePress,index,item) => {
                         {/* <Text>Home</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                    <Image source={require('../assets/img/collection.png')} />
+                    <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
                         {/* <Text>Collection</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                        <Image style={{ width: 28, height: 28 }} source={require('../assets/img/search.png')} />
+                    <Image
+                       style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/search.png')} />
                         {/* <Text>Search</Text> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
+                    <TouchableOpacity style={[styles.tabsss]} onPress={() => this.toggleTab4()}>
                         {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
                         {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2 }} source={{ uri: this.state.avatarProfile }}></Image>
+                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2,borderColor: '#27A291', borderWidth: 1  }} source={{ uri: this.state.avatarProfile }}></Image>
                         {/* <Text>Menu</Text> */}
                         {/* </Drawer> */}
                     </TouchableOpacity>
@@ -616,7 +618,7 @@ const styles = StyleSheet.create({
   bottomBar: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    // height: '6%',
+    height: '6%',
     bottom: 0,
     left: 0,
     right: 0,

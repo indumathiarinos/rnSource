@@ -162,8 +162,9 @@ render(){
       <SafeAreaView style={styles.container}>
           <View style={{height:'8%',justifyContent:'center',paddingLeft:'5%'}}>
             <TouchableOpacity onPress={()=>this.props.navigation.navigate('loginSignup')}>
-          <Image style={{alignSelf:'flex-start',}} source={require('../assets/img/backarrow.png')}/>
-          </TouchableOpacity>
+          <Image 
+           style={{width:50,height:50,alignSelf:'flex-start',}} source={require('../assets/img/backarrow.png')} />
+            </TouchableOpacity>
           </View>
           <Image style={{alignSelf:"center",marginTop:'5%',width:50,height:50}} source={require('../assets/img/logo1.png')}/>
           <Text style={{color:'#27A291',fontSize:24,alignSelf:'center',margin:'3%'}}>Sign Up</Text>

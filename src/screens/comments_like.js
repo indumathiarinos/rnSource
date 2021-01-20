@@ -157,10 +157,10 @@ return (
         </View>
       </TouchableOpacity>
       <TouchableOpacity
-      style={{justifyContent:'center',paddingRight:'3%'}}
+      style={{justifyContent:'center',}}
       onPress={()=>this.backpress()}
       >
-      <Image style={{margin:17}} source={require('../assets/img/close.png')}/>
+          <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
       </TouchableOpacity>
 
   </View>

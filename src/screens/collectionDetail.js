@@ -623,10 +623,10 @@ readsItems({ item }) {
             
           <SafeAreaView style={{ flex: 1, backgroundColor: '#ffff' }}>
           <View style={styles.staticheader}>
-          <TouchableOpacity style={{ padding: '2%',marginLeft:'5%' }}
+          <TouchableOpacity style={{ }}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Image source={require('../assets/img/backarrow.png')} />
+            <Image style={{width:50,height:50}} source={require('../assets/img/backarrow.png')} />
           </TouchableOpacity>
           <View style={{ flexDirection: 'row', width: width - 60, justifyContent: 'center', alignItems: 'center',alignSelf:"center" }}>
           <LinearGradient style={{ borderRadius: 10}} colors={
@@ -829,7 +829,7 @@ readsItems({ item }) {
                         <TouchableOpacity
                             style={styles.tabsss}
                             onPress={() => this.toggleTab1()}>
-                            <Image source={require('../assets/img/logo.png')} />
+     <Image style={{width:25,height:25}} source={require('../assets/img/logo.png')} />
                             {/* <Text>Home</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
@@ -837,7 +837,8 @@ readsItems({ item }) {
                         {/* <Text>Collection</Text> */}
                     </TouchableOpacity>
                         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                            <Image source={require('../assets/img/search.png')} />
+                        <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/search.png')} />
+
                             {/* <Text>Search</Text> */}
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
@@ -930,6 +931,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         bottom:0,
         left:0,
+        height:'6%',
         right:0,
         justifyContent:'space-around',
         flexDirection:'row',

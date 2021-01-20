@@ -219,9 +219,9 @@ class Contents extends Component {
           <TouchableOpacity style={{ marginLeft: '2%' }}
             onPress={() => this.props.navigation.navigate('newOldFilter')}
           >
-            <Image source={require('../assets/img/filter.png')} />
+          <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/filter.png')} />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width - 60, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width/1.5, justifyContent: 'center', alignItems: 'center' }}>
 
             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('viewBook')}>
               <Text style={styles.headerText}
@@ -249,8 +249,8 @@ class Contents extends Component {
             {/* </View> */}
             {/* </View> */}
           </View>
-          <TouchableOpacity onPress={() => this.backpress()}>
-            <Image source={require('../assets/img/close.png')} />
+          <TouchableOpacity style={{backgroundColor:'pink'}} onPress={() => this.backpress()}>
+          <Image style={{ alignSelf: 'center',width:50,height:50, }} source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
         {/* <View style={styles.header}>
@@ -273,7 +273,7 @@ class Contents extends Component {
             renderItem={({ item }) =>
           
             <TouchableOpacity onPress={() => this.gotoRead(item.page_id)}>
-              <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,height:height/10}} key={item.Content} >
+              <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,}} key={item.Content} >
                 <Text style={{ color: 'black', textAlign: 'left',  fontSize: 12,fontFamily:'AzoSans-Medium', marginTop: '2%', marginBottom: '2%' }}>{item.page_title}</Text>
                 <Divider style={{ color: '#707070', width: width - 50, }} />
               </View>
@@ -331,6 +331,7 @@ const styles = StyleSheet.create({
   headerText: {
     padding: '5%',
     fontSize: 14,
+    color:'#707070',
     fontFamily:'AzoSans-Medium',
   },
 
@@ -342,6 +343,7 @@ const styles = StyleSheet.create({
     height: '8%',
     backgroundColor: '#ffff',
     elevation: 1,
+    // backgroundColor:'pink',
     borderBottomColor: '#707070'
   },
 

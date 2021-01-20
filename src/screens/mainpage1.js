@@ -1,3 +1,5 @@
+
+
 import React, { Component,createRef } from 'react'
 import {
     View,SafeAreaView,Button,Modal,Animated,Keyboard,Platform,ImageBackground,LayoutAnimation, FlatList, BackHandler, RefreshControl, AsyncStorage, Share, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
@@ -391,7 +393,19 @@ class Home extends Component {
     
             )
         }
-    
+        tags(name){
+            let varcolordot = "";
+            if(name==='Education'){
+                varcolordot='#1C4A7E'
+            }else if(name==='Illustration'){
+                varcolordot='#c65135'
+            }else if(name==='Fiction'){
+                varcolordot='#741c7e'
+            }else if(name==='Comics'){
+                varcolordot="#c65135"
+            }
+            return varcolordot;
+        }
         changeLayout = () => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
             this.setState({ expanded: !this.state.expanded });
@@ -1208,7 +1222,7 @@ render() {
                     cardElevation={2}
                     cardMaxElevation={2}
                     cornerRadius={8}>
-                    <ImageBackground source={{ uri: item.Images!=''?item.Images:null }} style={{ width: 130, height: 150, jsutifyContent: 'center',resizeMode:'cover'}}>
+                    <ImageBackground source={{ uri: item.Images!=''?item.Images:null }} style={{ width: 160, height: 180, jsutifyContent: 'center',resizeMode:'cover'}}>
                        {/* {this.state.explore_page=='0'? */}
                         <TouchableOpacity
                         onPress={() => this.moreClick(item,"pressIcon") }>
@@ -1232,12 +1246,13 @@ render() {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={130}
-      itemHeight={120}
+      itemWidth={160}
+      itemHeight={180}
       snapToInterval={20}
-        contentContainerCustomStyle={{marginLeft:-80}}
+      currentIndex={1}
+        contentContainerCustomStyle={{marginLeft:0}}
       snapToAlignment={'start'}
-      onSnapToItem={(index) => this.snapItem(index, 'recent')}
+    //   onSnapToItem={(index) => this.snapItem(index, 'recent')}
       containerCustomStyle={{ marginTop: 30 }}
   />
       </View>
@@ -1271,7 +1286,7 @@ render() {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    style={{ backgroundColor:index%2==0?'#1C4A7E':'#C65135',padding:'3%'}}
+                    style={{ backgroundColor:this.tags(item.Category_name),padding:'3%'}}
                     cornerRadius={10}>
                          <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                          <Image
@@ -1391,7 +1406,7 @@ render() {
                       cardElevation={2}
                       cardMaxElevation={2}
                       cornerRadius={8}>
-                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 165, height: 100, jsutifyContent: 'center',resizeMode:'cover' }}>
+                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 180, height: 90, jsutifyContent: 'center',resizeMode:'cover' }}>
                           <TouchableOpacity
                               onPress={() => this.moreClick(item,"pressIcon") }>
                               <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1415,8 +1430,8 @@ render() {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={165}
-      itemHeight={100}
+      itemWidth={180}
+      itemHeight={90}
       snapToInterval={20}
       contentContainerCustomStyle={{marginLeft:-80}}
       snapToAlignment={'start'}
@@ -1619,16 +1634,15 @@ autoplay={false}
             width: 300,}}
             >
               <TouchableOpacity
-                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
+                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,justifyContent:'center'}}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
+                  flexDirection: 'row', alignItems: 'center', width: 200,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image  source={require('../assets/img/createCol.png')} />
-                  <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
-  
+                  <Image style={{alignSelf:'center'}}  source={require('../assets/img/createCol.png')} />
+                  <Text style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#27A291',marginTop:5, width: width / 2.5,alignSelf:'center',marginLeft:'2%'}}>Create Collection</Text>
                 </View>
               </TouchableOpacity>
   
@@ -1650,7 +1664,7 @@ autoplay={false}
                     }}
                     >
                   <Image  source={require('../assets/img/colliconnew1.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
+                      <Text style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
                     </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
@@ -1671,7 +1685,7 @@ autoplay={false}
                         flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                       }}>
                   <Image source={require('../assets/img/coll_white1.png')} />
-                        <Text style={{ fontSize: 17, color: '#ffff', marginLeft: '5%', width: width / 2.9   }}>Collections</Text>
+                        <Text style={{fontSize: 14,fontFamily:'AzoSans-Regular', color: '#ffff', marginLeft: '5%', width: width / 2.9   }}>Collections</Text>
                       </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
@@ -1691,7 +1705,7 @@ autoplay={false}
                                    <View style={{
                                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                    }}>
-                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 180 }}>{item.title}</Text>
+                                     <Text numberOfLines={1} style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 180 }}>{item.title}</Text>
                                      <Image style={{ alignSelf: 'center', marginLeft: '0%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
                          <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                                  <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1717,7 +1731,7 @@ autoplay={false}
                              <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                  {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                      {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1757,7 +1771,7 @@ autoplay={false}
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
                   <Image source={require('../assets/img/readlaternew1.png')} />
-                  <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
+                  <Text style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
                   <Divider style={{ backgroundColor: '#707070' }} />
   
                 </View>
@@ -1808,7 +1822,7 @@ autoplay={false}
  <TouchableOpacity
      style={styles.tabsss}
      onPress={() => this.toggleTab1()}>
-     <Image source={require('../assets/img/logo.png')} />
+     <Image style={{width:25,height:25}} source={require('../assets/img/logo.png')} />
  </TouchableOpacity>
 
 
@@ -1869,7 +1883,7 @@ autoplay={false}
   //       {/* <Text>Menu</Text> */}
   //       {/* </Drawer> */}
   //     </TouchableOpacity>
-  //   </FooterTab>
+  //   </FooterTab>Our t
   // </Footer>
   // </Container>
   // </Drawer>

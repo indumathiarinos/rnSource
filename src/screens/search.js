@@ -345,10 +345,23 @@ popupBookpage=(item)=>{
  }
 
 }
+tags(name){
+  let varcolordot = "";
+  if(name==='Education'){
+      varcolordot='#1C4A7E'
+  }else if(name==='Illustration'){
+      varcolordot='#c65135'
+  }else if(name==='Fiction'){
+      varcolordot='#741c7e'
+  }else if(name==='Comics'){
+      varcolordot="#c65135"
+  }
+  return varcolordot;
+}
   renderItem_card({ item }) {
     return (
     
-      <View style={{ flex: 1,alignSelf:'center',margin:5}}>
+      <View style={{ flex: 1,alignSelf:'center',margin:10}}>
 
         {/* <View style={{ width: 155 }}> */}
           {/* <Image
@@ -360,22 +373,22 @@ popupBookpage=(item)=>{
       >
 
             <CardView
-                cardElevation={2}
-                cardMaxElevation={2}
-                style={{ backgroundColor: '#fa376b',padding:'2%'}}
+                // cardElevation={2}
+                // cardMaxElevation={2}
+                style={{ backgroundColor: this.tags(item.Category_name),padding:'2%'}}
                 cornerRadius={10}>
                      <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                      <Image
                     resizeMode="stretch"
-                    style={{ width: width/4.5,borderRadius:10, height: 120, alignSelf: 'center' }} source={{ uri: item.Image1!=""?item.Image1:null}} />
+                    style={{ width: width/4.5,borderTopLeftRadius:8,borderBottomLeftRadius:8, height: 120, alignSelf: 'center' }} source={{ uri: item.Image1!=""?item.Image1:null}} />
                   <Image
                     resizeMode="stretch"
-                    style={{ width: width/4.5, height: 120,borderRadius:10, alignSelf: 'center',paddingRight:40 }} source={{ uri: item.Image2!=""?item.Image2:null }} />
+                    style={{ width: width/4.5, height: 120,borderTopLeftRadius:8,borderBottomLeftRadius:8, alignSelf: 'center',paddingRight:40,marginLeft:-5 }} source={{ uri: item.Image2!=""?item.Image2:null }} />
                  <Image
                     resizeMode="stretch"
-                    style={{ width: width/4.5, height: 120,borderRadius:10, alignSelf: 'center',paddingRight:80 }} source={{ uri: item.Image3!=""?item.Image3:null }} />
+                    style={{ width: width/4.5, height: 120,borderRadius:8, alignSelf: 'center',paddingRight:80,marginLeft:-5 }} source={{ uri: item.Image3!=""?item.Image3:null }} />
                  </View>
-                 <Text style={{ marginBottom: 5,color:'#fff', fontWeight: 'bold', fontSize: 15,textAlign:'center',marginTop:10}}>
+                 <Text style={{ marginBottom: 5,color:'#fff', fontSize: 16,fontFamily:'AzoSans-Medium',textAlign:'center',marginTop:10}}>
                     {item.Category_name}
                 </Text>
                 {/* <Image
@@ -395,6 +408,12 @@ popupBookpage=(item)=>{
     this.setState({newbool:true})
      this.refs.modal4.open()
   }
+  gotodetail(){
+    AsyncStorage.setItem('searchText',"")
+    AsyncStorage.setItem('searchFilter',"Desc")
+    this.props.navigation.navigate('searchDetail')
+    
+  }
   SearchFilterFunction(text) {
     {this.exploredataPopup()}
     const newData = this.arrayholder.filter(function(item) {
@@ -408,11 +427,11 @@ popupBookpage=(item)=>{
       //After setting the data it will automatically re-render the view
       popupData:this.state.searchText==""?this.setState({popupData:[]}):newData,
       searchText: text,
+
     });
-    this.refs.modal4.open();
+    {this.state.searchText==""?null:this.refs.modal4.open()}
     // console.log('profile data 1 value filtered ',this.state.popupData)
   }
-  
   reportClk=()=>{
     this.setState({reportModal:false})
     this.props.navigation.navigate('report')
@@ -434,12 +453,14 @@ popupBookpage=(item)=>{
                 value={this.state.searchText}
                 underlineColorAndroid="gray"
                 />
-                {Platform.OS=='ios'?<View style={{width:width/1.2,height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
+                {Platform.OS=='ios'?<View style={{width:width/1.6,height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
                 <TouchableOpacity style={styles.touchableButton} 
-                onPress={()=>{this.SearchFilterFunction(this.state.searchText)}}>
-                <Image
-                  source={require('../assets/img/search1.png')}
+                onPress={()=>{this.state.searchText!=""?this.SearchFilterFunction(this.state.searchText):
+                this.gotodetail()
+            }}>
+                <Image style={{alignSelf:'center',}}
+                  source={require('../assets/img/searchicon.png')}
                   />
                </TouchableOpacity>
 
@@ -458,23 +479,37 @@ popupBookpage=(item)=>{
           </Image> */}
         {/* </View> */}
     
-          <ScrollView >
+          <ScrollView 
+                          >
+
+
             {/* <View style={styles.container}> */}
-            <View style={styles.backgroundContainer}>
+            {/* <View style={styles.backgroundContainer}>
               <Image source={require('../assets/img/eclipse.png')}
                 resizeMode='cover'
                 style={styles.backdrop}/>
-            </View>
+            </View> */}
+             <View style={styles.containerStyle} >
+            <View 
+            style={styles.sliderContainerStyle}
+             />
+          </View> 
+          <View style={styles.backdrop}>
             {/* <View style={{ marginTop: '5%', flex:1 }}> */}
-              <View style={{ flexDirection: 'row',
+              <View style={{ flexDirection: 'row',width:width,
               //  margin:'2%', 
                alignContent: 'center', justifyContent: 'center',}}>
 
                 <Image
-                  style={{ marginTop:'3%' }}
-                  source={require('../assets/img/search1.png')}
+                  style={{ 
+                    // marginTop:'5%',
+                    width:29,height:29 }}
+                  source={require('../assets/img/white_search.png')}
                 />
-                <Text style={{ marginLeft: '2%', color: '#fff', marginTop:'3%',fontSize: 20, fontWeight: 'bold' }}>Explore</Text>
+                <Text style={{ 
+                  // margin: '5%',
+                  marginLeft:'2%',
+                   color: '#fff',fontSize: 24, fontFamily: 'Montserrat-Bold' }}>Explore</Text>
               </View>
               {/* <FlatList
                 data={this.state.list}
@@ -497,11 +532,10 @@ popupBookpage=(item)=>{
               enableEmptySections={false}
               contentContainerStyle={{
                 // padding:'2%',
-                paddingLeft:'5%',
-                // marginTop:'5%',
+                // paddingLeft:'5%',
                 flex: 1,
                 // marginBottom:'5%',
-                // marginTop:'5%',
+                marginTop:'3%',
                 justifyContent:'center',
                 // alignItems:'center'
                 // marginTop:'5%',marginLeft:'5%'
@@ -509,21 +543,21 @@ popupBookpage=(item)=>{
               keyExtractor={(item, index) => index.toString()}
             />
             {/* </View> */}
-               
+               </View>
           </ScrollView>
         
         <ModalBox
           style={{  alignItems: 'center',
           marginTop:'15%',
           
-          height:this.state.searchText==""?0:"60%",
+          height:this.state.searchText==""?0:"32%",
           width: width,}}
           position={'top'}
           ref={'modal4'}
           isDisabled={this.state.isDisabled}>
-            <View style={{flex:1, height:this.state.searchText==""?0:"60%",
+            <View style={{flex:1, height:this.state.searchText==""?0:"32%",
           width: width}}>
-          <TouchableOpacity style={{backgroundColor:'#27A291',width:width,padding:'3%',alignSelf:'center'}}><Text style={{fontSize:16,color:'white',textAlign:'center'}}>Suggestions for '{this.state.searchText} '</Text></TouchableOpacity>
+          <TouchableOpacity style={{backgroundColor:'#27A291',width:width,padding:'3%',alignSelf:'center',}}><Text style={{color:'white',textAlign:'center',fontFamily:'Montserrat-Bold',fontSize:16}}>Suggestions for '{this.state.text}'</Text></TouchableOpacity>
           <FlatList
             data={this.state.popupData}
             keyExtractor={(item,index)=>index.toString()}
@@ -533,8 +567,9 @@ popupBookpage=(item)=>{
               <TouchableOpacity onPress={()=>this.popupBookpage(item)}>
               <View style={{ flexDirection: 'row',paddingLeft:'3%',paddingRight:'3%',justifyContent:'space-between'}}>
                     <View style={{flexDirection:'column',width:width/1.5,marginTop:'3%' }}>
-            <Text style={{fontSize:17,fontWeight:'bold',paddingLeft:'2%'}}> {item.PostLinkTitle} </Text>
-            <Text style={{fontSize:16,marginTop:10,color:'#707070',paddingLeft:'3%'}}>
+                    <Text numberOfLines={1} style={{fontSize:16,fontFamily:'AzoSans-Medium',paddingLeft:'2%'}}>
+            {item.PostLinkTitle} </Text>
+            <Text style={{fontSize:12,fontFamily:'AzoSans-Light',marginTop:10,color:'#707070',paddingLeft:'3%'}}>
             {item.Post_author}    
             {/* Packaging Design - Bite Me: Packaging Insults Chewers as They... Grab a Piece of Tooth-Shaped Gum */}
               </Text>
@@ -562,14 +597,14 @@ popupBookpage=(item)=>{
 
        
         <Divider style={{color:'#707070',borderWidth:0.2,width:width}} />
-       {this.state.searchText==""?null: <TouchableOpacity style={{padding:'1%',marginBottom:'3%'}}    
+       {this.state.searchText==""?null: <TouchableOpacity style={{padding:'1%',}}    
         onPress={()=>{
           AsyncStorage.setItem('searchText',this.state.searchText)
           this.props.navigation.navigate('searchDetail')
         this.refs.modal4.close();
       }}>
-          <View style={{flexDirection:'row',marginTop:'1%',marginBottom:'1%',justifyContent:'flex-end',alignItems:'flex-end',alignContent:'flex-end',marginRight:'5%'}}>
-          <Text style={{color:'#707070',marginRight:'2%'}}>See All</Text>
+          <View style={{flexDirection:'row',marginTop:'1%',marginBottom:'1%',justifyContent:'flex-end',alignItems:'center',alignContent:'flex-end',marginRight:'5%'}}>
+          <Text style={{color:'#707070',marginRight:'2%',fontFamily:'AzoSans-Regular',fontSize:12}}>See All</Text>
             <Image style={{marginRight:'2%',}}  source={require('../assets/img/right_arrow.png')}/>
           </View>
         </TouchableOpacity>}
@@ -620,15 +655,15 @@ onBackdropPress={() =>     this.setState({reportModal:false})
           <TouchableOpacity 
           style={styles.tabsss} 
           onPress={() => this.toggleTab1()}>
-          <Image source={require('../assets/img/logo.png')}/>
+     <Image style={{width:25,height:25}} source={require('../assets/img/logo.png')} />
           {/* <Text>Home</Text> */}
            </TouchableOpacity>
            <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-            <Image source={require('../assets/img/collection.png')}/>
+           <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
             {/* <Text>Collection</Text> */}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-           <Image source={require('../assets/img/green_search.png')}/>
+           <Image source={require('../assets/img/greensearch.png')}/>
            {/* <Text>Search</Text> */}
         </TouchableOpacity>
         <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
@@ -649,6 +684,29 @@ onBackdropPress={() =>     this.setState({reportModal:false})
 
 }
 const styles = StyleSheet.create({
+  containerStyle: {
+    alignSelf: 'center',
+    width: width,
+    overflow: 'hidden',
+    height: width / 2,
+  },
+  sliderContainerStyle: {
+    borderRadius: width,
+    width: width * 2,
+    height: width * 2,
+    marginLeft: -(width / 2.08),
+    position: 'absolute',
+    bottom: 0,
+    overflow: 'hidden',
+    // elevation:1,
+    backgroundColor:'#27A291',
+    resizeMode:'cover'
+    },
+  backdrop: {
+    flex: 1,
+    marginTop: -150
+},
+
   box1: {
     position: 'absolute',
     top: 40,
@@ -686,18 +744,21 @@ const styles = StyleSheet.create({
     alignItems:'center',justifyContent:'center'
   },
   input:{
-    width:width/1.2,
+    width:width/1.6,
     backgroundColor:"#fff",
-   
-    padding:10,
+    fontFamily:'AzoSans-Regular',
+    fontSize:16,
+    // padding:10,
     margin:5
   },
   touchableButton: {
     position: 'absolute',
-    right: 35,
+    right: 65,
     height: 40,
     width: 35,
-    padding: 2
+    padding: 2,
+    alignItems:'center',
+    justifyContent:'center'
   },
   textInputStyle: {
     width: width - 100,
@@ -720,12 +781,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  backdrop: {
-    // flex:1,
-    marginTop: '-80%',
-    // marginTop:'-120%',
-    // marginLeft:'-5%'
-  },
+
 })
 function mapStateToProps(state){
   return{

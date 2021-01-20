@@ -24,13 +24,13 @@ class Collection extends Component {
             actions: [
                 {
                     text: "Create Collection",
-                    icon: require("../assets/img/collection/create.png"),
+                    icon: require("../assets/img/collection/createcoll.png"),
                     name: "createCollection",
                     position: 5
                 },
                 {
                     text: "Merge Collection",
-                    icon: require("../assets/img/collection/merge.png"),
+                    icon: require("../assets/img/collection/mergecollection.png"),
                     name: "mergeCollection",
                     position: 4
                 },
@@ -435,7 +435,9 @@ class Collection extends Component {
                         </TouchableOpacity>
                     </ScrollView>
                     <TouchableOpacity style={{ paddingLeft: '2%', paddingRight: '2%', width: width / 10, alignSelf: 'center' }} onPress={() => this.backpress()}>
-                        <Image source={require('../assets/img/close.png')} />
+                    <Image
+                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={{ marginBottom: '10%' }}>
@@ -549,7 +551,7 @@ class Collection extends Component {
                         {/* <Text>Collection</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                        <Image style={{ width: 28, height: 28 }} source={require('../assets/img/search.png')} />
+                        <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/search.png')} />
                         {/* <Text>Search</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
@@ -573,7 +575,7 @@ const styles = StyleSheet.create({
     bottomBar: {
         backgroundColor: '#fff',
         alignItems: 'center',
-        // height: '6%',
+        height: '6%',
         bottom: 0,
         left: 0,
         right: 0,
