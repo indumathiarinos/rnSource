@@ -1070,7 +1070,7 @@ this.CheckConnectivity()
       {/* {this.state.copiedData == "" ?  */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}>
-          <Image style={{ width: 43, height: 43 }} source={{ uri: this.state.avatar != "" ? this.state.avatar : null }} />
+          <Image style={{ width: 43, height: 43,}} source={{ uri: this.state.avatar != "" ? this.state.avatar : null }} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.contentClick():this.alertPopup()}}>
           <Text numberOfLines={2} style={styles.pageTitle}>{this.state.page_url}</Text>
@@ -1690,7 +1690,8 @@ pageTitle:{
   fontSize: 12, 
   fontFamily:'Montserrat-Bold',
   width: width / 1.5,
-  textAlign:'left'
+  textAlign:'left',
+  marginLeft:'2%'
 },
 hiddenImgs:{
   width: 40,

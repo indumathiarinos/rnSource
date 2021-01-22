@@ -398,7 +398,7 @@ exploredata(userid){
         <ScrollView>
           <View style={styles.staticheader}>
 
-            <View style={{ flexDirection: 'row', width: width - 40, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', width: width/1.2, justifyContent: 'center', alignItems: 'center' }}>
             <LinearGradient style={{ borderRadius: 10}} colors={
               ['#24D4BC', '#27A291']}>
               <TouchableOpacity >
@@ -431,7 +431,9 @@ exploredata(userid){
               {/* </View> */}
             </View>
             <TouchableOpacity onPress={() =>this.backpress()}>
-              <Image source={require('../assets/img/close.png')} />
+                    <Image
+                            style={{ alignSelf: 'flex-end',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />
             </TouchableOpacity>
           </View>
           <View>
@@ -721,7 +723,7 @@ const styles = StyleSheet.create({
   },
   staticheader: {
     paddingLeft: '2%',
-    height:'5%',
+    // height:'5%',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#ffff',

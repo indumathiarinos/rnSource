@@ -361,6 +361,8 @@ class ReplyComments extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}> */}
+                 <View style={{flexDirection:'row',width:width/1.2,justifyContent:'space-between'}}>
+
                     <TouchableOpacity onPress={() => this.setState({ viewModal: !this.state.viewModal })}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center', width: width / 3 }}>
@@ -374,15 +376,18 @@ class ReplyComments extends Component {
                     <TouchableOpacity
                         onPress={()=>this.props.navigation.navigate('commentsLike')}
                     >
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center',width:width/2}}>
                             <Text style={{ fontSize: 18,color:'black' }}
                             >{this.state.commentCounts}</Text>
                             <Image style={{marginTop:'3%',marginLeft:'2%'}} source={require('../assets/img/comment1.png')} />
                         </View>
 
                     </TouchableOpacity>
+                    </View>
                     <TouchableOpacity onPress={() => this.backpress()}>
-                        <Image source={require('../assets/img/close.png')} />
+                    <Image
+                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />
                     </TouchableOpacity>
                     {/* </View> */}
                 </View>
@@ -568,7 +573,7 @@ const styles = StyleSheet.create({
     //   },
     touchableButton: {
         position: 'absolute',
-        right: 40,
+        right: '13%',
         // height: 40,
         width: 35,
         padding: 2

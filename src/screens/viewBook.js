@@ -796,7 +796,11 @@ class ViewBook extends Component {
             <Image source={require('../assets/img/download.png')} />
           </TouchableOpacity>
           {/* :null} */}
-          <View style={{ flexDirection: 'row', width: width/1.3, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width/1.2, justifyContent: 'center', alignItems: 'center',
+        
+        
+        
+        }}>
             <LinearGradient style={{ borderRadius: 10 }} colors={
               ['#24D4BC', '#27A291']}>
               <TouchableOpacity
@@ -835,8 +839,8 @@ class ViewBook extends Component {
             {/* </View> */}
             {/* </View> */}
           </View>
-          <TouchableOpacity style={{ margin: 14 }} onPress={() => this.backpress()}>
-          <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
+          <TouchableOpacity onPress={() => this.backpress()}>
+          <Image style={{ width:40,height:50 }} source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
         {/* <View style={styles.header}>
@@ -1745,12 +1749,12 @@ const styles = StyleSheet.create({
   },
 
   staticheader: {
-    paddingLeft: '3%',
+    paddingLeft: '2%',
     // paddingRight:'2%',
     flexDirection: 'row',
-    // justifyContent: 'center', 
+    justifyContent: 'center', 
     alignItems: 'center',
-    height: '9%',
+    // height: '8%',
     backgroundColor: '#ffff',
     elevation: 1
 

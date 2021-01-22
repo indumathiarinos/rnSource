@@ -112,8 +112,9 @@ class Comments extends Component {
             .then((responseJson) => {
                 //alert(responseText);1
                 this.setState({comments: responseJson,loading:false,
-                commentCounts:responseJson[0].COUNTS});
-                AsyncStorage.setItem('commentId',JSON.stringify(Number(responseJson[0].commentID)))
+                commentCounts:responseJson.COUNTS
+            });
+                AsyncStorage.setItem('commentId',JSON.stringify(Number(responseJson.commentID)))
                 console.warn(responseJson)
             })
             .catch((error) => {
@@ -358,6 +359,8 @@ class Comments extends Component {
                         flexDirection: 'row',
                         justifyContent: 'space-between'
                     }}> */}
+                    <View style={{flexDirection:'row',width:width/1.2,justifyContent:'space-between'}}>
+
                     <TouchableOpacity onPress={() => this.setState({ viewModal: !this.state.viewModal })}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center', width: width / 3 }}>
@@ -371,15 +374,16 @@ class Comments extends Component {
                     <TouchableOpacity
                         onPress={()=>this.props.navigation.navigate('commentsLike')}
                     >
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center',width:width/2 }}>
                             <Text style={{ fontSize: 18,color:'black' }}
                             >{this.state.commentCounts}</Text>
                             <Image style={{marginTop:'3%',marginLeft:'2%'}} source={require('../assets/img/comment1.png')} />
                         </View>
 
                     </TouchableOpacity>
+                    </View>
                     <TouchableOpacity  onPress={() => this.backpress()}>
-                    <Image style={{ alignSelf: 'flex-end',width:50,height:50,backgroundColor:'pink' }} source={require('../assets/img/close.png')} />
+                    <Image style={{ alignSelf: 'flex-end',width:50,height:50, }} source={require('../assets/img/close.png')} />
                     </TouchableOpacity>
                     {/* </View> */}
                 </View>
@@ -432,7 +436,7 @@ class Comments extends Component {
                     />
                     <TouchableOpacity style={styles.touchableButton}
                         onPress={() => this.commentAddService()}>
-                        <Image
+                        <Image style={{width:25,height:25}}
                             source={require('../assets/img/send-icon.png')}
                         />
                     </TouchableOpacity>
@@ -555,7 +559,7 @@ const styles = StyleSheet.create({
     },
     touchableButton: {
         position: 'absolute',
-        right: 40,
+        right: '13%',
         // height: 40,
         width: 35,
         padding: 2

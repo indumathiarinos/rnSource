@@ -129,7 +129,7 @@ class Home extends Component {
           tab3: false,
           tab4: false
         });
-        this.props.navigation.navigate('newsfeed')
+        this.props.navigation.navigate('search')
       }
       toggleTab2() {
         {this.state.explore_page=='0'?
@@ -402,7 +402,7 @@ class Home extends Component {
             }else if(name==='Fiction'){
                 varcolordot='#741c7e'
             }else if(name==='Comics'){
-                varcolordot="#c65135"
+                varcolordot="#1C4A7E"
             }
             return varcolordot;
         }
@@ -733,7 +733,7 @@ class Home extends Component {
             });
            
             //   this.props.changeRemove();
-        }, 3000);
+        }, 4000);
         {this.exploredata1(this.state.getuserid)}
         // this.props.navigation.navigate('readlater');
       }
@@ -742,7 +742,10 @@ class Home extends Component {
         for(let item of list){
          AsyncStorage.setItem('typeid', item.TypeID);
          AsyncStorage.setItem('postid', item.Post_Page_Id);
-         this.readlaterAdd(this.state.getuserid,item.Post_Page_Id,item.TypeID,item.Readstatus)
+         console.log('readstatues ',item.Readstatus,"",item)
+        //  alert('read',item)
+        //  this.setState({exists:item.Readstatus=='Y'?true:false})
+         this.readlaterAdd(this.state.getuserid,item.Post_Page_Id,item.TypeID)
         }
       }
       readlaterAdd(userid,pageid,typeid){
@@ -1115,12 +1118,17 @@ closeLoginPopup(){
     AsyncStorage.setItem('contentFilter');
     this.CheckConnectivity()
 }
+getItem(item,funcName){
+    this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName,
+        // exists:item.Readstatus=='N'?false:true
+    })
+ console.log('item data',item,'exists',this.state.exists,item.Readstatus)
+}
 moreClick=(item,funcName)=>{
 // AsyncStorage.setItem('typeid', JSON.stringify(item.TypeID));
 // AsyncStorage.setItem('postid', JSON.stringify(item.Post_Page_Id));
 {this.state.explore_page=='0'?
-this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName,exists:item.Readstatus=='N'?false:true})
-&& console.log('item data',item,'exists',this.state.exists)
+this.getItem(item,funcName)
 :this.alertPopup()}
 }
 renderColData({item}){
@@ -1316,7 +1324,7 @@ render() {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={280}
+      itemWidth={320}
       itemHeight={300}
       contentContainerCustomStyle={{ alignItems: "center",justifyContent:'center'}}
       snapToAlignment={'center'}
@@ -2033,7 +2041,7 @@ autoplay={false}
         header:{
           flexDirection: 'row', 
           // flex: 0.5,
-          height:'9%',
+        //   height:'9%',
           top:0,
           left:0,
           right:0,

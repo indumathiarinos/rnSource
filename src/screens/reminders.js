@@ -299,8 +299,10 @@ class Reminders extends Component {
             {/* </View> */}
           </View>
           <TouchableOpacity onPress={() => this.backpress()}>
-            <Image source={require('../assets/img/close.png')} />
-          </TouchableOpacity>
+          <Image
+              style={{ alignSelf: 'center',width:50,height:50 }} 
+              source={require('../assets/img/close.png')} />
+                </TouchableOpacity>
         </View>
 
         <FlatList

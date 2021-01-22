@@ -216,12 +216,12 @@ class Contents extends Component {
       <SafeAreaView style={{ flex: 2, backgroundColor: '#fff' }}>
         {/* <View style={styles.staticheader}> */}
         <View style={styles.staticheader}>
-          <TouchableOpacity style={{ marginLeft: '2%' }}
+          <TouchableOpacity style={{ }}
             onPress={() => this.props.navigation.navigate('newOldFilter')}
           >
           <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/filter.png')} />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width/1.5, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width/1.3, justifyContent: 'center', alignItems: 'center' }}>
 
             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('viewBook')}>
               <Text style={styles.headerText}
@@ -273,9 +273,9 @@ class Contents extends Component {
             renderItem={({ item }) =>
           
             <TouchableOpacity onPress={() => this.gotoRead(item.page_id)}>
-              <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,}} key={item.Content} >
-                <Text style={{ color: 'black', textAlign: 'left',  fontSize: 12,fontFamily:'AzoSans-Medium', marginTop: '2%', marginBottom: '2%' }}>{item.page_title}</Text>
-                <Divider style={{ color: '#707070', width: width - 50, }} />
+              <View style={{ justifyContent: 'center', alignContent: 'center',width:width-80,}} key={item.Content} >
+                <Text style={{ color: 'black', textAlign: 'left',  fontSize: 14,fontFamily:'AzoSans-Medium', marginTop: '2%',padding:'2%', marginBottom: '2%' }}>{item.page_title}</Text>
+                <Divider style={{ color: '#707070', width: width - 80, }} />
               </View>
               </TouchableOpacity>
             }
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     paddingLeft: '2%',
     flexDirection: 'row',
     alignItems: 'center',
-    height: '8%',
+    // height: '8%',
     backgroundColor: '#ffff',
     elevation: 1,
     // backgroundColor:'pink',

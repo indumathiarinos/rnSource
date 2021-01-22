@@ -154,7 +154,7 @@ profileUpdateService(userid,col_Name,value){
             <SafeAreaView style={{ flex: 1,backgroundColor:'#fff'}}>
           <View style={styles.staticheader}>
          
-          <View style={{ flexDirection: 'row', width: width - 40, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width /1.2, justifyContent: 'center', alignItems: 'center' }}>
         
             <TouchableOpacity style={{ alignItems: 'center' }} 
             onPress={() => this.props.navigation.navigate('settings')}
@@ -188,7 +188,9 @@ profileUpdateService(userid,col_Name,value){
             {/* </View> */}
           </View>
           <TouchableOpacity onPress={()=>this.backpress()}>
-            <Image source={require('../assets/img/close.png')} />
+                       <Image
+                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
         <ScrollView>
@@ -352,7 +354,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         // justifyContent: 'center', 
         alignItems: 'center',
-        height: '10%',
+        // height: '10%',
         // width:width-40,
         backgroundColor: '#ffff',
         elevation: 1,

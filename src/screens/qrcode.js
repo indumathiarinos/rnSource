@@ -111,8 +111,9 @@ backpress=()=>{
                      <TouchableOpacity
                      onPress={()=>this.backpress()}
                 >
-                 <Image style={{paddingRight:'5%'}}                      
-                        source={require('../assets/img/close.png')}/>
+                         <Image
+                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />
                      </TouchableOpacity>
                     
                       {/* </View> */}
@@ -131,33 +132,27 @@ backpress=()=>{
           </TouchableOpacity>
         }
       />
-         <View style={styles.bottomBar}>
-                          <TouchableOpacity
-                              style={styles.tabsss}
-                              onPress={() => this.toggleTab1()}>
-                              <Image source={require('../assets/img/logo.png')} />
-                              {/* <Text>Home</Text> */}
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                          <Image source={require('../assets/img/collection.png')} />
-                              {/* <Text>Collection</Text> */}
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-                              <Image source={require('../assets/img/search.png')} />
-                              {/* <Text>Search</Text> */}
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab4()}>
-                              {/* <Drawer
-          ref={(ref) => { this.drawer = ref; }}
-          content={<SideBar navigator={this.navigator} />}
-          onClose={() => this.closeDrawer()} > */}
-                              {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                              <Image style={{ width: 28, height: 28,borderRadius:28/2 }} source={{uri:this.state.avatar}}></Image>
-                              {/* <Text>Menu</Text> */}
-                              {/* </Drawer> */}
-                          </TouchableOpacity>
-                     
-                   </View>
+       <View style={styles.bottomBar}>
+ <TouchableOpacity
+     style={styles.tabsss}
+     onPress={() => this.toggleTab1()}>
+     <Image style={{width:25,height:25}} source={require('../assets/img/logo.png')} />
+ </TouchableOpacity>
+
+
+ <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
+ <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
+ </TouchableOpacity>
+    
+ <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
+     <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/search.png')} />
+ </TouchableOpacity>
+
+ <TouchableOpacity style={[styles.tabsss]} onPress={() => this.toggleTab4()}>
+     <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}></Image>
+ </TouchableOpacity>
+
+</View>
       </SafeAreaView>
     );
   }
@@ -183,7 +178,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   headerRow:{
-    height: '9%',
+    // height: '9%',
     // flex:0.1,
     // paddingTop:'5%',
     flexDirection:'row',

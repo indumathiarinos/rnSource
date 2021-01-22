@@ -613,7 +613,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         // justifyContent: 'center', 
         alignItems: 'center',
-        height: '8%',
+        // height: '8%',
         backgroundColor: '#ffff',
         elevation: 1,
         borderBottomColor: '#707070'

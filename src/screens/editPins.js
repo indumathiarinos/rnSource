@@ -198,8 +198,10 @@ handleBackButtonClick() {
 
           </View>
           <TouchableOpacity onPress={() => this.backpress()}>
-            <Image source={require('../assets/img/close.png')} />
-          </TouchableOpacity>
+          <Image
+              style={{ alignSelf: 'center',width:50,height:50 }} 
+              source={require('../assets/img/close.png')} />
+           </TouchableOpacity>
         </View>
 
         <ScrollView>
@@ -274,7 +276,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // justifyContent: 'center', 
     alignItems: 'center',
-    height: '8%',
+    // height: '8%',
     backgroundColor: '#ffff',
     elevation: 1,
     borderBottomColor:'#707070'

@@ -117,7 +117,7 @@ class SubCollectionMerge extends Component {
     mergeCollection(fromId,ToId) {
         var json = JSON.stringify(
             {
-                "From_C_ID":fromId,"To_C_ID":ToId,"From_S_ID":"","To_S_ID":"0","Action_for":"Collection","UserID":this.state.getuserid
+                "From_C_ID":ToId,"To_C_ID":fromId,"From_S_ID":"","To_S_ID":"0","Action_for":"Collection","UserID":this.state.getuserid
             }
         );
         console.log('json is',json);
@@ -134,6 +134,7 @@ class SubCollectionMerge extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 //alert(responseText);
+                console.log('response',responseJson)
                 this.setState({  loading: false })
                 // AsyncStorage.setItem('MergeName', JSON.stringify(this.state.mergeName));
                 // this.props.mergePopup();

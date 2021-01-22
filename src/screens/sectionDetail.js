@@ -302,9 +302,9 @@ handleBackButtonClick() {
           margin: '2%',
           justifyContent: 'space-between'
         }}>
-          <View style={{ flexDirection: 'column',width:width/1.8, }}>
-            <Text numberOfLines={2} style={{ fontSize: 18, color: '#000' }}>{item.Title}</Text>
-            <Text style={{ color: '#707070' }}>{item.Author}</Text>
+          <View style={{ flexDirection: 'column',width:width/1.8-40, }}>
+            <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000' }}>{item.Title}</Text>
+            <Text numberOfLines={1} style={{ color: '#707070',fontFamily:'AzoSans-Light',fontSize:12}}>{item.Author}</Text>
           </View>
           {/* <Image source={item.img} /> */}
           <TouchableOpacity
@@ -403,9 +403,9 @@ handleBackButtonClick() {
                 <View style={styles.overlay}/>
 
                 <View style={{position:'absolute',top:40,alignItems:'center',width:width,justifyContent:'center',}}>
-                <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18 }}>{!this.state.toggle?this.state.coll_name:this.state.desc}</Text>
+                <Text style={{ textAlign: 'center', color: 'white', fontFamily: 'AzoSans-Bold', fontSize: 24 }}>{!this.state.toggle?this.state.coll_name:this.state.desc}</Text>
                             <View style={styles.divider}></View>
-                             <Text style={{ textAlign: 'center', color: 'white', marginTop: '2%', fontSize: 22 }}>{this.state.sec_name}</Text>
+                             <Text style={{ textAlign: 'center', color: 'white', marginTop: '2%', fontSize: 20,fontFamily:'AzoSans-Medium' }}>{this.state.sec_name}</Text>
 
                 </View>
                 {/* <View style={{  marginTop: '-20%',
@@ -434,13 +434,13 @@ handleBackButtonClick() {
       <SafeAreaView style={{ flex: 3, backgroundColor: '#ffff' }}>
 
         <View style={styles.staticheader}>
-          <TouchableOpacity style={{ padding: '2%' }}
+          <TouchableOpacity style={{ padding: '1%' }}
             onPress={() => this.props.navigation.goBack()}
           >
-            <Image source={require('../assets/img/backarrow.png')} />
+            <Image style={{width:50,height:30}} source={require('../assets/img/backarrow.png')} />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width - 60, justifyContent: 'center', alignItems: 'center' }}>
-          <LinearGradient style={{ borderRadius: 10}} colors={
+          <View style={{ flexDirection: 'row', width: width/1.1, justifyContent: 'center', alignItems: 'center',}}>
+          <LinearGradient style={{ borderRadius: 10, marginRight:'5%',}} colors={
               ['#24D4BC', '#27A291']}>
             <TouchableOpacity 
               onPress={this.headerBtnClk}>
@@ -449,32 +449,32 @@ handleBackButtonClick() {
                   paddingLeft: '5%',
                   paddingTop: '5%',
                   paddingBottom: '5%',
-                  fontSize: 16,
+                  fontSize: 14,
                   color: 'white',
-                  fontWeight: 'bold'
+                  fontFamily: 'AzoSans-Medium'
                 }}
 
                 >Collections/ </Text><Text style={{
                   paddingTop: '5%',
                   paddingBottom: '5%',
-                  fontSize: 16,
+                  fontSize: 14,
                   color: 'white',
-                  fontWeight: 'bold',
+                  fontFamily: 'AzoSans-Medium',
                   textDecorationLine: 'underline',
                 }}>Sections</Text>
                 <Text style={{
                   paddingTop: '5%',
                   paddingBottom: '5%',
-                  fontSize: 16,
+                  fontSize: 14,
                   color: 'white',
                 }}>/ </Text>
                 <Text style={{
                   paddingRight: '5%',
                   paddingTop: '5%',
                   paddingBottom: '5%',
-                  fontSize: 16,
+                  fontSize: 14,
                   color: 'white',
-                  fontWeight: 'bold',
+                  fontFamily: 'AzoSans-Bold',
                   textDecorationLine: 'underline',
                 }}>Reads</Text>
               </View>
@@ -532,7 +532,7 @@ handleBackButtonClick() {
 
           <FlatList
             data={this.state.readsData}
-            contentContainerStyle={{ marginTop: '5%' }}
+            contentContainerStyle={{ marginTop: '5%',width:width-40,alignSelf:'center'}}
             extraData={this.state}
             renderItem={this.renderItem_card.bind(this)}
             removeClippedSubviews={false}
@@ -655,7 +655,7 @@ const styles = StyleSheet.create({
   bottombtn1:{
     width:width,
     alignItems:'center',
-    backgroundColor:'red'
+    backgroundColor:'#E74C3C'
   },
   modal: {
     justifyContent: 'flex-end',
@@ -672,20 +672,22 @@ const styles = StyleSheet.create({
 
   },
   modaltext: {
-    fontSize: 18,
     margin:'3%',
     // padding: '3%',
     width:width/4.2,
     textAlign:'center',
     marginLeft:'0%',
+    fontSize: 16,
+    fontFamily:'AzoSans-Regular',
     color: '#707070'
   },
   modaltext1: {
     margin:'3%',
-    fontSize: 18,
     marginLeft:'7%',
     // padding: '3%',
-    color: '#fff'
+    color: '#fff',
+    fontSize: 16,
+    fontFamily:'AzoSans-Regular',
   },
   modal5: {
     // flex: 0.22,
@@ -697,12 +699,13 @@ const styles = StyleSheet.create({
     // width: width,
   },
   staticheader: {
-    paddingLeft: '2%',
+    // paddingLeft: '2%',
     // paddingRight:'2%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '9%',
+    // height: '9%',
+    // backgroundColor:'pink',
     backgroundColor: '#ffff',
     elevation: 1
 

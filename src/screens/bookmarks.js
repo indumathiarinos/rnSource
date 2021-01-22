@@ -363,7 +363,8 @@ _renderTruncatedFooter = (handlePress,index,item) => {
   return (
     <Text key={index} style={{ color: '#27A291',
     //  marginTop: -18, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={handlePress}>
-    marginTop: -18, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={()=>this.goToRead(item)}>
+    // marginTop: -18, paddingLeft: '1%',
+    alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={()=>this.goToRead(item)}>
       Read more
         </Text>
   );
@@ -418,7 +419,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
             activeOpacity={0.7}
           />
           </TouchableOpacity>
-          <View style={{backgroundColor:'#F9F9F9',alignItems:'center',paddingLeft:'2%',paddingRight:'2%',height:20,justifyContent:'center',}}>
+          <View style={{backgroundColor:'#F9F9F9',alignItems:'center',paddingLeft:'2%',paddingRight:'2%',justifyContent:'center',}}>
         {/* <ReadMore
                 contentContainerStyle={{backgroundColor:'#F9F9F9'}}
                 numberOfLines={1}
@@ -632,7 +633,7 @@ staticheader: {
   flexDirection: 'row',
   // justifyContent: 'center', 
   alignItems: 'center',
-  height: '8%',
+  // height: '8%',
   backgroundColor: '#ffff',
   elevation: 1,
   borderBottomColor:'#707070'

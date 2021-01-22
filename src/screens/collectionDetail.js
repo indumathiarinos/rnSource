@@ -590,7 +590,7 @@ readsItems({ item }) {
       }}>
         <View style={{ flexDirection: 'column',width:width/1.8-40, }}>
           <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000' }}>{item.Page_Post_Title}</Text>
-          <Text style={{ color: '#707070',fontFamily:'AzoSans-Light',fontSize:12
+          <Text numberOfLines={1} style={{ color: '#707070',fontFamily:'AzoSans-Light',fontSize:12,width:width/2.5,marginTop:'1%'
          }}>{item.Author}</Text>
         </View>
         {/* <Image source={item.img} /> */}
@@ -647,10 +647,9 @@ readsItems({ item }) {
                   paddingRight: '5%',
                   paddingTop: '5%',
                   paddingBottom: '5%',
-                  fontSize: 15,
+                  fontSize: 14,
                   fontFamily:'AzoSans-Bold',
                   color: 'white',
-                  fontWeight: 'bold',
                   textDecorationLine: 'underline',
                 }}>Sections</Text>
               </View>
@@ -783,7 +782,7 @@ readsItems({ item }) {
             </TouchableOpacity>
             <TouchableOpacity style={styles.bottombtn} onPress={()=>this.readsRemoveModal()}>
             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
-            <Image style={styles.iconwidth1} source={require('../assets/img/trash1.png')} />
+            <Image style={styles.iconwidth1} source={require('../assets/img/editRemove.png')} />
               <Text style={styles.modaltext}>Remove</Text>
               </View>
             </TouchableOpacity>
@@ -862,7 +861,7 @@ const styles = StyleSheet.create({
   bottombtn1:{
     width:width,
     alignItems:'center',
-    backgroundColor:'red'
+    backgroundColor:'#E74C3C'
   },
   modal: {
     justifyContent: 'flex-end',
@@ -879,20 +878,22 @@ const styles = StyleSheet.create({
 
   },
   modaltext: {
-    fontSize: 18,
     margin:'3%',
     // padding: '3%',
     width:width/4.2,
     textAlign:'center',
     marginLeft:'0%',
+    fontSize: 16,
+    fontFamily:'AzoSans-Regular',
     color: '#707070'
   },
   modaltext1: {
     margin:'3%',
-    fontSize: 18,
     marginLeft:'7%',
     // padding: '3%',
-    color: '#fff'
+    color: '#fff',
+    fontSize: 16,
+    fontFamily:'AzoSans-Regular',
   },
   button: {
     shadowColor: 'rgba(0,0,0, .4)', // IOS

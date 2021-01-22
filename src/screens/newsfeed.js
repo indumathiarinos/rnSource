@@ -272,7 +272,9 @@ closeLoginPopup(){
     return (
       <Text key={index} style={{ color: '#27A291',
       //  marginTop: -18, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={handlePress}>
-      marginTop: -19, paddingLeft: '1%', alignSelf: "flex-end",backgroundColor:'#F9F9F9',textDecorationLine: 'underline', }} onPress={()=>this.pressIcon(item)}>
+      // marginTop: -19, paddingLeft: '1%', 
+      alignSelf: "flex-end",backgroundColor:'#F9F9F9',
+      textDecorationLine: 'underline', }} onPress={()=>this.pressIcon(item)}>
         Read more
           </Text>
     );
@@ -1143,11 +1145,11 @@ style={{marginBottom:'10%'}}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                 <View style={{
-                  flexDirection: 'row', alignItems: 'center', width: 200,
+                  flexDirection: 'row', alignItems: 'center', width: 260,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
                   <Image style={{alignSelf:'center'}}  source={require('../assets/img/createCol.png')} />
-                  <Text style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#27A291',marginTop:5, width: width / 2.5,alignSelf:'center',marginLeft:'2%'}}>Create Collection</Text>
+                  <Text style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#27A291',marginTop:5, width: width / 2.5,alignSelf:'center',marginLeft:'4%'}}>Create Collection</Text>
                 </View>
               </TouchableOpacity>
   

@@ -354,7 +354,7 @@ tags(name){
   }else if(name==='Fiction'){
       varcolordot='#741c7e'
   }else if(name==='Comics'){
-      varcolordot="#c65135"
+      varcolordot="#1C4A7E"
   }
   return varcolordot;
 }
@@ -503,12 +503,12 @@ tags(name){
                 <Image
                   style={{ 
                     // marginTop:'5%',
-                    width:29,height:29 }}
+                    width:25,height:25 }}
                   source={require('../assets/img/white_search.png')}
                 />
                 <Text style={{ 
                   // margin: '5%',
-                  marginLeft:'2%',
+                  marginLeft:'3%',
                    color: '#fff',fontSize: 24, fontFamily: 'Montserrat-Bold' }}>Explore</Text>
               </View>
               {/* <FlatList
@@ -557,7 +557,7 @@ tags(name){
           isDisabled={this.state.isDisabled}>
             <View style={{flex:1, height:this.state.searchText==""?0:"32%",
           width: width}}>
-          <TouchableOpacity style={{backgroundColor:'#27A291',width:width,padding:'3%',alignSelf:'center',}}><Text style={{color:'white',textAlign:'center',fontFamily:'Montserrat-Bold',fontSize:16}}>Suggestions for '{this.state.text}'</Text></TouchableOpacity>
+          <TouchableOpacity style={{backgroundColor:'#27A291',width:width,padding:'3%',alignSelf:'center',}}><Text style={{color:'white',textAlign:'center',fontFamily:'Montserrat-Bold',fontSize:16}}>Suggestions for '{this.state.searchText}'</Text></TouchableOpacity>
           <FlatList
             data={this.state.popupData}
             keyExtractor={(item,index)=>index.toString()}
@@ -753,7 +753,7 @@ const styles = StyleSheet.create({
   },
   touchableButton: {
     position: 'absolute',
-    right: 65,
+    right: '18%',
     height: 40,
     width: 35,
     padding: 2,

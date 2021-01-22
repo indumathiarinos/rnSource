@@ -660,9 +660,9 @@ collData(userid,colid,secid) {
   
         let list=[this.state.currentItem];
         for(let item of list){
-         AsyncStorage.setItem('typeid', item.TypeID);
-         AsyncStorage.setItem('postid', item.Post_Page_Id);
-         this.readlaterAdd(this.state.getuserid,item.Post_Page_Id,item.TypeID)
+         AsyncStorage.setItem('typeid', item.type_id);
+         AsyncStorage.setItem('postid', item.id);
+         this.readlaterAdd(this.state.getuserid,item.id,item.type_id)
         }
     // this.props.navigation.navigate('readlater');
   }
@@ -905,6 +905,12 @@ collData(userid,colid,secid) {
       // AsyncStorage.setItem('postid', JSON.stringify(item.Post_Page_Id));
     {this.state.explore_page=='0'?this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName}):this.alertPopup()}
   }
+  gotodetail(){
+    AsyncStorage.setItem('searchText',"")
+    AsyncStorage.setItem('searchFilter',"Desc")
+    this.props.navigation.navigate('searchDetail')
+    
+  }
       searchfunc=()=>{
         this.setState({newbool:true,searchList:true})
         //  this.refs.modal4.open()
@@ -953,19 +959,18 @@ collData(userid,colid,secid) {
                 {Platform.OS=='ios'?<View style={{width:width/1.6,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
           <TouchableOpacity style={styles.touchableButton} 
-                onPress={()=>{this.state.text.length>0?this.SearchFilterFunction(this.state.text): AsyncStorage.setItem('searchText',this.state.searchText)
-                AsyncStorage.setItem('searchFilter',"Desc");
-                this.props.navigation.navigate('searchDetail')
-             }}>
+                  onPress={()=>{this.state.text!=""?this.SearchFilterFunction(this.state.text):
+                  this.gotodetail()
+              }}>
             <Image style={{width:20,height:20}} source={require('../assets/img/searchicon.png')}/>
             </TouchableOpacity>
-</View>
+          </View>
           <TouchableOpacity
               style={{alignSelf:'center',alignItems:'flex-end',}}
               onPress={()=>this.backpress()}>
-          <Image
-            source={require('../assets/img/closeicon.png')}>
-          </Image>
+           <Image
+              style={{ alignSelf: 'center',width:50,height:50 }} 
+              source={require('../assets/img/close.png')} />
           </TouchableOpacity>
          </View>
 
@@ -973,7 +978,7 @@ collData(userid,colid,secid) {
 
 
 {!this.state.searchList?null:
-<View style={{width:width,height:height/2,elevation:1}}>
+<View style={{width:width,height:'32%',elevation:1}}>
 
 
 <View style={{flex:1}}>
@@ -1129,10 +1134,10 @@ collData(userid,colid,secid) {
                     cardElevation={2}
                     cardMaxElevation={2}
                     cornerRadius={5}>
-                    <ImageBackground source={{ uri: item.image }} style={{ width: 130, height: 100, jsutifyContent: 'center' }}>
+                    <ImageBackground source={{ uri: item.image }} style={{ width: 165, height: 100, jsutifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon_pages") }>
-                            <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
+                            <Image style={{ alignSelf: 'flex-end', marginRight: '8%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
                         </TouchableOpacity>
                     </ImageBackground>
                 </CardView>
@@ -1533,7 +1538,7 @@ const styles = StyleSheet.create({
   },
   touchableButton: {
     position: 'absolute',
-    right: 55,
+    right: '17%',
     height: 25,
     width: 25,
     alignItems:'center',

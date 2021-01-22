@@ -284,7 +284,7 @@ class Pins extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={()=>this.cardPress(item)}>
                     <Text numberOfLines={2} style={styles.title}>{item.page_url}</Text>
-                    <Text style={{ color: '#707070', fontSize: 12,width: width / 2 - 40,textAlign:'left',marginTop:5,marginBottom:5,fontFamily:'AzoSans-Italic' }}>Page {item.rownum}</Text>
+                    <Text style={{ color: '#707070', fontSize: 12,width: width / 2 - 40,textAlign:'left',fontFamily:'AzoSans-Italic' }}>Page {item.rownum}</Text>
 
                     </TouchableOpacity>
                 {/* <View style={{ alignItems: 'center', marginLeft: '15%', marginBottom: 5, marginTop: 5}}> 
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         // justifyContent: 'center', 
         alignItems: 'center',
-        height: '8%',
+        // height: '8%',
         backgroundColor: '#ffff',
         elevation: 1,
         borderBottomColor: '#707070'
@@ -642,8 +642,8 @@ const styles = StyleSheet.create({
         fontSize:16,
         width: width / 2 - 40,
         textAlign:'left',
-        marginTop:5,
-        marginBottom:5
+        marginTop:'1%',
+        marginBottom:'1%'
     }
 })
 

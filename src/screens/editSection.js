@@ -201,8 +201,9 @@ class EditSection extends Component {
                      <TouchableOpacity
                      onPress={()=>this.backpress()}
                 >
-            <Image style={{paddingRight:'5%'}}
-                        source={require('../assets/img/close.png')}/>
+                       <Image
+                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />
                      </TouchableOpacity>
                       {/* </View> */}
                 </View>

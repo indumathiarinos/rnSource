@@ -6,7 +6,9 @@ import img2 from '../assets/img/cover2.png';
 import img3 from '../assets/img/cover3.png';
 import { Avatar, Divider } from 'react-native-elements';
 import EIcons from 'react-native-vector-icons/Entypo';
-import ReadMore from 'react-native-read-more-text';
+// import ReadMore from 'react-native-read-more-text';
+import ReadMore from './Readmore';
+
 import { connect } from "react-redux";
 import Modal1 from "react-native-modal";
 import LinearGradient from 'react-native-linear-gradient';
@@ -240,8 +242,10 @@ class Offline extends Component {
               style={{ justifyContent: 'center', paddingRight: '1%' }}
               onPress={() => this.backpress()}
             >
-              <Image style={{ marginTop: '5%', }} source={require('../assets/img/close.png')} />
-            </TouchableOpacity>
+                    <Image
+                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />    
+                  </TouchableOpacity>
 
           </View>
         </View>

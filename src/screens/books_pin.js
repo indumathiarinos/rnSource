@@ -264,7 +264,7 @@ renderItem_card({ item }) {
             style={{ alignSelf: 'center',width:50,height:50}}
             source={require('../assets/img/filter.png')}/>   
                    </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width/1.4, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width/1.3, justifyContent: 'center', alignItems: 'center' }}>
            
           <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('viewBook')}>
               <Text style={styles.headerText}
@@ -484,12 +484,12 @@ const styles = StyleSheet.create({
   },
   
   staticheader: {
-    paddingLeft: '2%',
+    // paddingLeft: '2%',
     // paddingRight:'2%',
     flexDirection: 'row',
     // justifyContent: 'center', 
     alignItems: 'center',
-    height: '10%',
+    // height: '10%',
     backgroundColor: '#ffff',
     elevation: 1,
     borderBottomColor:'#707070'

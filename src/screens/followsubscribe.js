@@ -376,8 +376,11 @@ exploredata(userid){
           style={{justifyContent:'center',paddingRight:'1%',marginRight:'3%'}}
           onPress={()=>this.backpress()}
           >
-          <Image style={{marginTop:'5%'}} source={require('../assets/img/close.png')}/>
-          </TouchableOpacity>
+                    <Image
+                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            source={require('../assets/img/close.png')} />
+                            
+                    </TouchableOpacity>
 
           </View>
       </View>
