@@ -239,11 +239,12 @@ exploredata(userid){
       });
 }
 
-showModal = () => {
+showModal = (item1) => {
   // console.log(this.state.undo)
   
     this.setState({
-      modalVisible: true
+      modalVisible: true,deletedName:item1.Titel,getDeleteId:item1.id,
+      undo:false
     });
       // {this.deleteData(this.state.getuserid,this.state.getDeleteId)}
   
@@ -305,13 +306,13 @@ showModal2 = () => {
 //   );
 // }
 removeItem(item1){
-  this.setState({deletedName:item1.Titel,
-    selectedId:item1.id,undo:false});
-  this.state.filterdata.push(item1);
-  // this.setState({getDeleteId:item1.id});
+  this.setState({deletedName:item1.Titel,getDeleteId:item1.id,
+    undo:false});
+  // this.state.filterdata.push(item1);
+  // // this.setState({getDeleteId:item1.id});
 
-  const filteredList = this.state.reading.filter((item) => item.Titel !== item1.Titel);
-  this.setState({getDeleteId:item1.id});
+  // const filteredList = this.state.reading.filter((item) => item.Titel !== item1.Titel);
+  // this.setState({getDeleteId:item1.id});
  
   this.showModal();
   // this.CheckConnectivity1();
@@ -401,9 +402,9 @@ _renderTruncatedFooter = (handlePress,index,item) => {
             <View style={{ flexDirection: 'row',justifyContent:'space-between',alignSelf:'center',width:'90%',marginTop:'5%' }}>
             <View  style={{flexDirection:'column',width:'80%'}}>
           <Text style={{color:'#707070',fontSize:12,fontFamily:'AzoSans-Regular',margin:'1%'}}>{item.upated_date}</Text>
-          <Text style={{fontSize:16,fontFamily:'Montserrat-Bold'}}>{item.Titel}</Text>
+          <Text numberOfLines={2} style={{fontSize:16,fontFamily:'Montserrat-Bold'}}>{item.Titel}</Text>
           </View>
-     <TouchableOpacity onPress={()=>this.removeItem(item)}>
+     <TouchableOpacity onPress={()=>this.showModal(item)}>
      <Image style={{width:40,height:40}} source={require('../assets/img/trashicon.png')} />
 
            </TouchableOpacity>
@@ -431,7 +432,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
                <ReadMoreText
                 contentContainerStyle={{backgroundColor:'#F9F9F9'}}
                 numberOfLines={1}
-                renderTruncatedFooter={(handlePress1,index)=>this._renderTruncatedFooter(handlePress1,index,item)}
+                renderTruncatedFooter={this._renderTruncatedFooter}
                 // renderRevealedFooter={this._renderRevealedFooter}
                 onReady={this._handleTextReady}>
                 <Text style={{backgroundColor:'#F9F9F9',alignSelf:'center',fontFamily:'AzoSans-Regular',fontSize:14}}>{item.Linedata}</Text>
@@ -616,16 +617,17 @@ _renderTruncatedFooter = (handlePress,index,item) => {
 
 }
 const styles = StyleSheet.create({
-  bottomBar: {
-    backgroundColor: '#fff',
+  bottomBar:{
+    backgroundColor: '#fff', 
     alignItems: 'center',
-    height: '6%',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    position: 'absolute'
+    height:'6%',
+    bottom:0,
+    left:0,
+    right:0,
+    justifyContent:'space-around',
+    flexDirection:'row',
+    position:'absolute',
+    elevation:8
 },
 
 staticheader: {

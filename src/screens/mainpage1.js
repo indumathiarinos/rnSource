@@ -129,7 +129,7 @@ class Home extends Component {
           tab3: false,
           tab4: false
         });
-        this.props.navigation.navigate('search')
+        // this.props.navigation.navigate('search')
       }
       toggleTab2() {
         {this.state.explore_page=='0'?
@@ -204,10 +204,10 @@ class Home extends Component {
           console.log("Is connected cheking?", state.isConnected);
       
           if(state.isConnected==true){
-            { this.exploredata(this.state.getuserid) }
-            { this.exploredata1(this.state.getuserid) }
+            // { this.exploredata(this.state.getuserid) }
+            // { this.exploredata1(this.state.getuserid) }
             // {this. exploredataPic(this.state.getuserid)}
-            // {this.getData();}
+            {this.getData();}
             // alert(this.state.explore_page,"explore")
           }else{
             alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
@@ -221,7 +221,7 @@ class Home extends Component {
                 // alert(this.state.explore_page)
             { this.exploredata(this.state.getuserid) }
             { this.exploredata1(this.state.getuserid) }
-                },1000)
+                },2000)
     }
     getData1(postid) {
         setTimeout(() => {
@@ -480,6 +480,7 @@ class Home extends Component {
     }
 
     exploredata1(userid) {
+        // console.log('userid in rec page',userid)
         var json = JSON.stringify({
             'UserID': userid,
         });
@@ -503,6 +504,9 @@ class Home extends Component {
                     expl11: responseJson
                 })
                 console.warn(responseJson)
+                console.warn(this.state.expl1+'1')
+                console.warn(this.state.expl11)
+
                 //alert(this.state.data.status)
                 for (let i = 0; i < this.state.expl11.length; i++) {
 
@@ -538,7 +542,8 @@ class Home extends Component {
                     }
                     else if (this.state.expl11[i].Datafor === 'UV') {
                         let recents = [...this.state.recents];
-                        recents.push(this.state.expl11[i])
+                        recents.push(this.state.expl11[i]);
+                        console.log(this.state.expl11[i]+'recent data')
                         this.setState({ recents });
                     }
                     // else{
@@ -1170,20 +1175,20 @@ render() {
      <SafeAreaView style={{backgroundColor:'#fff',flex:1}}>
   
           <View style={styles.header}>
-            <LinearGradient style={styles.active1}
-              colors={['#24D4BC', '#27A291']} >
-              <TouchableOpacity
+            {/* <LinearGradient style={styles.active1}
+              colors={['#24D4BC', '#27A291']} > */}
+              <TouchableOpacity style={[styles.active1,{backgroundColor:'#27A291'}]}
                 onPress={() => this.props.navigation.navigate('mainpage')}>
                 <Text style={[styles.activetext1]}
                 >Recommendations</Text>
               </TouchableOpacity>
-            </LinearGradient>
-            <LinearGradient style={styles.active1}
-              colors={['#fff', '#fff']} >
-              <TouchableOpacity  onPress={() =>this.props.navigation.navigate('newsfeed')}>
+            {/* </LinearGradient> */}
+            {/* <LinearGradient 
+              colors={['#fff', '#fff']} > */}
+              <TouchableOpacity style={styles.active1} onPress={() =>this.props.navigation.navigate('newsfeed')}>
                 <Text style={styles.inactiveText}>PageFeed</Text>
               </TouchableOpacity>
-            </LinearGradient>
+            {/* </LinearGradient> */}
           </View>
      <ScrollView
      showsVerticalScrollIndicator={false}
@@ -1196,11 +1201,11 @@ render() {
   <View style={styles.container}>
       <View style={styles.containerStyle} >
           <ImageBackground style={styles.sliderContainerStyle}
-              source={require('../assets/img/eclipse.png')}>
-          </ImageBackground>
+              source={require('../assets/img/bgpath.png')}>
+         </ImageBackground>
       </View>
       <View style={styles.overlay2}>
-          <Image source={require('../assets/img/crown.png')} />
+          <Image source={require('../assets/img/crown1.png')} />
           <Text style={{
               color: 'black', justifyContent: "center", marginTop: '5%',
               alignItems: "center", fontSize: 24, color: 'white',fontFamily:'Montserrat-Bold'
@@ -1228,7 +1233,7 @@ render() {
         >
                 <CardView
                     cardElevation={2}
-                    cardMaxElevation={2}
+                    // cardMaxElevation={2}
                     cornerRadius={8}>
                     <ImageBackground source={{ uri: item.Images!=''?item.Images:null }} style={{ width: 160, height: 180, jsutifyContent: 'center',resizeMode:'cover'}}>
                        {/* {this.state.explore_page=='0'? */}
@@ -1778,7 +1783,7 @@ autoplay={false}
                   flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
                   justifyContent: 'center', alignSelf: 'center'
                 }}>
-                  <Image source={require('../assets/img/readlaternew1.png')} />
+                  <Image  source={require('../assets/img/readlaternew1.png')} />
                   <Text style={{ fontSize: 14,fontFamily:'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
                   <Divider style={{ backgroundColor: '#707070' }} />
   
@@ -1909,7 +1914,8 @@ autoplay={false}
           right:0,
           justifyContent:'space-around',
           flexDirection:'row',
-          position:'absolute'
+          position:'absolute',
+          elevation:8
       },
       title:{
         marginBottom: 3,
@@ -1939,6 +1945,24 @@ autoplay={false}
     //       margin:'2%',
     //       padding:'2%'
     //   },
+    // containerStyle: {
+    //     alignSelf: 'center',
+    //     width: width,
+    //     overflow: 'hidden',
+    //     height: width / 2.2,
+    //   },
+    //   sliderContainerStyle: {
+    //     borderRadius: width,
+    //     width: width * 2,
+    //     height: width * 2,
+    //     marginLeft: -(width / 2),
+    //     position: 'absolute',
+    //     bottom: 0,
+    //     overflow: 'hidden',
+    //     elevation:1,
+    //     backgroundColor:'#fff',
+    //     resizeMode:'cover'
+    //     },
       modal: {
           // alignItems: 'center',
           flex: 0.3,

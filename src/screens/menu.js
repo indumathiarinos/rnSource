@@ -7,6 +7,7 @@ import NetInfo from '@react-native-community/netinfo';
 import {connect} from 'react-redux';
 // import Svg from 'react-native-svg';
 import FollowSvg from '../assets/img/followsub.svg';
+import Icons from 'react-native-vector-icons/Fontisto';
 console.disableYellowBox = true;
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
 const width = Dimensions.get('window').width;
@@ -30,7 +31,7 @@ class MenuPage extends Component {
       {
         id:3,
         title:`Request Creator's Account`,
-        img:require('../assets/img/reqcreator.png')
+        img:require('../assets/img/reqcreators.png')
       },
       {
         id:4,
@@ -41,7 +42,7 @@ class MenuPage extends Component {
       // {
       //   id:5,
       //   title:'Help',
-      //   img:require('../assets/img/help.png')
+      //   img:require('../assets/img/helpicon.png')
       // },
       {
         id:5,
@@ -71,7 +72,7 @@ class MenuPage extends Component {
       // {
       //   id:5,
       //   title:'Help',
-      //   img:require('../assets/img/help.png')
+      //   img:require('../assets/img/helpicon.png')
       // },
       {
         id:5,
@@ -257,6 +258,7 @@ class MenuPage extends Component {
   renderItem=(item,index)=>{
     
     return(
+      
       <TouchableOpacity
     style={{padding:'3%'}}
       onPress={() => this.pressIcon(item)}
@@ -268,8 +270,16 @@ class MenuPage extends Component {
    >
      {/* <FollowSvg/> */}
        <Image 
-            style={{marginLeft:item.id==1?'1%':'2%',width:40,height:40}} resizeMode='contain' source={item.img}/>
-            <Text style={{marginLeft:item.id==1?'3%':'5%',color:'#707070'}}>{item.title}</Text>
+            style={{
+              marginLeft:
+              // item.id==1?'1%':
+              '5%',
+              width:30,height:30}} resizeMode='contain' source={item.img}/>
+            <Text style={{
+              marginLeft:
+              // item.id==1?'3%':
+              '9%',
+              color:'#707070',fontSize:12,fontFamily:'AzoSans-Regular',}}>{item.title}</Text>
             </View>
 
       {/* </View> */}
@@ -286,9 +296,9 @@ class MenuPage extends Component {
            }}>
               <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} style={{height:STATUSBAR_HEIGHT}}/>
             <View style={{flex:3,backgroundColor:'white',borderBottomEndRadius:40,}}>
-              <View style={{height:'15%',justifyContent:'center'}}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',margin:'3%'}}>
-                <TouchableOpacity
+              <View style={styles.shadow}>
+                <View style={{flexDirection:'row',justifyContent:'space-evenly',}}>
+                <TouchableOpacity style={{width:width/8,height:50,alignItems:'center',justifyContent:'center'}}
                   onPress={()=>this.profileClick()}>
                  <Image
                  style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
@@ -296,31 +306,42 @@ class MenuPage extends Component {
                               </TouchableOpacity>
                               <TouchableOpacity
                   onPress={()=>this.profileClick()}>
-                  <View style={{flexDirection:'column',marginRight:'35%',marginTop:'3%'}}>
-                  <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>{this.state.username}</Text>
+                  <View style={{flexDirection:'column',width:width/2,height:50,justifyContent:'center'}}>
+                  <Text numberOfLines={this.state.username.length>30?1:1} style={{color:'#27A291',fontSize:16,fontFamily:'Montserrat-Bold'}}>{this.state.username}</Text>
                   <Text
                   onPress={()=>this.profileClick()}
-                  style={{color:'#27A291',textDecorationLine:'underline',padding:'1%',textDecorationColor:'#27A291'}}>View Profile</Text>
+                  style={{color:'#27A291',textDecorationLine:'underline',
+                  margin:'1%',marginTop:'3%',
+                  fontSize:14,fontFamily:'AzoSans-Regular',
+                  textDecorationColor:'#27A291'}}>View Profile</Text>
     
                   </View>
                   </TouchableOpacity>
   
                   <TouchableOpacity
-                  style={{marginLeft:'3%',marginRight:'3%',marginTop:'3%'}}
+                  style={{
+                   height:50,alignItems:'center',justifyContent:'center'
+                    // marginLeft:'3%',marginRight:'3%',marginTop:'3%'
+                  }}
                   onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
-                  <Image
-                  source={require('../assets/img/bell.png')}/>
+                  {/* <Image
+                  source={require('../assets/img/bell.png')}/> */}
+                    <Icons
+                  color={'#27A291'}
+                  size={27}
+                    name={'bell-alt'}
+                  />
                 {this.state.notificationCount!=0?
                   <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:0,top:12,backgroundColor:'#fff'}}>
-                    <Text style={{color:'#27A291'}}>{this.state.notificationCount}</Text>
+                    <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
                   </View>:null}
                   </TouchableOpacity>
                 </View>
               </View>
-              <Divider style={{ backgroundColor:'#707070' }} />
+              {/* <Divider style={{ backgroundColor:'#707070' }} /> */}
               <View>
             <FlatList
-              style={{height:'85%'}}
+              style={{height:'90%'}}
     
     data={this.state.list}
     renderItem={(({item,index})=>this.renderItem(item,index))
@@ -338,20 +359,19 @@ class MenuPage extends Component {
          <View style={styles.bottomLine}>
            <TouchableOpacity
            onPress={()=>this.logoutpress()}>
-                      <View style={{ flexDirection: 'row',paddingLeft:'5%',paddingRight:'10%',justifyContent:'space-around',alignItems:'center' }}>     
+                      <View style={{ flexDirection: 'row',padding:'3%',justifyContent:'space-evenly',alignItems:'center' }}>     
                         
-                          <Icon
+                          {/* <Icon
                           style={{color:'white'}}
                           size={30}
-                          name='logout'/>
-                          {/* <Image source={require('../assets/img/logout.png')}/>  */}
-                         <Text style={{color:'white',fontSize:20,textAlign:"center",fontWeight:'bold',width:width/2,marginRight:'25%'}}>Log Out</Text>
+                          name='logout'/> */}
+                          <Image style={{width:30,height:30,marginLeft:'6%'}} source={require('../assets/img/logout.png')}/> 
+                         <Text style={{color:'white',fontSize:16,fontFamily:'AzoSans-Bold',textAlign:'center',width:width/1.6,}}>Log Out</Text>
                       </View>
                       </TouchableOpacity>
                   </View>    
-                   
               </View>
-     
+
                   </View>
                   <Modal1 isVisible={this.state.loading}>
                   <Image source={require('../assets/gif/logo.gif')} style = {{alignSelf:'center',
@@ -371,40 +391,51 @@ class MenuPage extends Component {
              }}>
                 <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} style={{height:STATUSBAR_HEIGHT}}/>
               <View style={{flex:3,backgroundColor:'white',borderBottomEndRadius:40,}}>
-                <View style={{height:'15%',justifyContent:'center'}}>
-                  <View style={{flexDirection:'row',justifyContent:'space-between',margin:'3%'}}>
-                  <TouchableOpacity 
-                  // style={{width:50,height:50,borderRadius:50/2,}}
-                    onPress={()=>this.profileClick()}>
-                   <Image
-                    style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
-                    source={{uri:'http://pagevio.com/uploads/profile/noimage.jpg'}}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                    onPress={()=>this.profileClick()}>
-                    <View style={{flexDirection:'column',marginRight:'35%',marginTop:'3%'}}>
-                    <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>Guest</Text>
-                    <Text
-                    onPress={()=>this.profileClick()}
-                    style={{color:'#27A291',textDecorationLine:'underline',padding:'1%',textDecorationColor:'#27A291'}}>View Profile</Text>
-      
-                    </View>
-                    </TouchableOpacity>
+              <View style={styles.shadow}>
+                <View style={{flexDirection:'row',justifyContent:'space-evenly',}}>
+                <TouchableOpacity style={{width:width/8,height:50,alignItems:'center',justifyContent:'center'}}
+                  onPress={()=>this.profileClick()}>
+                 <Image
+                 style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
+                    source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}/>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                  onPress={()=>this.profileClick()}>
+                  <View style={{flexDirection:'column',width:width/2,height:50,justifyContent:'center'}}>
+                  <Text numberOfLines={this.state.username.length>30?1:1} style={{color:'#27A291',fontSize:16,fontFamily:'Montserrat-Bold'}}>{this.state.username}</Text>
+                  <Text
+                  onPress={()=>this.profileClick()}
+                  style={{color:'#27A291',textDecorationLine:'underline',
+                  margin:'1%',marginTop:'3%',fontSize:14,fontFamily:'AzoSans-Regular',
+                  textDecorationColor:'#27A291'}}>View Profile</Text>
     
-                    <TouchableOpacity
-                    style={{marginLeft:'3%',marginRight:'3%',marginTop:'3%'}}
-                    onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
-                    <Image
-                    source={require('../assets/img/bell.png')}/>
-                  {this.state.notificationCount!=0?
-                    <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:-5,top:10,backgroundColor:'#fff'}}>
-                      <Text style={{color:'#27A291'}}>{this.state.notificationCount}</Text>
-                    </View>:null}
-                    </TouchableOpacity>
                   </View>
+                  </TouchableOpacity>
+  
+                  <TouchableOpacity
+                  style={{
+                   height:50,alignItems:'center',justifyContent:'center'
+                    // marginLeft:'3%',marginRight:'3%',marginTop:'3%'
+                  }}
+                  onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
+                  {/* <Image
+                  source={require('../assets/img/bell.png')}/> */}
+                    <Icons
+                  color={'#27A291'}
+                  size={27}
+                    name={'bell-alt'}
+                  />
+                {this.state.notificationCount!=0?
+                  <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:0,top:12,backgroundColor:'#fff'}}>
+                    <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+                  </View>:null}
+                  </TouchableOpacity>
                 </View>
-               
-                      </View>                    
+              </View>
+              {/* <Divider style={{ backgroundColor:'#707070' }} /> */}
+              <View>
+                  </View>
+                  </View>
             </View>
         )
       }else {
@@ -414,42 +445,51 @@ class MenuPage extends Component {
          }}>
             <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} style={{height:STATUSBAR_HEIGHT}}/>
           <View style={{flex:3,backgroundColor:'white',borderBottomEndRadius:40,}}>
-            <View style={{height:'15%',justifyContent:'center'}}>
-              <View style={{flexDirection:'row',justifyContent:'space-between',margin:'3%'}}>
-              <TouchableOpacity
-                onPress={()=>this.profileClick()}>
-               <Image
-                style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
-                source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                onPress={()=>this.profileClick()}>
-                <View style={{flexDirection:'column',marginRight:'35%',marginTop:'3%'}}>
-                <Text style={{color:'#27A291',fontSize:18,fontWeight:'bold'}}>{this.state.username}</Text>
-                <Text
-                onPress={()=>this.profileClick()}
-                style={{color:'#27A291',textDecorationLine:'underline',padding:'1%',textDecorationColor:'#27A291'}}>View Profile</Text>
-  
-                </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                style={{marginLeft:'3%',marginRight:'3%',marginTop:'3%'}}
-                onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
-                <Image
-                source={require('../assets/img/bell.png')}/>
-              {this.state.notificationCount!=0?
-                <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:-5,top:10,backgroundColor:'#fff'}}>
-                  <Text style={{color:'#27A291'}}>{this.state.notificationCount}</Text>
-                </View>:null}
-                </TouchableOpacity>
-              </View>
-            </View>
-            <Divider style={{ backgroundColor:'#707070' }} />
-            <View>
-            <FlatList
-              style={{height:'85%'}}
+          <View style={styles.shadow}>
+                <View style={{flexDirection:'row',justifyContent:'space-evenly',}}>
+                <TouchableOpacity style={{width:width/8,height:50,alignItems:'center',justifyContent:'center'}}
+                  onPress={()=>this.profileClick()}>
+                 <Image
+                 style={{width:50,height:50,borderRadius:50/2,borderWidth:1,borderColor:'#27A291'}}
+                    source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}/>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                  onPress={()=>this.profileClick()}>
+                  <View style={{flexDirection:'column',width:width/2,height:50,justifyContent:'center'}}>
+                  <Text numberOfLines={this.state.username.length>30?1:1} style={{color:'#27A291',fontSize:16,fontFamily:'Montserrat-Bold'}}>{this.state.username}</Text>
+                  <Text
+                  onPress={()=>this.profileClick()}
+                  style={{color:'#27A291',textDecorationLine:'underline',
+                  margin:'1%',marginTop:'3%',fontSize:14,fontFamily:'AzoSans-Regular',
+                  textDecorationColor:'#27A291'}}>View Profile</Text>
     
+                  </View>
+                  </TouchableOpacity>
+  
+                  <TouchableOpacity
+                  style={{
+                   height:50,alignItems:'center',justifyContent:'center'
+                    // marginLeft:'3%',marginRight:'3%',marginTop:'3%'
+                  }}
+                  onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
+                  {/* <Image
+                  source={require('../assets/img/bell.png')}/> */}
+                    <Icons
+                  color={'#27A291'}
+                  size={27}
+                    name={'bell-alt'}
+                  />
+                {this.state.notificationCount!=0?
+                  <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:0,top:12,backgroundColor:'#fff'}}>
+                    <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+                  </View>:null}
+                  </TouchableOpacity>
+                </View>
+              </View>
+              {/* <Divider style={{ backgroundColor:'#707070' }} /> */}
+              <View>
+            <FlatList
+              style={{height:'90%'}}
     data={this.state.list1}
     renderItem={(({item,index})=>this.renderItem(item,index))
     }
@@ -463,17 +503,17 @@ class MenuPage extends Component {
         /> */}
         
           {/* <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} ></LinearGradient> */}
-         <View style={styles.bottomLine}>
+          <View style={styles.bottomLine}>
            <TouchableOpacity
-                onPress={()=>this.logoutpress()}>
-                      <View style={{ flexDirection: 'row',paddingLeft:'5%',paddingRight:'10%',justifyContent:'space-around',alignItems:'center' }}>     
+           onPress={()=>this.logoutpress()}>
+                      <View style={{ flexDirection: 'row',padding:'3%',justifyContent:'space-evenly',alignItems:'center' }}>     
                         
-                          <Icon
+                          {/* <Icon
                           style={{color:'white'}}
                           size={30}
-                          name='logout'/>
-                          {/* <Image source={require('../assets/img/logout.png')}/>  */}
-                         <Text style={{color:'white',fontSize:20,textAlign:"center",fontWeight:'bold',width:width/2,marginRight:'25%'}}>Log Out</Text>
+                          name='logout'/> */}
+                          <Image style={{width:30,height:30,marginLeft:'6%'}} source={require('../assets/img/logout.png')}/> 
+                         <Text style={{color:'white',fontSize:16,fontFamily:'AzoSans-Bold',textAlign:'center',width:width/1.6,}}>Log Out</Text>
                       </View>
                       </TouchableOpacity>
                   </View>    
@@ -502,7 +542,7 @@ const styles = StyleSheet.create({
   right: 0,
   justifyContent:'center',
   position: 'absolute',
-  backgroundColor:'#24D4BC',
+  backgroundColor:'#27A291',
   borderBottomEndRadius:40,
  
 },
@@ -555,6 +595,16 @@ const styles = StyleSheet.create({
     flex: 1,
     // flex: 1,
     // paddingTop: 5,
+  },
+  shadow:{
+    shadowColor: 'rgba(0,0,0, .5)', // IOS
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    backgroundColor: '#fff',
+    elevation: 5, // Android
+    height:'10%',
+    justifyContent:'center'
   },
   cardStyle: {
     margin: 5,

@@ -648,16 +648,17 @@ onPress={() => this.bookmarkPress()}
 
 }
 const styles = StyleSheet.create({
-  bottomBar: {
-    backgroundColor: '#fff',
+  bottomBar:{
+    backgroundColor: '#fff', 
     alignItems: 'center',
-    height: '6%',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    position: 'absolute'
+    height:'6%',
+    bottom:0,
+    left:0,
+    right:0,
+    justifyContent:'space-around',
+    flexDirection:'row',
+    position:'absolute',
+    elevation:8
 },
 activeText: {
   padding: '5%',

@@ -356,7 +356,7 @@ exploredata(userid){
 
           </View>
         </View> */}
-         <View style={{ height: '10%', backgroundColor: '#ffff',elevation:1,justifyContent:'center'  }}>
+         <View style={{  backgroundColor: '#ffff',elevation:1,justifyContent:'center'  }}>
         <View style={{ flexDirection: 'row',justifyContent:'space-around'} }>
           <View style={{width:width-40,alignItems:'center',justifyContent:'center',}}>
           <LinearGradient style={{ borderRadius: 10,height:height/14,alignItems:'center',justifyContent:'center'}} colors={

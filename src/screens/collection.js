@@ -231,6 +231,9 @@ class Collection extends Component {
             setAsyncStorage(keys.collectionId, item.collectionsID);
             AsyncStorage.setItem('newColl_Id', JSON.stringify(item.CollectionsID));
             setAsyncStorage(keys.newCollId, item.collectionsID);
+            AsyncStorage.setItem('profileCollection',false);
+            // AsyncStorage.setItem('profile_userid',JSON.stringify(null));
+            AsyncStorage.setItem('userid',this.state.getuserid);
             this.props.navigation.navigate('collectionDetail', { 'collId': item.collectionsID.toString() + "" });
         });
     }
@@ -494,7 +497,7 @@ class Collection extends Component {
                     distanceToEdge={50}
                     ref={(ref) => { this.floatingAction = ref; }}
                     actions={this.state.actions}
-                    color={'#24D4BC'}
+                    color={'#27A291'}
                     onPressItem={name => {
                         this.props.navigation.navigate(name)
                         // console.log(`selected button: ${name}`);
@@ -572,16 +575,17 @@ class Collection extends Component {
 
 }
 const styles = StyleSheet.create({
-    bottomBar: {
-        backgroundColor: '#fff',
+    bottomBar:{
+        backgroundColor: '#fff', 
         alignItems: 'center',
-        height: '6%',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        position: 'absolute'
+        height:'6%',
+        bottom:0,
+        left:0,
+        right:0,
+        justifyContent:'space-around',
+        flexDirection:'row',
+        position:'absolute',
+        elevation:8
     },
     tabsss: {
         alignItems: 'center', 

@@ -76,7 +76,9 @@ class SectionDetail extends Component {
     coll_img:'',
     secCoverImg:'',
     editSourceName:'',
-    removeUndo:false
+    removeUndo:false,
+    profileColl:false,
+    profile_userid:''
     
     
   }
@@ -133,7 +135,8 @@ async componentDidMount() {
   AsyncStorage.getItem('sec_name').then((value) => this.setState({ sec_name : value })).done();
   AsyncStorage.setItem('collSecFilter',"DESC");
   AsyncStorage.getItem('coll_Img').then((val) => this.setState({ coll_img: val })).done();
-
+  AsyncStorage.getItem('profileCollection').then((val)=>this.setState({profileColl:val})).done();
+  AsyncStorage.getItem('profile_userid').then((val)=>this.setState({profile_userid:val})).done();
   this.CheckConnectivity();
   this.focusListener = this.props.navigation.addListener('willFocus', () => {
        this.CheckConnectivity();
@@ -158,7 +161,7 @@ CheckConnectivity(){
 }
 secCoverData() {
   var json = JSON.stringify({
-   "UserID":this.state.getuserid,
+   "UserID":!this.state.profileColl?this.state.getuserid:this.state.profile_userid,
    "CollectionID":this.state.collectionId,
    "SectionID":this.state.sectionId
   });
@@ -187,7 +190,7 @@ getData(){
   setTimeout(() => {
     // console.log('get sectionid in sectionDetail book page ',secvalue)
     {this.secCoverData()}
-      {this.exploredata(this.state.getuserid)}
+      {this.exploredata(!this.state.profileColl?this.state.getuserid:this.state.profile_userid)}
       
   }, 1000);
 }
@@ -314,6 +317,7 @@ handleBackButtonClick() {
           imageStyle={{ borderRadius: 15 }}
           style={[item.Type==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null}]}
              >
+               {!this.state.profileColl?
             <TouchableOpacity
               onPress={() => {
                 this.refs.modal.open() 
@@ -323,7 +327,7 @@ handleBackButtonClick() {
               // alert(item.title)
              }}>
               <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
-            </TouchableOpacity>
+            </TouchableOpacity>:null}
           </ImageBackground>
           </TouchableOpacity>
         </View>

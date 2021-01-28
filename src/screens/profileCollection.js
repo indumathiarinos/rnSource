@@ -228,9 +228,14 @@ pressIcon = (item) => {
       //     if (item.collectionsID === e.collectionsID) {
       AsyncStorage.setItem('collectionId',item.collectionsID);
       AsyncStorage.setItem('col_id',item.collectionsID);
+      AsyncStorage.setItem('coll_name', item.Title);
+      AsyncStorage.setItem('coll_desc', item.Description);
+     {this.state.loginUserid!=this.state.getuserid? AsyncStorage.setItem('profileCollection',JSON.stringify(true)): AsyncStorage.setItem('profileCollection',JSON.stringify(false))}
       console.log('collection id ', item.collectionsID)
+      // AsyncStorage.setItem('userid',JSON.stringify(this.state.loginUserid))
       // item.like = !e.like;
-      return this.props.navigation.navigate('collectionDetail',{'collId':item.collectionsID});
+      return this.props.navigation.navigate('collectionDetail', { 'collId': item.collectionsID.toString() + "" });
+      // this.props.navigation.navigate('collectionDetail',{'collId':item.collectionsID});
       // } else {
       //     return e;
       // }
@@ -241,6 +246,7 @@ backpress=()=>{
   //    console.log('before set',this.props.nav)
     //  this.props.changeNavNews();
     //  this.props.navigation.navigate('MainpageTabs')
+    AsyncStorage.setItem('profileCollection',JSON.stringify(false));
     this.props.navigation.goBack();
 
   //    console.log('after set',this.props.nav);
@@ -435,21 +441,21 @@ fontFamily:'AzoSans-Medium'}}
                     
                     <TouchableOpacity style={styles.socialBarButton}
                      >
-                    <Text  style={{color:'#707070',fontSize: 12,
+                    <Text  style={{color:'#707070',fontSize: 12,marginRight:5,
   fontFamily:'AzoSans-Regular'}}>{this.state.followers}</Text>
-                      <Image style={{marginLeft:5}}
+                      <Image 
+                      // style={{width:18,height:18}}
                       // style={styles.icon}
                        source={require('../assets/img/profile.png')}/>
                     </TouchableOpacity>
-                    <View style={styles.divider}>
-                    </View>      
+                    <View style={styles.divider}/>
                     <TouchableOpacity 
                     // onPress={()=>this.refs.modal6.open()}
                      style={styles.socialBarButton}>
                     <Text style={{color:'#707070',fontSize: 12,
-  fontFamily:'AzoSans-Regular'}}>80.1k(SN)</Text>
+  fontFamily:'AzoSans-Regular'}}></Text>
                     {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
-                    <Image style={styles.icon} source={require('../assets/img/share.png')}/>
+                    <Image style={{width:50,height:40}} source={require('../assets/img/share.png')}/>
                     {/* </TouchableOpacity> */}
                       
                     </TouchableOpacity>
@@ -653,7 +659,6 @@ fontFamily:'AzoSans-Medium'}}
       marginRight:10,
       backgroundColor: "#FFFF",
       elevation:3
-   
     },
     buttonContainer1: {
       marginTop:20,
@@ -676,7 +681,7 @@ fontFamily:'AzoSans-Medium'}}
       justifyContent: 'center',
       width:100,
       borderRadius:30,
-      backgroundColor: "#27A291",
+      // backgroundColor: "#27A291",
      
     },
     socialBarContainer3: {
@@ -686,7 +691,7 @@ fontFamily:'AzoSans-Medium'}}
     socialBarContainer: {
       flexDirection: 'row',
       flex: 1,
-      marginTop:5
+      marginTop:3
     },
     socialBarContainer2: {
       flexDirection: 'row',
@@ -707,19 +712,32 @@ fontFamily:'AzoSans-Medium'}}
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
+      // padding:'2%'
+      marginBottom:'1%'
     },
     divider:{
       width:2,
-      height:20,
-      marginLeft:5,
+      height:25,
+      marginLeft:10,
       marginRight:5,
-      marginTop:'1%',
+      marginTop:'2%',
       backgroundColor:'#707070'
     },
     icon: {
-      width:25,
+      width:30,
       marginLeft:5,
-      height:25,
+      height:30,
+      resizeMode:'contain'
+    },
+    icon1: {
+      width:20,
+      marginLeft:5,
+      height:20,
+    },
+    icon4: {
+      width:20,
+      marginLeft:5,
+      height:20,
     },
     btnAction: {
       height:45,

@@ -218,7 +218,7 @@ class Notification extends Component {
 
         <View style={{
           flexDirection: 'row', justifyContent: 'center',
-          alignItems: 'center', height: '10%', backgroundColor: '#ffff',
+          alignItems: 'center',  backgroundColor: '#ffff',
           elevation: 1, borderBottomColor: '#707070'
         }}>
           <View style={{ flexDirection: 'row', width: width - 40, justifyContent: 'center' }}>

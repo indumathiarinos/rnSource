@@ -249,7 +249,7 @@ class Contents extends Component {
             {/* </View> */}
             {/* </View> */}
           </View>
-          <TouchableOpacity style={{backgroundColor:'pink'}} onPress={() => this.backpress()}>
+          <TouchableOpacity  onPress={() => this.backpress()}>
           <Image style={{ alignSelf: 'center',width:50,height:50, }} source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>

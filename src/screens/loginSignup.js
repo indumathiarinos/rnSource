@@ -164,6 +164,7 @@ console.warn(json+"")
          else if(responseJson.Msg==='Logedin successfully'){
           // alert(responseJson.Msg)
           this.props.savelogin();
+          // alert(responseJson.UserID)
            AsyncStorage.setItem('userid', JSON.stringify(Number(responseJson.UserID)));
            AsyncStorage.setItem('profile_userid', JSON.stringify(Number(responseJson.UserID)));
            AsyncStorage.setItem('bookmarkUserid',JSON.stringify(Number(responseJson.UserID)));

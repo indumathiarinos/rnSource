@@ -439,10 +439,8 @@ tags(name){
   render() {
 
     return (
-      <Container>
-      
-       {/* <Content >  */}
-      <SafeAreaView style={{ flex: 1,}}>
+ 
+      <SafeAreaView style={{ flex: 1,backgroundColor:'#fff'}}>
         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
           <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', }}>
         <View>
@@ -465,22 +463,9 @@ tags(name){
                </TouchableOpacity>
 
           </View>
-          {/* <TouchableOpacity
-          style={{padding:'1%'}}
-          onPress={() => this.refs.modal4.open()}          // onPress={() =>this.props.navigation.navigate('createCollection')} 
-          >
-           <Image source={require('../assets/img/plus.png')}/>
-           </TouchableOpacity> */}
-          {/* </View> */}
-          {/* <Image
-            style={{ alignSelf: 'center' }}
-            source={require('../assets/img/close.png')}>
 
-          </Image> */}
-        {/* </View> */}
     
-          <ScrollView 
-                          >
+          <ScrollView style={{marginBottom:'10%'}} >
 
 
             {/* <View style={styles.container}> */}
@@ -610,9 +595,7 @@ tags(name){
         </TouchableOpacity>}
         </View>
         </ModalBox>
-      </SafeAreaView>
       
-       {/* </Content> */}
        <Modal1 isVisible={this.state.reportModal}
 onBackdropPress={() =>     this.setState({reportModal:false})
 }>
@@ -650,35 +633,34 @@ onBackdropPress={() =>     this.setState({reportModal:false})
                             <Text style={{fontSize:17,margin:'5%',fontWeight:'500'}}>Please Login</Text>
                         </View>
                     </Modal1>
-      <Footer style={{backgroundColor:'#fff',alignItems:'center',}}> 
-          <FooterTab style={{backgroundColor:"white",marginLeft:'2%',marginRight:'2%',alignItems:'center',}}>
-          <TouchableOpacity 
-          style={styles.tabsss} 
-          onPress={() => this.toggleTab1()}>
-     <Image style={{width:25,height:25}} source={require('../assets/img/logo.png')} />
-          {/* <Text>Home</Text> */}
-           </TouchableOpacity>
-           <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-           <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/library.png')} />
+                    <View style={styles.bottomBar}>
+          <TouchableOpacity
+            style={styles.tabsss}
+            onPress={() => this.toggleTab1()}>
+            <Image style={{ width: 25, height: 25 }} source={require('../assets/img/logo.png')} />
+            {/* <Text>Home</Text> */}
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
+            <Image style={{ width: 50, height: 50, marginTop: 5 }} source={require('../assets/img/library.png')} />
             {/* <Text>Collection</Text> */}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-           <Image source={require('../assets/img/greensearch.png')}/>
-           {/* <Text>Search</Text> */}
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
-        {/* <Drawer
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
+            <Image style={{ width: 50, height: 50, marginTop: 5 }} source={require('../assets/img/search.png')} />
+            {/* <Text>Search</Text> */}
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
+            {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
             {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-            <Image style={{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}} source={{uri:this.state.explore_page=='0'? this.state.avatar:'http://pagevio.com/uploads/profile/noimage.jpg'}}></Image>
-             {/* <Text>Menu</Text> */}
-             {/* </Drawer> */}
+            <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.explore_page == '0' ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
+            {/* <Text>Menu</Text> */}
+            {/* </Drawer> */}
           </TouchableOpacity>
-          </FooterTab>
-        </Footer>
-     </Container>
+
+        </View>
+                    </SafeAreaView>
     )
   }
 
@@ -772,6 +754,18 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center'
   },
+  bottomBar:{
+    backgroundColor: '#fff', 
+    alignItems: 'center',
+    height:'6%',
+    bottom:0,
+    left:0,
+    right:0,
+    justifyContent:'space-around',
+    flexDirection:'row',
+    position:'absolute',
+    elevation:8
+},
   container: {
     flex: 1,
     alignItems: 'center',

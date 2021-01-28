@@ -446,7 +446,7 @@ exploredata(userid){
               // onPress={() => this.refs.modal4.open()}
               onPress={this.coverimgTapped.bind(this)}
               >
-            <Image source={require('../assets/img/pencil.png')}/>
+            <Image style={styles.pencil} source={require('../assets/img/pencil.png')}/>
 
             </TouchableOpacity>
 
@@ -472,7 +472,7 @@ exploredata(userid){
               // onPress={() => this.refs.modal4.open()}
               onPress={this.avatarTapped.bind(this)}
               >
-            <Image source={require('../assets/img/pencil.png')}/>
+            <Image style={styles.pencil} source={require('../assets/img/pencil.png')}/>
 
             </TouchableOpacity>
                 </View>
@@ -559,7 +559,7 @@ exploredata(userid){
 
             <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%' }}>{this.state.about.length}/2000</Text>
            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',marginTop:'2%'}}>
-             <Image source={require('../assets/img/world.png')}/>
+             <Image style={styles.icon} source={require('../assets/img/offline1.png')}/>
             <Text style={styles.textTitle1}>Website</Text>
             </View>
             <TextInput style={styles.touchableBtnpics}
@@ -674,6 +674,12 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // marginTop:120  //actual marginTop:130
   },
+  icon: {
+    width:50,
+    // marginLeft:5,
+    height:50,
+    resizeMode:'contain'
+  },
   lorem: {
     textAlign: 'left',
     color: '#000',
@@ -682,6 +688,9 @@ const styles = StyleSheet.create({
     lineHeight: 50,
     alignSelf: 'flex-start',
     justifyContent: 'flex-start'
+  },
+  pencil:{
+    width:17,height:17
   },
   input: {
     marginTop: 50,

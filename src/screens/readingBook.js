@@ -147,7 +147,8 @@ class ReadingBook extends Component {
       explore_page:'0',
       loginPoup:false,
       statusReadlater:'',
-      likestatus:''
+      likestatus:'',
+      postImg:''
      
 
     }
@@ -548,6 +549,7 @@ this.CheckConnectivity()
           profile_userid: responseJson[0].user_id,
           bgImg: responseJson[0].BackGround_Img,
           page_id:responseJson[0].page_id,
+          postImg:responseJson[0].PostImg,
           exists:responseJson[0].Readstatus=="N"?false:true,
           likeStatus:responseJson[0].Likestatus
 
@@ -1070,14 +1072,14 @@ this.CheckConnectivity()
       {/* {this.state.copiedData == "" ?  */}
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}>
-          <Image style={{ width: 43, height: 43,}} source={{ uri: this.state.avatar != "" ? this.state.avatar : null }} />
+          <Image style={{ width: 43, height: 43,}} source={{ uri: this.state.postImg != "" ? this.state.postImg : null }} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.contentClick():this.alertPopup()}}>
           <Text numberOfLines={2} style={styles.pageTitle}>{this.state.page_url}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.contentClick():this.alertPopup()}}>
+       {this.state.gettypeid=='4'?null: <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.contentClick():this.alertPopup()}}>
           <Image style={{ width:35,height:35 }} source={require('../assets/img/contents-rest.png')} />
-        </TouchableOpacity>
+        </TouchableOpacity>}
         {/* <TouchableOpacity
            onPress={this.changemode.bind(this)}
            >
@@ -1128,13 +1130,15 @@ this.CheckConnectivity()
         </View>
       } */}
      
-      <View 
+      {/* <View 
       style={{marginRight:10}}
       // style={{position:'absolute',right:10,
       //   top:70,padding:'2%',
       // }}
-      >
-          <View style={{ flexDirection: 'row',width:width,alignItems:'center',justifyContent:'flex-end'  }}>
+      > */}
+        <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',width:width,}}>
+      <Text style={{fontFamily:'AzoSans-Regular',fontSize:12,color:'#707070',marginLeft:5}}>{this.state.created_at}</Text>
+          <View style={{ flexDirection: 'row',width:width/1.3,alignItems:'center',justifyContent:'flex-end'  }}>
 <TouchableOpacity
 // onPress={this.changemode.bind(this)}
 >
@@ -1154,13 +1158,14 @@ this.CheckConnectivity()
 <TouchableOpacity
 onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
 >
-  <Image style={styles.hiddenImgs1} source={require('../assets/img/fbz.png')} />
+  <Image style={styles.hiddenImgs1} source={require('../assets/img/fb2.png')} />
 </TouchableOpacity>
 <TouchableOpacity
 // onPress={this.changemode.bind(this)}
 >
-  <Image style={styles.hiddenImgs1} source={require('../assets/img/twit.png')} />
+  <Image style={styles.hiddenImgs1} source={require('../assets/img/twitter.png')} />
 </TouchableOpacity>
+</View>
 </View>
 
 {/* <TouchableOpacity 
@@ -1173,7 +1178,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
             <Image style={{ top: '15%', right: 0, position: 'absolute' }} source={require('../assets/img/bigbookmark.png')} />
           </View>
             : null} */}
-</View>
+{/* </View> */}
         {this.state.bookmarkPopup ? <View>
             <Image style={{ top: '25%', right: 0, position: 'absolute' }} source={require('../assets/img/bigbookmark.png')} />
           </View>
@@ -1694,14 +1699,15 @@ pageTitle:{
   marginLeft:'2%'
 },
 hiddenImgs:{
-  width: 40,
-   height: 30,
+  width: 30,
+   height: 35,
 },
 hiddenImgs1:{
-  width: 30,
-   height: 30,
-    marginLeft: 3,
-     marginRight: 3
+  width: 20,
+   height: 20,
+   margin:5
+    // marginLeft: 3,
+    //  marginRight: 3
 },
 group:{
   width:40,

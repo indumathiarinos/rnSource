@@ -15,7 +15,7 @@ import {
 import ModalBox from 'react-native-modalbox';
 import ViewMoreText from 'react-native-view-more-text';
 // import ReadMore from 'react-native-read-more-text';
-//import ReadMore from 'react-native-read-more-text';
+// import ReadMore from 'react-native-read-more-text';
 import ReadMore from "./Readmore";
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -104,24 +104,23 @@ getData(){
       _renderTruncatedFooter = (handlePress) => {
         return (
           <View 
-      // style={{ marginTop: '-5%' }}
-      >
-        <TouchableOpacity
-        // onPress={() => !this.state.hidePic?this.setState({ hidePic: true}):this.setState({hidePic:false})}
-        >
-          <Text 
-            style={{
-              color: '#27A291',
-              alignSelf: "flex-end",
-              textDecorationLine: 'underline',
-              backgroundColor: '#fff'
-            }}
-           onPress={handlePress}>
-            Read more
-          </Text>
-        </TouchableOpacity>
-      </View>
-
+          // style={{ marginTop: '-5%' }}
+          >
+            <TouchableOpacity
+            // onPress={() => !this.state.hidePic?this.setState({ hidePic: true}):this.setState({hidePic:false})}
+            >
+              <Text 
+                style={{
+                  color: '#27A291',
+                  alignSelf: "flex-end",
+                  textDecorationLine: 'underline',
+                }}
+               onPress={handlePress}>
+                Read more
+              </Text>
+            </TouchableOpacity>
+          </View>
+    
         );
       }
       fb = () => {
@@ -243,24 +242,25 @@ getData(){
        }
        _renderRevealedFooter = (handlePress) => {
         return (
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('report')}>
-          <View style={styles.info1}>
-            <Image style={{ marginRight: '10%' }} source={require('../assets/img/flag.png')} />
-            <Text style={{color: "#707070",
-    fontSize: 12,
-  fontFamily:'AzoSans-Regular'}}>Report</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: '3%' }}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('report')}>
+              <View style={styles.info1}>
+                <Image style={{ marginRight: '10%' }} source={require('../assets/img/flag.png')} />
+                <Text style={styles.text1}>Report</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+            // onPress={() => this.state.hidePic?this.setState({ hidePic: false}):this.setState({hidePic:true})}
+            >
+              {/* <Text style={{ color: '#27A291',textDecorationLine:'underline', alignSelf: "flex-end", backgroundColor: '#fff', marginTop: -20, padding: '2%', }} onPress={handlePress}> */}
+    
+              <Text style={{ color: '#27A291', textDecorationLine: 'underline', alignSelf: "flex-end", backgroundColor: '#fff', }} onPress={handlePress}>
+                See less
+              </Text>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity 
-        // onPress={() => this.state.hidePic?this.setState({ hidePic: false}):this.setState({hidePic:true})}
-        >
-          <Text style={{ color: '#27A291',textDecorationLine:'underline', alignSelf: "flex-end", backgroundColor: '#fff', marginTop: 0, padding: '2%', }} onPress={handlePress}>
-            See less
-          </Text>
-        </TouchableOpacity>
-      </View>
+    
         );
       }
       clickEventListener=()=>{
@@ -375,41 +375,39 @@ getData(){
                     
                     <TouchableOpacity style={styles.socialBarButton}
                      >
-                    <Text  style={{color:'#707070',fontSize: 12,
+                    <Text  style={{color:'#707070',fontSize: 12,marginRight:5,
   fontFamily:'AzoSans-Regular'}}>{this.state.followers}</Text>
-                      <Image style={{marginLeft:5}}
+                      <Image 
+                      // style={{width:18,height:18}}
                       // style={styles.icon}
                        source={require('../assets/img/profile.png')}/>
                     </TouchableOpacity>
-                    <View style={styles.divider}>
-                    </View>      
+                    <View style={styles.divider}/>
                     <TouchableOpacity 
                     // onPress={()=>this.refs.modal6.open()}
                      style={styles.socialBarButton}>
                     <Text style={{color:'#707070',fontSize: 12,
-  fontFamily:'AzoSans-Regular'}}>80.1k(SN)</Text>
+  fontFamily:'AzoSans-Regular'}}></Text>
                     {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
-                    <Image style={styles.icon} source={require('../assets/img/share.png')}/>
+                    <Image style={{width:50,height:40}} source={require('../assets/img/share.png')}/>
                     {/* </TouchableOpacity> */}
                       
                     </TouchableOpacity>
                   
                 </View>
-                <View
-                style={{marginTop:30}}>
-            <ReadMore
-              numberOfLines={3}
+               <View style={{marginLeft:'5%',marginRight:'5%'}}>
+                {this.state.about.length>408?<ReadMore
+              numberOfLines={5}
               renderTruncatedFooter={this._renderTruncatedFooter}
               renderRevealedFooter={this._renderRevealedFooter}
               onReady={this._handleTextReady}>
               <Text
-                numberOfLines={3}
+                numberOfLines={5}
                 style={styles.description}>
                 {this.state.about}
               </Text>
-            </ReadMore>
-                </View>           
-                      
+            </ReadMore>:<Text>{this.state.about}</Text>}
+                      </View>
               {/* <Text style={styles.description}>
                   Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum electram expetendis, omittam deseruisse consequuntur ius an,</Text> */}
                 
@@ -484,7 +482,7 @@ getData(){
                        </Modal>
         <View style={styles.bottomBar}>
           <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
-          <Image style={styles.icon} source={require('../assets/img/world.png')}/>
+          <Image style={styles.icon} source={require('../assets/img/offline1.png')}/>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
           <Image style={styles.icon} source={require('../assets/img/insta.png')}/>
@@ -639,7 +637,7 @@ const styles = StyleSheet.create({
   socialBarContainer: {
     flexDirection: 'row',
     flex: 1,
-    marginTop:10
+    marginTop:3
   },
   socialBarContainer2: {
     flexDirection: 'row',
@@ -660,14 +658,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding:'2%'
+    // padding:'2%'
+    marginBottom:'1%'
   },
   divider:{
     width:2,
-    height:20,
-    marginLeft:5,
+    height:25,
+    marginLeft:10,
     marginRight:5,
-    marginTop:'3%',
+    marginTop:'2%',
     backgroundColor:'#707070'
   },
   icon: {

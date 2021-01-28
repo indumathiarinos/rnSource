@@ -119,6 +119,7 @@ backpress=()=>{
                       {/* </View> */}
                        
                 </View>
+                <View style={{flex:1}}>
       <QRCodeScanner
         onRead={this.onSuccess}
         topContent={
@@ -132,6 +133,7 @@ backpress=()=>{
           </TouchableOpacity>
         }
       />
+      </View>
        <View style={styles.bottomBar}>
  <TouchableOpacity
      style={styles.tabsss}
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
   centerText: {
     flex: 1,
     fontSize: 18,
-    padding: 32,
+    padding: 22,
     color: '#777',
   },
   textBold: {
@@ -174,8 +176,8 @@ const styles = StyleSheet.create({
     color: 'rgb(0,122,255)',
   },
   buttonTouchable: {
-    marginTop:'2%',
-    padding: 16,
+    // marginTop:'2%',
+    padding: 8,
   },
   headerRow:{
     // height: '9%',
@@ -207,7 +209,8 @@ bottomBar:{
   right:0,
   justifyContent:'space-around',
   flexDirection:'row',
-  position:'absolute'
+  position:'absolute',
+  elevation:8
 },
 tabsss:{
   margin:'2%',

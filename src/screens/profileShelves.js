@@ -971,29 +971,29 @@ render() {
             <Text style={styles.info}>{this.state.headline}</Text>
           
             <View style={styles.socialBarContainer}>
-                  
-                  <TouchableOpacity style={styles.socialBarButton} >
-                  <Text  style={{color:'#707070'}}>{this.state.followers}</Text>
-                    <Image style={{marginLeft:5}}
-                    // style={styles.icon}
-                     source={require('../assets/img/profile.png')}/>
-                  </TouchableOpacity>
-                  <View style={styles.divider}>
-                  </View>      
-                  <TouchableOpacity 
+                    
+                    <TouchableOpacity style={styles.socialBarButton}
+                     >
+                    <Text  style={{color:'#707070',fontSize: 12,marginRight:5,
+  fontFamily:'AzoSans-Regular'}}>{this.state.followers}</Text>
+                      <Image 
+                      // style={{width:18,height:18}}
+                      // style={styles.icon}
+                       source={require('../assets/img/profile.png')}/>
+                    </TouchableOpacity>
+                    <View style={styles.divider}/>
+                    <TouchableOpacity 
                     // onPress={()=>this.refs.modal6.open()}
                      style={styles.socialBarButton}>
-                <Text style={{color:'#707070',fontSize: 12,
-                  fontFamily:'AzoSans-Regular'}}>80.1k(SN)</Text>
+                    <Text style={{color:'#707070',fontSize: 12,
+  fontFamily:'AzoSans-Regular'}}></Text>
                     {/* <TouchableOpacity onPress={()=>this.refs.modal6.open()}> */}
-                  <Image style={styles.icon} source={require('../assets/img/share.png')}/>
-                  {/* </TouchableOpacity> */}
-                    
-                  </TouchableOpacity>
-                
-              </View>
-
-
+                    <Image style={{width:50,height:40}} source={require('../assets/img/share.png')}/>
+                    {/* </TouchableOpacity> */}
+                      
+                    </TouchableOpacity>
+                  
+                </View>
           </View>
           {!this.state.noData?null:
           <View>
@@ -1566,7 +1566,6 @@ buttonContainer: {
   marginRight:10,
   backgroundColor: "#FFFF",
   elevation:3
-
 },
 buttonContainer1: {
   marginTop:20,
@@ -1589,7 +1588,7 @@ buttonContainer2: {
   justifyContent: 'center',
   width:100,
   borderRadius:30,
-  backgroundColor: "#27A291",
+  // backgroundColor: "#27A291",
  
 },
 socialBarContainer3: {
@@ -1599,7 +1598,7 @@ socialBarContainer3: {
 socialBarContainer: {
   flexDirection: 'row',
   flex: 1,
-  marginTop:5
+  marginTop:3
 },
 socialBarContainer2: {
   flexDirection: 'row',
@@ -1620,19 +1619,32 @@ socialBarButton:{
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
+  // padding:'2%'
+  marginBottom:'1%'
 },
 divider:{
   width:2,
-  height:20,
-  marginLeft:5,
+  height:25,
+  marginLeft:10,
   marginRight:5,
-  marginTop:'1%',
+  marginTop:'2%',
   backgroundColor:'#707070'
 },
 icon: {
-  width:25,
+  width:30,
   marginLeft:5,
-  height:25,
+  height:30,
+  resizeMode:'contain'
+},
+icon1: {
+  width:20,
+  marginLeft:5,
+  height:20,
+},
+icon4: {
+  width:20,
+  marginLeft:5,
+  height:20,
 },
 btnAction: {
   height:45,

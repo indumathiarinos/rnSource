@@ -84,7 +84,9 @@ class CollectionDetail extends Component {
         PostPageTitle:'',
         readsRemovePopup:false,
         editPopup:false,
-        getCollectionId:''
+        getCollectionId:'',
+        profileColl:false,
+        profile_userid:''
   
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -140,6 +142,8 @@ AsyncStorage.getItem('coll_name').then((value) => this.setState({ coll_name : va
 AsyncStorage.getItem('coll_desc').then((value) => this.setState({ coll_desc : value })).done();
 AsyncStorage.getItem('col_id').then((value) => this.setState({ collectionId1 : value })).done();
 AsyncStorage.getItem('collSecFilter').then((val) =>this.setState({ SortBy: val })).done();
+AsyncStorage.getItem('profileCollection').then((val)=>this.setState({profileColl:val})).done();
+AsyncStorage.getItem('profile_userid').then((val)=>this.setState({profile_userid:val})).done();
 console.log('value1 ',this.state.collectionId1,value1)
 
 this.setState({collectionId:value1})
@@ -151,6 +155,10 @@ this.focusListener = this.props.navigation.addListener('willFocus', () => {
   value1 = this.props.navigation.state.params.collId
   ? this.props.navigation.state.params.collId
   : null;
+
+  AsyncStorage.getItem('profileCollection').then((val)=>this.setState({profileColl:val})).done();
+  AsyncStorage.getItem('profile_userid').then((val)=>this.setState({profile_userid:val})).done();
+
 //   AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
 //   AsyncStorage.getItem('coll_Img').then((val) => this.setState({ coll_img: val })).done();
 // AsyncStorage.getItem('collectionId').then((value) => this.setState({ collectionId : value })).done();
@@ -284,7 +292,10 @@ this.setState({loading:true})
 console.log('this. collection id is ',this.state.collectionId,collectionId)
 var json=JSON.stringify({
   "CollectionID":collectionId ,
-"User_ID":this.state.getuserid,
+"User_ID":
+// !this.state.profileColl?
+this.state.getuserid,
+// :this.state.profile_userid,
 "SortBy":this.state.SortBy
 });
 console.log('json in section page ',json)
@@ -334,6 +345,8 @@ this.focusListener.remove()
 handleBackButtonClick() {
 //   this.backpress()
 // this.props.navigation.navigate('collection');
+AsyncStorage.setItem('profileCollection',JSON.stringify(false));
+
 this.props.navigation.goBack();
     return true;
 } 
@@ -352,7 +365,10 @@ CheckConnectivity(){
 }
 secCoverData() {
   var json = JSON.stringify({
-   "UserID":this.state.getuserid,
+   "UserID":
+  //  !this.state.profileColl?
+   this.state.getuserid,
+  //  :this.state.profile_userid,
    "CollectionID":value1
   });
   fetch("http://162.250.120.20:444/Login/CollectionSectionImage",
@@ -381,12 +397,17 @@ setTimeout(() => {
   console.log('col id in collection detail is ',this.state.collectionId)
 
   // alert(this.state.collectionId)
-  {this.exploredata_Pic(this.state.getuserid)}
+  {this.exploredata_Pic(
+    // !this.state.profileColl?
+    this.state.getuserid
+    // :this.state.profile_userid
+    )}
   {this.secCoverData()}
   // alert("coll id ",this.state.getCollectionId)
   // {this.exploredata(this.state.collectionId)}
   {this.exploredata(value1)}
-        }, 1000)
+  console.log(this.state.profile_userid,this.state.profileColl,this.state.getuserid)
+        }, 5000)
 }
 
 renderItem_card({ item }) {
@@ -451,7 +472,10 @@ renderItem_card({ item }) {
 exploredata_Pic(userid){
 this.setState({loading:true})
 var json=JSON.stringify({
-  'userid':userid
+  'userid':
+  // !this.state.profileColl?
+  this.state.getuserid,
+  // :this.state.profile_userid
   });
   fetch("http://162.250.120.20:444/Login/ProfileUpdateGet",
     {
@@ -601,7 +625,8 @@ readsItems({ item }) {
         imageStyle={{ borderRadius: 15 }}
         style={[item.Type==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image1?'#fff':null}]}
            >
-          <TouchableOpacity
+        {/* {!this.state.profileColl?  */}
+         <TouchableOpacity
             onPress={() => {this.refs.modal.open() 
             this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title})
             AsyncStorage.setItem('newColl_Id',JSON.stringify(Number(item.CollectionsID)));
@@ -609,6 +634,7 @@ readsItems({ item }) {
           }}>
             <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
           </TouchableOpacity>
+          {/* :null} */}
         </ImageBackground>
         </TouchableOpacity>
       </View>
@@ -730,7 +756,8 @@ readsItems({ item }) {
             keyExtractor={(item, index) => index.toString()}
           />
                 </ScrollView>
-                     <FloatingAction
+                   {/* {!this.state.profileColl?   */}
+                   <FloatingAction
                     style={{ color: '#27A291',fontSize:10,fontFamily:'AzoSans-Regular' }}
                     position={'right'}
                        distanceToEdge={50}
@@ -743,6 +770,7 @@ readsItems({ item }) {
                           console.log(`selected button: ${name}`);
                         }}
                     />
+                    {/* :null} */}
         
           <Modal1 isVisible={this.state.loading} >
                             <Image source={require('../assets/gif/logo.gif')} style={{
@@ -755,6 +783,7 @@ readsItems({ item }) {
           style={[styles.modal, styles.modal5]}
           position={'bottom'}
           ref={'modal'}
+          backdrop={true}
           isDisabled={this.state.isDisabled}>
           <View style={{
            alignItems: 'center', justifyContent: 'center'
@@ -782,7 +811,7 @@ readsItems({ item }) {
             </TouchableOpacity>
             <TouchableOpacity style={styles.bottombtn} onPress={()=>this.readsRemoveModal()}>
             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
-            <Image style={styles.iconwidth1} source={require('../assets/img/editRemove.png')} />
+            <Image source={require('../assets/img/editRemove.png')} />
               <Text style={styles.modaltext}>Remove</Text>
               </View>
             </TouchableOpacity>
@@ -927,16 +956,17 @@ const styles = StyleSheet.create({
       // alignItems:'center',
       //  jsutifyContent: 'center'
        },
-    bottomBar:{
+       bottomBar:{
         backgroundColor: '#fff', 
         alignItems: 'center',
+        height:'6%',
         bottom:0,
         left:0,
-        height:'6%',
         right:0,
         justifyContent:'space-around',
         flexDirection:'row',
-        position:'absolute'
+        position:'absolute',
+        elevation:8
     },
     // tabsss:{
     //     margin:'2%'
@@ -966,8 +996,8 @@ const styles = StyleSheet.create({
         // justifyContent: 'center', 
         alignItems: 'center',
         // height: '8%',
-        marginTop:0.5,
-        marginBottom:0.5,
+        // marginTop:0.5,
+        // marginBottom:0.5,
         backgroundColor: '#ffff',
         elevation: 1,
         borderBottomColor:'#707070'

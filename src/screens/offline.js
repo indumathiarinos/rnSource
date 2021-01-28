@@ -161,7 +161,10 @@ class Offline extends Component {
         {/* <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: '5%',marginTop:'2%' }}>{item.Title}</Text> */}
         <TouchableOpacity 
         // onPress={()=>this.props.navigation.navigate('viewBook')}
-        >
+        ><View style={{marginLeft:'7%',marginRight:'7%',marginTop:'2%'}}>
+              <Text style={[styles.text2,{fontSize:16,width:width/1.2}]}>{item.Title}</Text>
+
+        </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: '2%' }}>
           {/* <View style={{flexDirection:'column',}}> */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", }}>
@@ -171,7 +174,7 @@ class Offline extends Component {
           {/* </View> */}
 
           <TouchableOpacity onPress={() => this.removeItem(item)}>
-            <Image style={{ alignSelf: 'center' }} source={require('../assets/img/trash1.png')} />
+            <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/trashicon.png')} />
           </TouchableOpacity>
          </View>
          </TouchableOpacity>
@@ -230,7 +233,7 @@ class Offline extends Component {
                 onPress={this.headerBtnClk}>
                 <Text style={{
                   padding: '5%',
-                  fontSize: 16,
+                  fontSize: 16,alignSelf:'center',
                   fontWeight: 'bold', color: 'white'    
                 }}
                 >Offline</Text>
@@ -307,8 +310,8 @@ const styles = StyleSheet.create({
   },
   text2: {
     color: '#000',
-    fontSize: 17,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontFamily: 'Montserrat-Bold',
     width: width / 2,
 
     // alignSelf:'center'
