@@ -3,11 +3,11 @@ import {
   View,AsyncStorage,SafeAreaView,Platform,ImageBackground,BackHandler, TextInput, FlatList, RefreshControl, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,
   TouchableOpacity, PermissionsAndroid
 } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
+// import Icon from 'react-native-vector-icons/Ionicons';
 import img1 from '../assets/img/searchimg1.png';
 import img2 from '../assets/img/searchimg2.png';
 import img3 from '../assets/img/searchimg3.png';
-import Carousel from '@rhysforyou/react-native-carousel';
+import Icon from 'react-native-vector-icons/AntDesign';
 import ModalBox from 'react-native-modalbox';
 import {Avatar,Divider} from 'react-native-elements';
 import CardView from 'react-native-cardview';
@@ -372,21 +372,21 @@ tags(name){
       onPress={()=>this.pressIcon(item)}
       >
 
-            <CardView
+<CardView
                 // cardElevation={2}
                 // cardMaxElevation={2}
-                style={{ backgroundColor: this.tags(item.Category_name),padding:'2%'}}
-                cornerRadius={10}>
+                style={{ backgroundColor: this.tags(item.Category_name),padding:'2%',height:230,width:width-70}}
+                cornerRadius={20}>
                      <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
                      <Image
                     resizeMode="stretch"
-                    style={{ width: width/4.5,borderTopLeftRadius:8,borderBottomLeftRadius:8, height: 120, alignSelf: 'center' }} source={{ uri: item.Image1!=""?item.Image1:null}} />
+                    style={{ width: width/4.5,borderTopLeftRadius:8,borderBottomLeftRadius:8, height:height/4.5, alignSelf: 'center' }} source={{ uri: item.Image1!=""?item.Image1:null}} />
                   <Image
                     resizeMode="stretch"
-                    style={{ width: width/4.5, height: 120,borderTopLeftRadius:8,borderBottomLeftRadius:8, alignSelf: 'center',paddingRight:40,marginLeft:-5 }} source={{ uri: item.Image2!=""?item.Image2:null }} />
+                    style={{ width: width/4.5, height:height/4.5,borderTopLeftRadius:8,borderBottomLeftRadius:8, alignSelf: 'center',paddingRight:40,marginLeft:-5 }} source={{ uri: item.Image2!=""?item.Image2:null }} />
                  <Image
                     resizeMode="stretch"
-                    style={{ width: width/4.5, height: 120,borderRadius:8, alignSelf: 'center',paddingRight:80,marginLeft:-5 }} source={{ uri: item.Image3!=""?item.Image3:null }} />
+                    style={{ width: width/4.5, height:height/4.5,borderRadius:8, alignSelf: 'center',paddingRight:80,marginLeft:-5 }} source={{ uri: item.Image3!=""?item.Image3:null }} />
                  </View>
                  <Text style={{ marginBottom: 5,color:'#fff', fontSize: 16,fontFamily:'AzoSans-Medium',textAlign:'center',marginTop:10}}>
                     {item.Category_name}
@@ -442,14 +442,16 @@ tags(name){
  
       <SafeAreaView style={{ flex: 1,backgroundColor:'#fff'}}>
         {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}> */}
-          <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', }}>
-        <View>
+          {/* <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', elevation:3}}> */}
+     <View style={styles.header}>
+       <View>
           <TextInput style={styles.input} 
                 placeholder="Search"
                 // secureTextEntry={textState}
+                placeholderTextColor={'#707070'}
                 onChangeText={value => this.setState({searchText:value})}
                 value={this.state.searchText}
-                underlineColorAndroid="gray"
+                underlineColorAndroid="#707070"
                 />
                 {Platform.OS=='ios'?<View style={{width:width/1.6,height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
@@ -457,8 +459,13 @@ tags(name){
                 onPress={()=>{this.state.searchText!=""?this.SearchFilterFunction(this.state.searchText):
                 this.gotodetail()
             }}>
-                <Image style={{alignSelf:'center',}}
+                {/* <Image style={{alignSelf:'center',}}
                   source={require('../assets/img/searchicon.png')}
+                  /> */}
+                  <Icon
+                  name={'search1'}
+                  size={20}
+                  color={'#707070'}
                   />
                </TouchableOpacity>
 
@@ -686,7 +693,7 @@ const styles = StyleSheet.create({
     },
   backdrop: {
     flex: 1,
-    marginTop: -150
+    marginTop: -180
 },
 
   box1: {
@@ -732,6 +739,18 @@ const styles = StyleSheet.create({
     fontSize:16,
     // padding:10,
     margin:5
+  },
+  header: {
+    flexDirection: 'row',
+    top: 0,
+    left: 0,
+    right: 0,
+    width: width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    backgroundColor: '#fff',
+    borderBottomColor: '#707070'
   },
   touchableButton: {
     position: 'absolute',

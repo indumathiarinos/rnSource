@@ -801,13 +801,12 @@ class ViewBook extends Component {
         
         
         }}>
-            <LinearGradient style={{ borderRadius: 10 }} colors={
-              ['#24D4BC', '#27A291']}>
+         
               <TouchableOpacity
-                // style={{
-                //   backgroundColor: '#27A291',
-                //   borderRadius: 20,  
-                // }}
+                style={{
+                  backgroundColor: '#27A291',
+                  borderRadius: 10,  
+                }}
                 onPress={this.headerBtnClk}>
                 <Text style={{
                   padding: '5%',
@@ -818,7 +817,6 @@ class ViewBook extends Component {
                   onPress={() => this.props.navigation.navigate('viewBook')}
                 >Description</Text>
               </TouchableOpacity>
-            </LinearGradient>
             <TouchableOpacity style={{ alignItems: 'center' }}
               onPress={() => { this.state.explore_page == '0' ? this.props.navigation.navigate('contents') : this.alertPopup() }}
             >

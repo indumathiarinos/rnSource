@@ -21,7 +21,7 @@ import { Divider } from 'react-native-paper';
 import NewsFeed from './newsfeed';
 import ScrollUp from 'react-native-scroll-up';
 // import ScrollButton from '../components/ScrollButton';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/AntDesign';
 import NetInfo from '@react-native-community/netinfo';
 import ModalBox from 'react-native-modalbox';
 import SnackBar from 'react-native-snackbar';
@@ -945,7 +945,7 @@ collData(userid,colid,secid) {
 
     return (
       <SafeAreaView style={{backgroundColor:'#fff',flex:1}}>
-          <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center',width:width}}>
+       <View style={styles.header}>
        <View style={{flexDirection:'row',alignItems: 'center',width:width/1.1,justifyContent:'center'}}>
         <View>
         <TextInput
@@ -955,6 +955,7 @@ collData(userid,colid,secid) {
               underlineColorAndroid={'#707070'}
               // underlineColorAndroid='black'
               placeholder="Search"
+              placeholderTextColor={'#707070'}
             />
                 {Platform.OS=='ios'?<View style={{width:width/1.6,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
@@ -962,7 +963,12 @@ collData(userid,colid,secid) {
                   onPress={()=>{this.state.text!=""?this.SearchFilterFunction(this.state.text):
                   this.gotodetail()
               }}>
-            <Image style={{width:20,height:20}} source={require('../assets/img/searchicon.png')}/>
+            {/* <Image style={{width:20,height:20}} source={require('../assets/img/searchicon.png')}/> */}
+            <Icon
+                  name={'search1'}
+                  size={20}
+                  color={'#707070'}
+                  />
             </TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -1553,6 +1559,18 @@ const styles = StyleSheet.create({
 
     // padding:10,
     margin:5
+  },
+  header: {
+    flexDirection: 'row',
+    top: 0,
+    left: 0,
+    right: 0,
+    width: width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    backgroundColor: '#fff',
+    borderBottomColor: '#707070'
   },
     modal: {
         alignItems: 'center',

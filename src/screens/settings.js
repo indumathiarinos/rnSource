@@ -271,6 +271,10 @@ exploredata(userid){
                coverImg:responseJson[0].cover,
                headline:responseJson[0].headline,
                about:responseJson[0].about,
+               website:responseJson[0].website,
+               insta:responseJson[0].instagram,
+               fb:responseJson[0].facebook,
+               twitter:responseJson[0].twitter
               })
             // }
             console.log('username is ',this.state.username)
@@ -398,7 +402,7 @@ exploredata(userid){
         <ScrollView>
           <View style={styles.staticheader}>
 
-            <View style={{ flexDirection: 'row', width: width/1.2, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', width: width-50, justifyContent: 'center', alignItems: 'center' }}>
             <LinearGradient style={{ borderRadius: 10}} colors={
               ['#24D4BC', '#27A291']}>
               <TouchableOpacity >

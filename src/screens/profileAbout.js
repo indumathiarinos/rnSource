@@ -10,6 +10,7 @@ import {
   BackHandler,
   SafeAreaView,
   Dimensions,
+  Linking,
   ScrollView
 } from 'react-native';
 import ModalBox from 'react-native-modalbox';
@@ -45,7 +46,11 @@ class ProfileAbout extends Component {
       cover:'',
       shareModal:'',
       Is_Follow:'',
-      loginUserid:'',     
+      loginUserid:'',  
+      fb:'',
+      insta:'',
+      website:'' ,
+      twitter:''  
       
 }
 this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -113,6 +118,8 @@ getData(){
                 style={{
                   color: '#27A291',
                   alignSelf: "flex-end",
+                  fontFamily:'AzoSans-Regular',
+                  fontSize:12,
                   textDecorationLine: 'underline',
                 }}
                onPress={handlePress}>
@@ -195,7 +202,11 @@ getData(){
                    headline:this.state.profil[0].headline,
                     about: this.state.profil[0].about,
                     cover:this.state.profil[0].cover,
-                    Is_Follow:this.state.profil[0].Is_Follow
+                    Is_Follow:this.state.profil[0].Is_Follow,
+                    website:this.state.profil[0].website,
+                    fb:this.state.profil[0].facebook,
+                    insta:this.state.profil[0].instagram,
+                    twitter:this.state.profil[0].twitter
   
                   })
                 }
@@ -263,8 +274,8 @@ getData(){
     
         );
       }
-      clickEventListener=()=>{
-        this.props.navigation.navigate('socialmedia');
+      clickEventListener=(url)=>{
+       {url?Linking.openURL(url):null}
       }
       imgPress=()=>{
    this.props.navigation.navigate('socialmedia')
@@ -481,23 +492,21 @@ getData(){
                        }} />
                        </Modal>
         <View style={styles.bottomBar}>
-          <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
+        {this.state.website? <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener(this.state.website)}>
           <Image style={styles.icon} source={require('../assets/img/offline1.png')}/>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
+          </TouchableOpacity>:null}
+          {this.state.insta?<TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener(this.state.insta)}>
           <Image style={styles.icon} source={require('../assets/img/insta.png')}/>
             {/* <Image style={styles.icon} source={{uri: "https://img.icons8.com/material-outlined/48/000000/topic.png"}}/> */}
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
+          </TouchableOpacity>:null}
+          {this.state.fb?  <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener(this.state.fb)}>
           <Image style={styles.icon} source={require('../assets/img/fb2.png')}/>
 
             {/* <Image style={styles.icon} source={{uri: "https://img.icons8.com/material-outlined/48/000000/block-microphone.png"}}/> */}
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener()}>
+          </TouchableOpacity>:null}
+          {this.state.twitter? <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener(this.state.twitter)}>
           <Image style={styles.icon} source={require('../assets/img/twitter.png')}/>
-
-            {/* <Image style={styles.icon} source={{uri: "https://img.icons8.com/material-outlined/48/000000/block-microphone.png"}}/> */}
-          </TouchableOpacity>
+          </TouchableOpacity>:null}
         </View>
     </ScrollView>
       </SafeAreaView>

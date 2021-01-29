@@ -536,7 +536,10 @@ SearchFilterFunction(text) {
           </TouchableOpacity>
         
           </View> */}
-                <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', }}>
+          
+              
+      <View style={styles.header}>
+      <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', }}>
                 <TouchableOpacity onPress={()=>{
                            AsyncStorage.setItem('searchText'," ")
                  this.props.navigation.navigate('searchFilter')}}>
@@ -545,9 +548,9 @@ SearchFilterFunction(text) {
             source={require('../assets/img/filter.png')}>
           </Image>
           </TouchableOpacity>
-        <View style={{width:width/1.5,alignItems:'center',}}>
+        <View style={{width:width/1.3,alignItems:'center',}}>
           <TextInput
-           style={styles.input} 
+           style={[styles.input]} 
            value={!this.state.profilepage? this.state.text:this.state.profileSearch}
            underlineColorAndroid={this.state.text!=""|| this.state.profileSearch!=""?'#27A291':'#707070'}
            placeholder="Search Here"
@@ -568,7 +571,6 @@ SearchFilterFunction(text) {
        source={require('../assets/img/close.png')}/>
       </TouchableOpacity>
       </View>
-
           <View style={{flexDirection:'row',width:width-40,justifyContent:'center'}}>
 <TouchableOpacity 
 onPress={()=>this.setState({profilepage:false})}
@@ -595,7 +597,7 @@ style={[!this.state.profilepage?styles.blacktext:styles.headerText,{fontFamily:'
             
             >Profiles</Text>
           </TouchableOpacity>
-      
+      </View>
         </View>
  
     
@@ -765,6 +767,18 @@ headerText: {
   fontSize: 16,
   color:'white'
 },
+header: {
+  // flexDirection: 'row',
+  top: 0,
+  left: 0,
+  right: 0,
+  width: width,
+  alignItems: 'center',
+  justifyContent: 'center',
+  elevation: 3,
+  backgroundColor: '#fff',
+  borderBottomColor: '#707070'
+},
 button: {
   shadowColor: 'rgba(0,0,0, .4)', // IOS
   shadowOffset: { height: 1, width: 1 }, // IOS
@@ -792,7 +806,7 @@ topview:{
 },
 touchableButton: {
   position: 'absolute',
-  right: 65,
+  right: '18%',
   height: 40,
   width: 35,
   padding: 2,
@@ -807,6 +821,7 @@ input:{
   // padding:10,
   margin:5
 },
+
 textInputStyle: {
     width: width - 100,
     alignSelf:'center'

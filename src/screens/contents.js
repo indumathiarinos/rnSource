@@ -219,9 +219,9 @@ class Contents extends Component {
           <TouchableOpacity style={{ }}
             onPress={() => this.props.navigation.navigate('newOldFilter')}
           >
-          <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/filter.png')} />
+          <Image style={{ alignSelf: 'center',width:50,height:50, }} source={require('../assets/img/filter.png')} />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width/1.3, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width-105, justifyContent: 'center', alignItems: 'center' }}>
 
             <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('viewBook')}>
               <Text style={styles.headerText}
@@ -274,13 +274,20 @@ class Contents extends Component {
           
             <TouchableOpacity onPress={() => this.gotoRead(item.page_id)}>
               <View style={{ justifyContent: 'center', alignContent: 'center',width:width-80,}} key={item.Content} >
-                <Text style={{ color: 'black', textAlign: 'left',  fontSize: 14,fontFamily:'AzoSans-Medium', marginTop: '2%',padding:'2%', marginBottom: '2%' }}>{item.page_title}</Text>
-                <Divider style={{ color: '#707070', width: width - 80, }} />
+                <Text style={{ color: 'black', textAlign: 'left',  fontSize: 14,fontFamily:'AzoSans-Medium', marginTop: '2%',padding:'2%', marginBottom: '2%',paddingLeft:0 }}>{item.page_title}</Text>
+                
               </View>
               </TouchableOpacity>
             }
-            keyExtractor={(item, index) => index.toString()} />
+            keyExtractor={(item, index) => index.toString()}
+            ItemSeparatorComponent={(item)=>
+            
+ <Divider style={{ color: '#707070', width: width - 80,alignSelf:'center',}} />
+             } />
         {/* </View> */}
+        <View style={{alignItems:'center',justifyContent:'center',width:width}}>
+        <Divider style={{ color: '#707070', width: width - 80, }} />
+        </View>
 </ScrollView>
         <View style={styles.bottomBar}>
           <TouchableOpacity

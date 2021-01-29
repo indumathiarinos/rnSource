@@ -154,7 +154,7 @@ profileUpdateService(userid,col_Name,value){
             <SafeAreaView style={{ flex: 1,backgroundColor:'#fff'}}>
           <View style={styles.staticheader}>
          
-          <View style={{ flexDirection: 'row', width: width /1.2, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width-50, justifyContent: 'center', alignItems: 'center' }}>
         
             <TouchableOpacity style={{ alignItems: 'center' }} 
             onPress={() => this.props.navigation.navigate('settings')}

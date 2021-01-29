@@ -332,7 +332,7 @@ exploredata(userid){
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <SafeAreaView style={{ flex: 1}}>
+      <SafeAreaView style={{ flex: 1,elevation:1,backgroundColor:'#fff',}}>
         {/* <View style={{ height: '11%', backgroundColor: '#ffff', justifyContent: 'space-around', alignItems: 'center', elevation: 1 }}>
           <View style={{ flexDirection: 'row', }}>
 
@@ -356,12 +356,28 @@ exploredata(userid){
 
           </View>
         </View> */}
-         <View style={{  backgroundColor: '#ffff',elevation:1,justifyContent:'center'  }}>
-        <View style={{ flexDirection: 'row',justifyContent:'space-around'} }>
-          <View style={{width:width-40,alignItems:'center',justifyContent:'center',}}>
-          <LinearGradient style={{ borderRadius: 10,height:height/14,alignItems:'center',justifyContent:'center'}} colors={
-              ['#24D4BC', '#27A291']}>
+      
+        <View style={styles.staticheader}>
+          <View style={{flexDirection:'row',width:width-40,justifyContent:'center',alignItems:'center'}}>
           <TouchableOpacity
+          style={[{ backgroundColor: '#27A291',borderRadius:10}]}
+            onPress={() => this.props.navigation.navigate('mainpage')}>
+            <Text style={{  padding: '5%',
+                  fontSize: 14,
+                  color: 'white',
+                  fontFamily:'AzoSans-Medium',color:'white'}}
+            >Followed/Subscribed</Text>
+          </TouchableOpacity>
+        
+      </View>
+      <TouchableOpacity onPress={()=>this.backpress()}>
+          <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
+
+      </TouchableOpacity>
+      </View>
+        {/* <View style={{ flexDirection: 'row',alignItems:'center',justifyContent:'center',} }>
+        <View style={{width:width-30}}>
+          <TouchableOpacity style={{ borderRadius: 10,height:height/14,alignItems:'center',justifyContent:'center',backgroundColor:'#27A291',alignSelf:'center',}}
             onPress={this.headerBtnClk}>
             <Text style={{  padding: '5%',
   fontSize: 14,
@@ -370,10 +386,9 @@ exploredata(userid){
             >Followed/Subscribed</Text>
 
           </TouchableOpacity>
-          </LinearGradient>
           </View>
           <TouchableOpacity
-          style={{justifyContent:'center',paddingRight:'1%',marginRight:'3%'}}
+          style={{justifyContent:'center',}}
           onPress={()=>this.backpress()}
           >
                     <Image
@@ -382,8 +397,7 @@ exploredata(userid){
                             
                     </TouchableOpacity>
 
-          </View>
-      </View>
+          </View> */}
 
         {/* <Image
             style={{width:width}}
@@ -493,6 +507,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     backgroundColor: '#E74C3C'
+
+  },
+  header: {
+    flexDirection: 'row',
+    top: 0,
+    left: 0,
+    right: 0,
+    width: width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    backgroundColor: '#fff',
+    borderBottomColor: '#707070'
+  },
+  activetext: {
+    padding: '5%',
+    fontSize: 14,
+    fontFamily: 'AzoSans-Medium',
+    color: 'white'
+  },
+  staticheader:{
+    flexDirection:'row',
+    // justifyContent: 'center', 
+    alignItems: 'center',
+    // height: '8%',
+     backgroundColor: '#ffff',
+     elevation:1,
+     borderBottomColor:'#707070'
+
 
   },
 })

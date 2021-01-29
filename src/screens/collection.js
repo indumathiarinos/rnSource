@@ -550,7 +550,7 @@ class Collection extends Component {
                         {/* <Text>Home</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab2()}>
-                        <Image style={{ width: 50, height: 40 }} source={require('../assets/img/green_coll_icon.png')} />
+                        <Image style={{ }} source={require('../assets/img/collnobg.png')} />
                         {/* <Text>Collection</Text> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>

@@ -1464,8 +1464,9 @@ styles={{flexDirection:'row'}}
 
             <View style={styles.readlaterModal}>
               <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
-
+              <TouchableOpacity>
               <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
+              </TouchableOpacity>
             </View>
           } />
         {/* </Modal> */}
@@ -1566,14 +1567,13 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    height: '9%',
     top: 0,
     left: 0,
     right: 0,
     width: width,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 2,
+    elevation: 3,
     backgroundColor: '#fff',
     borderBottomColor: '#707070'
   },

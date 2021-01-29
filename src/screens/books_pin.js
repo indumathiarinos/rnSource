@@ -261,10 +261,10 @@ renderItem_card({ item }) {
           onPress={()=>this.props.navigation.navigate('booksPinFilter')}
           >
         <Image
-            style={{ alignSelf: 'center',width:50,height:50}}
+            style={{ alignSelf: 'center',width:50,height:50,}}
             source={require('../assets/img/filter.png')}/>   
                    </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width/1.3, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row',  width: width-105, justifyContent: 'center', alignItems: 'center' }}>
            
           <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => this.props.navigation.navigate('viewBook')}>
               <Text style={styles.headerText}
@@ -301,7 +301,7 @@ renderItem_card({ item }) {
             {/* </View> */}
           </View>
           <TouchableOpacity style={{ margin: 5 }} onPress={() => this.backpress()}>
-          <Image style={{ alignSelf: 'center',width:50,height:50,paddingRight:'3%' }} source={require('../assets/img/close.png')} />
+          <Image style={{ alignSelf: 'center',width:50,height:50, }} source={require('../assets/img/close.png')} />
           </TouchableOpacity>
         </View>
         {/* <View style={styles.header}>

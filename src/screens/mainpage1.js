@@ -129,7 +129,7 @@ class Home extends Component {
           tab3: false,
           tab4: false
         });
-        // this.props.navigation.navigate('search')
+        this.props.navigation.navigate('mainpage')
       }
       toggleTab2() {
         {this.state.explore_page=='0'?
@@ -739,7 +739,7 @@ class Home extends Component {
            
             //   this.props.changeRemove();
         }, 4000);
-        {this.exploredata1(this.state.getuserid)}
+        // {this.exploredata1(this.state.getuserid)}
         // this.props.navigation.navigate('readlater');
       }
       readlaterClick(){
@@ -1200,14 +1200,14 @@ render() {
                   
   <View style={styles.container}>
       <View style={styles.containerStyle} >
-          <ImageBackground style={styles.sliderContainerStyle}
-              source={require('../assets/img/bgpath.png')}>
-         </ImageBackground>
+          <View style={styles.sliderContainerStyle}/>
+          {/* source={require('../assets/img/bgpath.png')}>
+         </ImageBackground> */}
       </View>
       <View style={styles.overlay2}>
-          <Image source={require('../assets/img/crown1.png')} />
+          <Image source={require('../assets/img/top-picks-icon.png')} />
           <Text style={{
-              color: 'black', justifyContent: "center", marginTop: '5%',
+              color: 'black', justifyContent: "center", marginTop: '1%',
               alignItems: "center", fontSize: 24, color: 'white',fontFamily:'Montserrat-Bold'
           }} >Our Top Picks</Text>
   
@@ -1235,7 +1235,7 @@ render() {
                     cardElevation={2}
                     // cardMaxElevation={2}
                     cornerRadius={8}>
-                    <ImageBackground source={{ uri: item.Images!=''?item.Images:null }} style={{ width: 160, height: 180, jsutifyContent: 'center',resizeMode:'cover'}}>
+                    <ImageBackground source={{ uri: item.Images!=''?item.Images:null }} style={{ width: 157, height: 200, jsutifyContent: 'center',resizeMode:'cover'}}>
                        {/* {this.state.explore_page=='0'? */}
                         <TouchableOpacity
                         onPress={() => this.moreClick(item,"pressIcon") }>
@@ -1259,8 +1259,8 @@ render() {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={160}
-      itemHeight={180}
+      itemWidth={157}
+      itemHeight={200}
       snapToInterval={20}
       currentIndex={1}
         contentContainerCustomStyle={{marginLeft:0}}
@@ -1296,7 +1296,7 @@ render() {
           onPress={()=>this.pressIcon1(item)}
           >
     
-                <CardView
+                {/* <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
                     style={{ backgroundColor:this.tags(item.Category_name),padding:'3%'}}
@@ -1315,13 +1315,34 @@ render() {
                      <Text style={{ marginBottom: 5,color:'#fff', fontSize: 16,textAlign:'center',marginTop:10,fontFamily:'AzoSans-Medium'}}>
                         {item.Category_name}
                     </Text>
-                    {/* <Image
-                        resizeMode="contain"
-                        style={{ width: width/1.4, height: 150, alignSelf: 'center' }} source={{ uri: item.Images }} />
-                    <Text style={{ marginBottom: 5, marginTop: 5, fontWeight: 'bold', fontSize: 15,textAlign:'center' }}>
-                        {item.Category_name}
-                    </Text> */}
-                </CardView>
+                   
+                </CardView> */}
+                   <CardView
+                // cardElevation={2}
+                // cardMaxElevation={2}
+                style={{ backgroundColor: this.tags(item.Category_name),padding:'2%',height:230}}
+                cornerRadius={20}>
+                     <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
+                     <Image
+                    resizeMode="stretch"
+                    style={{ width: width/4.5,borderTopLeftRadius:8,borderBottomLeftRadius:8, height:height/4.5, alignSelf: 'center' }} source={{ uri: item.Image1!=""?item.Image1:null}} />
+                  <Image
+                    resizeMode="stretch"
+                    style={{ width: width/4.5, height:height/4.5,borderTopLeftRadius:8,borderBottomLeftRadius:8, alignSelf: 'center',paddingRight:40,marginLeft:-5 }} source={{ uri: item.Image2!=""?item.Image2:null }} />
+                 <Image
+                    resizeMode="stretch"
+                    style={{ width: width/4.5, height:height/4.5,borderRadius:8, alignSelf: 'center',paddingRight:80,marginLeft:-5 }} source={{ uri: item.Image3!=""?item.Image3:null }} />
+                 </View>
+                 <Text style={{ marginBottom: 5,color:'#fff', fontSize: 16,fontFamily:'AzoSans-Medium',textAlign:'center',marginTop:10}}>
+                    {item.Category_name}
+                </Text>
+                {/* <Image
+                    resizeMode="contain"
+                    style={{ width: width/1.4, height: 150, alignSelf: 'center' }} source={{ uri: item.Images }} />
+                <Text style={{ marginBottom: 5, marginTop: 5, fontWeight: 'bold', fontSize: 15,textAlign:'center' }}>
+                    {item.Category_name}
+                </Text> */}
+            </CardView>
             </TouchableOpacity>
   
       )}
@@ -1329,8 +1350,8 @@ render() {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={320}
-      itemHeight={300}
+      itemWidth={340}
+      itemHeight={230}
       contentContainerCustomStyle={{ alignItems: "center",justifyContent:'center'}}
       snapToAlignment={'center'}
       onSnapToItem={(index) => this.snapItem(index, 'expl')}
@@ -1981,7 +2002,8 @@ autoplay={false}
           marginLeft: -(width / 2),
           position: 'absolute',
           bottom: 0,
-          overflow: 'hidden'
+          overflow: 'hidden',
+          backgroundColor:'#27A291'
       },
       active: { height: 4, width: 20, backgroundColor: '#27A291' },
       inactive: { height: 2, width: 20, backgroundColor: '#707070' },
@@ -2014,13 +2036,13 @@ autoplay={false}
         fontSize: 24,
         width:width-40, 
         margin: '2%',
-        marginTop:'4%'
+        marginTop:'2%'
       },
       overlay2: {
           // marginTop:'10%',
           // position:'absolute',
           // top:0,
-          marginTop: '-45%',
+          marginTop: '-47%',
           justifyContent: "center",
           alignItems: "center",
       },

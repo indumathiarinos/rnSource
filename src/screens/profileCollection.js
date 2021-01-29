@@ -473,7 +473,7 @@ fontFamily:'AzoSans-Medium'}}
                                       marginTop: '5%',
                                       // marginLeft:'5%'
                                   }}
-                                  data={this.state.publicCollections}
+                                  data={this.state.loginUserid==this.state.getuserid?this.state.collection:this.state.publicCollections}
                                   extraData={this.state}
                                   renderItem={this.renderItem_card.bind(this)}
                                   numColumns={2}

@@ -124,7 +124,7 @@ class Offline extends Component {
   // }
   _renderTruncatedFooter = (handlePress) => {
     return (
-      <Text style={{ color: '#27A291', marginTop: 5, alignSelf: "flex-end", marginTop: '-5%', backgroundColor: '#fff', paddingLeft: '1%', textDecorationLine: 'underline', }} onPress={handlePress}>
+      <Text style={{ color: '#27A291', marginTop: 5, alignSelf: "flex-end", paddingLeft: '1%', textDecorationLine: 'underline', }} onPress={handlePress}>
         Read more
       </Text>
     );
@@ -187,7 +187,7 @@ class Offline extends Component {
         />
         </TouchableOpacity>
         <View style={{ backgroundColor: '#F9F9F9', elevation: 2, paddingLeft: '5%', paddingRight: '5%', paddingTop: '2%', paddingBottom: '2%' }}>
-          <ReadMore
+          {/* <ReadMore
             numberOfLines={3}
             renderTruncatedFooter={this._renderTruncatedFooter}
             renderRevealedFooter={this._renderRevealedFooter}
@@ -195,7 +195,21 @@ class Offline extends Component {
             <Text style={styles.description}>
               {item.Content}
             </Text>
-          </ReadMore>
+          </ReadMore> */}
+          {item.Content.length>150?
+          <ReadMore
+              numberOfLines={3}
+              renderTruncatedFooter={this._renderTruncatedFooter}
+              renderRevealedFooter={this._renderRevealedFooter}
+              onReady={this._handleTextReady}>
+              <Text numberOfLines={3} style={styles.description}>
+              {item.Content}
+            </Text>
+            </ReadMore>
+            : 
+            <Text style={styles.description}>
+              {item.Content}
+            </Text>}
           {/* <Text style={{fontSize:17,marginLeft:'5%',marginRight:'5%',padding:'2%'}}
           numberOfLines={1}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed bibendum quam quis semper tempus. Vestibulum ornare, augue a interdum consequat, est urna dignissim magna, at tempus magna leo a nulla. Nulla id luctus tortor, et cursus leo. Integer facilisis et eros vitae sodales. Duis sapien mi, lacinia eu nunc ac, condimentum ultrices est. Vestibulum ac justo non ipsum tristique ultricies quis non dolor. Nullam bibendum nulla ac lorem tincidunt, vel ultricies nulla semper. Duis nec magna sit amet ante vestibulum aliquam id sit amet felis. Mauris molestie leo lacus, at vulputate metus dapibus vel. Mauris efficitur convallis eros, vitae euismod velit sagittis vel. Integer egestas, nunc ac lobortis bibendum, nisi elit fringilla magna, sit amet eleifend sapien risus id lacus.          </Text>
@@ -222,36 +236,25 @@ class Offline extends Component {
 
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#ffff' }}>
-        <View style={{
-          height: '10%', backgroundColor: '#ffff', elevation: 1, justifyContent: 'center', borderBottomColor: '#707070'
-        }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <View style={{ width: width - 40,alignItems:'center',justifyContent:'center' }}>
-            <LinearGradient style={{ borderRadius: 10,}} colors={
-              ['#24D4BC', '#27A291']}>
-              <TouchableOpacity 
-                onPress={this.headerBtnClk}>
-                <Text style={{
-                  padding: '5%',
-                  fontSize: 16,alignSelf:'center',
-                  fontWeight: 'bold', color: 'white'    
-                }}
-                >Offline</Text>
+     
+     <View style={styles.staticheader}>
+          <View style={{flexDirection:'row',width:width-50,justifyContent:'center',alignItems:'center'}}>
+          <TouchableOpacity
+          style={[{ backgroundColor: '#27A291',borderRadius:10}]}
+            onPress={() => this.props.navigation.navigate('mainpage')}>
+            <Text style={{  padding: '5%',
+                  fontSize: 14,
+                  color: 'white',
+                  fontFamily:'AzoSans-Medium',color:'white'}}
+            >Offline</Text>
+          </TouchableOpacity>
+        
+      </View>
+      <TouchableOpacity onPress={()=>this.backpress()}>
+          <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
 
-              </TouchableOpacity>
-              </LinearGradient>
-            </View>
-            <TouchableOpacity
-              style={{ justifyContent: 'center', paddingRight: '1%' }}
-              onPress={() => this.backpress()}
-            >
-                    <Image
-                            style={{ alignSelf: 'center',width:50,height:50 }} 
-                            source={require('../assets/img/close.png')} />    
-                  </TouchableOpacity>
-
-          </View>
-        </View>
+      </TouchableOpacity>
+      </View>
 
 
         <FlatList
@@ -308,6 +311,11 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 15,
   },
+  headerRow:{
+    backgroundColor:'#27A291',
+    borderRadius:10,
+    // width: width - 40
+  },
   text2: {
     color: '#000',
     fontSize: 14,
@@ -321,6 +329,17 @@ const styles = StyleSheet.create({
     padding: '5%',
     fontSize: 16,
     fontWeight: 'bold'
+  },
+  staticheader:{
+    flexDirection:'row',
+    // justifyContent: 'center', 
+    alignItems: 'center',
+    // height: '8%',
+     backgroundColor: '#ffff',
+     elevation:1,
+     borderBottomColor:'#707070'
+
+
   },
 })
 function mapStateToProps(state) {

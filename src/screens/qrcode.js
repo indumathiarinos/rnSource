@@ -104,7 +104,7 @@ backpress=()=>{
 
   render() {
     return (
-      <SafeAreaView style={{flex:1}}>
+      <SafeAreaView style={{flex:1,backgroundColor:'#fff'}}>
             <View style={styles.headerRow}>
                       {/* <View style={styles.headerRow}> */}
                       <Text style={styles.heading}>QR Code Scanner</Text>
@@ -119,21 +119,24 @@ backpress=()=>{
                       {/* </View> */}
                        
                 </View>
-                <View style={{flex:1}}>
+                {/* <View style={{flex:1}}> */}
       <QRCodeScanner
         onRead={this.onSuccess}
-        topContent={
-          <Text style={styles.centerText}>
-            Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.
-          </Text>
-        }
-        bottomContent={
-          <TouchableOpacity style={styles.buttonTouchable}>
-            <Text style={styles.buttonText}>OK. Got it!</Text>
-          </TouchableOpacity>
-        }
+        // style={{flex:1}}
+        containerStyle={{flex:1}}
+        // topContent={
+        //   <Text 
+        //   style={styles.centerText}>
+        //     Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.
+        //   </Text>
+        // }
+        // bottomContent={
+        //   <TouchableOpacity style={styles.buttonTouchable}>
+        //     <Text style={styles.buttonText}>OK. Got it!</Text>
+        //   </TouchableOpacity>
+        // }
       />
-      </View>
+      {/* </View> */}
        <View style={styles.bottomBar}>
  <TouchableOpacity
      style={styles.tabsss}
@@ -162,9 +165,9 @@ backpress=()=>{
  
 const styles = StyleSheet.create({
   centerText: {
-    flex: 1,
+    flex: 0.2,
     fontSize: 18,
-    padding: 22,
+    // padding: 22,
     color: '#777',
   },
   textBold: {
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
   },
   buttonTouchable: {
     // marginTop:'2%',
-    padding: 8,
+    // padding: 8,
   },
   headerRow:{
     // height: '9%',
