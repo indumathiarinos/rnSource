@@ -16,6 +16,7 @@ import {
   AsyncStorage, LayoutAnimation, FlatList
 } from 'react-native';
 import LoginModal from '../components/loginModal';
+import BlurModal from '../components/blurModal';
 
 import ViewMoreText from 'react-native-view-more-text';
 import ReadMore from 'react-native-read-more-text';
@@ -148,7 +149,9 @@ class ReadingBook extends Component {
       loginPoup:false,
       statusReadlater:'',
       likestatus:'',
-      postImg:''
+      postImg:'',
+      undo:false,
+      subtitle:''
      
 
     }
@@ -231,24 +234,28 @@ this.CheckConnectivity()
         );
     }
 }
-  readlater = () => {
+readlater = () => {
+  this.setState({
+    collectionModal: false,
+    readlaterPopup: true
+  });
+
+  setTimeout(() => {
     this.setState({
-      collectionModal: false,
-      readlaterPopup: true
-    });
-    setTimeout(() => {
-      // this.props.changeRemove()
-      this.setState({
-        readlaterPopup: false, 
-      });
-      //   this.props.changeRemove();
-    }, 3000);
-    {this.exploredata(this.state.getpostid,this.state.gettypeid)}
-    // this.props.navigation.navigate('readlater');
-  }
+      readlaterPopup: false,
+    })
+    if (this.state.undo == false) {
+      this.readlaterAdd(this.state.getuserid, this.state.getpostid, this.state.gettypeid)
+    } else {
+      this.setState({ undo: false })
+    }
+  }, 3000);
+
+  // this.props.navigation.navigate('readlater');
+}
   readlaterAdd(userid, pageid, typeid) {
 
-    this.setState({ loading: true })
+    // this.setState({ loading: true })
     var json = JSON.stringify({
       'UserID': userid,
       "Post_PageID": pageid,
@@ -267,11 +274,15 @@ this.CheckConnectivity()
       .then((response) => response.json())
       .then((responseJson) => {
         //alert(responseText);
-        if (responseJson[0].Message == "Already Exist") {
-          // this.setState({ exists: true })
+        if (responseJson[0].Message == "Already Exist"|| "Added Successfully") {
+          this.setState({ exists: true })
+        }else{
+          this.setState({exists:false})
         }
         this.setState({ loading: false, collectionModal:false,expanded:false,sectionExpand:false})
-        this.readlater()
+        { this.exploredata(this.state.gettypeid, this.state.getpostid) }
+
+        // this.readlater()
         // SnackBar.show({
         //   title: !this.state.exists?"Added to ReadLater":"Already Added in ReadLater",
         //   duration:SnackBar.LENGTH_LONG,
@@ -537,7 +548,7 @@ this.CheckConnectivity()
 
         this.setState({
           scrollTop:true,
-          description:responseJson[0].BackGround_Img+responseJson[0].page_description,
+          description:responseJson[0].BackGround_Img+this.state.subtitle+responseJson[0].page_description,
           avatar: responseJson[0].avatar,
           created_at: responseJson[0].created_at,
           page_url: responseJson[0].page_url,
@@ -551,7 +562,8 @@ this.CheckConnectivity()
           page_id:responseJson[0].page_id,
           postImg:responseJson[0].PostImg,
           exists:responseJson[0].Readstatus=="N"?false:true,
-          likeStatus:responseJson[0].Likestatus
+          likeStatus:responseJson[0].Likestatus,
+          subtitle:responseJson[0].sub_title
 
         })
         console.log('page des ',this.state.description)
@@ -925,10 +937,12 @@ this.CheckConnectivity()
             this.props.navigation.navigate('comments')
   }
   likeClick(id) {
+    // alert(id)
     // let selected;
    
         this.setState({ loading: true })
         var json = JSON.stringify({ "UserID": this.state.getuserid, "Post_Page_ID": id,"TypeID":this.state.gettypeid });
+       console.log('like data ',json)
         fetch("http://162.250.120.20:444/Login/LikesAdd",
           {
             method: 'POST',
@@ -1070,6 +1084,8 @@ this.CheckConnectivity()
           {/* <Text style = { styles.Percentage }> { Math.round( this.state.progress_count * 100 ) }% </Text> */}
         </View> : null}
       {/* {this.state.copiedData == "" ?  */}
+      <View style={{ overflow: 'hidden', paddingBottom: 5 }}>
+
       <View style={styles.headerRow}>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}>
           <Image style={{ width: 43, height: 43,}} source={{ uri: this.state.postImg != "" ? this.state.postImg : null }} />
@@ -1093,6 +1109,7 @@ this.CheckConnectivity()
         </TouchableOpacity>
 
       </View> 
+      </View>
       {/* :
         <View style={styles.hiddenContainer}>
           <View style={{ flexDirection: 'row', alignItems: 'center', width: width - 40 }}>
@@ -1314,7 +1331,11 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
             <Text style={styles.bottomText}> {this.state.contents.length} Sections</Text>
           </TouchableOpacity>
         </View>
-        : <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: this.state.modeState == 'light' ? '#fff' : '#000' }}>
+        : <View style={{ flexDirection: 'row', shadowColor: '#000',
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity:  0.4,
+        shadowRadius: 3,
+        elevation: 10,borderTopColor:'#707070', justifyContent: "space-between", padding: '3%', position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: this.state.modeState == 'light' ? '#fff' : '#000' }}>
         <TouchableOpacity
           // onPress={()=>this.onPressHandler(item.Post_page_id)}
           onPress={() =>{this.state.explore_page=='0'?this.likeClick(this.state.getpostid):this.alertPopup()}}>
@@ -1433,130 +1454,133 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
         </View>
       </Modal1>
       <Modal1 isVisible={this.state.collectionModal}
-  onBackdropPress={() => this.setState({ collectionModal: false,expanded:false,sectionExpand:false})}>
-            <View 
-            style={{backgroundColor:'#fff', alignItems: 'center',
-            justifyContent:'center',
-            alignSelf:'center',
-            flex: !this.state.expanded ? 0.3 : 0.4,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            borderBottomLeftRadius: 5,
-            borderBottomEndRadius: 5,
-            width: 300,}}
-            >
-            <TouchableOpacity
-                style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
-                onPress={() => {this.props.navigation.navigate('createCollection')
-                this.setState({collectionModal:false})}}>
-                <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
-                  justifyContent: 'center', alignSelf: 'center'
-                }}>
-                  <Image  source={require('../assets/img/createCol.png')} />
-                  <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
-  
-                </View>
-              </TouchableOpacity>
-  
-              <Divider style={{ backgroundColor: '#707070', marginTop: '5%',borderWidth:0.3,width: 300 }} />
-              {!this.state.expanded ? (
-                <TouchableOpacity
-                  onPress={this.changeLayout}>
-                  <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: '4%',
-                    width:300,
-                    justifyContent: 'space-between',
-                  }}>
-                    <View 
-                    style={{
-                      flexDirection: 'row',
-                     width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
-                    }}
+                    onBackdropPress={() => this.setState({ collectionModal: false, expanded: false, sectionExpand: false })}>
+                    <View
+                        style={{
+                            backgroundColor: '#fff', alignItems: 'center',
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            flex: !this.state.expanded ? 0.3 : 0.4,
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                            borderBottomLeftRadius: 5,
+                            borderBottomEndRadius: 5,
+                            width: 300,
+                        }}
                     >
-                <Image  source={require('../assets/img/colliconnew1.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
-                    </View>
-  
-                    <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
-                  </View>
-                </TouchableOpacity>
-              ) : (
-                  <View style={{ height: !this.state.expanded ? 50 : 145, }}>
-  
-                    <View style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      padding: '4%',
-                      backgroundColor: '#27A291',
-                      width: 300,
-                      justifyContent: 'space-between',
-                    }}>
-                      <View style={{
-                        flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
-                      }}>
-                  <Image source={require('../assets/img/coll_white1.png')} />
-                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
-                  </View>
-                      <TouchableOpacity
-                        // style={{ marginLeft: '-15%', }}
-                        onPress={this.changeLayout}>
-                        <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
-                      </TouchableOpacity>
-                    </View>
-                    <ScrollView persistentScrollbar={this.state.collection.length>2?true:false}>
-                     <FlatList
-                          data={this.state.collection}
-                          keyExtractor={(item,index)=>index.toString()}
-                          renderItem={({item})=>(
-                              <View>
-                              <TouchableOpacity
-                                 style={{backgroundColor:'#f0f0f0',width:300,}}
-                                   onPress={() => this.collectionBook(item.title,item.id)}>
-                                   <View style={{
-                                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
-                                   }}>
-                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
-                                     <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
-                         <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
-                                 <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
-                         </TouchableOpacity> 
-                         </View>
-                         </TouchableOpacity>
-                                 <Divider style={{ backgroundColor: '#707070',borderWidth:0.2 }} />
-                   {this.state.sectionExpand && item.id==this.state.secCollid
-                        //  item.id==this.state.secCollid
-                      //    item.SectionStatus==1
-                         ?
-                      <FlatList
-                      data={this.state.section}
-                      keyExtractor={(item,index)=>index.toString()}
-                      renderItem={({item})=>(
-                          <View>
-                           {item.SectionID!=0? 
-                           <View>
-                           <TouchableOpacity
-                             style={{backgroundColor:'#f0f0f0',width:300,}}
-                               onPress={() => this.secBook(item.Title,item.CollectionsID,item.SectionID,item)}
-                               >
-                             <View style={{
-                                 flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
-                               }}>
-                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
-                                 {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
-                     {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
+                        <TouchableOpacity
+                            style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200, justifyContent: 'center' }}
+                            onPress={() => {
+                                this.props.navigation.navigate('createCollection')
+                                this.setState({ collectionModal: false })
+                            }}>
+                            <View style={{
+                                flexDirection: 'row', alignItems: 'center', width: 200,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}>
+                                <Image style={{ alignSelf: 'center' }} source={require('../assets/img/createCol.png')} />
+                                <Text style={{ fontSize: 16, fontFamily: 'AzoSans-Medium', color: '#27A291', marginTop: 5, width: width / 2.5, alignSelf: 'center', marginLeft: '2%' }}>Create Collection</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <Divider style={{ backgroundColor: '#707070', marginTop: '5%', borderWidth: 0.3, width: 300 }} />
+                        {!this.state.expanded ? (
+                            <TouchableOpacity
+                                onPress={this.changeLayout}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    padding: '4%',
+                                    width: 300,
+                                    justifyContent: 'space-between',
+                                }}>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                                        }}
+                                    >
+                                        <Image source={require('../assets/img/colliconnew1.png')} />
+                                        <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.9 }}>Collections</Text>
+                                    </View>
+
+                                    <Image style={{ alignSelf: 'center', }} source={require('../assets/img/down_arrow.png')} />
+                                </View>
+                            </TouchableOpacity>
+                        ) : (
+                                <View style={{ height: !this.state.expanded ? 50 : 145, }}>
+
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        padding: '4%',
+                                        backgroundColor: '#27A291',
+                                        width: 300,
+                                        justifyContent: 'space-between',
+                                    }}>
+                                        <View style={{
+                                            flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                                        }}>
+                                            <Image source={require('../assets/img/coll_white1.png')} />
+                                            <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#ffff', marginLeft: '5%', width: width / 2.9 }}>Collections</Text>
+                                        </View>
+                                        <TouchableOpacity
+                                            // style={{ marginLeft: '-15%', }}
+                                            onPress={this.changeLayout}>
+                                            <Image style={{ alignSelf: 'center', }} source={require('../assets/img/up_arrow_white.png')} />
+                                        </TouchableOpacity>
+                                    </View>
+                                    <ScrollView persistentScrollbar={this.state.collection.length > 2 ? true : false}>
+                                        <FlatList
+                                            data={this.state.collection}
+                                            keyExtractor={(item, index) => index.toString()}
+                                            renderItem={({ item }) => (
+                                                <View>
+                                                    <TouchableOpacity
+                                                        style={{ backgroundColor: '#f0f0f0', }}
+                                                        onPress={() => this.collectionBook(item.title, item.id)}>
+                                                        <View style={{
+                                                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
+                                                        }}>
+                                                            <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 180 }}>{item.title}</Text>
+                                                            <Image style={{ alignSelf: 'center', marginLeft: '0%' }} source={item.privacy == 'Public' ? require('../assets/img/worldwide.png') : require('../assets/img/not.png')} />
+                                                            <TouchableOpacity style={{ width: 30, height: 30, alignItems: 'center', justifyContent: 'center' }} onPress={() => { item.SectionStatus == 1 ? this.sectionClick(item.id) : null }}>
+                                                                <Image style={{ alignSelf: 'center', marginLeft: '2%', }} source={item.SectionStatus == 0 ? null : require('../assets/img/dropdown.png')} />
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                    <Divider style={{ backgroundColor: '#707070', borderWidth: 0.2 }} />
+                                                    {this.state.sectionExpand && item.id == this.state.secCollid
+                                                        //  item.id==this.state.secCollid
+                                                        //    item.SectionStatus==1
+                                                        ?
+                                                        <FlatList
+                                                            data={this.state.section}
+                                                            keyExtractor={(item, index) => index.toString()}
+                                                            renderItem={({ item }) => (
+                                                                <View>
+                                                                    {item.SectionID != 0 ?
+                                                                        <View>
+                                                                            <TouchableOpacity
+                                                                                style={{ backgroundColor: '#f0f0f0', width: 300, }}
+                                                                                onPress={() => this.secBook(item.Title, item.CollectionsID, item.SectionID, item)}
+                                                                            >
+                                                                                <View style={{
+                                                                                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
+                                                                                }}>
+                                                                                    <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                                                                    {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
+                                                                                    {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
                      </TouchableOpacity>  */}
-                     </View>
-                     </TouchableOpacity>
-                             <Divider style={{ backgroundColor: '#707070',borderWidth:0.2 }} />
-                             </View>
-                             :null}
-                             </View> )}/>:null}
-                              
-                                 {/* <TouchableOpacity
+                                                                                </View>
+                                                                            </TouchableOpacity>
+                                                                            <Divider style={{ backgroundColor: '#707070', borderWidth: 0.2 }} />
+                                                                        </View>
+                                                                        : null}
+                                                                </View>)} /> : null}
+
+                                                    {/* <TouchableOpacity
                                  style={{backgroundColor:'#f0f0f0',width:300,}}
                                    onPress={() => this.collectionBook("Cats in the Wild")}>
                                    <View style={{
@@ -1569,29 +1593,29 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                                  </TouchableOpacity>
                
                                  <Divider style={{ backgroundColor: '#707070',borderWidth:0.3 }} /> */}
-               
-                       </View>
-                          )}/>
-                 </ScrollView>
-                  </View>
-                )}
-  
-              <TouchableOpacity
-                onPress={() => this.readlaterAdd(this.state.getuserid,this.state.page_id,"4")}>
-  
-                <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
-                  justifyContent: 'center', alignSelf: 'center'
-                }}>
-                  <Image source={require('../assets/img/readlaternew1.png')} />
-                  <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
-                  <Divider style={{ backgroundColor: '#707070' }} />
-  
-                </View>
-              </TouchableOpacity>
-  
-            </View>
-          </Modal1>
+
+                                                </View>
+                                            )} />
+                                    </ScrollView>
+                                </View>
+                            )}
+
+                        <TouchableOpacity
+                            onPress={() => this.readlater()}>
+
+                            <View style={{
+                                flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}>
+                                <Image source={require('../assets/img/readlaternew1.png')} />
+                                <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
+                                <Divider style={{ backgroundColor: '#707070' }} />
+
+                            </View>
+                        </TouchableOpacity>
+
+                    </View>
+                </Modal1>
              
       {/* <Modal
         animationType="slide"
@@ -1603,6 +1627,8 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           n closed.');
         }}> */}
         {this.state.readlaterPopup?
+          <BlurModal visible={this.state.modalVisible}
+          children={
         <View style={{
           width: width,
           left: 0, right: 0, bottom: 0, position: 'absolute',
@@ -1613,9 +1639,11 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           backgroundColor: '#27A291',
         }}>
           <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
-
+          <TouchableOpacity onPress={()=>this.setState({undo:true})}>
           <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
+          </TouchableOpacity>
         </View>
+          }/>
         :null}
       {/* </Modal> */}
       {/* <Modal
@@ -1625,6 +1653,8 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
         onRequestClose={() => {
         }}> */}
         {this.state.popupModal?
+          <BlurModal visible={this.state.modalVisible}
+          children={ 
         <View style={{
           left: 0, right: 0, bottom: 0, position: 'absolute',
           height: '8%',
@@ -1639,6 +1669,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
 
         </TouchableOpacity>
         </View>
+          }/>
         :null}
       {/* </Modal> */}
 
@@ -1688,7 +1719,15 @@ container: {
 headerRow:{
   flexDirection: 'row', 
   alignItems: 'center', 
-  justifyContent: 'space-around' 
+  justifyContent: 'space-around',
+  elevation: 3,
+  backgroundColor: '#fff',
+  shadowColor: '#000',
+  shadowOffset: { width: 1, height: 1 },
+  shadowOpacity:  0.4,
+  shadowRadius: 3,
+  elevation: 3,
+  borderBottomColor:'#707070'
 },
 pageTitle:{
   color: '#27A291', 
@@ -1838,6 +1877,7 @@ bottomBar: {
   left: 0,
   right: 0,
   bottom: 0,
+  
 },
 
 bottomBtn: {

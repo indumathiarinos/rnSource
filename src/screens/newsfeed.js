@@ -79,7 +79,11 @@ class NewsFeed extends Component {
       secCollid: '',
       explore_page: '0',
       loginPoup: false,
-      customlikeCount: false
+      customlikeCount: false,
+      undo:false,
+      rpostid:'',
+      rtypeid:'',
+      username:''
 
 
     }
@@ -416,7 +420,31 @@ class NewsFeed extends Component {
   closeModal = () => {
     this.setState({ isModalVisible: false });
   }
-
+  recentService=(typeid,postid)=>{
+    var json = JSON.stringify({
+        'UserID': this.state.getuserid,
+        "TypeID": typeid,
+        "Post_Page_ID": postid
+    });
+    console.log('recent service json', json)
+    fetch("http://162.250.120.20:444/Login/RecentViewed",
+    {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'content-type': 'application/json'
+            },
+            body: json
+        }
+    )
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.warn('response recent service ',responseJson)
+        })
+        .catch((error) => {
+            console.warn(error);
+        });
+}
   pressIcon = (item) => {
     console.log('feeeddd data is ', item)
     let { feeding } = this.state;
@@ -435,19 +463,21 @@ class NewsFeed extends Component {
         } else if (item.TypeID == 1) {
           AsyncStorage.setItem('typeid', item.TypeID);
           AsyncStorage.setItem('postid', item.Post_Page_Id);
+          this.recentService(item.TypeID,item.Post_Page_Id)
 
           console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
           return this.props.navigation.navigate('viewBook');
         } else if (item.TypeID == 2) {
           AsyncStorage.setItem('typeid', item.TypeID);
           AsyncStorage.setItem('postid', item.Post_Page_Id);
+          this.recentService(item.TypeID,item.Post_Page_Id)
 
           console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
           return this.props.navigation.navigate('periodiViewBook');
         } else if (item.TypeID == 3) {
           AsyncStorage.setItem('typeid', item.TypeID);
           AsyncStorage.setItem('postid', item.Post_Page_Id);
-
+          this.recentService(item.TypeID,item.Post_Page_Id)
           console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
           return this.props.navigation.navigate('seriesViewBook');
         }
@@ -455,6 +485,49 @@ class NewsFeed extends Component {
         return e;
       }
     });
+  }
+  notifyAdd = (n_userid,username,id,title) =>{
+    var json2 = 
+    // JSON.stringify(
+      {
+      
+        "id":id,
+        "title":title,
+        "user_name":username,
+        "type":"like",
+        "bookimg":null,
+        "user_id":this.state.getuserid,
+        "comment":"",
+        "actionURL":"http:\/\/pagevio.com\/notification-read\/like",
+        "icon":"fa fa-thumbs-up",
+        "heading":"Likes your"
+    }
+    // )
+    let n_type="App\Notifications\NotificationFeeds";
+    let ntype2="App\User";
+    var json = JSON.stringify({
+      "Type":n_type,
+      "Notifiable_Type":ntype2,
+      "Notifiable_ID":n_userid,
+      "Datas":JSON.stringify(json2)});
+    console.log(json,"notiffy data")
+    fetch("http://162.250.120.20:444/Login/NotificationAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log('responsejson notify ',responseJson)
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   }
   likeClick(id) {
     // let selected;
@@ -482,7 +555,7 @@ class NewsFeed extends Component {
             if (responseJson[0].msg == "Success") {
               data.Likestatus = responseJson[0].Message == 'Like' ? 'Y' : 'N';
               data.likescount = responseJson[0].Message == 'Like' ? Number(data.likescount) + 1 : Number(data.likescount) - 1;
-
+            {responseJson[0].Message == 'Like'? this.notifyAdd(data.UserID,this.state.username,data.Post_Page_Id,data.Title):null}
               this.setState({ loading: false, customlikeCount: !this.state.customlikeCount });
               console.warn(responseJson);
             }
@@ -604,6 +677,7 @@ class NewsFeed extends Component {
     AsyncStorage.getItem('typeid').then((val) => this.setState({ gettypeid: val })).done();
     AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page: value })).done();
     AsyncStorage.setItem('collectionFilter', "DESC");
+    AsyncStorage.getItem('username').then((val)=>this.setState({username:val})).done();
     this.CheckConnectivity();
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     // this.getData();
@@ -646,9 +720,13 @@ class NewsFeed extends Component {
         readlaterPopup: false,
         // exists: false
       });
-
+      if (this.state.undo == false) {
+        this.readlaterAdd(this.state.getuserid, this.state.rpostid, this.state.rtypeid)
+    } else {
+        this.setState({ undo: false })
+    }
       //   this.props.changeRemove();
-    }, 3000);
+    }, 4000);
 
     // this.props.navigation.navigate('readlater');
   }
@@ -657,11 +735,17 @@ class NewsFeed extends Component {
     for (let item of list) {
       AsyncStorage.setItem('typeid', item.TypeID);
       AsyncStorage.setItem('postid', item.Post_Page_Id);
-      this.readlaterAdd(this.state.getuserid, item.Post_Page_Id, item.TypeID)
-
+      console.log('readlater status ',item.Readstatus)
+      this.setState({exists:item.Readstatus=='N'?false:true,rpostid:item.Post_Page_Id,rtypeid:item.TypeID});
+      this.readlater();
+      // this.readlaterAdd(this.state.getuserid, item.Post_Page_Id, item.TypeID)
     }
   }
   readlaterAdd(userid, pageid, typeid) {
+    let feeding = [...this.state.feeding];
+    for (let data of feeding) {
+      if (data.Post_Page_Id == pageid) {
+
     this.setState({ loading: true })
     var json = JSON.stringify({
       'UserID': userid,
@@ -682,16 +766,15 @@ class NewsFeed extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         //alert(responseText);
-        // if (responseJson[0].Message == "Already Exist") {
-        //   this.setState({ exists: true })
-        // }else{
-        //   this.setState({exists:false})
-        // }
-        this.setState({ loading: false, })
-        // this.readlater();
-        this.setState({ collectionModal: false, expanded: false, sectionExpand: false });
+     
+          data.Readstatus = responseJson[0].Message == "Already Exist" || "Added Successfully" ? 'Y' : 'N';
+        
+     
 
-        this.readlater();
+        // this.readlater();
+        this.setState({ loading: false,collectionModal: false, expanded: false, sectionExpand: false});
+
+        // this.readlater();
         // SnackBar.show({
         //     title: !this.state.exists?"Added to ReadLater":"Already Added in ReadLater",
         //     duration:SnackBar.LENGTH_LONG,
@@ -709,7 +792,6 @@ class NewsFeed extends Component {
         //         // readlaterPopup: false,
         //         exists:false
         //     });
-
         //     //   this.props.changeRemove();
         // }, 5000);
         console.warn(responseJson)
@@ -719,6 +801,9 @@ class NewsFeed extends Component {
       .catch((error) => {
         console.warn(error);
       });
+    }
+  }
+  this.setState({feeding})
   }
   reportClk = () => {
     this.setState({ newModalVisible: false })
@@ -1051,7 +1136,9 @@ class NewsFeed extends Component {
           <TouchableOpacity
             style={{ width: width / 6, alignItems: 'center', justifyContent: 'center' }}
             // onPress={() => this.refs.modal4.open()} 
-            onPress={() => { this.state.explore_page == '0' ? this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon", exists: item.Readstatus == "N" ? false : true }) : this.alertPopup() }}
+            onPress={() => { this.state.explore_page == '0' ? this.setState({ collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: "pressIcon",
+            //  exists: item.Readstatus == "N" ? false : true 
+            }) : this.alertPopup() }}
           // onPress={() =>this.props.navigation.navigate('createCollection')} 
           >
              <View
@@ -1464,7 +1551,7 @@ styles={{flexDirection:'row'}}
 
             <View style={styles.readlaterModal}>
               <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>this.setState({undo:true})}>
               <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
               </TouchableOpacity>
             </View>

@@ -172,7 +172,7 @@ console.warn(json+"")
            AsyncStorage.setItem('usertype',JSON.stringify(Number(responseJson.UserType)));
           AsyncStorage.setItem('typeid', JSON.stringify(Number(responseJson.UserType)));
           AsyncStorage.setItem('explore_page',JSON.stringify(0));
-
+          AsyncStorage.setItem('username',JSON.stringify(responseJson.username))
           console.log('userid & usertype',responseJson.UserID,'',responseJson.UserType);
           {this.clear('mainpage')}                   
 

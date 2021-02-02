@@ -419,7 +419,6 @@ SearchFilterFunction(text) {
   }
   fullcard1=({item})=>{
     return (
-        
       <View style={{ flexDirection: 'row',margin:'3%',justifyContent:'center' }}>
       <TouchableOpacity style={{marginRight:'3%',alignSelf:'center'}} onPress={()=>this.state.explore_page=='0'?this.goToAuthorProfile(item.user_id):this.alertPopup()}>
       <Image style={{width:60,height:60,borderRadius:60/2}} source={{uri:item.avatar!=""?item.avatar:null}}/>
@@ -603,7 +602,7 @@ style={[!this.state.profilepage?styles.blacktext:styles.headerText,{fontFamily:'
     
         <FlatList
         legacyImplementation={false}
-        data={!this.state.profilepage?this.state.profileData1:this.state.getProfiles}
+        data={!this.state.profilepage?this.state.profileData:this.state.getProfiles}
         // data={!this.state.profilepage? this.state.profileData1:this.state.profileData}
         navigation={this.props.navigation}
         renderItem={!this.state.profilepage?this.fullcard.bind(this):this.fullcard1.bind(this)}

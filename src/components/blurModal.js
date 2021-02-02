@@ -8,7 +8,7 @@ import { View, Text,Modal } from 'react-native'
         transparent={true}
         visible={visible}
         >
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.5)'}}>
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.2)'}}>
                 {children}
             </View>
     </Modal>

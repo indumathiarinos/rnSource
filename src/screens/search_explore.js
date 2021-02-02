@@ -27,8 +27,8 @@ import ModalBox from 'react-native-modalbox';
 import SnackBar from 'react-native-snackbar';
 console.disableYellowBox = true;
 // import Modal from "react-native-modal";
-import {connect} from 'react-redux';
-
+import {connect} from 'react-redux'
+import BlurModal from '../components/blurModal'
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -85,7 +85,8 @@ class SearchExplore extends Component {
           Category_name:'',
           collection:'',
           explore_page:'0',
-          loginPopup:false
+          loginPopup:false,
+          undo:false
 
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -439,6 +440,31 @@ class SearchExplore extends Component {
           }
         });
       }
+      recentService=(typeid,postid)=>{
+        var json = JSON.stringify({
+            'UserID': this.state.getuserid,
+            "TypeID": typeid,
+            "Post_Page_ID": postid
+        });
+        console.log('recent service json', json)
+        fetch("http://162.250.120.20:444/Login/RecentViewed",
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'content-type': 'application/json'
+                },
+                body: json
+            }
+        )
+            .then((response) => response.json())
+            .then((responseJson) => {
+              console.warn('response recent service ',responseJson)
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+    }
       pressIcon1 = (item) => {
           let { pub } = this.state;
           pub = pub.map(e => {
@@ -446,13 +472,21 @@ class SearchExplore extends Component {
                   AsyncStorage.setItem('typeid',JSON.stringify(Number(item.type_id)));
           
                   AsyncStorage.setItem('postid',JSON.stringify(Number(item.id)));
+
               if (item.type_id ==4) {
+
                   return this.props.navigation.navigate('readingBook');
               } else if(item.type_id==1){
+                this.recentService(item.type_id,item.id)
+
                   return this.props.navigation.navigate('viewBook');
               } else if(item.type_id==2){
+                this.recentService(item.type_id,item.id)
+
                   return this.props.navigation.navigate('periodiViewBook');
               }else if(item.type_id==3){
+                this.recentService(item.type_id,item.id)
+
                   return this.props.navigation.navigate('seriesViewBook');
               }
             } else {
@@ -785,12 +819,18 @@ collData(userid,colid,secid) {
         AsyncStorage.setItem('postid',JSON.stringify(Number(item.id)));
 
     if (item.type_id ==4) {
+      this.recentService(item.type_id,item.id)
         return this.props.navigation.navigate('readingBook');
     } else if(item.type_id==1){
+      this.recentService(item.type_id,item.id)
+
         return this.props.navigation.navigate('viewBook');
     } else if(item.type_id==2){
+      this.recentService(item.type_id,item.id)
+
         return this.props.navigation.navigate('periodiViewBook');
     }else if(item.type_id==3){
+      this.recentService(item.type_id,item.id)
         return this.props.navigation.navigate('seriesViewBook');
     }
   } else {
@@ -1346,14 +1386,13 @@ collData(userid,colid,secid) {
                 style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
                 onPress={() => {this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
-                <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,height:30,
-                  justifyContent: 'center', alignSelf: 'center'
-                }}>
-                  <Image  source={require('../assets/img/createCol.png')} />
-                  <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
-  
-                </View>
+               <View style={{
+                                flexDirection: 'row', alignItems: 'center', width: 200,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}>
+                                <Image style={{ alignSelf: 'center' }} source={require('../assets/img/createCol.png')} />
+                                <Text style={{ fontSize: 16, fontFamily: 'AzoSans-Medium', color: '#27A291', marginTop: 5, width: width / 2.5, alignSelf: 'center', marginLeft: '2%' }}>Create Collection</Text>
+                            </View>
               </TouchableOpacity>
   
               <Divider style={{ backgroundColor: '#707070', marginTop: '5%',borderWidth:0.3,width: 300 }} />
@@ -1367,15 +1406,15 @@ collData(userid,colid,secid) {
                     width:300,
                     justifyContent: 'space-between',
                   }}>
-                    <View 
-                    style={{
-                      flexDirection: 'row',
-                     width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
-                    }}
-                    >
-                  <Image  source={require('../assets/img/colliconnew1.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
-                    </View>
+                     <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                                        }}
+                                    >
+                                        <Image source={require('../assets/img/colliconnew1.png')} />
+                                        <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.9 }}>Collections</Text>
+                                    </View>
   
                     <Image style={{ alignSelf: 'center',  }} source={require('../assets/img/down_arrow.png')} />
                   </View>
@@ -1391,12 +1430,12 @@ collData(userid,colid,secid) {
                       width: 300,
                       justifyContent: 'space-between',
                     }}>
-                      <View style={{
-                        flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
-                      }}>
-                  <Image source={require('../assets/img/coll_white1.png')} />
-                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
-                      </View>
+                        <View style={{
+                                            flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
+                                        }}>
+                                            <Image source={require('../assets/img/coll_white1.png')} />
+                                            <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#ffff', marginLeft: '5%', width: width / 2.9 }}>Collections</Text>
+                                        </View>
                       <TouchableOpacity
                         // style={{ marginLeft: '-15%', }}
                         onPress={this.changeLayout}>
@@ -1412,11 +1451,11 @@ collData(userid,colid,secid) {
                               <TouchableOpacity
                                  style={{backgroundColor:'#f0f0f0',width:300,}}
                                    onPress={() => this.collectionBook(item.title,item.id)}>
-                                   <View style={{
-                                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
-                                   }}>
-                                     <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
-                                     <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} />
+                                 <View style={{
+                                                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
+                                                        }}>
+                                                            <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 180 }}>{item.title}</Text>
+                                                            <Image style={{ alignSelf: 'center', marginLeft: '0%' }} source={item.privacy == 'Public' ? require('../assets/img/worldwide.png') : require('../assets/img/not.png')} />
                          <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                                  <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
                          </TouchableOpacity> 
@@ -1441,7 +1480,7 @@ collData(userid,colid,secid) {
                              <View style={{
                                  flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                }}>
-                                 <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                 <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                  {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                      {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -1476,15 +1515,15 @@ collData(userid,colid,secid) {
               <TouchableOpacity
                 onPress={() => this.readlaterClick()}>
   
-                <View style={{
-                  flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
-                  justifyContent: 'center', alignSelf: 'center'
-                }}>
-                  <Image source={require('../assets/img/readlaternew1.png')} />
-                  <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
-                  <Divider style={{ backgroundColor: '#707070' }} />
-  
-                </View>
+                      <View style={{
+                                flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}>
+                                <Image source={require('../assets/img/readlaternew1.png')} />
+                                <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
+                                <Divider style={{ backgroundColor: '#707070' }} />
+
+                            </View>
               </TouchableOpacity>
   
             </View>
@@ -1507,6 +1546,8 @@ collData(userid,colid,secid) {
                             console.log('Modal has been closed.');
                         }}> */}
                         {this.state.readlaterPopup?
+                         <BlurModal visible={this.state.modalVisible}
+                         children={
                         <View style={{
                             left: 0, right: 0, bottom: 0, position: 'absolute',
                             height: '8%',
@@ -1519,6 +1560,7 @@ collData(userid,colid,secid) {
                            
                                 <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
                         </View>
+                         }/>
                         :null}
  </SafeAreaView>
   )

@@ -603,7 +603,7 @@ onPress={() => this.bookmarkPress()}
   
               </View>         
            
-          <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
+          <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'4%'}} 
           onPress={()=>this.undoFunc()}
           >
               <Text style={{fontSize: 16,fontFamily:'AzoSans-Regular',color: '#fff',textDecorationLine:'underline'}}>Undo</Text>
