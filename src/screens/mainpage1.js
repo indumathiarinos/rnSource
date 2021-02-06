@@ -96,7 +96,10 @@ class Home extends Component {
             undo: false,
             doubleBackToExitPressedOnce: false,
             rpostid: '',
-            rtypeid: ''
+            rtypeid: '',
+            postadd_postid:'',
+            postadd_typeid:''
+            
         }
         // this.moveAnimation = new Animated.ValueXY({ x: 0, animated:true})
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -540,6 +543,7 @@ class Home extends Component {
                         let rv = [...this.state.rv];
                         rv.push(this.state.expl11[i])
                         this.setState({ rv });
+                        this.state.rv.sort((a, b) => (a.Pagedate > b.Pagedate) ? -1 : 1)
                     }
                     else if (this.state.expl11[i].Datafor === 'Series') {
                         let series = [...this.state.series];
@@ -1176,7 +1180,7 @@ class Home extends Component {
     }
     getItem(item, funcName) {
         this.setState({
-            collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: funcName,
+            collectionModal: !this.state.collectionModal, currentItem: item, curFuncName: funcName,postadd_postid:item.Post_Page_Id,postadd_typeid:item.TypeID
             // exists:item.Readstatus=='N'?false:true
         })
         //  console.log('item data',item,'exists',this.state.exists,item.Readstatus)
@@ -1187,6 +1191,7 @@ class Home extends Component {
         {
             this.state.explore_page == '0' ?
             this.getItem(item, funcName)
+            
             : this.alertPopup()
         }
     }
@@ -1292,7 +1297,7 @@ class Home extends Component {
                                                 cardElevation={2}
                                                 // cardMaxElevation={2}
                                                 cornerRadius={8}>
-                                                <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width: 157, height: 200, jsutifyContent: 'center', resizeMode: 'cover' }}>
+                                                <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width:width/2.5, height: height/3.5, jsutifyContent: 'center', resizeMode: 'cover' }}>
                                                     {/* {this.state.explore_page=='0'? */}
                                                     <TouchableOpacity
                                                         onPress={() => this.moreClick(item, "pressIcon")}>
@@ -1316,8 +1321,8 @@ class Home extends Component {
                                 autoplay={false}
                                 enableMomentum={true}
                                 sliderWidth={Dimensions.get('window').width}
-                                itemWidth={157}
-                                itemHeight={200}
+                                itemWidth={width/2.5}
+                                itemHeight={width/3.5}
                                 snapToInterval={20}
                                 currentIndex={1}
                                 contentContainerCustomStyle={{ marginLeft: 0 }}
@@ -1377,18 +1382,18 @@ class Home extends Component {
                                     <CardView
                                         // cardElevation={2}
                                         // cardMaxElevation={2}
-                                        style={{ backgroundColor: this.tags(item.Category_name), padding: '2%', height: 230 }}
+                                        style={{ backgroundColor: this.tags(item.Category_name), padding: '2%', height: height/3 }}
                                         cornerRadius={20}>
                                         <View style={{ flex: 1, margin: 10, marginBottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                             <Image
                                                 resizeMode="stretch"
-                                                style={{ width: width / 4.5, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, height: height / 4.5, alignSelf: 'center' }} source={{ uri: item.Image1 != "" ? item.Image1 : null }} />
+                                                style={{ width: width / 4, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, height: height / 4.5, alignSelf: 'center' }} source={{ uri: item.Image1 != "" ? item.Image1 : null }} />
                                             <Image
                                                 resizeMode="stretch"
-                                                style={{ width: width / 4.5, height: height / 4.5, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, alignSelf: 'center', paddingRight: 40, marginLeft: -5 }} source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
+                                                style={{ width: width / 4, height: height / 4.5, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, alignSelf: 'center', paddingRight: 40, marginLeft: -10 }} source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
                                             <Image
                                                 resizeMode="stretch"
-                                                style={{ width: width / 4.5, height: height / 4.5, borderRadius: 8, alignSelf: 'center', paddingRight: 80, marginLeft: -5 }} source={{ uri: item.Image3 != "" ? item.Image3 : null }} />
+                                                style={{ width: width / 4, height: height / 4.5, borderRadius: 8, alignSelf: 'center', paddingRight: 80, marginLeft: -10 }} source={{ uri: item.Image3 != "" ? item.Image3 : null }} />
                                         </View>
                                         <Text style={{ marginBottom: 5, color: '#fff', fontSize: 16, fontFamily: 'AzoSans-Medium', textAlign: 'center', marginTop: 10 }}>
                                             {item.Category_name}
@@ -1442,8 +1447,8 @@ class Home extends Component {
                                         <CardView
                                             cardElevation={2}
                                             cardMaxElevation={2}
-                                            cornerRadius={5}>
-                                            <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width: 130, height: 150, jsutifyContent: 'center', resizeMode: 'cover' }}>
+                                            cornerRadius={8}>
+                                            <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width: width/2.5, height: height/3.5, jsutifyContent: 'center', resizeMode: 'cover' }}>
                                                 <TouchableOpacity
                                                     onPress={() => this.moreClick(item, "pressIcon")}>
                                                     <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1463,8 +1468,8 @@ class Home extends Component {
                             autoplay={false}
                             enableMomentum={true}
                             sliderWidth={Dimensions.get('window').width}
-                            itemWidth={130}
-                            itemHeight={120}
+                            itemWidth={width/2.5}
+                            itemHeight={height/3.5}
                             snapToInterval={20}
                             contentContainerCustomStyle={{ marginLeft: -80 }}
                             snapToAlignment={'start'}
@@ -1500,7 +1505,7 @@ class Home extends Component {
                                             cardElevation={2}
                                             cardMaxElevation={2}
                                             cornerRadius={8}>
-                                            <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width: 180, height: 90, jsutifyContent: 'center', resizeMode: 'cover' }}>
+                                            <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width: width/2.5,height:height/6.5, jsutifyContent: 'center', resizeMode: 'cover' }}>
                                                 <TouchableOpacity
                                                     onPress={() => this.moreClick(item, "pressIcon")}>
                                                     <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1524,8 +1529,8 @@ class Home extends Component {
                             autoplay={false}
                             enableMomentum={true}
                             sliderWidth={Dimensions.get('window').width}
-                            itemWidth={180}
-                            itemHeight={90}
+                            itemWidth={width/2.5}
+                            itemHeight={height/6.5}
                             snapToInterval={20}
                             contentContainerCustomStyle={{ marginLeft: -80 }}
                             snapToAlignment={'start'}
@@ -1559,7 +1564,7 @@ class Home extends Component {
                       cardElevation={2}
                       cardMaxElevation={2}
                       cornerRadius={8}>
-                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 130, height: 120, jsutifyContent: 'center',resizeMode:'cover' }}>
+                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{width: 157, height: 200, jsutifyContent: 'center',resizeMode:'cover' }}>
                           <TouchableOpacity
                               onPress={() => this.moreClick(item,"seriesPress") }>
                               <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1580,8 +1585,8 @@ class Home extends Component {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={130}
-      itemHeight={120}
+      itemWidth={157}
+      itemHeight={200}
       snapToInterval={20}
       contentContainerCustomStyle={{marginLeft:-80}}
       snapToAlignment={'start'}
@@ -1616,7 +1621,7 @@ class Home extends Component {
                       cardElevation={2}
                       cardMaxElevation={2}
                       cornerRadius={8}>
-                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 130, height: 120, jsutifyContent: 'center',resizeMode:'cover' }}>
+                      <ImageBackground source={{ uri: item.Images!=''?item.Images:null }}  style={{ width: 157, height: 200, jsutifyContent: 'center',resizeMode:'cover' }}>
                           <TouchableOpacity
                                   onPress={() => this.moreClick(item,"periodicalPress") }>
                               <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1636,8 +1641,8 @@ class Home extends Component {
       autoplay={false}
       enableMomentum={true}
       sliderWidth={Dimensions.get('window').width}
-      itemWidth={130}
-      itemHeight={140}
+      itemWidth={157}
+      itemHeight={200}
       snapToInterval={20}
         contentContainerCustomStyle={{marginLeft:-80}}
       snapToAlignment={'start'}
@@ -1645,7 +1650,7 @@ class Home extends Component {
       containerCustomStyle={{ marginTop: 30 }}
   />
   </View> */}
-                    <LinearGradient style={[styles.overlay1, { marginTop: 10 }]}
+                    <LinearGradient style={[styles.overlay1, { marginTop: 10, }]}
                         colors={['#C5F3FB40', '#81EEFF40']}>
                         <Text style={styles.headline1}>Recently Viewed</Text>
 
@@ -1663,7 +1668,7 @@ class Home extends Component {
                         <SnapCarousel
                             data={this.state.recents}
                             renderItem={({ item, index }) => (
-                                <View style={{ paddingRight: 10 }}>
+                                <View style={{ paddingRight: 10,marginBottom:'20%' }}>
                                     <TouchableOpacity
                                         onPress={() => this.recentPress(item)}
                                     >
@@ -1693,8 +1698,8 @@ class Home extends Component {
                             autoplay={false}
                             enableMomentum={true}
                             sliderWidth={Dimensions.get('window').width}
-                            itemWidth={130}
-                            itemHeight={120}
+                            itemWidth={width/2.5}
+                            itemHeight={height/3.5}
                             snapToInterval={20}
                             contentContainerCustomStyle={{ marginLeft: -80 }}
                             snapToAlignment={'start'}
@@ -1733,6 +1738,8 @@ class Home extends Component {
                         <TouchableOpacity
                             style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200, justifyContent: 'center' }}
                             onPress={() => {
+                                AsyncStorage.setItem('postadd_postid',JSON.stringify(Number(this.state.postadd_postid)));
+                                AsyncStorage.setItem('postadd_typeid',JSON.stringify(Number(this.state.postadd_typeid)));
                                 this.props.navigation.navigate('createCollection')
                                 this.setState({ collectionModal: false })
                             }}>
@@ -1941,9 +1948,14 @@ class Home extends Component {
                         <Image style={{ width: 50, height: 50, marginTop: 5 }} source={require('../assets/img/search.png')} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
-                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.explore_page == '0' ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, }]} onPress={() => this.toggleTab4()}>
+          
+            <View style={{flexDirection:'row'}}>
+            <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.explore_page == '0' ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
+          <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+            </View>
+                    
+          </TouchableOpacity>
 
                 </View>
                 {/* : 
@@ -2198,13 +2210,13 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     pubImgStyle: {
-        width: 130, height: 150,
+        width:width/2.5, height: height/3.5,
         borderRadius: 15,
         //  justifyContent: 'center'
     },
     pageImgStyle: {
         elevation: 1,
-        width: 130, height: 100,
+        width: width/2.8, height: height/4.5,
         borderRadius: 15,
         //    justifyContent: 'center'
     }

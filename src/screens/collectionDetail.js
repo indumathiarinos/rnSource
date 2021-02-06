@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { FloatingAction } from "react-native-floating-action";
 import LinearGradient from 'react-native-linear-gradient';
 console.disableYellowBox = true;
+import BlurModal from '../components/blurModal';
 import HTMLView from 'react-native-htmlview';
 import Modal1 from 'react-native-modal';
 import NetInfo from '@react-native-community/netinfo';
@@ -86,7 +87,8 @@ class CollectionDetail extends Component {
         editPopup:false,
         getCollectionId:'',
         profileColl:false,
-        profile_userid:''
+        profile_userid:'',
+        editRemovePopup:false
   
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -185,10 +187,10 @@ showModal = () => {
     console.log('modal state is ',this.state.modalVisible)
 }
 readsRemoveModal = () => {
-  this.refs.modal.close();
-  console.log('enters')
+  // this.refs.modal.close();
+  // console.log('enters')
   this.setState({
-    readsRemovePopup: true
+    readsRemovePopup: true,editRemovePopup:false
   });
   setTimeout(() => {
       // this.props.changeRemove()
@@ -200,7 +202,6 @@ readsRemoveModal = () => {
     }else{
       this.setState({removeUndo:false})
     }
-    {this.exploredata(value1)}
     }, 3000);
     console.log('modal state is ',this.state.readsRemovePopup)
 }
@@ -584,6 +585,7 @@ deletefunc(item){
       .then((responseJson) => {
           //alert(responseText);
           this.setState({ loading: false })
+          {this.exploredata(value1)}
           console.warn(responseJson)
           // if(responseJson.Msg=="Success"){
            
@@ -612,22 +614,22 @@ readsItems({ item }) {
         marginLeft:0,marginRight:0,
         justifyContent: 'space-between'
       }}>
-        <View style={{ flexDirection: 'column',width:width/1.8-40, }}>
-          <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000' }}>{item.Page_Post_Title}</Text>
+  <View style={{ flexDirection: 'column',width:width/1.8,  }}>
+              <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000' }}>{item.Page_Post_Title}</Text>
           <Text numberOfLines={1} style={{ color: '#707070',fontFamily:'AzoSans-Light',fontSize:12,width:width/2.5,marginTop:'1%'
          }}>{item.Author}</Text>
         </View>
         {/* <Image source={item.img} /> */}
         <TouchableOpacity
         onPress={()=>this.descPage(item)}
-        style={{borderRadius:15,backgroundColor:'#fff'}} >
-        <ImageBackground source={{uri:item.Image1}} 
+        style={[styles.button,{height:item.Type==4?height/6.5:200}]} >
+              <ImageBackground source={{uri:item.Image1}} 
         imageStyle={{ borderRadius: 15 }}
-        style={[item.Type==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image1?'#fff':null}]}
+        style={[item.Type==4?styles.pageImgStyle:styles.pubImgStyle,{borderColor:!item.Image1?'#fff':null}]}
            >
         {/* {!this.state.profileColl?  */}
          <TouchableOpacity
-            onPress={() => {this.refs.modal.open() 
+            onPress={() => {this.setState({editRemovePopup:true})
             this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title})
             AsyncStorage.setItem('newColl_Id',JSON.stringify(Number(item.CollectionsID)));
             AsyncStorage.setItem('edit_title',item.Page_Post_Title);
@@ -654,10 +656,10 @@ readsItems({ item }) {
           >
             <Image style={{width:50,height:50}} source={require('../assets/img/backarrow.png')} />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width - 60, justifyContent: 'center', alignItems: 'center',alignSelf:"center" }}>
-          <LinearGradient style={{ borderRadius: 10}} colors={
-          ['#24D4BC', '#27A291']}>
+          <View style={{ flexDirection: 'row',width:width-50,justifyContent: 'center', alignItems: 'center',alignSelf:"center" }}>
+          
             <TouchableOpacity
+            style={{ borderRadius: 10,backgroundColor:'#27A291',marginRight:50,}}
               onPress={this.headerBtnClk}>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={{
@@ -680,7 +682,6 @@ readsItems({ item }) {
                 }}>Sections</Text>
               </View>
             </TouchableOpacity>
-                </LinearGradient>
             {/* <TouchableOpacity style={{ alignItems: 'center' }}
               onPress={() => {
                 this.props.navigation.navigate('pins1')
@@ -763,7 +764,7 @@ readsItems({ item }) {
                        distanceToEdge={50}
                         ref={(ref) => { this.floatingAction = ref; }}
                         actions={this.state.actions}
-                        color={'#24D4BC'}
+                        color={'#27A291'}
                         onPressItem={name => {
                           AsyncStorage.setItem('EditCreateSec',JSON.stringify(false));
                           this.props.navigation.navigate(name,{'collId':value1});
@@ -779,48 +780,53 @@ readsItems({ item }) {
                                 height: 140
                             }} />
           </Modal1>
-          <ModalBox
+          {/* <ModalBox
           style={[styles.modal, styles.modal5]}
           position={'bottom'}
           ref={'modal'}
           backdrop={true}
           isDisabled={this.state.isDisabled}>
-          <View style={{
-           alignItems: 'center', justifyContent: 'center'
-          }}>
-            {/* <TouchableOpacity onPress={this._toggleModal} >
-              <Text style={styles.modaltext}>Share</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                this.refs.toast.show('Copied link to clipboard'),
-                  this.refs.modal5.close()
-              }}
-            >
-              <Text style={styles.modaltext}>Copy Link</Text>
-            </TouchableOpacity> */}
-            <TouchableOpacity style={styles.bottombtn} onPress={() =>{
-              this.refs.modal.close();
-              this.props.navigation.navigate('sectionEdit')}
-             } >
-            <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
-    <Image style={styles.iconwidth} source={require('../assets/img/pencil.png')} />
-    <Text style={styles.modaltext}>Edit</Text>
-  </View>
-              {/* <Text style={styles.modaltext}>Edit</Text> */}
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.bottombtn} onPress={()=>this.readsRemoveModal()}>
-            <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
-            <Image source={require('../assets/img/editRemove.png')} />
-              <Text style={styles.modaltext}>Remove</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.bottombtn1} onPress={()=>this.refs.modal.close()}>
-
-              <Text style={styles.modaltext1}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </ModalBox>
+         
+        </ModalBox> */}
+        <BlurModal
+         visible={this.state.editRemovePopup}
+        children={
+          <View  style={[styles.bottomBar,{height:height/5.5, justifyContent:'center',
+          flexDirection:'column',}]}
+          >
+             {/* <TouchableOpacity onPress={this._toggleModal} >
+               <Text style={styles.modaltext}>Share</Text>
+             </TouchableOpacity>
+             <TouchableOpacity
+               onPress={() => {
+                 this.refs.toast.show('Copied link to clipboard'),
+                   this.refs.modal5.close()
+               }}
+             >
+               <Text style={styles.modaltext}>Copy Link</Text>
+             </TouchableOpacity> */}
+             <TouchableOpacity style={styles.bottombtn} onPress={() =>{
+              this.setState({editRemovePopup:false})
+               this.props.navigation.navigate('sectionEdit')}
+              } >
+             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
+     <Image style={styles.iconwidth} source={require('../assets/img/pencil.png')} />
+     <Text style={styles.modaltext}>Edit</Text>
+   </View>
+               {/* <Text style={styles.modaltext}>Edit</Text> */}
+             </TouchableOpacity>
+             <TouchableOpacity style={styles.bottombtn} onPress={()=>this.readsRemoveModal()}>
+             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
+             <Image source={require('../assets/img/editRemove.png')} />
+               <Text style={styles.modaltext}>Remove</Text>
+               </View>
+             </TouchableOpacity>
+             <TouchableOpacity style={styles.bottombtn1} onPress={()=>this.setState({editRemovePopup:false})}>
+ 
+               <Text style={styles.modaltext1}>Cancel</Text>
+             </TouchableOpacity>
+           </View>
+        }/>
         
         <Modal
           animationType="slide"
@@ -931,7 +937,7 @@ const styles = StyleSheet.create({
     shadowRadius: 1, //IOS
     backgroundColor: '#fff',
     elevation: 2, // Android
-    borderRadius:10,
+    borderRadius:15,
 },
   modal5: {
     // flex: 0.22,
@@ -944,14 +950,14 @@ const styles = StyleSheet.create({
   },
   pubImgStyle:{ 
     // elevation:1,
-    width: 130, height: 150,
+    width: 140, height: 200,
     borderRadius:15
     // alignItems:'center',
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
       // elevation:1,
-      width: 130, height: 100,
+      width:140, height: height/6.5,
       borderRadius:15
       // alignItems:'center',
       //  jsutifyContent: 'center'
@@ -996,6 +1002,7 @@ const styles = StyleSheet.create({
         // justifyContent: 'center', 
         alignItems: 'center',
         // height: '8%',
+        width: width,
         // marginTop:0.5,
         // marginBottom:0.5,
         backgroundColor: '#ffff',

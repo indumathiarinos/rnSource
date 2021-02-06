@@ -262,12 +262,13 @@ class NewsFeed extends Component {
         this.setState({
           feeding: this.state.feeding.concat(responseJson),
           //adding the new data with old one available in Data Source of the List
-          loading: false,
           getpagingCount: responseJson[0].Pagingcounts,
 
 
           //updating the loading state to false
         });
+        { this.exploredataPic(this.state.getuserid) }
+
         console.warn(responseJson)
         // alert(this.pageCountVal)  
       })
@@ -452,33 +453,22 @@ class NewsFeed extends Component {
     feeding = feeding.map(e => {
       if (item.TypeID === e.TypeID) {
         // item.like = !e.like;
-
+        AsyncStorage.setItem('typeid',JSON.stringify(Number( item.TypeID)));
+        AsyncStorage.setItem('postid', JSON.stringify(Number(item.Post_Page_Id)));
+        AsyncStorage.setItem('pagefeed_userid', item.UserID);
+        console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
         if (item.TypeID == 4) {
           // AsyncStorage.setItem('pagefeedItem',JSON.stringify(item));
-          AsyncStorage.setItem('typeid', item.TypeID);
-          AsyncStorage.setItem('postid', item.Post_Page_Id);
-          AsyncStorage.setItem('pagefeed_userid', item.UserID);
-          console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
+        
           return this.props.navigation.navigate('readingBook');
         } else if (item.TypeID == 1) {
-          AsyncStorage.setItem('typeid', item.TypeID);
-          AsyncStorage.setItem('postid', item.Post_Page_Id);
-          this.recentService(item.TypeID,item.Post_Page_Id)
-
-          console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
+        
           return this.props.navigation.navigate('viewBook');
         } else if (item.TypeID == 2) {
-          AsyncStorage.setItem('typeid', item.TypeID);
-          AsyncStorage.setItem('postid', item.Post_Page_Id);
-          this.recentService(item.TypeID,item.Post_Page_Id)
-
-          console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
+         
           return this.props.navigation.navigate('periodiViewBook');
         } else if (item.TypeID == 3) {
-          AsyncStorage.setItem('typeid', item.TypeID);
-          AsyncStorage.setItem('postid', item.Post_Page_Id);
-          this.recentService(item.TypeID,item.Post_Page_Id)
-          console.log('newsfeed post id is', item.Post_Page_Id, item.TypeID);
+         
           return this.props.navigation.navigate('seriesViewBook');
         }
       } else {
@@ -503,8 +493,8 @@ class NewsFeed extends Component {
         "heading":"Likes your"
     }
     // )
-    let n_type="App\Notifications\NotificationFeeds";
-    let ntype2="App\User";
+    let n_type=`App\\Notifications\\NotificationFeeds`;
+    let ntype2=`App\\User`;
     var json = JSON.stringify({
       "Type":n_type,
       "Notifiable_Type":ntype2,
@@ -636,7 +626,7 @@ class NewsFeed extends Component {
     return true;
   }
   exploredataPic(userid) {
-    // this.setState({loading:true})
+    this.setState({loading:true})
     var json = JSON.stringify({
       'userid': userid
     });
@@ -660,8 +650,8 @@ class NewsFeed extends Component {
           // alert(this.state.bookdetail[0].Image)
           this.setState({
             avatar: responseJson[i].avatar,
-            username: responseJson[i].username
-
+            username: responseJson[i].username,
+            loading:false
           })
         }
         AsyncStorage.setItem('profile_img', this.state.avatar);
@@ -701,7 +691,6 @@ class NewsFeed extends Component {
     setTimeout(() => {
       console.log('pagefeed user id is ', this.state.getuserid);
       { this.exploredata() }
-      { this.exploredataPic(this.state.getuserid) }
     }, 1000)
   }
   toast = () => {
@@ -998,7 +987,7 @@ class NewsFeed extends Component {
     return (
       <View style={{ width: width, flex: 1, backgroundColor: '#fff', }}>
         <View style={{ flexDirection: 'row',alignItems:'center',margin:'2%', justifyContent: 'space-between' }}>
-          <TouchableOpacity style={{}} onPress={() => { this.state.explore_page == '0' ? this.goToAuthorProfile(item.UserID) : this.logoutpress() }}>
+          <TouchableOpacity style={{marginRight:'2%'}} onPress={() => { this.state.explore_page == '0' ? this.goToAuthorProfile(item.UserID) : this.logoutpress() }}>
             <Image style={styles.userImg}
               source={{ uri: item.User_Images != "" ? item.User_Images : null }}
             />
@@ -1047,7 +1036,8 @@ class NewsFeed extends Component {
 
         <View style={{
           backgroundColor: '#F9F9F9',
-          paddingLeft: '5%', paddingRight: '5%', paddingTop: '2%', paddingBottom: '2%'
+          // paddingLeft: '5%', paddingRight: '5%', 
+          paddingTop: '2%', paddingBottom: '2%'
         }}>
           <ReadMore
             numberOfLines={item.DescriptionContent.length < 200 ? 1 : 3}
@@ -1117,7 +1107,7 @@ class NewsFeed extends Component {
                 style={{ alignSelf: 'center' }}
                 //  style={{marginLeft:15,marginBottom:3}}
                 color={
-                  //  item.Likestatus=='Y'?'#27A291':
+                   item.CommentStatus=='Y'?'#27A291':
                   '#707070'}
               />
               <Text style={{

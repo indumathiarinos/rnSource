@@ -120,7 +120,39 @@ class Onboarding extends React.Component {
 
                 {/* </ImageBackground> */}
                 <Image style={styles.img_grp} source={image.img}></Image>
-                <Text numberOfLines={3} style={styles.txt2}>{image.subtitle}</Text>
+                <View style={{alignItems:'center',alignSelf:'center',justifyContent:'center',  position: 'absolute',
+        // height: 40,
+        bottom: '15%',width:width}}>
+            {index==0?
+            <View style={{width:width,alignItems:'center',justifyContent:'center'}}>
+            <View style={styles.row}>
+            <Text style={styles.darktext}>Collect</Text>
+            <Text  style={styles.lighttext}> publications you like</Text>
+            </View>
+            <View style={styles.row}>
+            <Text style={styles.darktext}>Pin</Text>
+            <Text style={styles.lighttext}> important phrases</Text>
+            </View>
+            <View style={styles.row}>
+            <Text style={styles.darktext}>Bookmark</Text>
+            <Text style={styles.lighttext}> to read later</Text>
+            </View>
+            </View>
+            :null}
+             {index==1?
+            <View style={{width:width,alignItems:'center',justifyContent:'center'}}>
+            <Text  style={styles.lighttext}>You can also read the same publication on </Text>
+            <Text style={styles.darktext}>PC, Tablet or Mobile</Text>
+            </View>
+            :null}
+             {index==2?
+           <View style={{width:width,alignItems:'center',justifyContent:'center'}}>
+           <Text  style={styles.lighttext}>Share Interesting</Text>
+           <Text style={styles.darktext}>Quotes or Phrases on Social Media</Text>
+           </View>
+            :null}
+                {/* <Text numberOfLines={3} style={styles.txt2}>{image.subtitle}</Text> */}
+                </View>
 
 
 
@@ -145,6 +177,7 @@ class Onboarding extends React.Component {
                         loop
                         showsPageIndicator={styles.dot2}
                         pageIndicatorContainerStyle={styles.dot}
+                        pageIndicatorStyle={{width:8,height:8,borderRadius:4}}
                         index={0}
                         renderPageIndicator={this.page}
                         activePageIndicatorStyle={styles.dot1}
@@ -251,6 +284,11 @@ const styles = StyleSheet.create({
        height: height/2.5,
        marginLeft:'10%'
     },
+    row:{
+        flexDirection:'row',
+    },
+    lighttext:{fontFamily:'AzoSans-Light',fontSize:16,textAlign:'center',},
+    darktext:{fontFamily:'AzoSans-Regular',fontSize:16,textAlign:'center',},
 
     subtitle: {
         // margin: '20%',
@@ -277,9 +315,7 @@ const styles = StyleSheet.create({
         // marginBottom: 36
     },
     txt2: {
-        position: 'absolute',
-        // height: 40,
-        bottom: '15%',
+      
         width: width / 1.5,
         color: 'black',
         fontSize: 16,
@@ -287,13 +323,16 @@ const styles = StyleSheet.create({
         fontFamily:'AzoSans-Light',
 
         textAlign: 'center',
+        alignSelf:'center',
+        // backgroundColor:'pink',
+        marginLeft:'8%'
         // marginBottom:'3%'
     },
     txt1: {
         marginTop: '35%',
         color: 'white',
         fontSize: 22,
-        fontFamily:'Montserrat-Regular'
+        fontFamily:'Montserrat-Light'
 
     },
     textSignUp: {

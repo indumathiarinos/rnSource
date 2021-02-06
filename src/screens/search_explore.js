@@ -86,7 +86,9 @@ class SearchExplore extends Component {
           collection:'',
           explore_page:'0',
           loginPopup:false,
-          undo:false
+          undo:false,
+          postadd_postid:'',
+          postadd_typeid:''
 
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -266,6 +268,7 @@ class SearchExplore extends Component {
                   }
                    
                   }
+                  console.log(responseJson)
 
 
                   // if(this.state.expl11[0].Datafor==='MV'){
@@ -943,11 +946,11 @@ collData(userid,colid,secid) {
     moreClick=(item,funcName)=>{
       // AsyncStorage.setItem('typeid', JSON.stringify(item.TypeID));
       // AsyncStorage.setItem('postid', JSON.stringify(item.Post_Page_Id));
-    {this.state.explore_page=='0'?this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName}):this.alertPopup()}
+    {this.state.explore_page=='0'?this.setState({collectionModal:!this.state.collectionModal,currentItem:item,curFuncName:funcName,postadd_typeid:item.type_id,postadd_postid:item.id}):this.alertPopup()}
   }
   gotodetail(){
     AsyncStorage.setItem('searchText',"")
-    AsyncStorage.setItem('searchFilter',"Desc")
+    AsyncStorage.setItem('searchFilter',"All")
     this.props.navigation.navigate('searchDetail')
     
   }
@@ -1071,14 +1074,17 @@ collData(userid,colid,secid) {
             <Text numberOfLines={1} style={{fontSize:16,fontFamily:'AzoSans-Medium',paddingLeft:'2%'}}>
                {item.PostLinkTitle}
                 </Text>
-            <Text style={{fontSize:12,fontFamily:'AzoSans-Light',marginTop:10,color:'#707070',paddingLeft:'3%'}}>
+            <Text numberOfLines={1} style={{fontSize:12,fontFamily:'AzoSans-Light',marginTop:10,color:'#707070',paddingLeft:'3%'}}>
             {item.Post_author}    
             </Text>
             </View>
             <ImageBackground imageStyle={{borderRadius:10}} source={{uri:item.PostLinkImage!=""?item.PostLinkImage:null}} 
-            style={{resizeMode:'cover',width:100,height:120,borderRadius:20,
-            marginTop:'2%',marginBottom:'2%'
-            }}>
+            // style={{resizeMode:'cover',width:100,height:120,borderRadius:20,
+            // marginTop:'2%',marginBottom:'2%'
+            // }}>
+            style={[item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null, marginTop:'2%',marginBottom:'2%'}]}
+              >
+
             <TouchableOpacity style={{padding:'2%'}}
                    onPress={() => { this.state.explore_page=='0'?this.setState({reportModal:true,searchList:false}):this.alertPopup()
                     // this.refs.modal4.close()
@@ -1111,7 +1117,7 @@ collData(userid,colid,secid) {
 <ScrollView
      ref={(c) => {this.scroll = c}}
    >
- <View style = {styles.overlay}>  
+ <View style = {[styles.overlay,{}]}>  
   <Text style={styles.headline1} onPress={this.ShareMessage} >Publications</Text>
   <View style={{ height: 1, width: width - 40, backgroundColor: '#27A291' }} />
 
@@ -1128,8 +1134,8 @@ collData(userid,colid,secid) {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    cornerRadius={5}>
-                    <ImageBackground source={{ uri: item.image }} style={{ width: 130, height: 150, jsutifyContent: 'center' }}>
+                    cornerRadius={8}>
+                    <ImageBackground source={{ uri: item.image }} style={{ width: width/2.5, height: height/3.5, jsutifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon") }>
                             <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1150,8 +1156,8 @@ collData(userid,colid,secid) {
     autoplay={false}
     enableMomentum={true}
     sliderWidth={Dimensions.get('window').width}
-    itemWidth={130}
-    itemHeight={120}
+    itemWidth={width/2.5}
+    itemHeight={width/3.5}
     snapToInterval={20}
     contentContainerCustomStyle={{marginLeft:-80}}
     containerCustomStyle={{ marginTop: 30 }}
@@ -1180,7 +1186,7 @@ collData(userid,colid,secid) {
                     cardElevation={2}
                     cardMaxElevation={2}
                     cornerRadius={5}>
-                    <ImageBackground source={{ uri: item.image }} style={{ width: 165, height: 100, jsutifyContent: 'center' }}>
+                    <ImageBackground source={{ uri: item.image }} style={{ width: width/2.5,height:height/6.5, jsutifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon_pages") }>
                             <Image style={{ alignSelf: 'flex-end', marginRight: '8%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1205,8 +1211,8 @@ collData(userid,colid,secid) {
     autoplay={false}
     enableMomentum={true}
     sliderWidth={Dimensions.get('window').width}
-    itemWidth={165}
-    itemHeight={100}
+    itemWidth={width/2.5}
+    itemHeight={height/6.5}
     snapToInterval={20}
     contentContainerCustomStyle={{marginLeft:-80}}
     snapToAlignment={'start'}
@@ -1384,7 +1390,10 @@ collData(userid,colid,secid) {
             >
              <TouchableOpacity
                 style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200,height:30, }}
-                onPress={() => {this.props.navigation.navigate('createCollection')
+                onPress={() => {
+                  AsyncStorage.setItem('postadd_postid',JSON.stringify(Number(this.state.postadd_postid)));
+                  AsyncStorage.setItem('postadd_typeid',JSON.stringify(Number(this.state.postadd_typeid)));
+                  this.props.navigation.navigate('createCollection')
                 this.setState({collectionModal:false})}}>
                <View style={{
                                 flexDirection: 'row', alignItems: 'center', width: 200,
@@ -1658,6 +1667,7 @@ const styles = StyleSheet.create({
         // marginTop:'10%',
         justifyContent: "center",
         alignItems: "center",
+        marginTop:'5%'
     },
     overlay2: {
         // marginTop:'10%',
@@ -1674,6 +1684,23 @@ const styles = StyleSheet.create({
         // marginBottom:'5%'
         // marginBottom:'5%'
     },
+    pubImgStyle:{ 
+      // elevation:1,
+      width: width/3.5,height:height/3.5,
+      // width:100,height:160,
+          borderRadius:15,
+      
+      // alignItems:'center',
+      //  jsutifyContent: 'center'
+       },
+       pageImgStyle:{ 
+        // elevation:1,
+        width: width/3.5,height:height/7.5,
+        // width:100,height:120,
+        borderRadius:15
+        // alignItems:'center',
+        //  jsutifyContent: 'center'
+         },
     logo: {
         backgroundColor: 'rgba(0,0,0,0)',
         width: 160,

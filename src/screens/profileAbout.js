@@ -291,9 +291,8 @@ getData(){
         {/* <View style={styles.staticheader}> */}
         <View style={styles.staticheader}>
           <View style={{flexDirection:'row',width:width-40,justifyContent:'center',alignItems:'center'}}>
-          <LinearGradient style={{ borderRadius: 10}} colors={
-              ['#24D4BC', '#27A291']}>
-          <TouchableOpacity
+         
+          <TouchableOpacity style={{ borderRadius: 10,backgroundColor:'#27A291'}}
             onPress={this.headerBtnClk}>
 <Text style={{ padding: '5%',
   color:'white',
@@ -302,7 +301,6 @@ getData(){
             onPress={() =>this.goToAuthorProfile()}
           >About</Text>
             </TouchableOpacity>
-            </LinearGradient>
           <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate('profileCollection')}>
           <Text style={styles.headerText}
             
@@ -362,14 +360,13 @@ getData(){
             
               <View>
                 <View style={styles.socialBarContainer3}> 
-                <LinearGradient style={styles.buttonContainer2} colors={['#24D4BC', '#27A291']} >
-              <TouchableOpacity
+              
+              <TouchableOpacity style={[styles.buttonContainer2]}
               onPress={()=>this.setState({shareModal:!this.state.shareModal})}>
                 <Text style={{color:'#fff',fontSize: 16,
   color:'#fff',
   fontFamily:'AzoSans-Regular'}}>Share</Text> 
               </TouchableOpacity>
-              </LinearGradient>
               </View> 
               </View>   
               
@@ -493,7 +490,7 @@ getData(){
                        </Modal>
         <View style={styles.bottomBar}>
         {this.state.website? <TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener(this.state.website)}>
-          <Image style={styles.icon} source={require('../assets/img/offline1.png')}/>
+          <Image style={styles.icon} source={require('../assets/img/web_icon.png')}/>
           </TouchableOpacity>:null}
           {this.state.insta?<TouchableOpacity style={[styles.btnAction, styles.shadow]} onPress={()=> this.clickEventListener(this.state.insta)}>
           <Image style={styles.icon} source={require('../assets/img/insta.png')}/>
@@ -519,7 +516,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width,
     overflow: 'hidden',
-    height: width / 2.2,
+    height: width / 2.5,
   },
   sliderContainerStyle: {
     borderRadius: width,
@@ -528,7 +525,7 @@ const styles = StyleSheet.create({
     marginLeft: -(width / 2),
     position: 'absolute',
     bottom: 0,
-    overflow: 'hidden',
+    overflow:'hidden',
     elevation:1,
     backgroundColor:'#fff',
     resizeMode:'cover'
@@ -566,7 +563,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignSelf:'center',
     alignItems: 'center',
-    marginTop: width /3.4  //actual marginTop:130
+    marginTop: width /4  //actual marginTop:130
   },
   bottomBar: {
     flexDirection: 'row',
@@ -577,11 +574,11 @@ const styles = StyleSheet.create({
   },
   name:{
     color:"#000",
-    fontSize: 16,
+    fontSize: 18,
     fontFamily:'Montserrat-Bold'
   },
   body:{
-    // marginTop:5,
+    marginTop:5,
   },
   bodyContent: {
     alignItems: 'center',
@@ -589,7 +586,7 @@ const styles = StyleSheet.create({
   },
   info:{
     color: "#000000",
-    fontSize: 12,
+    fontSize: 14,
   fontFamily:'AzoSans-Medium'
   },
   info1: {
@@ -600,7 +597,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   description:{
-    fontSize:12,
+    fontSize:14,
   fontFamily:'AzoSans-Regular'
   },
   buttonContainer: {
@@ -636,7 +633,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width:100,
     borderRadius:30,
-    // backgroundColor: "#27A291",
+    backgroundColor: "#27A291",
    
   },
   socialBarContainer3: {
@@ -646,12 +643,13 @@ const styles = StyleSheet.create({
   socialBarContainer: {
     flexDirection: 'row',
     flex: 1,
-    marginTop:3
+    marginTop:5
   },
   socialBarContainer2: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent:'space-between',
+    marginTop:-20
  },
   socialBarSection: {
     justifyContent: 'center',

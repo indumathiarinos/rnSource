@@ -327,14 +327,16 @@ class MenuPage extends Component {
                   {/* <Image
                   source={require('../assets/img/bell.png')}/> */}
                     <Icons
+                    style={{marginLeft:15}}
                   color={'#27A291'}
                   size={27}
                     name={'bell-alt'}
                   />
                 {this.state.notificationCount!=0?
-                  <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:0,top:12,backgroundColor:'#fff'}}>
-                    <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
-                  </View>:null}
+              <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',left:25,top:20,backgroundColor:'#fff',}}>
+              <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+          </View>
+                  :null}
                   </TouchableOpacity>
                 </View>
               </View>
@@ -412,14 +414,12 @@ class MenuPage extends Component {
                   </View>
                   </TouchableOpacity>
   
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                   style={{
                    height:50,alignItems:'center',justifyContent:'center'
-                    // marginLeft:'3%',marginRight:'3%',marginTop:'3%'
                   }}
                   onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
-                  {/* <Image
-                  source={require('../assets/img/bell.png')}/> */}
+               
                     <Icons
                   color={'#27A291'}
                   size={27}
@@ -429,6 +429,27 @@ class MenuPage extends Component {
                   <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:0,top:12,backgroundColor:'#fff'}}>
                     <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
                   </View>:null}
+                  </TouchableOpacity> */}
+
+<TouchableOpacity
+                  style={{
+                   height:50,alignItems:'center',justifyContent:'center'
+                    // marginLeft:'3%',marginRight:'3%',marginTop:'3%'
+                  }}
+                  onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
+                  {/* <Image
+                  source={require('../assets/img/bell.png')}/> */}
+                    <Icons
+                    style={{marginLeft:15}}
+                  color={'#27A291'}
+                  size={27}
+                    name={'bell-alt'}
+                  />
+                {this.state.notificationCount!=0?
+               <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',left:25,top:20,backgroundColor:'#fff',}}>
+               <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+           </View>
+                  :null}
                   </TouchableOpacity>
                 </View>
               </View>
@@ -466,14 +487,12 @@ class MenuPage extends Component {
                   </View>
                   </TouchableOpacity>
   
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                   style={{
                    height:50,alignItems:'center',justifyContent:'center'
-                    // marginLeft:'3%',marginRight:'3%',marginTop:'3%'
                   }}
                   onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
-                  {/* <Image
-                  source={require('../assets/img/bell.png')}/> */}
+                
                     <Icons
                   color={'#27A291'}
                   size={27}
@@ -483,6 +502,27 @@ class MenuPage extends Component {
                   <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',right:0,top:12,backgroundColor:'#fff'}}>
                     <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
                   </View>:null}
+                  </TouchableOpacity> */}
+
+<TouchableOpacity
+                  style={{
+                   height:50,alignItems:'center',justifyContent:'center'
+                    // marginLeft:'3%',marginRight:'3%',marginTop:'3%'
+                  }}
+                  onPress={()=>this.props.navigation.navigate('notification') && this.props.navigation.closeDrawer()}>
+                  {/* <Image
+                  source={require('../assets/img/bell.png')}/> */}
+                    <Icons
+                    style={{marginLeft:15}}
+                  color={'#27A291'}
+                  size={27}
+                    name={'bell-alt'}
+                  />
+                {this.state.notificationCount!=0?
+                    <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',left:25,top:20,backgroundColor:'#fff',}}>
+                    <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+                </View>
+                  :null}
                   </TouchableOpacity>
                 </View>
               </View>

@@ -267,17 +267,17 @@ backpress=()=>{
               onPress={() => this.pressIcon(item)}>
                <View style={{flex:1,flexDirection: 'row', backgroundColor: '#ffff',elevation:2,borderRadius:10 }}
                 >
-                    <Image style={{ width: '75%', elevation: 1, height: height / 6, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
+                    <Image resizeMode={'contain'} style={{ width: '75%', elevation: 1, height: height / 6.5, resizeMode: 'cover', borderTopLeftRadius: 10, borderBottomLeftRadius: 10 }}
                         source={{ uri: item.Image1!=""?item.Image1:null }} />
                     <View style={{ flex:1, flexDirection: 'column', marginLeft: '1%', elevation: 1 }}>
                         <View >
                             <Image
-                                style={{ height: height / 12, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
+                                style={{ height: height / 13, resizeMode: 'cover', borderTopRightRadius: 10, marginBottom: '1%' }}
                                 source={{ uri: item.Image2!=""?item.Image2:null}} />
                         </View>
                         <View>
                             <Image
-                                style={{ height: height / 12, resizeMode: 'cover', borderBottomRightRadius: 10 }}
+                                style={{ height: height / 13, resizeMode: 'cover', borderBottomRightRadius: 10 }}
                                 source={{ uri: item.Image3!=""?item.Image3:null }} />
                         </View>
                     </View>
@@ -289,7 +289,7 @@ backpress=()=>{
                     <Text style={{ color: '#707070',
       fontSize: 12,
     fontFamily:'AzoSans-Light' }}>{item.PublicationCount} publications</Text>
-                    <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>
+                   {item.PageCount>0 || item.PageCount!=""? <Text style={{ color: '#707070' }}>{item.PageCount} pages</Text>:null}
                 </View>
             </TouchableOpacity>
         </View>
@@ -365,9 +365,8 @@ backpress=()=>{
               
               >About</Text>
             </TouchableOpacity>
-            <LinearGradient style={{ borderRadius: 10}} colors={
-                ['#24D4BC', '#27A291']}>
-            <TouchableOpacity 
+           
+            <TouchableOpacity style={{ borderRadius: 10,backgroundColor:'#27A291'}}
               onPress={this.headerBtnClk}>
   <Text style={{ padding: '5%',
   color: "#fff",
@@ -377,7 +376,6 @@ fontFamily:'AzoSans-Medium'}}
             >Collection</Text>
   
               </TouchableOpacity>
-              </LinearGradient>
             <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate('profileShelves')}>
             <Text style={styles.headerText}
               
@@ -419,12 +417,10 @@ fontFamily:'AzoSans-Medium'}}
                 </View>
                 <View>
                   <View style={styles.socialBarContainer3}> 
-                  <LinearGradient style={styles.buttonContainer2} colors={['#24D4BC', '#27A291']} >
-                <TouchableOpacity
+                <TouchableOpacity  style={styles.buttonContainer2} 
                 onPress={()=>this.setState({shareModal:!this.state.shareModal})}>
               <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>Share</Text> 
                 </TouchableOpacity>
-                </LinearGradient>
                 </View> 
                 </View>   
                 
@@ -462,7 +458,7 @@ fontFamily:'AzoSans-Medium'}}
                   
                 </View>
                   <View
-                  style={{marginTop:30}}>
+                >
                     <Text
                      style={styles.name1}
                     >Collection</Text>
@@ -558,7 +554,7 @@ fontFamily:'AzoSans-Medium'}}
       alignSelf: 'center',
       width: width,
       overflow: 'hidden',
-      height: width / 2.2,
+      height: width / 2.5,
     },
     sliderContainerStyle: {
       borderRadius: width,
@@ -567,12 +563,30 @@ fontFamily:'AzoSans-Medium'}}
       marginLeft: -(width / 2),
       position: 'absolute',
       bottom: 0,
-      overflow: 'hidden',
+      overflow:'hidden',
       elevation:1,
       backgroundColor:'#fff',
       resizeMode:'cover'
-  
       },
+    // containerStyle: {
+    //   alignSelf: 'center',
+    //   width: width,
+    //   overflow: 'hidden',
+    //   height: width / 2.2,
+    // },
+    // sliderContainerStyle: {
+    //   borderRadius: width,
+    //   width: width * 2,
+    //   height: width * 2,
+    //   marginLeft: -(width / 2),
+    //   position: 'absolute',
+    //   bottom: 0,
+    //   overflow: 'hidden',
+    //   elevation:1,
+    //   backgroundColor:'#fff',
+    //   resizeMode:'cover'
+  
+    //   },
     headerText: {
       padding: '5%',
       color: "#707070",
@@ -606,7 +620,7 @@ fontFamily:'AzoSans-Medium'}}
       justifyContent:'center',
       alignSelf:'center',
       alignItems: 'center',
-      marginTop: width /3.4  //actual marginTop:130
+      marginTop:width /4 //actual marginTop:130
     },
     bottomBar: {
       flexDirection: 'row',
@@ -621,7 +635,7 @@ fontFamily:'AzoSans-Medium'}}
     //   fontWeight:'600',
     // },
     body:{
-      // marginTop:10,
+      marginTop:5,
     },
     bodyContent: {
       alignItems: 'center',
@@ -630,7 +644,7 @@ fontFamily:'AzoSans-Medium'}}
     },
   name:{
       color:"#000",
-      fontSize: 16,
+      fontSize: 18,
       fontFamily:'Montserrat-Bold'
     },
     name1:{
@@ -642,7 +656,7 @@ fontFamily:'AzoSans-Medium'}}
     },
     info:{
       color: "#000000",
-      fontSize: 12,
+      fontSize: 14,
     fontFamily:'AzoSans-Medium'
     },
     description:{
@@ -681,7 +695,7 @@ fontFamily:'AzoSans-Medium'}}
       justifyContent: 'center',
       width:100,
       borderRadius:30,
-      // backgroundColor: "#27A291",
+      backgroundColor: "#27A291",
      
     },
     socialBarContainer3: {
@@ -691,12 +705,13 @@ fontFamily:'AzoSans-Medium'}}
     socialBarContainer: {
       flexDirection: 'row',
       flex: 1,
-      marginTop:3
+      marginTop:5
     },
     socialBarContainer2: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent:'space-between',
+      marginTop:-20
    },
     socialBarSection: {
       justifyContent: 'center',

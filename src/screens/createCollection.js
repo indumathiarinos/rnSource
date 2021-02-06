@@ -33,13 +33,18 @@ class CreateCollection extends Component {
             getuserid:'',
             descLength:0,
             getcolId:'',
-            gotoSectionEdit:false
+            gotoSectionEdit:false,
+            postadd_postid:'',
+            postadd_typeid:''
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     componentDidMount() {
         AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
         AsyncStorage.getItem('EditCreateColl').then(val =>this.setState({ gotoSectionEdit: val })).done;
+        AsyncStorage.getItem('postadd_postid').then(val =>this.setState({ postadd_postid: val })).done;
+        AsyncStorage.getItem('postadd_typeid').then(val =>this.setState({ postadd_typeid: val })).done;
+
         console.log('newww ',this.state.gotoSectionEdit)
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // {this.getData()}
@@ -68,6 +73,7 @@ class CreateCollection extends Component {
       }
 
     exploredata(userid,title,privacy,desc){
+        {this.state.title==""?null:
         this.setState({loading:true})
         var json=JSON.stringify({
           'C_user_id': userid,
@@ -75,6 +81,8 @@ class CreateCollection extends Component {
           "C_privacy":privacy,
           "C_description":desc,
           "C_collection_id":"",
+          "Post_PageID":this.state.postadd_postid,
+          "Type":this.state.postadd_typeid
           });
           console.warn(json+"")
           fetch("http://162.250.120.20:444/Login/CollectionAdd",
@@ -112,6 +120,7 @@ class CreateCollection extends Component {
             .catch((error) => {
                 console.warn(error);
             });
+        }
       }
 
       createsection(){

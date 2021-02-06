@@ -83,7 +83,7 @@ CheckConnectivity(){
 
     if(state.isConnected==true){
 
-      this.login()
+     {this.state.email!="" && this.state.password !=""? this.login():null}
     }else{
       alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
     }
@@ -150,7 +150,7 @@ console.warn(json+"")
         setTimeout(() => {
           Alert.alert(
             'Status',
-            "Invalid Username & Password",
+            responseJson.Msg,
             [
                    {text: 'OK', onPress: () => 
                   //  this.props.navigation.navigate('loginSignup')

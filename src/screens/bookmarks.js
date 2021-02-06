@@ -487,13 +487,10 @@ _renderTruncatedFooter = (handlePress,index,item) => {
   
       >Read Later</Text>
   </TouchableOpacity>
-  <LinearGradient style={{ borderRadius: 10}} colors={
-                ['#24D4BC', '#27A291']}>
-  <TouchableOpacity >
+  <TouchableOpacity style={{ borderRadius: 10,backgroundColor:'#27A291'}}>
     <Text style={styles.activeText}
       >Bookmarks</Text>
   </TouchableOpacity>
-  </LinearGradient>
   
   
   
@@ -596,19 +593,17 @@ _renderTruncatedFooter = (handlePress,index,item) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
                     <Image
-                       style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/search.png')} />
+                        style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/search.png')} />
                         {/* <Text>Search</Text> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.tabsss]} onPress={() => this.toggleTab4()}>
-                        {/* <Drawer
-        ref={(ref) => { this.drawer = ref; }}
-        content={<SideBar navigator={this.navigator} />}
-        onClose={() => this.closeDrawer()} > */}
-                        {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2,borderColor: '#27A291', borderWidth: 1  }} source={{ uri: this.state.avatarProfile }}></Image>
-                        {/* <Text>Menu</Text> */}
-                        {/* </Drawer> */}
-                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, }]} onPress={() => this.toggleTab4()}>
+          
+          <View style={{flexDirection:'row'}}>
+          <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatarProfile ? this.state.avatarProfile : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
+        <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+          </View>
+                  
+        </TouchableOpacity>
 
                 </View>
     </SafeAreaView>
@@ -653,11 +648,11 @@ headerText: {
   color:'#707070',
   fontFamily:'AzoSans-Medium'
 },
-tabsss: {
-  alignItems: 'center', 
-  justifyContent: 'center',
-  padding:'1%'
-},
+// tabsss: {
+//   alignItems: 'center', 
+//   justifyContent: 'center',
+//   padding:'1%'
+// },
 })
 function mapStateToProps(state) {
     return {

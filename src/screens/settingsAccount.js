@@ -299,7 +299,7 @@ profileUpdateService(userid,col_Name,value){
            </TouchableOpacity>
            </LinearGradient>):( <TouchableOpacity style={styles.touchableBtn1}
                 onPress={()=>this.setState({selfdestruct:!this.state.selfdestruct})}>
-                    <Text style={{color:'#27A291',fontSize:18,textAlign:'center'}}>Connect</Text>
+                    <Text style={{color:'#27A291',fontSize:18,textAlign:'center'}}>Self Destruct</Text>
                 </TouchableOpacity>)
                 }
                

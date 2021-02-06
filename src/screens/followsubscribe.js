@@ -308,7 +308,7 @@ exploredata(userid){
                     <Image style={{width:50,height:50,borderRadius:50/2,padding:'2%'}} source={{uri:item.userImg}}/>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between',alignItems:'center', paddingLeft: '5%', paddingRight: '2%', flex: 1, }}>
-          <Text style={{ textAlign: 'left',marginTop:'-2%', fontSize: 14,
+          <Text style={{ textAlign: 'left',marginTop:'-2%', fontSize: 16,
           fontFamily:'Montserrat-Bold' }}
           // style={{ fontSize: 18,backgroundColor:'green', color: 'black', fontWeight: 'bold',width:width,alignSelf:'center',textAlign:'left'}}
           >{item.Username}</Text>
@@ -316,7 +316,7 @@ exploredata(userid){
           <TouchableOpacity 
           onPress={()=> this.removeItem(item)}
           // onPress={()=>this.showModal(item)}
-          style={{  backgroundColor: '#27A291', elevation: 2, alignItems: 'center', justifyContent: 'center', width: 83, height: 30, alignSelf: 'center', borderRadius: 20 }}
+          style={{  backgroundColor: '#27A291', elevation: 2, alignItems: 'center', justifyContent: 'center', width: width/4, height: 30, alignSelf: 'center', borderRadius: 20 }}
           // style={{backgroundColor:'#27A291',elevation:2,marginTop:'0.5%',alignItems:'center',width:width/2-90,height:height/16,alignSelf:'center',borderRadius:20}}
           >
             <Text style={{  fontSize: 14,

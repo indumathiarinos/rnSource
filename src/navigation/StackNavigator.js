@@ -723,6 +723,7 @@ newSignup: {
  
   const MainDrawer = createDrawerNavigator({
     MainTabs: HomeNavigator,
+    
     // Settings: SettingsStack,
   },
   {

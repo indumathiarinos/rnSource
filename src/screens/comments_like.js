@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import Modal1 from "react-native-modal";
 import LinearGradient from 'react-native-linear-gradient';
 import NetInfo from '@react-native-community/netinfo';
+import Icons from 'react-native-vector-icons/AntDesign'
+
 // import { Button } from 'react-native-paper';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -78,7 +80,11 @@ class CommentsLike extends Component {
         title: "Honey Bee",
       }
     ],
-    commentId:''
+    commentId:'',
+    getuserid:'',
+    gettypeid:'',
+    getpostid:'',
+    replyId:''
     
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -86,8 +92,8 @@ class CommentsLike extends Component {
 exploredata(){
   var json=JSON.stringify({
     // "C_ID":this.state.commentId,
-    "C_ID":"48",
-    "R_ID":""});
+    "C_ID":this.state.commentId,
+    "R_ID":this.state.replyId});
   console.log('get json ',json)
     fetch("http://162.250.120.20:444/Login/CommentLikeView",
       {
@@ -111,6 +117,12 @@ exploredata(){
 }
 componentDidMount() {
   AsyncStorage.getItem('commentId').then((val)=>this.setState({commentId:val})).done();
+  AsyncStorage.getItem('userid').then((value) => { this.setState({ getuserid: value }) }).done();
+  AsyncStorage.getItem('typeid').then((value) => { this.setState({ gettypeid: value }) }).done();
+  AsyncStorage.getItem('postid').then((value) => { this.setState({ getpostid: value }) }).done();
+  AsyncStorage.getItem('commentId').then((value) => { this.setState({ commentId: value==null?"":value }) }).done();
+  AsyncStorage.getItem('replyId').then((value) => { this.setState({ replyId: value==null?"":value }) }).done();
+
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   this.getData();
 }
@@ -153,7 +165,12 @@ return (
       <TouchableOpacity style={{marginLeft:'5%'}} >
         <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
         <Text style={{color:'#27A291',fontSize:16,fontFamily:'AzoSans-Regular',marginRight:'4%'}}>{this.state.commentsLike.length} Likes</Text>
-        <Image source={require('../assets/img/like.png')}/>
+        {/* <Image source={require('../assets/img/like.png')}/> */}
+        <Icons name={'like1'}
+                size={20}
+                style={{ alignSelf: 'center' }}
+                color={'#27A291'}
+              />
         </View>
       </TouchableOpacity>
       <TouchableOpacity

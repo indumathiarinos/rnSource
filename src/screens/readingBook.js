@@ -40,7 +40,9 @@ import Share from 'react-native-share';
 import SnackBar from 'react-native-snackbar';
 import { color } from 'react-native-reanimated';
     const audiopage=`<p contenteditable="true" placeholder="Title...">Testing for Audio</p><img id="titlorgimg" style="margin:0 auto;width:300px;height:200px" onclick="titshowimgwid(this)" class="" src="http://pagevio.com/uploads/stories/iron-man-hand-minimal-4k-y0.jpg"><img src="../../images/cancel.png" onclick="ClearImage(1)" class="imgcan"><p>File size of the below audio is 700kb and 28 seconds</p><div class="vidfoc" contenteditable="false" id="AudioPlayer_1" style="text-align: right;"><img src="../../images/cancel.png" alt="" style="cursor: pointer;" class="fr-draggable"><div class="audioplayer" contenteditable="false"><audio id="Audio_1" style="width: 0px; height: 0px; visibility: hidden;"><source src="..http://pagevio.com/uploads/stories/file_example_MP3_700KB.mp3"></audio><div class="audioplayer-playpause" contenteditable="false" title=""><a href="#"></a></div><div class="audioplayer-time audioplayer-time-current" contenteditable="false">00:00</div><div class="audioplayer-bar" contenteditable="false"><div contenteditable="false" class="audioplayer-bar-loaded" style="width: 8.57552%;"></div><div contenteditable="false" class="audioplayer-bar-played" style="width: 44.0335%;"></div></div><div class="audioplayer-time audioplayer-time-duration" contenteditable="false">00:28</div><div class="audioplayer-volume" contenteditable="false"><div class="audioplayer-volume-button" contenteditable="false" title=""><a href="#"></a></div><div class="audioplayer-volume-adjust" contenteditable="false"><div><div style="width: 100%;"><br></div></div></div></div></div><section class="ToolBar" id="audiotoolbar_1" style="top: 105px; display: none;"><i class="fa fa-bold" aria-hidden="true"></i><i class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-align-left" aria-hidden="true"></i><i class="fa fa-align-center" aria-hidden="true"></i><i class="fa fa-align-right" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i></section><input id="Audiotitle_1" class="form-control subtitle" placeholder="Title.." value=""></div><p>File size of the below audio is 1MB and 28 seconds</p><div class="vidfoc" contenteditable="false" id="AudioPlayer_2" style="text-align: right;"><img src="../../images/cancel.png" alt="" style="cursor: pointer;" class="fr-draggable"><div class="audioplayer" contenteditable="false"><audio id="Audio_2" style="width: 0px; height: 0px; visibility: hidden;"><source src="..http://pagevio.com/uploads/stories/file_example_MP3_1MG.mp3"></audio><div class="audioplayer-playpause" contenteditable="false" title=""><a href="#"></a></div><div class="audioplayer-time audioplayer-time-current" contenteditable="false">00:00</div><div class="audioplayer-bar" contenteditable="false"><div contenteditable="false" class="audioplayer-bar-loaded" style="width: 12.3825%;"></div><div contenteditable="false" class="audioplayer-bar-played"></div></div><div class="audioplayer-time audioplayer-time-duration" contenteditable="false">00:28</div><div class="audioplayer-volume" contenteditable="false"><div class="audioplayer-volume-button" contenteditable="false" title=""><a href="#"></a></div><div class="audioplayer-volume-adjust" contenteditable="false"><div><div style="width: 100%;"><br></div></div></div></div></div><section class="ToolBar" id="audiotoolbar_2" style="top: 105px; display: none;"><i class="fa fa-bold" aria-hidden="true"></i><i class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-align-left" aria-hidden="true"></i><i class="fa fa-align-center" aria-hidden="true"></i><i class="fa fa-align-right" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i></section><input id="Audiotitle_2" class="form-control subtitle" placeholder="Title.." value=""></div><p>File size of the below audio is 5MB and 2:13 seconds</p><div class="vidfoc" contenteditable="false" id="AudioPlayer_3" style="text-align: right;"><img src="../../images/cancel.png" alt="" style="cursor: pointer;" class="fr-draggable"><div class="audioplayer" contenteditable="false"><audio id="Audio_3" style="width: 0px; height: 0px; visibility: hidden;"><source src="..http://pagevio.com/uploads/stories/file_example_MP3_5MG.mp3"></audio><div class="audioplayer-playpause" contenteditable="false" title=""><a href="#"></a></div><div class="audioplayer-time audioplayer-time-current" contenteditable="false">00:00</div><div class="audioplayer-bar" contenteditable="false"><div contenteditable="false" class="audioplayer-bar-loaded" style="width: 1.23898%;"></div><div contenteditable="false" class="audioplayer-bar-played"></div></div><div class="audioplayer-time audioplayer-time-duration" contenteditable="false">02:13</div><div class="audioplayer-volume" contenteditable="false"><div class="audioplayer-volume-button" contenteditable="false" title=""><a href="#"></a></div><div class="audioplayer-volume-adjust" contenteditable="false"><div><div style="width: 100%;"><br></div></div></div></div></div><section class="ToolBar" id="audiotoolbar_3" style="top: 105px; display: none;"><i class="fa fa-bold" aria-hidden="true"></i><i class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-link" aria-hidden="true"></i><i class="fa fa-align-left" aria-hidden="true"></i><i class="fa fa-align-center" aria-hidden="true"></i><i class="fa fa-align-right" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i></section><input id="Audiotitle_3" class="form-control subtitle" placeholder="Title.." value=""></div><p><br></p>`;
-
+    import Icons from 'react-native-vector-icons/AntDesign'
+    import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+    import ShareIcon from 'react-native-vector-icons/EvilIcons'
 console.disableYellowBox = true;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -148,7 +150,7 @@ class ReadingBook extends Component {
       explore_page:'0',
       loginPoup:false,
       statusReadlater:'',
-      likestatus:'',
+      likestatus:false,
       postImg:'',
       undo:false,
       subtitle:''
@@ -208,14 +210,14 @@ this.CheckConnectivity()
     // });
     // AsyncStorage.getItem('popup_name1').then((newval1) => this.setState({ popup_title1: newval1 })).done();
     this.CheckConnectivity();
-    this.focusListener = this.props.navigation.addListener('willFocus', () => {
-      if(this.props.collSec==true){
-        console.log('coll sec value in read page ',this.props.collSec)
-          {this.getData2()}
+    // this.focusListener = this.props.navigation.addListener('willFocus', () => {
+    //   if(this.props.collSec==true){
+    //     console.log('coll sec value in read page ',this.props.collSec)
+    //       {this.getData2()}
   
-       }
-        this.CheckConnectivity();
-      })
+    //    }
+    //     this.CheckConnectivity();
+    //   })
   
     // { this.getData() }
     // this.CheckConnectivity();
@@ -433,7 +435,7 @@ readlater = () => {
     // setTimeout(() => {
     //   {this.state.scrollTop?this.scroll.scrollTo({x: 0,animated: true}):null}
     //  }, 1);
-    this.focusListener.remove()
+    // this.focusListener.remove()
 
   }
   getData() {
@@ -462,7 +464,7 @@ readlater = () => {
       //   })
       // }
       // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 1000);
+    }, 3000);
   }
   // exploredata(postid,typeid,pagecount){
   //   console.log('josn postid,typeid, pagingcount ',postid,typeid,pagecount)
@@ -545,10 +547,10 @@ readlater = () => {
           loading: false,
         })
         console.log('reading data length ',responseJson[0].ReadStatus)
-
+        if(responseJson!=[]){
         this.setState({
           scrollTop:true,
-          description:responseJson[0].BackGround_Img+this.state.subtitle+responseJson[0].page_description,
+          description:responseJson[0].page_description,
           avatar: responseJson[0].avatar,
           created_at: responseJson[0].created_at,
           page_url: responseJson[0].page_url,
@@ -562,14 +564,15 @@ readlater = () => {
           page_id:responseJson[0].page_id,
           postImg:responseJson[0].PostImg,
           exists:responseJson[0].Readstatus=="N"?false:true,
-          likeStatus:responseJson[0].Likestatus,
+          likeStatus:responseJson[0].Likestatus=='Y'?true:false,
           subtitle:responseJson[0].sub_title
 
         })
         console.log('page des ',this.state.description)
        
         console.log('this description data is ', this.state.avatar, this.state.page_url, this.state.created_at,"exist",this.state.exists);
-
+      }
+      console.warn(responseJson);
       })
       .catch((error) => {
         console.warn(error);
@@ -896,10 +899,52 @@ readlater = () => {
           bookmarkPopup: false,
           copiedData: ""
         })
-
       }, 3000);
     }
     //   console.log('modal state is ', this.state.popupModal)
+  }
+  notifyAdd = (n_userid,username,id,title) =>{
+    var json2 = 
+    // JSON.stringify(
+      {
+      
+        "id":id,
+        "title":title,
+        "user_name":username,
+        "type":"like",
+        "bookimg":null,
+        "user_id":this.state.getuserid,
+        "comment":"",
+        "actionURL":"http:\/\/pagevio.com\/notification-read\/like",
+        "icon":"fa fa-thumbs-up",
+        "heading":"Likes your"
+    }
+    // )
+    let n_type=`App\\Notifications\\NotificationFeeds`;
+    let ntype2=`App\\User`;
+    var json = JSON.stringify({
+      "Type":n_type,
+      "Notifiable_Type":ntype2,
+      "Notifiable_ID":n_userid,
+      "Datas":JSON.stringify(json2)});
+    console.log(json,"notiffy data")
+    fetch("http://162.250.120.20:444/Login/NotificationAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log('responsejson notify ',responseJson)
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   }
   getCopiedData = async () => {
     //To get the text from clipboard
@@ -958,6 +1003,8 @@ readlater = () => {
             this.setState({ loading: false,});
             console.warn(responseJson);
             this.setState({ like:responseJson[0].Message=='Unlike'?false:true })
+            {responseJson[0].Message == 'Like'? this.notifyAdd(this.state.profile_userid,this.state.author,this.state.getpostid,this.state.page_url):null}
+
             // console.log('like service called');
             { this.exploredata(this.state.getpostid,this.state.gettypeid) }
           })
@@ -1087,7 +1134,9 @@ readlater = () => {
       <View style={{ overflow: 'hidden', paddingBottom: 5 }}>
 
       <View style={styles.headerRow}>
-        <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}>
+        <TouchableOpacity 
+        // onPress={() =>{this.state.explore_page=='0'? this.goToAuthorProfile():this.alertPopup()}}
+        >
           <Image style={{ width: 43, height: 43,}} source={{ uri: this.state.postImg != "" ? this.state.postImg : null }} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() =>{this.state.explore_page=='0'? this.contentClick():this.alertPopup()}}>
@@ -1107,7 +1156,6 @@ readlater = () => {
         <TouchableOpacity onPress={() => this.backpress()}>
         <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
         </TouchableOpacity>
-
       </View> 
       </View>
       {/* :
@@ -1196,45 +1244,38 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           </View>
             : null} */}
 {/* </View> */}
-        {this.state.bookmarkPopup ? <View>
+       
+      {/* </View> */}
+      {!this.state.contentVisible?
+      
+      <View style={{flex:1}}>
+         {this.state.bookmarkPopup ? <View style={{flex:0.8}}>
             <Image style={{ top: '25%', right: 0, position: 'absolute' }} source={require('../assets/img/bigbookmark.png')} />
           </View>
             : null}
-      {/* </View> */}
-      {/* <WebView
+      <WebView
         // source={{html:`<p contenteditable="true" placeholder="Title...">New sample page for event</p><div contenteditable="false" id="Event_1" class="QuickEvent page_padding" style="position: relative;"><img src="../../images/cancel.png" onclick="clearevepromo(1)" id="cancel_1" style="left: 95%; top: 20px;" class="fr-draggable"><section id="eventtoolbar_1" contenteditable="false" class="eventToolbar1" style="display: block;"><i onclick="ToolbarSty('B',currentevenprom)" class="fa fa-bold" aria-hidden="true"></i><i onclick="ToolbarSty('I',currentevenprom)" class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-align-left" onclick="ToolbarSty('left',currentevenprom)" aria-hidden="true"></i><i class="fa fa-align-center" onclick="ToolbarSty('center',currentevenprom)" aria-hidden="true"></i><i class="fa fa-align-right" onclick="ToolbarSty('right',currentevenprom)" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i></section><input type="text" id="titl_1" placeholder="Title" class="col-md-6 col-xs-6 col-lg-6 col-sm-6 form-control event_form" onkeydown="Edit2BackspaceInp(this,event)" onclick="showtool(1)" value="New Event"><br><div class="upload-btn-wrapper"><i class="fa fa-image round_media_btn" aria-hidden="true"></i><input type="file" name="myfile" onchange="getImage(this)" value=""></div><div style="position: relative;"><section id="desctoolbar_1" contenteditable="false" class="eventToolbar2" style="display: block;"><i onclick="DescbarSty('B',currentdescid)" class="fa fa-bold" aria-hidden="true"></i><i onclick="DescbarSty('I',currentdescid)" class="fa fa-italic" aria-hidden="true"></i><i onclick="DescbarSty('U',currentdescid)" class="fa fa-underline" aria-hidden="true"></i><i onclick="DescbarSty('S',currentdescid)" class="fa fa-strikethrough" aria-hidden="true"></i><i onclick="DescbarSty('LI',currentdescid)" class="fa fa-link" aria-hidden="true"></i><i class="fa fa-align-left" onclick="DescbarSty('left',currentdescid)" aria-hidden="true"></i><i class="fa fa-align-center" onclick="DescbarSty('center',currentdescid)" aria-hidden="true"></i><i class="fa fa-align-right" onclick="DescbarSty('right',currentdescid)" aria-hidden="true"></i><i onclick="DescbarSty('IN',currentdescid)" class="fa fa-indent" aria-hidden="true"></i><i onclick="DescbarSty('OU',currentdescid)" class="fa fa-outdent" aria-hidden="true"></i><i onclick="DescbarSty('CO',currentdescid)" class="fa fa-columns" aria-hidden="true"></i><i onclick="DescbarSty('OL',currentdescid)" class="fa fa-list-ol" aria-hidden="true"></i><i onclick="DescbarSty('UL',currentdescid)" class="fa fa-list-ul" aria-hidden="true"></i><i onclick="DescbarSty('LI',currentdescid)" class="fa fa-list" aria-hidden="true"></i><i class="fa fa-superscript" aria-hidden="true"></i><i class="fa fa-subscript" aria-hidden="true"></i></section><textarea id="desc_1" placeholder="Description" style="resize:none;" class="col-md-6 col-xs-6 col-lg-6 col-sm-6 form-control event_form" onclick="Desctool(1)" value="Testing for event">Testing for event</textarea></div><span id="add-date"><span class="event_label" style="margin-right: 70px;">Date:</span><input class="event_form" type="date" style="width:140px;" value="2020-01-15">&nbsp;&nbsp;&nbsp;<input class="event_form" type="type" value="11:30am" onkeydown="Edit2BackspaceInp(this,event)" style="width:85px;"></span><div style="position: relative;"><section id="maptoolbar_1" contenteditable="false" class="eventToolbar3" style="display: block;"><i onclick="MapbarSty('B',this)" class="fa fa-bold" aria-hidden="true"></i><i onclick="MapbarSty('I',this)" class="fa fa-italic" aria-hidden="true"></i><i class="fa fa-map" onclick="MapbarSty('map',this)" aria-hidden="true"></i><span style="display:none"><label>Enter Location</label> <input onkeydown="Edit2BackspaceInp(this,event)" id="Event_location_1" type="text" class="map_input pac-target-input" placeholder="Enter a location" autocomplete="off" value=""></span></section><span class="event_label" style="margin-right: 45px;">Location:</span><input class="event_form" type="text" id="locate_1" placeholder="Location Name" onkeydown="Edit2BackspaceInp(this,event)" onclick="Maptool(1)" style="width:78%;" value=""></div><input class="btn save_event" id="EventBtn_1" onclick="evet()" type="button" value="Save The Date"><br><br><br></div><p>Reminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotionReminder issues for event and promotion<br></p>`}}
-       source={{html:this.state.description}}
-        style={{flex:1 }}
+      //  source={{html:this.state.description
+      //   // this.state.description
+      // }}
+      source={{html:this.state.description}}
+      style={{
+        // flex:0.5,
+        flex:2,
+        // height:height/2,
+        marginTop:-120,
+        marginBottom:-150
+        }}
+        // style={{flex:1 }}
         // startInLoadingState
         // domStorageEnabled
         // geolocationEnabled
         // allowUniversalAccessFromFileURLs
         // injectedJavaScript={INJECTEDJAVASCRIPT}
         // allowFileAccess
-      /> */}
-      {!this.state.contentVisible ?
-        <ScrollView
-          contentContainerStyle={styles.scroll}
-          ref={(c) => {this.scroll = c}}
-          onContentSizeChange={(width, height) => { this.scrollViewContent_height = height }}
-          onScroll={this.UpdateProgressBar}
-          onLayout={(event) => this.scrollView_height = (event.nativeEvent.layout.height)}
-          scrollEventThrottle={12} >
-
-          {/* {this.state.bookmarkPopup ? <View>
-            <Image style={{ top: '15%', right: 0, position: 'absolute' }} source={require('../assets/img/bigbookmark.png')} />
-          </View>
-            : null} */}
-       
-          <HTMLView
-            // html={this.state.description}
-            value={this.state.description}
-            renderNode={this._renderNode}
-            nodeComponentProps={{selectable: this.state.explore_page=='0'?true:false}}
-            // textSelectable={this.state.explore_page=='0'?true:false}
-             />
-     
-          <View style={styles.nextPreviousView}>
+      />
+      {this.state.gettypeid=='4'?null:
+       <View style={styles.nextPreviousView}>
             {this.state.previousPage!="" ?
               <TouchableOpacity onPress={() => this.handleLess()}>
                 <View >
@@ -1250,14 +1291,8 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                 </View>
               </TouchableOpacity> : <Text></Text>}
           </View>
-          
-
-
-
-          {/* {this.state.pagefeedData!="" || this.state.readingData!=""?
-                    ( */}
-
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
+        }
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
               <TouchableOpacity
                 onPress={() =>{this.state.explore_page=='0'?this.goToAuthorProfile():this.alertPopup()}}
               >
@@ -1273,10 +1308,10 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                 </Text>
               </TouchableOpacity>
             </View>
+            <View style={{flex:0.2}}>
             <View style={{ flexDirection: 'row', alignItems: 'center', 
-            flex:1, justifyContent:'space-between'
-            // margin: 5
-            , marginBottom: 80
+            justifyContent:'space-between',margin:5
+            // margin: 5            // marginBottom: 80
              }}>
 
               <View 
@@ -1293,6 +1328,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                   {this.state.created_at} {/* {item.Username} */}
                 </Text>
               </View>
+          
               <View 
                               style={{ flexDirection: 'row',}}
               // style={{ flexDirection: 'row', width: width / 2 - 10, marginLeft: 10, height: 40, justifyContent: 'center', alignItems: 'center', marginBottom: 30 }}
@@ -1306,43 +1342,55 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                   {this.state.created_at} {/* {item.Username} */}
                 </Text>
               </View>
-            </View>         
-        </ScrollView>
-        :
-        <ScrollView style={{marginBottom:'10%'}}>
-        <FlatList
-          data={this.state.contents}
-          // style={{marginBottom:'15%'}}
-          renderItem={({ item,index}) =>
-            <TouchableOpacity onPress={() => this.gotoRead(item.page_order)}>
-              <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,height:height/12}} key={item.Content} >
-                <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, marginTop: '2%', marginBottom: '2%' }}>{item.page_title}</Text>
-                <Divider style={{ color: '#707070', width: width - 50, }} />
-              </View>
-              </TouchableOpacity>
-          }
-          contentContainerStyle={{ alignItems: 'center',}}
-          keyExtractor={(item, index) => index} />
-                  </ScrollView>
-      }
-        {this.state.contentVisible ? <View style={styles.bottomBar}>
+            </View> 
+            </View>
+            </View>        
+:
+<ScrollView style={{marginBottom:'10%'}}>
+<FlatList
+  data={this.state.contents}
+  // style={{marginBottom:'15%'}}
+  renderItem={({ item,index}) =>
+    <TouchableOpacity onPress={() => this.gotoRead(item.page_order)}>
+      <View style={{ justifyContent: 'center', alignContent: 'center',width:width-40,height:height/12}} key={item.Content} >
+        <Text style={{ color: 'black', textAlign: 'left', fontSize: 16, marginTop: '2%', marginBottom: '2%' }}>{item.page_title}</Text>
+        <Divider style={{ color: '#707070', width: width - 50, }} />
+      </View>
+      </TouchableOpacity>
+  }
+  contentContainerStyle={{ alignItems: 'center',}}
+  keyExtractor={(item, index) => index} />
+          </ScrollView>
+}
+      {/* </Modal> */}
+      {/* <Text style={[styles.text, theme[this.state.modeState].text]}>Some text</Text>
+   <TouchableOpacity onPress={()=>this.state.modeState=='light'?this.setState({modeState:'dark'}):this.setState({modeState:'light'})}>
+     <Image source={this.state.modeState=='light'?require('../assets/img/worldwide.png'):require('../assets/img/darkmode.png')}/>
+   </TouchableOpacity> */}
+     {this.state.contentVisible ? <View style={styles.bottomBar}>
           <TouchableOpacity
             style={styles.bottomBtn}>
             <Text style={styles.bottomText}> {this.state.contents.length} Sections</Text>
           </TouchableOpacity>
         </View>
-        : <View style={{ flexDirection: 'row', shadowColor: '#000',
+        : 
+        
+        <View style={{ flexDirection: 'row', justifyContent: "space-between", padding: '3%', paddingLeft:'4%',paddingRight:'4%',shadowColor: '#000',
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity:  0.4,
         shadowRadius: 3,
-        elevation: 10,borderTopColor:'#707070', justifyContent: "space-between", padding: '3%', position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: this.state.modeState == 'light' ? '#fff' : '#000' }}>
+        elevation: 10,borderTopColor:'#707070',  position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: this.state.modeState == 'light' ? '#fff' : '#000' }}>
         <TouchableOpacity
           // onPress={()=>this.onPressHandler(item.Post_page_id)}
           onPress={() =>{this.state.explore_page=='0'?this.likeClick(this.state.getpostid):this.alertPopup()}}>
 
           {/* {this.renderImage} */}
-          {this.state.likeStatus=='Y' == true ? <Image style={{marginTop:10,marginLeft:5}} source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')} />}
-          {/* <Image
+<Icons name={this.state.likeStatus ? 'like1' : 'like2'}
+                size={20}
+                style={{ alignSelf: 'center' }}
+                color={this.state.likeStatus ? '#27A291' : '#707070'}
+              />     
+                   {/* <Image
             source={imgSource}
           /> */}
 
@@ -1354,9 +1402,14 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           onPress={() =>{this.state.explore_page=='0'?
             this.commentClick():this.alertPopup()}}
         >
-          <Image
-          style={styles.group}
-            source={require('../assets/img/comments-icon.png')} />
+         <MaterialIcon name={'comment-text-outline'}
+                size={20}
+                style={{ alignSelf: 'center' }}
+                //  style={{marginLeft:15,marginBottom:3}}
+                color={
+                  //  item.Likestatus=='Y'?'#27A291':
+                  '#707070'}
+              />
         </TouchableOpacity>
         <TouchableOpacity
           // onPress={() => this.refs.modal4.open()} 
@@ -1365,15 +1418,23 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           }}
         // onPress={() =>this.props.navigation.navigate('createCollection')} 
         >
-          <Image style={styles.group} source={require('../assets/img/add-to-icon.png')} />
-        </TouchableOpacity>
+       <Icons name={'plus'}
+  size={20}
+  style={{alignSelf:'center'}}
+  color={'#707070'}
+  />    
+      </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>{this.state.explore_page=='0'?
             this.setState({ shareModal: !this.state.shareModal }):this.alertPopup()}
             // this.refs.modal6.open()
           }>
-          <Image style={styles.group} source={require('../assets/img/share-icon.png')} />
-        </TouchableOpacity>
+<ShareIcon name={'share-google'}
+  size={25}
+  style={{alignSelf:'center'}}
+  color={'#707070'}
+  />   
+       </TouchableOpacity>
       </View> 
         }
       <Modal1 isVisible={this.state.loading}
@@ -1471,6 +1532,8 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                         <TouchableOpacity
                             style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200, justifyContent: 'center' }}
                             onPress={() => {
+                              AsyncStorage.setItem('postadd_postid',JSON.stringify(Number(this.state.getpostid)));
+                              AsyncStorage.setItem('postadd_typeid',JSON.stringify(Number(this.state.gettypeid)));
                                 this.props.navigation.navigate('createCollection')
                                 this.setState({ collectionModal: false })
                             }}>
@@ -1681,6 +1744,9 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
           console.log('Modal has been closed.');
         }}> */}
         {this.state.pinspopup?
+        <BlurModal
+        visible={this.state.pinspopup}
+        children={
         <View style={{
           width: width,
           left: 0, right: 0, bottom: 0, position: 'absolute',
@@ -1697,13 +1763,9 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
 
           <Text style={{ alignSelf: 'flex-end', fontSize: 16, color: '#fff', textDecorationLine: 'underline', marginRight: 5 }}>Undo</Text>
         </View>
+        }/>
         :null}
-      {/* </Modal> */}
-      {/* <Text style={[styles.text, theme[this.state.modeState].text]}>Some text</Text>
-   <TouchableOpacity onPress={()=>this.state.modeState=='light'?this.setState({modeState:'dark'}):this.setState({modeState:'light'})}>
-     <Image source={this.state.modeState=='light'?require('../assets/img/worldwide.png'):require('../assets/img/darkmode.png')}/>
-   </TouchableOpacity> */}
-   
+
     </SafeAreaView>
     // </View>
   )
@@ -1792,8 +1854,9 @@ nextPreviousView:{
   // alignItems: 'center',
   // marginRight: '5%', 
   // marginLeft: '5%', 
-  marginTop: '2%', 
-  marginBottom: '2%'
+  // marginTop: '2%', 
+  // marginBottom: '2%'
+  margin:15
 },
 previousTitle:{
   alignSelf: 'flex-start',

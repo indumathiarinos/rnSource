@@ -161,7 +161,8 @@ CheckConnectivity(){
 }
 secCoverData() {
   var json = JSON.stringify({
-   "UserID":!this.state.profileColl?this.state.getuserid:this.state.profile_userid,
+   "UserID":this.state.getuserid,
+  //  !this.state.profileColl?this.state.getuserid:this.state.profile_userid,
    "CollectionID":this.state.collectionId,
    "SectionID":this.state.sectionId
   });
@@ -300,24 +301,25 @@ handleBackButtonClick() {
       <TouchableOpacity onPress={()=>this.descPage(item)}>
         <View style={{
           flex: 1,
+          height:210,
+          marginLeft:20,marginRight:20,
           flexDirection: 'row',
           // width: '50%',
-          margin: '2%',
           justifyContent: 'space-between'
         }}>
-          <View style={{ flexDirection: 'column',width:width/1.8-40, }}>
-            <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000' }}>{item.Title}</Text>
+          <View style={{ flexDirection: 'column',width:width/1.8,  }}>
+            <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000', }}>{item.Title}</Text>
             <Text numberOfLines={1} style={{ color: '#707070',fontFamily:'AzoSans-Light',fontSize:12}}>{item.Author}</Text>
           </View>
           {/* <Image source={item.img} /> */}
           <TouchableOpacity
           onPress={()=>this.descPage(item)}
-          style={styles.button} >
+          style={[styles.button,{height:item.Type==4?height/6.5:200}]} >
           <ImageBackground source={{uri:item.Image}} 
           imageStyle={{ borderRadius: 15 }}
-          style={[item.Type==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null}]}
+          style={[item.Type==4?styles.pageImgStyle:styles.pubImgStyle,{borderColor:!item.Image?'#fff':null}]}
              >
-               {!this.state.profileColl?
+               {/* {!this.state.profileColl? */}
             <TouchableOpacity
               onPress={() => {
                 this.refs.modal.open() 
@@ -327,7 +329,8 @@ handleBackButtonClick() {
               // alert(item.title)
              }}>
               <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
-            </TouchableOpacity>:null}
+            </TouchableOpacity>
+             {/* :null} */}
           </ImageBackground>
           </TouchableOpacity>
         </View>
@@ -443,10 +446,9 @@ handleBackButtonClick() {
           >
             <Image style={{width:50,height:30}} source={require('../assets/img/backarrow.png')} />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', width: width/1.1, justifyContent: 'center', alignItems: 'center',}}>
-          <LinearGradient style={{ borderRadius: 10, marginRight:'5%',}} colors={
-              ['#24D4BC', '#27A291']}>
-            <TouchableOpacity 
+          <View style={{ flexDirection: 'row', width: width-50, justifyContent: 'center', alignItems: 'center',}}>
+          <TouchableOpacity
+            style={{ borderRadius: 10,backgroundColor:'#27A291',marginRight:50}}
               onPress={this.headerBtnClk}>
               <View style={{ flexDirection: 'row' }}>
                 <Text style={{
@@ -483,7 +485,6 @@ handleBackButtonClick() {
                 }}>Reads</Text>
               </View>
             </TouchableOpacity>
-            </LinearGradient>
           </View>
         </View>
         <ScrollView>
@@ -504,7 +505,7 @@ handleBackButtonClick() {
                 contentContainerStyle={{
                     flex:1,
                     justifyContent:'center',
-                    marginBottom:'5%'
+                    marginBottom:'1%'
                 }}
                     data={this.state.secCoverImg}
                     extraData={this.state}
@@ -536,7 +537,7 @@ handleBackButtonClick() {
 
           <FlatList
             data={this.state.readsData}
-            contentContainerStyle={{ marginTop: '5%',width:width-40,alignSelf:'center'}}
+            contentContainerStyle={{ marginTop: '1%',width:width,alignSelf:'center'}}
             extraData={this.state}
             renderItem={this.renderItem_card.bind(this)}
             removeClippedSubviews={false}
@@ -630,14 +631,14 @@ handleBackButtonClick() {
 const styles = StyleSheet.create({
   pubImgStyle:{ 
     // elevation:1,
-    width: 130, height: 150,
+    width: 140, height: 200,
     borderRadius:15
     // alignItems:'center',
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
       // elevation:1,
-      width: 130, height: 100,
+      width:140, height: height/6.5,
       borderRadius:15
       // alignItems:'center',
       //  jsutifyContent: 'center'
@@ -709,6 +710,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // height: '9%',
+    width:width,
     // backgroundColor:'pink',
     backgroundColor: '#ffff',
     elevation: 1
@@ -721,7 +723,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   divider: {
-    width: width / 2,
+    width: width / 2.5,
     alignSelf: 'center',
     padding: '1%',
     borderBottomColor: 'white',
@@ -746,7 +748,8 @@ const styles = StyleSheet.create({
     shadowRadius: 1, //IOS
     backgroundColor: '#fff',
     elevation: 2, // Android
-    borderRadius:10,
+    borderRadius:15,
+   
 },
   container: {
     position: 'absolute',

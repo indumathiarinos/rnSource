@@ -33,6 +33,9 @@ import Share from 'react-native-share';
 import SnackBar from 'react-native-snackbar';
 import LoginModal from '../components/loginModal';
 import BlurModal from '../components/blurModal';
+import Icons from 'react-native-vector-icons/AntDesign'
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import ShareIcon from 'react-native-vector-icons/EvilIcons'
 console.disableYellowBox = true;
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -101,7 +104,7 @@ class ViewBook extends Component {
       explore_page: '0',
       loginPopup: false,
       undo: false,
-      likeStatus: '',
+      likeStatus: false,
       scrollend: false
       // Image: "https://arinos.co.uk/uploads/publication-cover/1581929254.jpg"
       // Title: "SNOW WHITE AND THE SEVEN DWARF"
@@ -310,7 +313,7 @@ class ViewBook extends Component {
     setTimeout(() => {
       console.log('vire book typrif postid ', this.state.gettypeid, this.state.getpostid)
       { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 1000)
+    }, 3000)
   }
 
 
@@ -409,9 +412,11 @@ class ViewBook extends Component {
           post_translator: responseJson[0].post_translator,
           isbn: responseJson[0].post_isbn_years,
           exists: responseJson[0].Readstatus == 'N' ? false : true,
-          likeStatus: responseJson[0].Likestatus
+          likeStatus: responseJson[0].Likestatus == 'Y'?true:false
+        
           // visible:this.state.Is_Follow=="Follow"?false:true
         })
+        AsyncStorage.setItem('likestatus',JSON.stringify(this.state.likeStatus))
         //  Title: "SNOW WHITE AND THE SEVEN DWARF"
         //  Content: "Once upon a time . . . in a great castle, a Prince’s daughter grew up happy and contented, in spite of a jealous stepmother. She was very pretty, with blue eyes and long black hair. Her skin was delicate and fair, and so she was called Snow White. Everyone was quite sure she would become very beautiful. Though her stepmother was a wicked woman, she too was very beautiful, and the magic mirror told her this every day, whenever she asked it"
         //  Updated_Date: "17 February 2020"
@@ -650,6 +655,49 @@ class ViewBook extends Component {
     // AsyncStorage.setItem('pagefeed_userid',this.state.user_id);
     this.props.navigation.navigate('readingBook');
   }
+  notifyAdd = (n_userid,username,id,title) =>{
+    var json2 = 
+    // JSON.stringify(
+      {
+      
+        "id":id,
+        "title":title,
+        "user_name":username,
+        "type":"like",
+        "bookimg":null,
+        "user_id":this.state.getuserid,
+        "comment":"",
+        "actionURL":"http:\/\/pagevio.com\/notification-read\/like",
+        "icon":"fa fa-thumbs-up",
+        "heading":"Likes your"
+    }
+    // )
+    let n_type=`App\\Notifications\\NotificationFeeds`;
+    let ntype2=`App\\User`;
+    var json = JSON.stringify({
+      "Type":n_type,
+      "Notifiable_Type":ntype2,
+      "Notifiable_ID":n_userid,
+      "Datas":JSON.stringify(json2)});
+    console.log(json,"notiffy data")
+    fetch("http://162.250.120.20:444/Login/NotificationAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log('responsejson notify ',responseJson)
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
   readlater = () => {
     this.setState({
       collectionModal: false,
@@ -746,6 +794,7 @@ class ViewBook extends Component {
     )
       .then((response) => response.json())
       .then((responseJson) => {
+        {responseJson[0].Message == 'Like'? this.notifyAdd(this.state.user_id,this.state.author,this.state.getpostid,this.state.title):null}
         this.setState({ loading: false, });
         console.warn(responseJson);
         // this.setState({ likeStatus:responseJson[0].Message=='Unlike'?false:true })
@@ -757,6 +806,9 @@ class ViewBook extends Component {
       });
 
   }
+
+
+  
   render() {
     // AsyncStorage.getItem('3dots').then((newval) => this.setState({ popup_val: newval })).done();
     // if (this.state.popup_val == 1) {
@@ -1237,6 +1289,8 @@ onPress={() => this.props.navigation.navigate('report')}>
             <TouchableOpacity
               style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200, height: 30, }}
               onPress={() => {
+                AsyncStorage.setItem('postadd_postid',JSON.stringify(Number(this.state.getpostid)));
+                AsyncStorage.setItem('postadd_typeid',JSON.stringify(Number(this.state.gettypeid)));
                 this.props.navigation.navigate('createCollection')
                 this.setState({ collectionModal: false })
               }}>
@@ -1483,45 +1537,66 @@ onPress={() => this.props.navigation.navigate('report')}>
 
         <View style={styles.bottomBar}>
           <TouchableOpacity
-            style={{ padding: '1%' }}
             onPress={() => { this.state.explore_page == '0' ? this.likeClick(this.state.getpostid) : this.alertPopup() }}
           >
             {/* {this.renderImage} */}
-            {this.state.likeStatus == 'Y' ? <Image
+            <View style={{flexDirection:'row'}}>
+            <Icons name={this.state.likeStatus ? 'like1' : 'like2'}
+                size={20}
+                style={{ alignSelf: 'center' }}
+                color={this.state.likeStatus ? '#27A291' : '#707070'}
+              />
+              {/* <Text style={{
+                color:
+                this.state.likeStatus? '#27A291' :
+                    '#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>
+                {item.likescount=="" || item.likescount==0?'':item.likescount} {item.likescount=="" || item.likescount<=1?'Like' : 'Likes'}
+                </Text> */}
+          </View>
+            {/* {this.state.likeStatus == 'Y' ? <Image
               style={{ marginTop: 12 }}
               source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')}
               />
-            }
+            } */}
           </TouchableOpacity>
           {/* <Image
   onPress={()=>this.setState({showlikeImg:!this.state.showlikeImg})}  
  source={imgSource}/> */}
           <TouchableOpacity
-            style={{ padding: '1%' }}
             onPress={() => this.commentClick()}
           >
-            <Image
-              style={styles.group}
-              source={require('../assets/img/comments-icon.png')} />
+            <MaterialIcon name={'comment-text-outline'}
+                size={20}
+                style={{ alignSelf: 'center' }}
+                //  style={{marginLeft:15,marginBottom:3}}
+                color={
+                  //  item.Likestatus=='Y'?'#27A291':
+                  '#707070'}
+              />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ padding: '1%' }}
             onPress={() => {
               this.state.explore_page == '0' ? this.setState({ collectionModal: !this.state.collectionModal }
               ) : this.alertPopup()
             }}          // onPress={() =>this.props.navigation.navigate('createCollection')} 
           >
-            <Image style={styles.group}
-              source={require('../assets/img/add-to-icon.png')} />
+            <Icons name={'plus'}
+  size={20}
+  style={{alignSelf:'center'}}
+  color={'#707070'}
+  />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{ padding: '1%' }}
 
             onPress={() => { this.state.explore_page == '0' ? this.setState({ shareModal: !this.state.shareModal }) : this.alertPopup() }}
           >
 
-            <Image style={styles.group}
-              style={styles.group} source={require('../assets/img/share-icon.png')} />
+<ShareIcon name={'share-google'}
+  size={25}
+  style={{alignSelf:'center'}}
+  color={'#707070'}
+  />
           </TouchableOpacity>
         </View>
         {/* :null} */}
@@ -1792,7 +1867,7 @@ const styles = StyleSheet.create({
     // padding:'2%',
     flexDirection: 'row',
     justifyContent: "space-around",
-    padding: '3%',
+    padding: '2%',
     // margin:'3%',
     position: 'absolute',
     left: 0,

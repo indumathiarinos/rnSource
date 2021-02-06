@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, FlatList,SafeAreaView,
     AsyncStorage,Modal, LayoutAnimation,ImageBackground,BackHandler, RefreshControl, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image, TouchableOpacity, PermissionsAndroid } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Entypo';
 import { connect } from "react-redux";
 import { FloatingAction } from "react-native-floating-action";
 import LinearGradient from 'react-native-linear-gradient';
@@ -200,7 +200,7 @@ componentWillUnmount () {
      let collection=[...this.state.collection];
      for(let data of this.state.collection){
        if(data.collectionsID==id){
-            this.setState({selectedCol:id});
+            this.setState({selectedCol:id,next:true,secCollid:id});
        }
        break;
      }
@@ -210,7 +210,7 @@ componentWillUnmount () {
     let collection=[...this.state.collection];
     for(let data of this.state.collection){
       if(data.collectionsID==id){
-        this.setState({selectedCol:id});
+        this.setState({selectedCol:id,secCollid:id});
         {this.changeLayout()}
       }
       break;
@@ -242,9 +242,14 @@ componentWillUnmount () {
             </TouchableOpacity>
             <TouchableOpacity
             style={styles.styleList}
-                // onPress={() => this.arrowPress(item.collectionsID)}
+                onPress={() => this.arrowPress(item.collectionsID)}
             >
-            <Image style={{alignSelf:'flex-end',marginRight:10}} source={item.collectionsID!=this.state.selectedCol?require('../assets/img/right-arrow.png'):require('../assets/img/down-arrow1.png')}/>
+            {/* <Image style={{alignSelf:'flex-end',marginRight:10}} source={item.collectionsID!=this.state.selectedCol?require('../assets/img/right-arrow.png'):require('../assets/img/down-arrow1.png')}/> */}
+         <Icon
+        size={20}
+         name={item.collectionsID==this.state.selectedCol?'chevron-thin-right':'chevron-thin-down'}
+         color={item.collectionsID==this.state.selectedCol?'#fff':'#707070'}
+         />
            </TouchableOpacity>
             {/* </TouchableOpacity> */}
         
@@ -394,7 +399,7 @@ editClk() {
     this.setState({loading:true})
     var json = JSON.stringify({
         "To_C_ID":this.state.selectedCol,
-        "To_S_ID":this.state.sourceSecId,
+        "To_S_ID":Number(this.state.sourceSecId),
         "POSTID":this.state.getpostid
     });
     console.log('edit clk json',json)
@@ -444,8 +449,8 @@ editClk() {
             }
         sectionClick = (collid,value) => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            this.setState({ sectionExpand: !this.state.sectionExpand,next:value!=""?!this.state.next:false,collSourceName:value,
-                selectedCol:collid
+            this.setState({ sectionExpand:true,next:value!=""?!this.state.next:false,collSourceName:value,
+                selectedCol:collid,secCollid:collid,selectedCol:collid
             });
             this.secData(this.state.getuserid,collid)
             console.log('section data collection ',this.state.section);
@@ -474,11 +479,12 @@ editClk() {
                 
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#ffff' }}>
                    <View style={{height:'8%',backgroundColor:'#27A291',justifyContent:'center'}}>
-                    <Text style={{color:'#fff',fontWeight:'bold',fontSize:20,textAlign:'center'}}>Edit {this.state.editpagetitle}</Text>
+                    <Text style={{color:'#fff',fontFamily:'Montserrrat-Bold',fontSize:16,textAlign:'center'}}>Edit {this.state.editpagetitle}</Text>
                     </View>
                     <ScrollView style={{paddingBottom:'10%',marginBottom:100}}>
-                    <View><Text style={{fontSize:24,color:'#000',margin:'2%',padding:'1%'}}>Collection</Text></View>
-                        <View style={{width:width-20,height:1,backgroundColor:'#24D4BC',alignSelf:'center',marginLeft:'2%',marginRight:'2%',marginBottom:'2%'}}/>
+                    <View style={{flexDirection:'row',alignItems:'center',}}><Text style={{fontSize:24,color:'#000',margin:'2%',padding:'1%',fontFamily:'Montserrat-Light',marginRight:0}}>Collection / </Text>
+                    <Text style={{fontSize:24,color:'#27A291',margin:'2%',marginLeft:0,marginTop:'3%',padding:'1%',fontFamily:'Montserrat-Regular',marginRight:0}}>Section</Text></View>
+                        <View style={{width:width-20,height:1,backgroundColor:'#27A291',alignSelf:'center',marginLeft:'2%',marginRight:'2%',marginBottom:'2%'}}/>
                         <ScrollView>
                        <FlatList
                             data={this.state.collection}
@@ -494,19 +500,25 @@ editClk() {
                                     //  }}
                                      style={[styles.containerList,
                                         item.id==this.state.selectedCol||this.state.txtClick==item.id || item.id==this.state.secCollid ?styles.activeList:styles.inacitveList
-    
                                         // item.id==this.state.selectedCol||this.state.txtClick==item.id || item.id==this.state.secCollid ?styles.activeList:styles.inacitveList
                                         ]}
                                      >
                                      <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{this.setState({selectedCol:item.id,secCollid:null,})}}>      
                                        <Image style={{width:20,height:20}} source={item.id==this.state.selectedCol||item.id==this.state.secCollid? require('../assets/img/white_tick.png'):require('../assets/img/uncheck.png')}/>
                                        </TouchableOpacity>
-                                       <Text style={[{ fontSize: 17, color: '#707070', textAlign: 'center', width: width/1.5 },{color:  item.id==this.state.selectedCol || item.id==this.state.secCollid ?"#fff":"#707070"}]}>{item.title}</Text>
+                                       <Text style={[{ fontSize: 16, color: '#707070', textAlign: 'center', width: width/1.5,fontFamily:'AzoSans-Regular' },{color:  item.id==this.state.selectedCol || item.id==this.state.secCollid ?"#fff":"#707070"}]}>{item.title}</Text>
     
                                        {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                            <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1 ?this.sectionClick(item.id,item.title):null}}>
                                    {/* <Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.SectionStatus==0 || item.id==this.state.selectedCol?require('../assets/img/down-arrow1.png'):require('../assets/img/right-arrow1.png')} /> */}
-                                  {item.SectionStatus==0?null:<Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.id==this.state.selectedCol?require('../assets/img/right-arrow1.png'):require('../assets/img/down-arrow1.png')} />}
+                                  {item.SectionStatus==0?null:
+                                //   <Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.id==this.state.selectedCol?require('../assets/img/right-arrow1.png'):require('../assets/img/down-arrow1.png')} />
+                                <Icon
+                                    name={item.id==this.state.selectedCol||this.state.txtClick==item.id || item.id==this.state.secCollid ?'chevron-thin-down':'chevron-thin-right'}
+                                    color={item.id==this.state.selectedCol||this.state.txtClick==item.id || item.id==this.state.secCollid ?'#fff':'#707070'}
+                                    size={20}
+                                    />
+                               }
                            </TouchableOpacity> 
                            </View>
                            </TouchableOpacity>
@@ -523,7 +535,7 @@ editClk() {
                              {item.SectionID!=0? 
                              <View>
                              <TouchableOpacity
-                               style={{backgroundColor:'#fff',width:width,}}
+                               style={{width:width,}}
                                  onPress={() => this.secBook(item.Title,item.CollectionsID,item.SectionID,item)}
                                  >
                                  <View 
@@ -531,17 +543,17 @@ editClk() {
                                 //        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                 //      }}
                                 style={[styles.containerList,
-                                    item.SectionID==this.state.selectedSec  ?styles.activeList:styles.inacitveList
+                                    item.SectionID==this.state.selectedSec || this.state.sectionExpand ?styles.activeList:styles.inacitveList
                                     ]}
                                      >
                                        <TouchableOpacity 
                                        style={{width:30,height:30,alignItems:'center',justifyContent:'center'}}>      
-                                       <Image source={ require('../assets/img/check.png')}/>
+                                       <Image style={{width:20,height:20}} source={ require('../assets/img/white_tick.png')}/>
                                        </TouchableOpacity>
                                        <TouchableOpacity onPress={()=>this.setState({sectionCheck:!this.state.sectionCheck,next:true,selectedSec:item.SectionID})} style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} >      
-                                       <Image source={item.SectionID==this.state.selectedSec? require('../assets/img/check.png'):require('../assets/img/uncheck.png')}/>
+                                       <Image style={{width:20,height:20}} source={item.SectionID==this.state.selectedSec? require('../assets/img/white_tick.png'):require('../assets/img/uncheck.png')}/>
                                        </TouchableOpacity>
-                                       <Text style={[{ fontSize: 17, color: '#707070', textAlign: 'center', width: width/1.5 },{color:  item.SectionID==this.state.selectedSec ?"#fff":"#707070"}]}>{item.Title}</Text>
+                                       <Text style={[{ fontSize: 16, color: '#707070', textAlign: 'center', width: width/1.5,fontFamily:'AzoSans-Regular'},{color: item.SectionID==this.state.selectedSec || this.state.sectionExpand ? "#fff":"#707070"}]}>{item.Title}</Text>
     
                                        {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                          
@@ -589,25 +601,30 @@ editClk() {
                   {this.state.secCollid==""?
                   <View style={{position:'absolute',bottom:'10%',right:'5%'}}>
                   <TouchableOpacity onPress={()=>this.gotoCreateColl()}>
-                  <View style={{width:width/2-30,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18,alignSelf:'flex-end',}}>
-                                <Text style={{paddingLeft:10}}>Create Collection</Text>
-                                    <Image source={require('../assets/img/plus.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
+                  <View style={{width:width/3,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18,alignSelf:'flex-end',}}>
+                                <Text numberOfLines={2} style={{paddingLeft:20,fontFamily:'AzoSans-Regular',fontSize:10,color:'#707070',width:width/5}}>Create Collection</Text>
+                                  <View style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291',alignItems:'center',justifyContent:'center'}}>
+                                  <Image  source={require('../assets/img/white_coll.png')} style={{}}/>
+                                  </View>
                                 </View>
                                 </TouchableOpacity>
                                 </View>:
                     <View style={{height:40,alignItems:'center', flexDirection:'row',justifyContent:'space-around',bottom:'10%',position:'absolute',left:0,right:0}}>
                                   <TouchableOpacity onPress={this.gotoCreateColl.bind(this)}>
-                    <View style={{width:width/2-30,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18}}>
-                                    <Text style={{paddingLeft:10}}>Create Collection</Text>
-                                    <Image source={require('../assets/img/plus.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
-    
+                    <View style={{width:width/3,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18}}>
+                                    <Text numberOfLines={2} style={{paddingLeft:20,fontFamily:'AzoSans-Regular',fontSize:10,color:'#707070',width:width/5}}>Create Collection</Text>
+                                    <View style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291',alignItems:'center',justifyContent:'center'}}>
+                                  <Image  source={require('../assets/img/white_coll.png')} style={{}}/>
+                                  </View>    
                                 </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={()=>this.gotoCreateSec()}>
-                                <View style={{width:width/2-30,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18}}>
-                                <Text style={{paddingLeft:10}}>Create Section</Text>
-                                    <Image source={require('../assets/img/plus.png')} style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291'}}/>
-                                </View>
+                                <View style={{width:width/3,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18}}>
+                                <Text numberOfLines={2} style={{paddingLeft:20,fontFamily:'AzoSans-Regular',fontSize:10,color:'#707070',width:width/5}}>Create Section</Text>
+                                <View style={{width:32,height:32,borderRadius:32/2,backgroundColor:'#27A291',alignItems:'center',justifyContent:'center'}}>
+                                  <Image  source={require('../assets/img/white_section.png')} style={{width:15,height:15}}/>
+                                  </View>                     
+                                             </View>
                                 </TouchableOpacity>
                                 </View>
                     }
@@ -658,19 +675,19 @@ editClk() {
          }}>
            <View style={{flexDirection:'row',width:'85%',margin:'1%',alignSelf:'center',  alignItems: 'center',
           justifyContent:'center',}}>
-           <Text  style={{fontSize: 17,textAlign:'center', color: 'white',alignSelf:'center',marginLeft:'2%'}}>Edited - </Text>
-          <Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:Number(this.state.editpagetitle).length!=null && this.state.editpagetitle.length<10?width/8:width/4.5,textAlign:'center'}}> 
+           <Text  style={{fontSize: 16,fontFamily:'AzoSans-Regular',textAlign:'center', color: 'white',alignSelf:'center',marginLeft:'2%'}}>Edited - </Text>
+          <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Regular',textAlign:'left', color: '#fff',width:Number(this.state.editpagetitle).length!=null && this.state.editpagetitle.length<10?width/8:width/4.5,textAlign:'center'}}> 
           {this.state.editpagetitle}
           </Text>
-          <Text style={{color:'#fff',fontSize:17}}> to </Text>
-          <Text style={{textDecorationLine:'underline',color:'#fff',fontSize:17}}>
+          <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}> to </Text>
+          <Text style={{textDecorationLine:'underline',color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>
             {this.state.collSourceName}
             {/* Sample Collection1 */}
             </Text>
            </View>
            
           <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({undo:true})}>
-          <Text style={{fontSize: 16,color:'white',textDecorationLine:'underline',}}>Undo</Text>
+          <Text style={{fontSize: 16,color:'white',textDecorationLine:'underline',fontFamily:'AzoSans-Regular'}}>Undo</Text>
           </TouchableOpacity>
        </View>}
         />
@@ -738,13 +755,13 @@ editClk() {
           
         },
         textStyle:{ 
-            color: 'black', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+            color: '#707070', textAlign: 'center', fontSize: 16, paddingLeft: '4%',fontFamily:'AzoSans-Regular'
         },
         inacitveStyle:{ 
-            color: '#c2c2c2', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+            color: '#c2c2c2', textAlign: 'center', fontSize: 16, paddingLeft: '4%',fontFamily:'AzoSans-Regular'
         },
         inacitveColor:{ 
-            color: '#fff', textAlign: 'center', fontSize: 18, paddingLeft: '4%'
+            color: '#fff', textAlign: 'center', fontSize: 16, paddingLeft: '4%',fontFamily:'AzoSans-Regular'
         },
       
         activeText: {

@@ -189,7 +189,8 @@ class Settings extends Component {
       }
     };
 
-    ImagePicker.z(options, response => {
+
+    ImagePicker.showImagePicker(options, response => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -498,6 +499,7 @@ exploredata(userid){
               onChangeText={(val)=>this.usernameUpdate(val)}
               value={this.state.username}
             />
+            {/* {this.state.username.length<4?<Text>Min 4 Characters required</Text>:null} */}
             {/* <Text style={{ color: '#646464', fontSize: 15, textAlign: 'center', margin: '2%' }}>(JPG, PNG, TIF or GIF recommended)</Text> */}
             <Text style={styles.textTitle1}>Headline</Text>
             {/* <TouchableOpacity style={styles.touchableBtn}>
@@ -553,7 +555,7 @@ exploredata(userid){
               maxLength={2000}
               // placeholder={!this.state.about?"tell us more about yourself":null}
               onChangeText={(val)=>this.aboutUpdate(val)}
-              value={this.state.about} style={{ height: 170, textAlign: 'center', justifyContent: 'center', borderRadius: 20, backgroundColor: '#F9F9F9', paddingLeft: '8%', textAlign: 'left' }} />
+              value={this.state.about} style={styles.inputbox} />
             {/* <TextInput textAlignVertical={'top'}
                 style={[styles.lorem,styles.input]} multiline={true} placeholder="tell us more about yourself" /> */}
             {/* <Text 
@@ -790,6 +792,17 @@ const styles = StyleSheet.create({
     borderRadius: 30
     ,
   },
+  inputbox:{ 
+    height: 170,
+     textAlign: 'center',
+      justifyContent: 'center',
+       borderRadius: 20, 
+       backgroundColor: '#F9F9F9',
+        paddingLeft: '8%',
+         textAlign: 'left',
+         fontFamily:'AzoSans-Regular',
+         fontSize:16
+ },
   touchableBtn1: {
     backgroundColor: '#ffff',
     justifyContent: 'center',
@@ -830,17 +843,17 @@ const styles = StyleSheet.create({
     padding: '3%',
   },
   textTitle1: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
     // fontWeight:'600',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     padding: '3%',
     // marginTop:'1%'
   },
   descTextTitle: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat-Bold',
     padding: '5%',
     // marginTop: '5%'
   },

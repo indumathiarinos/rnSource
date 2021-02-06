@@ -410,7 +410,7 @@ tags(name){
   }
   gotodetail(){
     AsyncStorage.setItem('searchText',"")
-    AsyncStorage.setItem('searchFilter',"Desc")
+    AsyncStorage.setItem('searchFilter',"All")
     this.props.navigation.navigate('searchDetail')
     
   }
@@ -492,12 +492,18 @@ tags(name){
               //  margin:'2%', 
                alignContent: 'center', justifyContent: 'center',}}>
 
-                <Image
+                {/* <Image
                   style={{ 
                     // marginTop:'5%',
                     width:25,height:25 }}
                   source={require('../assets/img/white_search.png')}
-                />
+                /> */}
+                 <Icon
+                 
+                  name={'search1'}
+                  size={30}
+                  color={'#fff'}
+                  />
                 <Text style={{ 
                   // margin: '5%',
                   marginLeft:'3%',
@@ -561,16 +567,19 @@ tags(name){
                     <View style={{flexDirection:'column',width:width/1.5,marginTop:'3%' }}>
                     <Text numberOfLines={1} style={{fontSize:16,fontFamily:'AzoSans-Medium',paddingLeft:'2%'}}>
             {item.PostLinkTitle} </Text>
-            <Text style={{fontSize:12,fontFamily:'AzoSans-Light',marginTop:10,color:'#707070',paddingLeft:'3%'}}>
+            <Text  numberOfLines={1} style={{fontSize:12,fontFamily:'AzoSans-Light',marginTop:10,color:'#707070',paddingLeft:'3%'}}>
             {item.Post_author}    
             {/* Packaging Design - Bite Me: Packaging Insults Chewers as They... Grab a Piece of Tooth-Shaped Gum */}
               </Text>
             </View>
             <ImageBackground imageStyle={{borderRadius:10}} source={{uri:item.PostLinkImage!=""?item.PostLinkImage:null}} 
-            style={{resizeMode:'cover',width:100,height:120,borderRadius:20,
-            // margin:'3%'
-            marginTop:'2%',marginBottom:'2%'
-            }}>
+            // style={{resizeMode:'cover',width:100,height:120,borderRadius:20,
+            // // margin:'3%'
+            // marginTop:'2%',marginBottom:'2%'
+            // }}
+            style={[item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null, marginTop:'2%',marginBottom:'2%'}]}
+            
+            >
             <TouchableOpacity style={{padding:'2%'}}
                    onPress={() => {this.state.explore_page=='0'?( this.setState({reportModal:true})&&
                     this.refs.modal4.close()):this.alertPopup()
@@ -652,22 +661,24 @@ onBackdropPress={() =>     this.setState({reportModal:false})
             {/* <Text>Collection</Text> */}
           </TouchableOpacity>
           <TouchableOpacity style={styles.tabsss} onPress={() => this.toggleTab3()}>
-            <Image style={{ width: 50, height: 50, marginTop: 5 }} source={require('../assets/img/search.png')} />
+            <Image style={{  }} source={require('../assets/img/green_search.png')} />
             {/* <Text>Search</Text> */}
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
+          <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, }]} onPress={() => this.toggleTab4()}>
             {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
             {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
+            <View style={{flexDirection:'row'}}>
             <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.explore_page == '0' ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-            {/* <Text>Menu</Text> */}
+          <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+            </View>
+                      {/* <Text>Menu</Text> */}
             {/* </Drawer> */}
           </TouchableOpacity>
-
         </View>
-                    </SafeAreaView>
+      </SafeAreaView>
     )
   }
 
@@ -679,6 +690,23 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     height: width / 2,
   },
+  pubImgStyle:{ 
+    // elevation:1,
+    width: width/3.5,height:height/3.5,
+    // width:100,height:160,
+        borderRadius:15,
+    
+    // alignItems:'center',
+    //  jsutifyContent: 'center'
+     },
+     pageImgStyle:{ 
+      // elevation:1,
+      width: width/3.5,height:height/7.5,
+      // width:100,height:120,
+      borderRadius:15
+      // alignItems:'center',
+      //  jsutifyContent: 'center'
+       },
   sliderContainerStyle: {
     borderRadius: width,
     width: width * 2,

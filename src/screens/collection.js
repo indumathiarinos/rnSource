@@ -499,6 +499,10 @@ class Collection extends Component {
                     actions={this.state.actions}
                     color={'#27A291'}
                     onPressItem={name => {
+                        if(name=="createCollection"){
+                            AsyncStorage.setItem('postadd_postid',JSON.stringify(Number("")));
+                            AsyncStorage.setItem('postadd_typeid',JSON.stringify(Number("")));
+                        }
                         this.props.navigation.navigate(name)
                         // console.log(`selected button: ${name}`);
                     }}
@@ -557,16 +561,14 @@ class Collection extends Component {
                         <Image style={{width:50,height:50,marginTop:5}} source={require('../assets/img/search.png')} />
                         {/* <Text>Search</Text> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
-                        {/* <Drawer
-        ref={(ref) => { this.drawer = ref; }}
-        content={<SideBar navigator={this.navigator} />}
-        onClose={() => this.closeDrawer()} > */}
-                        {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2 }} source={{ uri: this.state.avatar }}></Image>
-                        {/* <Text>Menu</Text> */}
-                        {/* </Drawer> */}
-                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, }]} onPress={() => this.toggleTab4()}>
+          
+          <View style={{flexDirection:'row'}}>
+          <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatar ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
+        <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+          </View>
+                  
+        </TouchableOpacity>
 
                 </View>
             </SafeAreaView>
@@ -587,10 +589,10 @@ const styles = StyleSheet.create({
         position:'absolute',
         elevation:8
     },
-    tabsss: {
-        alignItems: 'center', 
-        justifyContent: 'center'
-    },
+    // tabsss: {
+    //     alignItems: 'center', 
+    //     justifyContent: 'center'
+    // },
     subtitle:{
         color: '#707070',
         fontSize:12,

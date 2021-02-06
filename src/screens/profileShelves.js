@@ -902,9 +902,8 @@ render() {
             >Collection</Text>
           </TouchableOpacity>
 
-          <LinearGradient style={{ borderRadius: 10 }} colors={
-            ['#24D4BC', '#27A291']}>
-            <TouchableOpacity
+         
+            <TouchableOpacity style={{ borderRadius: 10,backgroundColor:'#27A291'}}
               onPress={this.headerBtnClk}>
               <Text style={{
                 padding: '5%',
@@ -915,7 +914,6 @@ render() {
                 onPress={() => this.props.navigation.navigate('profileShelves')}
               >Shelves</Text>
             </TouchableOpacity>
-          </LinearGradient>
           {/* </View> */}
           {/* </View> */}
         </View>
@@ -923,16 +921,16 @@ render() {
         <Image style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/close.png')} />
         </TouchableOpacity>
       </View>
-      {/* </View> */}
       <ScrollView>
-      <View style={styles.containerStyle} >
-          <ImageBackground style={styles.sliderContainerStyle}
-            
-            source={{uri:this.state.cover!=""?this.state.cover:null}}
-            >
-            {/* <Slider/> */}
-          </ImageBackground>
-        </View> 
+          <View style={styles.containerStyle} >
+              <ImageBackground style={styles.sliderContainerStyle}
+                source={{uri:this.state.cover!=""?this.state.cover:null}}
+                >
+                {/* <Slider/> */}
+              </ImageBackground>
+            </View> 
+   
+            <Image style={styles.avatar} source={{uri:this.state.avatar}}/>
 
         <Image style={styles.avatar} source={{uri:this.state.avatar}}/>
         <View style={styles.socialBarContainer2}>
@@ -952,12 +950,10 @@ render() {
             </View>
             <View>
               <View style={styles.socialBarContainer3}> 
-              <LinearGradient style={styles.buttonContainer2} colors={['#24D4BC', '#27A291']} >
-            <TouchableOpacity
+            <TouchableOpacity  style={styles.buttonContainer2} 
             onPress={()=>this.setState({shareModal:!this.state.shareModal})}>
               <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>Share</Text> 
             </TouchableOpacity>
-            </LinearGradient>
             </View> 
             </View>   
             
@@ -1461,11 +1457,30 @@ onBackdropPress={() => this.setState({ collectionModal: false })}>
 const styles = StyleSheet.create({
 active: { height: 4, width: 20, backgroundColor: 'green' },
 inactive: { height: 2, width: 20, backgroundColor: '#707070' },
+// containerStyle: {
+//   alignSelf: 'center',
+//   width: width,
+//   overflow: 'hidden',
+//   height: width / 2.2,
+// },
+// sliderContainerStyle: {
+//   borderRadius: width,
+//   width: width * 2,
+//   height: width * 2,
+//   marginLeft: -(width / 2),
+//   position: 'absolute',
+//   bottom: 0,
+//   overflow: 'hidden',
+//   elevation:1,
+//   backgroundColor:'#fff',
+//   resizeMode:'cover'
+
+//   },
 containerStyle: {
   alignSelf: 'center',
   width: width,
   overflow: 'hidden',
-  height: width / 2.2,
+  height: width / 2.5,
 },
 sliderContainerStyle: {
   borderRadius: width,
@@ -1474,7 +1489,7 @@ sliderContainerStyle: {
   marginLeft: -(width / 2),
   position: 'absolute',
   bottom: 0,
-  overflow: 'hidden',
+  overflow:'hidden',
   elevation:1,
   backgroundColor:'#fff',
   resizeMode:'cover'
@@ -1507,13 +1522,13 @@ avatar: {
   borderRadius: 63,
   borderWidth: 2,
   borderColor: "white",
-  marginBottom:10,
+  // marginBottom:10,
   position: 'absolute',
   flexDirection: 'row',
   justifyContent:'center',
   alignSelf:'center',
   alignItems: 'center',
-  marginTop: width /3.4  //actual marginTop:130
+  marginTop: width /4  //actual marginTop:130
 },
 bottomBar: {
   flexDirection: 'row',
@@ -1528,16 +1543,17 @@ bottomBar: {
 //   fontWeight:'600',
 // },
 body:{
-  // marginTop:10,
+  // marginTop:5,
 },
 bodyContent: {
   alignItems: 'center',
    padding:10,
+   marginTop:'1%'
   // backgroundColor:'skyblue'
 },
 name:{
   color:"#000",
-  fontSize: 16,
+  fontSize: 18,
   fontFamily:'Montserrat-Bold'
 },
 name1:{
@@ -1549,7 +1565,7 @@ name1:{
 },
 info:{
   color: "#000000",
-  fontSize: 12,
+  fontSize: 14,
 fontFamily:'AzoSans-Medium'
 },
 description:{
@@ -1588,7 +1604,7 @@ buttonContainer2: {
   justifyContent: 'center',
   width:100,
   borderRadius:30,
-  // backgroundColor: "#27A291",
+  backgroundColor: "#27A291",
  
 },
 socialBarContainer3: {
@@ -1598,12 +1614,13 @@ socialBarContainer3: {
 socialBarContainer: {
   flexDirection: 'row',
   flex: 1,
-  marginTop:3
+  marginTop:5
 },
 socialBarContainer2: {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent:'space-between',
+  marginTop:-20
 },
 socialBarSection: {
   justifyContent: 'center',

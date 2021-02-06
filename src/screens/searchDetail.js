@@ -241,18 +241,18 @@ profileService(){
 imgClick=(postid,typeid)=>{
   let { profileData } = this.state;
   profileData = profileData.map(e => {
-    if (typeid== e.TypeID) {
+    if (e.TypeID==typeid) {
       console.log('type id postid in search page profile ',typeid,postid)
-      AsyncStorage.setItem('typeid',JSON.stringify(Number(typeid)));
-      AsyncStorage.setItem('postid', JSON.stringify(Number(postid)));
-      if (typeid == 4) {
+      AsyncStorage.setItem('typeid',JSON.stringify(Number(e.TypeID)));
+      AsyncStorage.setItem('postid', JSON.stringify(Number(e.Post_page_id)));
+      if (e.TypeID == 4) {
         // AsyncStorage.setItem('pagefeedItem',JSON.stringify(item));
         return this.props.navigation.navigate('readingBook');
-      } else if (typeid == 1) {
+      } else if (e.TypeID == 1) {
             return this.props.navigation.navigate('viewBook');
-      } else if (typeid == 2) {
+      } else if (e.TypeID == 2) {
         return this.props.navigation.navigate('periodiViewBook');
-      } else if (typeid == 3) {
+      } else if (e.TypeID == 3) {
             return this.props.navigation.navigate('seriesViewBook');
       }
     } else {
@@ -598,8 +598,15 @@ style={[!this.state.profilepage?styles.blacktext:styles.headerText,{fontFamily:'
           </TouchableOpacity>
       </View>
         </View>
- 
-    
+        <FlatList
+            showsVerticalScrollIndicator={false}
+            data={!this.state.profilepage? this.state.profileData:this.state.getProfiles}
+            renderItem={(item) =>!this.state.profilepage?
+              this.fullcard(item):  this.fullcard1(item)
+            }
+            keyExtractor={(item, index) => index.toString()}
+            extraData={this.state}/>
+{/*     
         <FlatList
         legacyImplementation={false}
         data={!this.state.profilepage?this.state.profileData:this.state.getProfiles}
@@ -607,10 +614,10 @@ style={[!this.state.profilepage?styles.blacktext:styles.headerText,{fontFamily:'
         navigation={this.props.navigation}
         renderItem={!this.state.profilepage?this.fullcard.bind(this):this.fullcard1.bind(this)}
         enableEmptySections={false}
-        style={{ marginTop: '1%' }}
+        // style={{ marginTop: '1%' }}
         extraData={this.state}
         keyExtractor={(item, index) => index.toString()}
-      />
+      /> */}
 
    
     <ModalBox
@@ -734,15 +741,15 @@ style={[!this.state.profilepage?styles.blacktext:styles.headerText,{fontFamily:'
 const styles = StyleSheet.create({
   pubImgStyle:{ 
     // elevation:1,
-    width: 130, height: 150,
-    borderRadius:15,
+    width: width/3,height:height/3.5,
+        borderRadius:15,
     
     // alignItems:'center',
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
       // elevation:1,
-      width: 125, height: 70,
+      width: width/3,height:height/6.5,
       borderRadius:15
       // alignItems:'center',
       //  jsutifyContent: 'center'

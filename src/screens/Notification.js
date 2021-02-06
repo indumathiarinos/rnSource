@@ -128,6 +128,35 @@ class Notification extends Component {
         console.warn(error);
       });
   }
+  notifyUpdate(id) {
+    var json = JSON.stringify({
+      PK_ID: id,
+    });
+    console.log('notify data ',json)
+    fetch("http://162.250.120.20:444/Login/NotifyUpdate",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        //alert(responseText);
+        this.exploredata(this.state.getuserid)
+        this.setState({ loading: false })
+        // console.warn(responseJson)
+        // console.warn("Notification")
+
+        //alert(this.state.data.status)  
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
   handleBackButtonClick() {
     this.backpress()
     return true;
@@ -159,12 +188,15 @@ class Notification extends Component {
     var imgSource = this.state.showlikeImg ? like : unlike;
     // var imgSource = this.state.showlikeImg? require('../assets/img/like.png') : require('../assets/img/unlike.png');
     return (
-
+      <TouchableOpacity 
+      onPress={()=>  item.notifyreadstatus=='N'? this.notifyUpdate(item.id):null}
+      >
       <View style={{
         flexDirection: 'row',
         padding: '3%',
+        
         // backgroundColor:'pink',
-        flex: 1, backgroundColor: '#fff',
+        flex: 1, backgroundColor: item.notifyreadstatus=='N'?'#C5F3FB':'#fff',
         // alignItems:'center',
         justifyContent: 'space-between'
       }}>
@@ -192,7 +224,8 @@ class Notification extends Component {
             /> */}
            
 
-      </View>);
+      </View>
+      </TouchableOpacity>);
   }
   // filter_page = () => {
   //   // let data = [ { id: 1, name: 'Mike', city: 'philps', state:'New York'}, { id: 2, name: 'Steve', city: 'Square', state: 'Chicago'}, { id: 3, name: 'Jhon', city: 'market', state: 'New York'}, { id: 4, name: 'philps', city: 'booket', state: 'Texas'}, { id: 5, name: 'smith', city: 'brookfield', state: 'Florida'}, { id: 6, name: 'Broom', city: 'old street', state: 'Florida'}, ]

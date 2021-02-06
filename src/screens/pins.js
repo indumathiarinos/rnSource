@@ -406,14 +406,13 @@ class Pins extends Component {
 
                     >Collection</Text>
                     </TouchableOpacity>
-                    <LinearGradient style={{ borderRadius: 10}} colors={
-                    ['#24D4BC', '#27A291']}>
+                   
                     <TouchableOpacity 
+                    style={{ borderRadius: 10,backgroundColor:'#27A291'}}
                     >
                     <Text style={styles.activeText}
                     >Pins</Text>
                     </TouchableOpacity>
-                    </LinearGradient>
                     <TouchableOpacity style={{ alignItems: 'center' }}
                         onPress={() =>this.readlaterPress()}
                         >
@@ -512,16 +511,14 @@ class Pins extends Component {
                         style={{ alignSelf: 'center',width:50,height:50 }} source={require('../assets/img/search.png')} />
                         {/* <Text>Search</Text> */}
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.tabsss, ]} onPress={() => this.toggleTab4()}>
-                        {/* <Drawer
-        ref={(ref) => { this.drawer = ref; }}
-        content={<SideBar navigator={this.navigator} />}
-        onClose={() => this.closeDrawer()} > */}
-                        {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                        <Image style={{ width: 28, height: 28, borderRadius: 28 / 2,borderColor: '#27A291', borderWidth: 1  }} source={{ uri: this.state.avatar }}></Image>
-                        {/* <Text>Menu</Text> */}
-                        {/* </Drawer> */}
-                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, }]} onPress={() => this.toggleTab4()}>
+          
+          <View style={{flexDirection:'row'}}>
+          <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatar ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
+        <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+          </View>
+                  
+        </TouchableOpacity>
 
                 </View>
             </SafeAreaView>

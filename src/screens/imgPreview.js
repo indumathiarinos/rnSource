@@ -15,13 +15,17 @@ import {
   FlatList,
 
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+
 import ModalBox from 'react-native-modalbox';
 import Modal1 from 'react-native-modal';
 import { Avatar, Divider } from 'react-native-elements';
 import { connect } from "react-redux";
 import BlurModal from '../components/blurModal';
 import Share from 'react-native-share';
-
+import Icons from 'react-native-vector-icons/AntDesign'
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import ShareIcon from 'react-native-vector-icons/EvilIcons'
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -44,10 +48,14 @@ class PreView extends Component {
       getsecColName: '',
       sectionExpand: false,
       section: '',
-      getuserid:'',
       secCollid: '',
       popup_title:'',
-      likeStatus:false
+      likeStatus:false,
+      user_id:'',
+      author:'',
+      title:'',
+      img:'',
+      undo:false
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
@@ -55,7 +63,28 @@ class PreView extends Component {
     AsyncStorage.getItem('userid').then((value) => this.setState({ getuserid: value })).done();
     AsyncStorage.getItem('typeid').then((value) => this.setState({ gettypeid: value })).done();
     AsyncStorage.getItem('postid').then((value) => this.setState({ getpostid: value })).done();
+    AsyncStorage.getItem('likestatus').then((value) => this.setState({ likeStatus: value })).done();
+    this.CheckConnectivity();
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+  CheckConnectivity() {
+    NetInfo.fetch().then(state => {
+
+      // console.log("Connection type cheking", state.type);
+      // console.log("Is connected cheking?", state.isConnected);
+
+      if (state.isConnected == true) {
+        { this.getData(); }
+      } else {
+        alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
+      }
+
+    });
+  }
+  getData(){
+    setTimeout(() => {
+      this.exploredata(this.state.gettypeid,this.state.getpostid)
+    }, 1000);
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -64,6 +93,49 @@ class PreView extends Component {
     this.backpress();
     return true;
   } 
+  notifyAdd = (n_userid,username,id,title) =>{
+    var json2 = 
+    // JSON.stringify(
+      {
+      
+        "id":id,
+        "title":title,
+        "user_name":username,
+        "type":"like",
+        "bookimg":null,
+        "user_id":this.state.getuserid,
+        "comment":"",
+        "actionURL":"http:\/\/pagevio.com\/notification-read\/like",
+        "icon":"fa fa-thumbs-up",
+        "heading":"Likes your"
+    }
+    // )
+    let n_type=`App\\Notifications\\NotificationFeeds`;
+    let ntype2=`App\\User`;
+    var json = JSON.stringify({
+      "Type":n_type,
+      "Notifiable_Type":ntype2,
+      "Notifiable_ID":n_userid,
+      "Datas":JSON.stringify(json2)});
+    console.log(json,"notiffy data")
+    fetch("http://162.250.120.20:444/Login/NotificationAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log('responsejson notify ',responseJson)
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
   likeClick(id) {
     // let selected;
    
@@ -83,9 +155,11 @@ class PreView extends Component {
           .then((responseJson) => {
             this.setState({ loading: false,});
             console.warn(responseJson);
-            this.setState({ likeStatus:responseJson[0].Message=='Unlike'?false:true })
-            // console.log('like service called');
+            {responseJson[0].Message == 'Like'? this.notifyAdd(this.state.user_id,this.state.author,this.state.getpostid,this.state.title):null}
             { this.exploredata(this.state.gettypeid,this.state.getpostid) }
+
+            // this.setState({ likeStatus:responseJson[0].Message=='Unlike'?false:true })
+            // console.log('like service called');
           })
           .catch((error) => {
             console.warn(error);
@@ -313,8 +387,119 @@ class PreView extends Component {
     console.log('this typeid postid ',this.state.gettypeid,this.state.getpostid)
     this.props.navigation.navigate('comments')
   }
+  exploredata(typeid, postid) {
+    this.setState({ loading: true })
+    // {"TypeID":"1","Post_PageID":"3"}
+    console.log('dsflkajdkfksd ', typeid, postid)
+    var json = JSON.stringify({
+      'TypeID': typeid,
+      'Post_PageID': postid,
+      "user_id": this.state.getuserid
+    });
+    console.log('jsong ', json)
+    fetch("http://162.250.120.20:444/Login/HelpPublicationDesc",
+      {
+        method: 'POST',
+
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+       
+        this.setState({
+          img: responseJson[0].Image,
+          title: responseJson[0].Title,
+          author: responseJson[0].username,
+          user_id: responseJson[0].user_id,
+          exists: responseJson[0].Readstatus == 'N' ? false : true,
+          likeStatus: responseJson[0].Likestatus == 'Y'?true:false
+                })
+ 
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
    imgPress=()=>{
     this.props.navigation.navigate('socialmedia')
+  }
+  readlater = () => {
+    this.setState({
+      collectionModal: false,
+      readlaterPopup: true
+    });
+
+    setTimeout(() => {
+      this.setState({
+        readlaterPopup: false,
+      })
+      if (this.state.undo == false) {
+        this.readlaterAdd(this.state.getuserid, this.state.getpostid, this.state.gettypeid)
+      } else {
+        this.setState({ undo: false })
+      }
+    }, 3000);
+    { this.exploredata(this.state.gettypeid, this.state.getpostid) }
+
+    // this.props.navigation.navigate('readlater');
+  }
+  readlaterAdd(userid, pageid, typeid) {
+    // this.setState({ loading: true })
+    var json = JSON.stringify({
+      'UserID': userid,
+      "Post_PageID": pageid,
+      "Type_ID": typeid
+    });
+    fetch("http://162.250.120.20:444/Login/ReadLaterAdd",
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-type': 'application/json'
+        },
+        body: json
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        //alert(responseText);
+        // if (responseJson[0].Message == "Already Exist") {
+        //   // this.setState({ exists: true })
+        // }
+        this.setState({ collectionModal: false, expanded: false, sectionExpand: false, loading: false });
+        // this.readlater();
+        // SnackBar.show({
+        //   title: !this.state.exists?"Added to ReadLater":"Already Added in ReadLater",
+        //   duration:SnackBar.LENGTH_LONG,
+        //   backgroundColor: '#27A291',
+        //   action: {
+        //     title: 'Undo',
+        //   //   onPress: () => SnackBar.show({ title: 'Thank you!' }),
+        //     color: '#fff',
+        //   },
+        // })
+        //      setTimeout(() => {
+        //         SnackBar.dismiss()
+        //     // this.props.changeRemove()
+        //     this.setState({
+        //         // readlaterPopup: false,
+        //         exists:false
+        //     });
+
+        //     //   this.props.changeRemove();
+        // }, 5000);
+        console.warn(responseJson)
+        console.warn("readlateradd")
+        //alert(this.state.data.status)  
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   }
   render() {
    let value = this.props.navigation.state.params.name
@@ -333,54 +518,62 @@ class PreView extends Component {
       >
          <TouchableOpacity style={{position:'absolute',height:"8%",top:0,left:0,right:0}} onPress={()=>this.setState({showBar:!this.state.showBar})}/>
        {!this.state.showBar?null:
-        <View style={{flexDirection:'row',position:'absolute',height:"8%",top:0,left:0,right:0,backgroundColor:'gray'}}>
-          <Text style={{color:'#fff',marginLeft:'2%',alignSelf:'center',fontSize:17,textAlign:'center',width:width/1.1,}}>{title}</Text>
+        <View style={{flexDirection:'row',position:'absolute',height:"8%",top:0,left:0,right:0,backgroundColor:'#000'}}>
+          <Text style={{color:'#fff',marginLeft:'2%',alignSelf:'center',fontSize:20,fontFamily:'Montserrat-Bold',textAlign:'center',width:width-50,}}>{title}</Text>
          <TouchableOpacity style={{marginRight:'2%',alignItems:'center',justifyContent:'center'}} onPress={()=>this.props.navigation.navigate('viewBook')}>
-          <Image style={{width:30,height:30,marginRight:20}} source={require('../assets/img/close-button.png')}/>
+          <Image style={{width:50,height:40,marginRight:40}} source={require('../assets/img/close-button.png')}/>
           </TouchableOpacity>
         </View>}
         <Image 
         style={{ width: '100%', height: '80%', alignSelf: 'center' }}
-          source={{uri:value}}>
+          // source={{uri:value}}
+          source={{uri:this.state.img}}
+          >
         </Image>
         <TouchableOpacity style={{position:'absolute',height:"8%",bottom: 0,left:0,right:0}} onPress={()=>this.setState({showBar:!this.state.showBar})}/>
 
         {!this.state.showBar?null:
          <View style={styles.bottomBar}>
          <TouchableOpacity
-           style={{ padding: '1%' }}
            onPress={() => this.likeClick(this.state.getpostid)}
          >
-           {this.state.likeStatus?
- <Image
-//  style={{marginTop:12}}
- source={
-require('../assets/img/liked.png')
- }/>:
-           <Image 
-           source={require('../assets/img/like_outline.png')}
+   <Icons name={this.state.likeStatus ? 'like1' : 'like2'}
+                size={20}
+                style={{ alignSelf: 'center' }}
+                color={this.state.likeStatus ? '#fff' : '#fff'}
               />
-           }
          </TouchableOpacity>
          <TouchableOpacity
            onPress={() => this.commentClick()}
          >
-           <Image 
-          style={{width:25,height:25,marginTop:8}}
-             source={require('../assets/img/message.png')} />
+          <MaterialIcon name={'comment-text-outline'}
+                size={20}
+                style={{ alignSelf: 'center' }}
+                //  style={{marginLeft:15,marginBottom:3}}
+                color={
+                  //  item.Likestatus=='Y'?'#27A291':
+                  '#fff'}
+              />
          </TouchableOpacity>
          <TouchableOpacity
                  onPress={()=>this.setState({collectionModal:true})}
          >
-           <Image style={{width:25,height:25,marginTop:5}}
-           source={require('../assets/img/add_white.png')} />
+         <Icons name={'plus'}
+  size={20}
+  style={{alignSelf:'center'}}
+  color={'#fff'}
+  />
          </TouchableOpacity>
          <TouchableOpacity 
 
            onPress={() =>this.setState({shareModal:true})}
          >
-           <Image  style={styles.group} source={require('../assets/img/share_white.png')} />
-         </TouchableOpacity>
+<ShareIcon name={'share-google'}
+  size={25}
+  style={{alignSelf:'center'}}
+  color={'#fff'}
+  />      
+     </TouchableOpacity>
        </View>
        }
   <Modal1 isVisible={this.state.shareModal}
@@ -456,6 +649,8 @@ require('../assets/img/liked.png')
             <TouchableOpacity
               style={{ alignSelf: 'center', alignContent: 'center', alignItems: 'center', width: 200, height: 30, }}
               onPress={() => {
+                AsyncStorage.setItem('postadd_postid',JSON.stringify(Number(this.state.getpostid)));
+                AsyncStorage.setItem('postadd_typeid',JSON.stringify(Number(this.state.gettypeid)));
                 this.props.navigation.navigate('createCollection')
                 this.setState({ collectionModal: false })
               }}>
@@ -463,8 +658,8 @@ require('../assets/img/liked.png')
                 flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200, height: 30,
                 justifyContent: 'center', alignSelf: 'center'
               }}>
-                  <Image  source={require('../assets/img/createCol.png')} />
-                <Text style={{ fontSize: 17, color: '#27A291', marginLeft: '5%', width: width / 2.5, }}>Create Collection</Text>
+                <Image source={require('../assets/img/createCol.png')} />
+                <Text style={{ fontSize: 16, fontFamily: 'AzoSans-Medium', color: '#27A291', marginTop: 5, width: width / 2.5, alignSelf: 'center', marginLeft: '2%' }}>Create Collection</Text>
 
               </View>
             </TouchableOpacity>
@@ -486,8 +681,8 @@ require('../assets/img/liked.png')
                       width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}
                   >
-                  <Image  source={require('../assets/img/colliconnew1.png')} />
-                      <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
+                    <Image source={require('../assets/img/colliconnew1.png')} />
+                    <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.9 }}>Collections</Text>
                   </View>
 
                   <Image style={{ alignSelf: 'center', }} source={require('../assets/img/down_arrow.png')} />
@@ -507,8 +702,8 @@ require('../assets/img/liked.png')
                     <View style={{
                       flexDirection: 'row', width: 260, justifyContent: 'center', alignItems: 'center', alignSelf: "center",
                     }}>
-                    <Image  source={require('../assets/img/colliconnew1.png')} />
-                      <Text style={{ fontSize: 17, color: '#fff', marginLeft: '5%', width: width / 2.9  }}>Collections</Text>
+                      <Image source={require('../assets/img/coll_white1.png')} />
+                      <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#ffff', marginLeft: '5%', width: width / 2.9 }}>Collections</Text>
                     </View>
                     <TouchableOpacity
                       // style={{ marginLeft: '-15%', }}
@@ -528,7 +723,7 @@ require('../assets/img/liked.png')
                             <View style={{
                               flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                             }}>
-                              <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.title}</Text>
+                             <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 180 }}>{item.title}</Text>
                               <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy == 'Public' ? require('../assets/img/worldwide.png') : require('../assets/img/not.png')} />
                               <TouchableOpacity style={{ width: 30, height: 30, alignItems: 'center', justifyContent: 'center' }} onPress={() => { item.SectionStatus == 1 ? this.sectionClick(item.id) : null }}>
                                 <Image style={{ alignSelf: 'center', marginLeft: '2%', }} source={item.SectionStatus == 0 ? null : require('../assets/img/dropdown.png')} />
@@ -554,7 +749,7 @@ require('../assets/img/liked.png')
                                         <View style={{
                                           flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', alignSelf: "center", padding: '4%',
                                         }}>
-                                          <Text numberOfLines={1} style={{ fontSize: 17, color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
+                                        <Text numberOfLines={1} style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', textAlign: 'center', width: 230 }}>{item.Title}</Text>
                                           {/* <Image style={{ alignSelf: 'center', marginLeft: '-10%' }} source={item.privacy=='Public'?require('../assets/img/worldwide.png'):require('../assets/img/not.png')} /> */}
                                           {/* <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{item.SectionStatus==1?this.sectionClick(item.id):null}}>
                              <Image style={{ alignSelf: 'center',marginLeft:'2%',}} source={item.SectionStatus==0?null:require('../assets/img/dropdown.png')} />
@@ -589,15 +784,15 @@ require('../assets/img/liked.png')
             <TouchableOpacity
               onPress={() => this.readlater()}>
 
-              <View style={{
-                flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
-                justifyContent: 'center', alignSelf: 'center'
-              }}>
-                  <Image source={require('../assets/img/readlaternew1.png')} />
-                <Text style={{ fontSize: 17, color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
-                <Divider style={{ backgroundColor: '#707070' }} />
+                      <View style={{
+                                flexDirection: 'row', alignItems: 'center', padding: '4%', width: 200,
+                                justifyContent: 'center', alignSelf: 'center'
+                            }}>
+                                <Image source={require('../assets/img/readlaternew1.png')} />
+                                <Text style={{ fontSize: 14, fontFamily: 'AzoSans-Regular', color: '#707070', marginLeft: '5%', width: width / 2.6 }}>Read Later</Text>
+                                <Divider style={{ backgroundColor: '#707070' }} />
 
-              </View>
+                            </View>
             </TouchableOpacity>
 
           </View>
@@ -619,13 +814,32 @@ require('../assets/img/liked.png')
           </TouchableOpacity>
         </View>}
         />
+         {this.state.readlaterPopup ?
+          <BlurModal visible={this.state.modalVisible}
+            children={
+              <View style={{
+                width: width,
+                left: 0, right: 0, bottom: 0, position: 'absolute',
+                height: '8%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#27A291',
+              }}>
+                <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
+                <TouchableOpacity onPress={() => this.setState({ undo: true })}>
+                  <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
+                </TouchableOpacity>
+              </View>
+            } />
+          : null}
       </SafeAreaView>
     );
   }
 }
 const styles=StyleSheet.create({
   bottomBar: {
-    backgroundColor: 'gray',
+    backgroundColor: '#000',
     flexDirection: 'row',
     justifyContent: "space-around",
     padding: '3%',
