@@ -204,7 +204,8 @@ this.CheckConnectivity()
     AsyncStorage.getItem('pageorder').then((value) => this.setState({ getcontentpageCount: value })).done();
     AsyncStorage.getItem('contentTopage').then((value) => this.setState({ contentToRead: value })).done();
     AsyncStorage.getItem('explore_page').then((value) => this.setState({ explore_page : value })).done();
-    this.setState({loading:false})
+    // this.setState({loading:false})
+    {this.props.collSec==true?this.getData2():null}
     // InteractionManager.runAfterInteractions(() => {
     //   this.setState({interactionsComplete: true});
     // });
@@ -216,7 +217,7 @@ this.CheckConnectivity()
     //       {this.getData2()}
   
     //    }
-    //     this.CheckConnectivity();
+    //     // this.CheckConnectivity();
     //   })
   
     // { this.getData() }
@@ -464,7 +465,7 @@ readlater = () => {
       //   })
       // }
       // { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 3000);
+    }, 1000);
   }
   // exploredata(postid,typeid,pagecount){
   //   console.log('josn postid,typeid, pagingcount ',postid,typeid,pagecount)
@@ -544,7 +545,6 @@ readlater = () => {
        console.log(responseJson)
         this.setState({
           readingData: this.state.readingData.concat(responseJson),
-          loading: false,
         })
         console.log('reading data length ',responseJson[0].ReadStatus)
         if(responseJson!=[]){
@@ -572,6 +572,7 @@ readlater = () => {
        
         console.log('this description data is ', this.state.avatar, this.state.page_url, this.state.created_at,"exist",this.state.exists);
       }
+      this.setState({loading:false})
       console.warn(responseJson);
       })
       .catch((error) => {
@@ -726,7 +727,7 @@ readlater = () => {
       })
       this.props.collSecPopup();
       //   this.props.changeRemove();
-    }, 3000);
+    }, 5000);
   
     // console.log('modal state is ', this.state.popupModal)
   }
@@ -1201,9 +1202,12 @@ readlater = () => {
       //   top:70,padding:'2%',
       // }}
       > */}
-        <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',width:width,}}>
-      <Text style={{fontFamily:'AzoSans-Regular',fontSize:12,color:'#707070',marginLeft:5}}>{this.state.created_at}</Text>
-          <View style={{ flexDirection: 'row',width:width/1.3,alignItems:'center',justifyContent:'flex-end'  }}>
+        <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',width:width,}}>
+   {this.state.gettypeid=='4'? 
+   <Text style={{fontFamily:'AzoSans-Regular',fontSize:12,color:'#707070',marginLeft:5}}>{this.state.created_at}</Text>
+    :null}
+         
+         {!this.state.contentVisible? <View style={{ flexDirection: 'row',width:this.state.gettypeid=='4'? width/1.3:width,alignItems:'center',justifyContent:'flex-end'  }}>
 <TouchableOpacity
 // onPress={this.changemode.bind(this)}
 >
@@ -1230,7 +1234,7 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
 >
   <Image style={styles.hiddenImgs1} source={require('../assets/img/twitter.png')} />
 </TouchableOpacity>
-</View>
+</View>:null}
 </View>
 
 {/* <TouchableOpacity 
@@ -1390,6 +1394,11 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                 style={{ alignSelf: 'center' }}
                 color={this.state.likeStatus ? '#27A291' : '#707070'}
               />     
+               {this.state.likeStatus? <Text style={{
+                color:
+                this.state.likeStatus? '#27A291' :
+                    '#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Like</Text>:null}
                    {/* <Image
             source={imgSource}
           /> */}

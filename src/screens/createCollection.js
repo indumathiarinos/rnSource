@@ -13,7 +13,7 @@ import Modal from "react-native-modal";
 import { connect } from "react-redux";
 import NetInfo from '@react-native-community/netinfo';
 const width = Dimensions.get('window').width;
-
+import BlurModal from '../components/blurModal';
 console.disableYellowBox = true;
 
 const height = Dimensions.get('window').height;
@@ -35,7 +35,9 @@ class CreateCollection extends Component {
             getcolId:'',
             gotoSectionEdit:false,
             postadd_postid:'',
-            postadd_typeid:''
+            postadd_typeid:'',
+            addCollectionModal:false,
+            undo:false
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -71,7 +73,29 @@ class CreateCollection extends Component {
             }
         });
       }
-
+      addCollection=()=>{
+        //   this.setState({addCollectionModal:true})
+        //   setTimeout(() => {
+        //      this.setState({addCollectionModal:false})
+        //      this.props.navigation.goBack();
+        //   }, 5000);
+        this.setState({
+            addCollectionModal: true
+        });
+        setTimeout(() => {
+            // this.props.changeRemove()
+            this.setState({
+                addCollectionModal: false
+            })
+            if(this.state.undo==false){
+                // this.props.navigation.goBack();
+                {this.CheckConnectivity()}
+              }else{
+                this.setState({undo:false})
+              }    
+              this.props.navigation.goBack();
+        }, 3000);
+      }
     exploredata(userid,title,privacy,desc){
         {this.state.title==""?null:
         this.setState({loading:true})
@@ -110,7 +134,9 @@ class CreateCollection extends Component {
                 //     this.props.navigation.navigate('sectionEdit');
                 //     this.setState({gotoSectionEdit:false})
                 // }else{
-                    this.props.navigation.goBack();
+                    // {this.state.postadd_postid!=""?this.addCollection(): 
+                                    //    this.props.navigation.goBack()
+                // }
                 //    this.props.navigation.navigate('collection');
                 // }
                 }
@@ -260,7 +286,7 @@ class CreateCollection extends Component {
                 <View style={styles.bottomLine}>
                
                <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'4%'}}
-                                  onPress={()=>this.CheckConnectivity()}>
+                                  onPress={()=>this.addCollection()}>
               {/* onPress={()=>this.props.navigation.navigate('collection')}> */}
               <View style={{flexDirection:'row'}}>
                <Text style={{color:'#707070',alignSelf:'center',textAlign:'right',fontSize:16,fontFamily:'AzoSans-Regular',paddingRight:'2%'}}>Save</Text>
@@ -280,6 +306,41 @@ class CreateCollection extends Component {
                        height: 140
                        }} />
                  </Modal>
+                 {this.state.addCollectionModal ?
+                    <BlurModal visible={this.state.addCollectionModal}
+                    children={
+                        <View style={{
+                            left: 0, right: 0, bottom: 0, position: 'absolute',
+                            height: '10%',
+                            width:width,
+                            // height:'8%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#27A291',
+                            paddingTop:'1%',
+                            // paddingLeft:'2%',
+                            // paddingRight:'2%'
+                        }}>
+                            <View style={{flexDirection:'row',width:width/1.4,alignSelf:'center',alignItems:'center',justifyContent:'center'}}>
+                                 <Text style={{ color: '#fff', fontSize: 16, textAlign: 'center',fontFamily:'AzoSans-Bold' }}>Added to - </Text>
+                          <TouchableOpacity 
+                        //   onPress={()=>this.props.navigation.navigate('collection')}
+                          >
+                          <Text numberOfLines={2} style={{fontSize:16,fontFamily:'AzoSans-Medium',color:'#fff',textDecorationLine:'underline'}}>{this.state.title}</Text>
+                          </TouchableOpacity>
+
+                            </View>
+
+                           
+                            <TouchableOpacity style={{ marginTop: '1%', alignSelf: 'flex-end', marginRight: '3%' }}
+                            onPress={()=>this.setState({undo:true})}
+                            >
+                                <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline',fontFamily:'AzoSans-Regular' }}>Undo</Text>
+                            </TouchableOpacity>
+
+
+                        </View>}/>
+                    : null}
             </SafeAreaView>
         )
     }

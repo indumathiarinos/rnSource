@@ -92,15 +92,15 @@ CheckConnectivity(){
 }
 sendData=()=>{
   // alert('Under Development')
-      AsyncStorage.setItem('userid',JSON.stringify(""));
-      AsyncStorage.setItem('typeid',JSON.stringify(""));
-      AsyncStorage.setItem('profile_img',JSON.stringify(""));
+      AsyncStorage.setItem('userid',JSON.stringify(Number("")));
+      AsyncStorage.setItem('typeid',JSON.stringify(Number("")));
+      AsyncStorage.setItem('profile_img',JSON.stringify(Number("")));
       AsyncStorage.setItem('user_name',JSON.stringify("Guest"));
-      AsyncStorage.setItem('postid',JSON.stringify(""));
-      AsyncStorage.setItem('collectionId',JSON.stringify(""));
-      AsyncStorage.setItem('sectionId',JSON.stringify(""));
-      AsyncStorage.setItem('usertype',JSON.stringify(""));
-      AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+      AsyncStorage.setItem('postid',JSON.stringify(Number("")));
+      AsyncStorage.setItem('collectionId',JSON.stringify(Number("")));
+      AsyncStorage.setItem('sectionId',JSON.stringify(Number("")));
+      AsyncStorage.setItem('usertype',JSON.stringify(Number("")));
+      AsyncStorage.setItem('bookmarkUserid',JSON.stringify(Number("")));
       AsyncStorage.setItem('loginData', JSON.stringify(false));
       this.props.savelogout();
       AsyncStorage.setItem('explore_page',JSON.stringify(1));
@@ -263,7 +263,7 @@ console.warn(json+"")
         <View style={{ alignContent: 'center', alignItems: 'center',flex:1 }}>
           <Image style={{
             width: 300,
-            resizeMode: 'contain', marginBottom: 15
+            resizeMode: 'contain', marginBottom: 0
           }}
             source={require('../assets/img/welc.png')}
           />

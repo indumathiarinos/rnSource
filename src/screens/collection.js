@@ -564,8 +564,8 @@ class Collection extends Component {
                     <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, }]} onPress={() => this.toggleTab4()}>
           
           <View style={{flexDirection:'row'}}>
-          <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatar ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-        <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+          <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatar ? this.state.avatar : null}}></Image>
+          <Image style={{top:'60%',right:'38%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
           </View>
                   
         </TouchableOpacity>

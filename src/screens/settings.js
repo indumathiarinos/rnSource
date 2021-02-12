@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View,Button,AsyncStorage, SafeAreaView,ImageBackground,BackHandler, FlatList, RefreshControl, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,TouchableOpacity, PermissionsAndroid} from 'react-native'
+import { View,Button,AsyncStorage, SafeAreaView,ProgressBarAndroid,ImageBackground,BackHandler, FlatList, RefreshControl, StyleSheet, Text, Alert, Dimensions, ScrollView, StatusBar, Image,TouchableOpacity, PermissionsAndroid} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import img1 from '../assets/img/cover1.png';
 import img2 from '../assets/img/cover2.png';
@@ -12,6 +12,7 @@ import ImagePicker from 'react-native-image-picker';
 import Modal1 from 'react-native-modal';
 import ImgToBase64 from 'react-native-image-base64';
 import NetInfo from '@react-native-community/netinfo';
+import PencilIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 const width = Dimensions.get('window').width;
 console.disableYellowBox = true;
 const height = Dimensions.get('window').height;
@@ -297,6 +298,7 @@ exploredata(userid){
     var json=JSON.stringify({
       "UserID":userid,"ColumnName":col_Name,"Value":value
       });
+      console.log('json update ',json)
       fetch("http://162.250.120.20:444/Login/ProfilesUpdate",
         {
             method: 'POST',
@@ -341,45 +343,63 @@ exploredata(userid){
    }
    headlineUpdate=(val)=>{
      if(this.state.headline!=val){
-       console.log('enters in headline onchange text',val);
     this.setState({headline:val})
-    {this.profileUpdateService(this.state.userid,'HeadLine',val)}
-     }
+    // {val.length>5?
+      this.profileUpdateService(this.state.getuserid,'HeadLine',val)
+      // :null}
+     }else{
+      this.setState({headline:val})
+    }
    }
    usernameUpdate=(val)=>{
+     console.log('data ',val,this.state.username)
     if(this.state.username!=val){
    this.setState({username:val})
-   {this.profileUpdateService(this.state.userid,'UserName',this.state.username)}
+  //  { val.length>3?
+    this.profileUpdateService(this.state.getuserid,'UserName',val)
+    // :null}
+    }else{
+      this.setState({username:val})
     }
   }
   aboutUpdate=(val)=>{
     if(this.state.about!=val){
    this.setState({about:val})
-   {this.profileUpdateService(this.state.userid,'About',this.state.about)}
+   {this.profileUpdateService(this.state.getuserid,'About',val)}
+    }else{
+      this.setState({about:val})
     }
   }
   webUpdate=(val)=>{
     if(this.state.website!=val){
    this.setState({website:val})
-   {this.profileUpdateService(this.state.userid,'Website',this.state.website)}
+   {this.profileUpdateService(this.state.getuserid,'Website',val)}
+    }else{
+      this.setState({website:val})
     }
   }
   fbUpdate=(val)=>{
     if(this.state.fb!=val){
    this.setState({fb:val})
-   {this.profileUpdateService(this.state.userid,'Facebook',this.state.fb)}
+   {this.profileUpdateService(this.state.getuserid,'Facebook',val)}
+    }else{
+      this.setState({fb:val})
     }
   }
   instaUpdate=(val)=>{
     if(this.state.insta!=val){
    this.setState({insta:val})
-   {this.profileUpdateService(this.state.userid,'Instagram',this.state.insta)}
+   {this.profileUpdateService(this.state.getuserid,'Instagram',val)}
+    }else{
+      this.setState({insta:val})
     }
   }
   twitterUpdate=(val)=>{
     if(this.state.twitter!=val){
    this.setState({twitter:val})
-   {this.profileUpdateService(this.state.userid,'Twitter',this.state.twitter)}
+   {this.profileUpdateService(this.state.getuserid,'Twitter',val)}
+    }else{
+      this.setState({twitter:val})
     }
   }
 
@@ -403,19 +423,17 @@ exploredata(userid){
         <ScrollView>
           <View style={styles.staticheader}>
 
-            <View style={{ flexDirection: 'row', width: width-50, justifyContent: 'center', alignItems: 'center' }}>
-            <LinearGradient style={{ borderRadius: 10}} colors={
-              ['#24D4BC', '#27A291']}>
-              <TouchableOpacity >
+            <View style={{ flexDirection: 'row', width: width-60, justifyContent: 'center', alignItems: 'center' }}>
+           
+              <TouchableOpacity style={{ borderRadius: 10,backgroundColor:'#27A291'}} >
                 <Text style={{
                   padding: '5%',
-                  fontSize: 16,
+                  fontSize: 14,
                   color: 'white',
-                  fontWeight: 'bold'
+                  fontFamily: 'AzoSans-Medium'
                 }}
                 >Profile</Text>
               </TouchableOpacity>
-                </LinearGradient>
               <TouchableOpacity style={{ alignItems: 'center' }}
                 onPress={() => this.props.navigation.navigate('settingsAccount')}
               >
@@ -447,11 +465,21 @@ exploredata(userid){
               source={{uri:this.state.coverImg!=""?this.state.coverImg:null}}>
               {/* <Slider/> */}
             </ImageBackground>
-            <TouchableOpacity style={{borderColor:'#fff',borderWidth:0.5,right:10,marginTop:80, position:'absolute',backgroundColor:'#24d4bc',width:30,height:30,borderRadius:30/2,alignItems:'center',justifyContent:'center'}}
+            <TouchableOpacity 
+            style={{borderColor:'#fff',borderWidth:0.5,right:10,marginTop:80, position:'absolute',
+            backgroundColor:'#27A291',
+            width:30,height:30,
+            borderRadius:30/2,alignItems:'center',justifyContent:'center'
+          }}
               // onPress={() => this.refs.modal4.open()}
               onPress={this.coverimgTapped.bind(this)}
               >
-            <Image style={styles.pencil} source={require('../assets/img/pencil.png')}/>
+                <PencilIcon
+                name={'pencil'}
+                color={'#fff'}
+                size={18}
+                />
+            {/* <Image style={styles.pencil} source={require('../assets/img/pencilicon.png')}/> */}
 
             </TouchableOpacity>
 
@@ -473,11 +501,20 @@ exploredata(userid){
                 // source={{ uri: this.state.photo.uri }}
                 />
         )}
-                <TouchableOpacity style={{marginLeft:80,borderColor:'#fff',borderWidth:0.5, position: 'absolute',marginTop:70,padding:'1%',backgroundColor:'#24d4bc',width:30,height:30,borderRadius:30/2,alignItems:'center',justifyContent:'center'}}
+                <TouchableOpacity
+                 style={{marginLeft:80,borderColor:'#fff',borderWidth:0.5, position: 'absolute',marginTop:70,padding:'1%',
+
+                  backgroundColor:'#27A291',width:30,height:30,borderRadius:30/2,alignItems:'center',justifyContent:'center'
+                }}
               // onPress={() => this.refs.modal4.open()}
               onPress={this.avatarTapped.bind(this)}
               >
-            <Image style={styles.pencil} source={require('../assets/img/pencil.png')}/>
+                 <PencilIcon
+                name={'pencil'}
+                color={'#fff'}
+                size={18}
+                />
+            {/* <Image style={styles.pencil} source={require('../assets/img/pencilicon.png')}/> */}
 
             </TouchableOpacity>
                 </View>
@@ -495,11 +532,13 @@ exploredata(userid){
            <View style={{flex:1,margin:'2%',marginTop:'15%'}}>
             <Text style={styles.textTitle1}>Username</Text>
             <TextInput style={styles.touchableBtn}
-              placeholderTextColor='#707070'
+            placeholder='enter your Username'
+              placeholderTextColor='#cccccc'
+              maxLength={30}
               onChangeText={(val)=>this.usernameUpdate(val)}
               value={this.state.username}
             />
-            {/* {this.state.username.length<4?<Text>Min 4 Characters required</Text>:null} */}
+            {this.state.username.length<4 && this.state.username.length>0?<Text style={{alignSelf:'center',fontSize:14,fontFamily:'AzoSans-Regular',color:'#27A291',marginTop:'1%'}}>Min 4 Characters required</Text>:null}
             {/* <Text style={{ color: '#646464', fontSize: 15, textAlign: 'center', margin: '2%' }}>(JPG, PNG, TIF or GIF recommended)</Text> */}
             <Text style={styles.textTitle1}>Headline</Text>
             {/* <TouchableOpacity style={styles.touchableBtn}>
@@ -510,10 +549,14 @@ exploredata(userid){
                         color:'#000',fontSize:18}}>Editor, GraTiFi</Text>
                 </TouchableOpacity> */}
             <TextInput style={styles.touchableBtn}
-              placeholderTextColor='#707070'
+            placeholder='enter your Headline'
+              placeholderTextColor='#cccccc'
+              maxLength={35}
               onChangeText={(val)=>this.headlineUpdate(val)}
               value={this.state.headline}
             />
+             {this.state.headline.length<6 && this.state.headline.length>0?<Text style={{alignSelf:'center',fontSize:14,fontFamily:'AzoSans-Regular',color:'#27A291',marginTop:'1%'}}>Min 6 Characters required</Text>:null}
+
             {/* <TextInput multiline textAlignVertical={'top'}
               maxLength={2000}
               value={this.state.baseuri} style={{ height: 170, textAlign: 'center', justifyContent: 'center', borderRadius: 20, backgroundColor: '#F9F9F9', paddingLeft: '8%', textAlign: 'left' }} /> */}
@@ -553,7 +596,8 @@ exploredata(userid){
             <Text style={styles.descTextTitle}>About</Text>
             <TextInput multiline textAlignVertical={'top'}
               maxLength={2000}
-              // placeholder={!this.state.about?"tell us more about yourself":null}
+              placeholderTextColor={'#cccccc'}
+              placeholder={!this.state.about?"tell us more about yourself":null}
               onChangeText={(val)=>this.aboutUpdate(val)}
               value={this.state.about} style={styles.inputbox} />
             {/* <TextInput textAlignVertical={'top'}
@@ -563,14 +607,14 @@ exploredata(userid){
                     // style={{justifyContent:'center',color:'#CCCCCC',fontSize:18}}
                     >tell us more about yourself</Text> */}
 
-            <Text style={{ color: '#707070', textAlign: 'right', paddingRight: '2%' }}>{this.state.about.length}/2000</Text>
+            <Text style={{ color: '#cccccc', textAlign: 'right', paddingRight: '2%' }}>{this.state.about.length}/2000</Text>
            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'center',marginTop:'2%'}}>
-             <Image style={styles.icon} source={require('../assets/img/offline1.png')}/>
+             <Image style={styles.icon} source={require('../assets/img/offline.png')}/>
             <Text style={styles.textTitle1}>Website</Text>
             </View>
             <TextInput style={styles.touchableBtnpics}
               placeholder='enter your website'
-              placeholderTextColor='#707070'
+              placeholderTextColor='#cccccc'
               onChangeText={(val)=>this.webUpdate(val)}
               value={this.state.website}
             />
@@ -580,7 +624,7 @@ exploredata(userid){
             </View>
             <TextInput style={styles.touchableBtnpics}
               placeholder='enter your Facebook'
-              placeholderTextColor='#707070'
+              placeholderTextColor='#cccccc'
               onChangeText={(val)=>this.fbUpdate(val)}
               value={this.state.fb}
             />
@@ -590,7 +634,7 @@ exploredata(userid){
             </View>
             <TextInput style={styles.touchableBtnpics}
               placeholder='enter your Instagram'
-              placeholderTextColor='#707070'
+              placeholderTextColor='#cccccc'
               onChangeText={(val)=>this.instaUpdate(val)}
               value={this.state.insta}
             />
@@ -600,15 +644,19 @@ exploredata(userid){
             </View>
             <TextInput style={styles.touchableBtnpics}
               placeholder='enter your Twitter'
-              placeholderTextColor='#707070'
+              placeholderTextColor='#cccccc'
               onChangeText={(val)=>this.twitterUpdate(val)}
               value={this.state.twitter}
             />
+           
             <View style={{ marginTop:'10%',marginBottom:'10%'}}>   
-    
+            {/* <TouchableOpacity style={styles.touchableBtn2}
+                >
+                    <Text style={[styles.connectedText,{color:'#27A291'}]}>Save</Text>
+                </TouchableOpacity> */}
             <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
               <TouchableOpacity onPress={()=>this.props.navigation.navigate('loginSignup')}>
-                <Text style={{ color: '#ffff', fontSize: 18, textAlign: 'center' }}>Logout</Text>
+                <Text style={{ color: '#ffff', fontSize: 16,fontFamily:'AzoSans-Regular', textAlign: 'center' }}>Logout</Text>
               </TouchableOpacity>
             </LinearGradient>
             </View>
@@ -680,11 +728,28 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     // marginTop:120  //actual marginTop:130
   },
+  touchableBtn2:{
+    backgroundColor:'#ffff',
+    justifyContent:'center',
+    // alignItems:'center',
+    // width:width-50,
+    // height:'2.5%',
+    height:height/14,
+    elevation:3,
+    borderRadius:30,
+    marginBottom:'5%'
+    },
   icon: {
     width:50,
     // marginLeft:5,
     height:50,
     resizeMode:'contain'
+  },
+  connectedText:{
+    color:'#ffff',
+    fontSize:16,
+    fontFamily:'AzoSans-Regular',
+    textAlign:'center'
   },
   lorem: {
     textAlign: 'left',
@@ -774,10 +839,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingLeft: '8%',
     paddingRight: '8%',
-    height: 50,
+    height:height/14,
     fontSize: 17,
-    borderRadius: 30
-    ,
+    borderRadius: 30,
+    fontFamily:'AzoSans-Regular',
   },
   touchableBtnpics: {
     backgroundColor: '#F9F9F9',
@@ -789,8 +854,8 @@ const styles = StyleSheet.create({
     marginTop: '2%',
     height: 50,
     fontSize: 17,
-    borderRadius: 30
-    ,
+    borderRadius: 30,
+    fontFamily:'AzoSans-Regular',
   },
   inputbox:{ 
     height: 170,
@@ -859,8 +924,9 @@ const styles = StyleSheet.create({
   },
   headerText: {
     padding: '2%',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    fontFamily: 'AzoSans-Medium',
+    color:'#707070'
   },
 })
 function mapStateToProps(state){

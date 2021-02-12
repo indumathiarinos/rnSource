@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
     fontFamily:'Montserrat-Bold'
   },
   body:{
-    marginTop:5,
+    marginTop:'5%',
   },
   bodyContent: {
     alignItems: 'center',

@@ -94,7 +94,47 @@ var json=JSON.stringify({
         console.warn(error);
     });
 }
- 
+selfDestructService(userid){
+  var json=JSON.stringify({
+    'UserID':userid
+    });
+    console.log('json ',json)
+    fetch("http://162.250.120.20:444/Login/UserDestruct",
+      {
+          method: 'POST',
+          headers:  {
+              'Accept': 'application/json',
+              'content-type': 'application/json'
+          },
+          body: json
+      }
+  )
+      .then((response) => response.json())
+      .then((responseJson) => {
+          //alert(responseText);
+         this.logoutpress();
+            console.log('username is ',responseJson)
+          //alert(this.state.data.status)  
+      })
+      .catch((error) => {
+          console.warn(error);
+      });
+  }
+  logoutpress=()=>{
+    AsyncStorage.setItem('userid',JSON.stringify(""));
+    AsyncStorage.setItem('typeid',JSON.stringify(""));
+    AsyncStorage.setItem('profile_img',JSON.stringify(""));
+    AsyncStorage.setItem('user_name',JSON.stringify(""));
+    AsyncStorage.setItem('postid',JSON.stringify(""));
+    AsyncStorage.setItem('collectionId',JSON.stringify(""));
+    AsyncStorage.setItem('sectionId',JSON.stringify(""));
+    AsyncStorage.setItem('usertype',JSON.stringify(""));
+    AsyncStorage.setItem('bookmarkUserid',JSON.stringify(""));
+    AsyncStorage.setItem('loginData', JSON.stringify(false));
+    this.props.savelogout();
+    this.props.navigation.closeDrawer();
+    this.props.navigation.navigate('newSignup');
+  }
 componentWillUnmount() {
   BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 }
@@ -107,6 +147,7 @@ profileUpdateService(userid,col_Name,value){
     var json=JSON.stringify({
       "UserID":userid,"ColumnName":col_Name,"Value":value
       });
+      console.log(json)
       fetch("http://162.250.120.20:444/Login/ProfilesUpdate",
         {
             method: 'POST',
@@ -131,13 +172,13 @@ profileUpdateService(userid,col_Name,value){
   emailUpdate=(val)=>{
     if(this.state.email!=val){
    this.setState({email:val})
-   {this.profileUpdateService(this.state.userid,'Email',this.state.email)}
+   {this.profileUpdateService(this.state.getuserid,'Email',val)}
     }
   }
   passwordUpdate=(val)=>{
     if(this.state.password!=val){
    this.setState({password:val})
-   {this.profileUpdateService(this.state.userid,'Password',this.state.password)}
+   {this.profileUpdateService(this.state.getuserid,'Password',val)}
     }
   }
   backpress=()=>{
@@ -148,13 +189,15 @@ profileUpdateService(userid,col_Name,value){
 
     //    console.log('after set',this.props.nav);
    }
+
+
     render() {
         const { navigate } = this.props.navigation;
         return (
             <SafeAreaView style={{ flex: 1,backgroundColor:'#fff'}}>
           <View style={styles.staticheader}>
          
-          <View style={{ flexDirection: 'row', width: width-50, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width-60, justifyContent: 'center', alignItems: 'center' }}>
         
             <TouchableOpacity style={{ alignItems: 'center' }} 
             onPress={() => this.props.navigation.navigate('settings')}
@@ -163,19 +206,18 @@ profileUpdateService(userid,col_Name,value){
 
               >Profile</Text>
             </TouchableOpacity>
-            <LinearGradient style={{ borderRadius: 10}} colors={
-              ['#24D4BC', '#27A291']}>
+            
             <TouchableOpacity 
+             style={{ borderRadius: 10,backgroundColor:'#27A291'}}
               onPress={this.headerBtnClk}>
               <Text style={{
                 padding: '5%',
-                fontSize: 16,
+                fontSize: 14,
                 color: 'white',
-                fontWeight: 'bold'
+                fontFamily: 'AzoSans-Medium'
               }}
               >Account</Text>
             </TouchableOpacity>
-              </LinearGradient>
             <TouchableOpacity style={{ alignItems: 'center' }} 
             onPress={() => this.props.navigation.navigate('emailNotification')}
             >
@@ -199,14 +241,15 @@ profileUpdateService(userid,col_Name,value){
         <Text style={styles.textTitle}>Email</Text>
            
                 <TextInput style={styles.touchableBtn}
-                // placeholder='Email'
-                // placeholderTextColor='#707070'
+                placeholder='Email'
+                placeholderTextColor='#cccccc'
                 onChangeText={(val)=>this.emailUpdate(val)}
                 value={this.state.email}
             />
   <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
                     <TouchableOpacity>
-                    <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Edit Email</Text>
+                    <Text style={{color:'#ffff', fontSize:16,
+        fontFamily:'AzoSans-Regular',textAlign:'center'}}>Edit Email</Text>
                 </TouchableOpacity>
                 </LinearGradient>
                 <Text style={styles.textTitle}>Password</Text>
@@ -214,94 +257,98 @@ profileUpdateService(userid,col_Name,value){
            <TextInput style={styles.touchableBtn}
            secureTextEntry={true}
            placeholder='Password'
-        //    placeholderTextColor='#707070'
+           placeholderTextColor='#cccccc'
            onChangeText={(val)=>this.passwordUpdate(val)}
            value={this.state.password}
        />
 <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
                <TouchableOpacity>
-               <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Change Password</Text>
+               <Text style={{color:'#ffff', fontSize:16,
+        fontFamily:'AzoSans-Regular',textAlign:'center'}}>Change Password</Text>
            </TouchableOpacity>
            </LinearGradient>
-            <View style={{marginBottom:'20%'}}>
+            <View style={{marginBottom:'10%'}}>
 
-            <View style={{flexDirection:'column',flex:1,marginTop:'5%',marginBottom:'5%'}}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'5%'}}>
+            <View style={{flexDirection:'column',flex:1,marginTop:'7%',marginBottom:'1%'}}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'2%'}}>
                     <Image style={{marginLeft:'5%'}} source={require('../assets/img/fb1.png')} />
-                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-between',height:height/6,paddingRight:'6%'}}>
-                    <Text style={{justifyContent:'center',textAlign:'left',fontSize:17,fontWeight:'bold',marginLeft:'4%'}}>Connect to Facebook</Text>
-                    <Text style={{color:'#707070',marginLeft:'5%'}}>Connecting with Google allows you to login with one click. We will never post to Google or message your friends without your permission.</Text>
+                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-around',height:height/9,paddingRight:'6%'}}>
+                    <Text style={[styles.socialmediaText,
+                      ]}>Connect to Facebook</Text>
+                    <Text style={styles.socialDesc}>Connecting with Facebook allows you to login with one click. We will never post to Facebook or message your friends without your permission.</Text>
                     </View>
                 </View>
-                {this.state.fb?( <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
-               <TouchableOpacity  onPress={()=>this.setState({fb:!this.state.fb})}>
-               <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Connected</Text>
+                {this.state.fb?( 
+               <TouchableOpacity style={styles.btnview} onPress={()=>this.setState({fb:!this.state.fb})}>
+               <Text style={styles.connectedText}>Connected</Text>
            </TouchableOpacity>
-           </LinearGradient>):( <TouchableOpacity style={styles.touchableBtn1}
+          ):( <TouchableOpacity style={styles.touchableBtn1}
                 onPress={()=>this.setState({fb:!this.state.fb})}>
-                    <Text style={{color:'#27A291',fontSize:18,textAlign:'center'}}>Connect</Text>
+                    <Text style={[styles.connectedText,{color:'#27A291'}]}>Connect</Text>
                 </TouchableOpacity>)
                 }
                
                
             </View>
-            <View style={{flexDirection:'column',flex:1,marginTop:'5%',marginBottom:'5%',padding:'2%'}}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'5%'}}>
+            <View style={{flexDirection:'column',flex:1,marginTop:'3%',marginBottom:'2%'}}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'1%'}}>
                     <Image style={{marginLeft:'5%'}} source={require('../assets/img/google1.png')} />
-                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-around',height:height/6,paddingRight:'6%'}}>
-                    <Text style={{justifyContent:'center',textAlign:'left',fontSize:17,fontWeight:'bold',marginLeft:'4%'}}>Connect to Google</Text>
-                    <Text style={{color:'#707070',marginLeft:'4%'}}>Connecting with Google allows you to login with one click. We will never post to Google or message your friends without your permission.</Text>
+                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-around',height:height/9,paddingRight:'6%',}}>
+                    <Text style={styles.socialmediaText}>Connect to Google</Text>
+                    <Text style={styles.socialDesc}>Connecting with Google allows you to login with one click. We will never post to Google or message your friends without your permission.</Text>
                     </View>
                 </View>
-                {this.state.google?( <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
-               <TouchableOpacity  onPress={()=>this.setState({google:!this.state.google})}>
-               <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Connected</Text>
+                {this.state.google?( 
+               <TouchableOpacity style={styles.btnview}  onPress={()=>this.setState({google:!this.state.google})}>
+               <Text style={styles.connectedText}>Connected</Text>
            </TouchableOpacity>
-           </LinearGradient>):( <TouchableOpacity style={styles.touchableBtn1}
+           ):( <TouchableOpacity style={styles.touchableBtn1}
                 onPress={()=>this.setState({google:!this.state.google})}>
-                    <Text style={{color:'#27A291',fontSize:18,textAlign:'center'}}>Connect</Text>
+                    <Text style={[styles.connectedText,{color:'#27A291'}]}>Connect</Text>
                 </TouchableOpacity>)
                 }
                
                
             </View>
-            <View style={{flexDirection:'column',flex:1,marginTop:'5%',marginBottom:'5%'}}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'5%'}}>
+            <View style={{flexDirection:'column',flex:1,marginTop:'3%',marginBottom:'2%'}}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'1%'}}>
                     <Image style={{marginLeft:'5%'}} source={require('../assets/img/twitter.png')} />
-                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-around',height:height/6,paddingRight:'6%'}}>
-                    <Text style={{justifyContent:'center',textAlign:'left',fontSize:17,fontWeight:'bold',marginLeft:'4%'}}>Connect to Twitter</Text>
-                    <Text style={{color:'#707070',marginLeft:'4%'}}>Connecting with Google allows you to login with one click. We will never post to Google or message your friends without your permission.</Text>
+                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-around',height:height/9,paddingRight:'6%',}}>
+                    <Text style={styles.socialmediaText}>Connect to Twitter</Text>
+                    <Text style={styles.socialDesc}>Connecting with Twitter allows you to login with one click. We will never post to Twitter or message your friends without your permission.</Text>
                     </View>
                 </View>
-                {this.state.twitter?( <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
-               <TouchableOpacity  onPress={()=>this.setState({twitter:!this.state.twitter})}>
-               <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Connected</Text>
+                {this.state.twitter?( 
+               <TouchableOpacity style={styles.btnview}  onPress={()=>this.setState({twitter:!this.state.twitter})}>
+               <Text style={styles.connectedText}>Connected</Text>
            </TouchableOpacity>
-           </LinearGradient>):( <TouchableOpacity style={styles.touchableBtn1}
+          ):( <TouchableOpacity style={styles.touchableBtn1}
                 onPress={()=>this.setState({twitter:!this.state.twitter})}>
-                    <Text style={{color:'#27A291',fontSize:18,textAlign:'center'}}>Connect</Text>
+                    <Text style={[styles.connectedText,{color:'#27A291',}]}>Connect</Text>
                 </TouchableOpacity>)
                 }
                
                
             </View>
-            <View style={{flexDirection:'column',flex:1,marginTop:'5%',marginBottom:'5%'}}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'5%'}}>
+            <View style={{flexDirection:'column',flex:1,marginTop:'3%',marginBottom:'2%'}}>
+                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:'1%'}}>
                     <Image style={{marginLeft:'5%'}} source={require('../assets/img/selfDestruct.png')} />
-                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-around',height:height/6,paddingRight:'6%'}}>
-                    <Text style={{justifyContent:'center',textAlign:'left',fontSize:17,fontWeight:'bold',marginLeft:'4%'}}>Self-Destruct</Text>
-                    <Text style={{color:'#707070',marginLeft:'4%'}}>Connecting with Google allows you to login with one click. We will never post to Google or message your friends without your permission.</Text>
+                    <View style={{flexDirection:'column',flex:1,justifyContent:'space-around',height:height/9,paddingRight:'6%',}}>
+                    <Text style={styles.socialmediaText}>Self-Destruct</Text>
+                    <Text style={styles.socialDesc}>Self-destruct will permanently remove your profile, comments, and posts, along with any pages, publications, series and periodicals you created.</Text>
                     </View>
                 </View>
-                {this.state.selfdestruct?( <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
-               <TouchableOpacity  onPress={()=>this.setState({selfdestruct:!this.state.selfdestructv})}>
-               <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Connected</Text>
+                {/* {this.state.selfdestruct?( 
+               <TouchableOpacity style={styles.btnview}  onPress={()=>this.selfDestructService(this.state.getuserid)}>
+               <Text style={styles.connectedText}>Self Destruted</Text>
            </TouchableOpacity>
-           </LinearGradient>):( <TouchableOpacity style={styles.touchableBtn1}
-                onPress={()=>this.setState({selfdestruct:!this.state.selfdestruct})}>
-                    <Text style={{color:'#27A291',fontSize:18,textAlign:'center'}}>Self Destruct</Text>
-                </TouchableOpacity>)
-                }
+          ):(  */}
+          <TouchableOpacity style={styles.touchableBtn1}
+              onPress={()=>this.selfDestructService(this.state.getuserid)}>
+                    <Text style={[styles.connectedText,{color:'#27A291'}]}>Self Destruct</Text>
+                </TouchableOpacity>
+                {/* )
+                } */}
                
                
             </View>
@@ -310,7 +357,7 @@ profileUpdateService(userid,col_Name,value){
 
                                <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
                     <TouchableOpacity onPress={()=>this.props.navigation.navigate('loginSignup')}>
-                    <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Logout</Text>
+                    <Text style={styles.connectedText}>Logout</Text>
                 </TouchableOpacity>
                 </LinearGradient>
                   
@@ -334,6 +381,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         height:50,
         borderRadius:30,
+        backgroundColor:'#27A291'
 
       },
     logoutBtn:{
@@ -403,9 +451,29 @@ const styles = StyleSheet.create({
         paddingLeft:'8%',
         paddingRight:'8%',
         height:50,
-        fontSize:17,
+        fontSize:16,
+        fontFamily:'AzoSans-Regular',
         borderRadius:30,
         marginBottom:'5%',
+  },
+  socialmediaText:{
+    justifyContent:'center',
+    textAlign:'left',
+    fontSize:16,
+    fontFamily:'Montserrat-Bold',
+    marginLeft:'4%'
+  },
+  socialDesc:{
+    color:'#707070',
+    marginLeft:'5%',
+    fontSize:12,
+    fontFamily:'AzoSans-Regular',
+  },
+  connectedText:{
+    color:'#ffff',
+    fontSize:16,
+    fontFamily:'AzoSans-Regular',
+    textAlign:'center'
   },
 touchableBtn1:{
     backgroundColor:'#ffff',
@@ -416,7 +484,7 @@ touchableBtn1:{
     height:50,
     elevation:3,
     borderRadius:30
-,    },
+    },
     headerRow:{
         height: '11%',
         // flex:0.1,
@@ -439,9 +507,9 @@ touchableBtn1:{
         color:'#27A291'
     },
     textTitle:{
-        fontSize:18,
+        fontSize:16,
         textAlign:'center',
-        fontWeight:'bold',
+        fontFamily:'Montserrat-Bold',
         padding:'3%',
        
     },
@@ -462,22 +530,24 @@ touchableBtn1:{
     },
     headerText: {
         padding: '2%',
-        fontSize: 16,
-        fontWeight: 'bold'
+        fontSize: 14,
+        fontFamily: 'AzoSans-Medium',
+        color:'#707070'
     },
 })
-function mapStateToProps(state){
-    return{
-    nav:state.apiReducer.nav,
-    }
+function mapStateToProps(state) {
+  return {
+    nav: state.apiReducer.nav,
   }
-  
-  
-  function mapDispatchToProps(dispatch){
-    return{
-        changeNavRec:()=>dispatch({type:'CHANGE_NAV_REC'}),
-        changeNavNews:()=>dispatch({type:'CHANGE_NAV_NEWS'})
-    }
-  };
-  
-  export default connect(mapStateToProps,mapDispatchToProps)(SettingsAccount);
+}
+
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNavRec: () => dispatch({ type: 'CHANGE_NAV_REC' }),
+    changeNavNews: () => dispatch({ type: 'CHANGE_NAV_NEWS' }),
+    savelogout: ()=> dispatch({type:'CHECKLOGOUT'})
+  }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(SettingsAccount);

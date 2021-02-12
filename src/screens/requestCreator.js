@@ -198,10 +198,15 @@ class RequestCreator extends Component {
                 
                 <Text style={styles.textTitle}>Dear Readers</Text>
                 <View style={{width:width-50,height:1,backgroundColor:'#24D4BC',alignSelf:'center'}}/>
-                <HtmlView
-                style={styles.html}
+                <View style={{  width:width-60,alignSelf:'center',
+        alignItems:'center',
+        justifyContent:'center'}}>
+  <HtmlView
+                stylesheet={styles}
                 value={htmlview}
                 />
+                </View>
+              
                   <View style={styles.btnTextHolder}>
               
       </View>
@@ -214,12 +219,12 @@ class RequestCreator extends Component {
                     onPress={()=>!this.state.reqCreator?this.setState({reqCreator:!this.state.reqCreator}):null}
                     // onPress={()=>this.props.navigation.navigate('loginSignup')}
                     >
-                    <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Sign In</Text>
+                    <Text style={{color:'#ffff',textAlign:'center',fontSize:16,fontFamily:'AzoSans-Regular'}}>Sign In</Text>
                 </TouchableOpacity>
                 </LinearGradient>:
                   <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around',margin:'10%',marginTop:'5%',marginBottom:'2%'}}>
                 <Image style={{width:50,height:50,borderRadius:50/2}} source={{uri:this.state.avatar}}/>
-                <Text style={{color:'#27A291', width:width/2,fontSize:17}}>{this.state.username}</Text>
+                <Text style={{color:'#27A291', width:width/2,fontSize:16,fontFamily:'AzoSans-Regular'}}>{this.state.username}</Text>
                 </View>
         }
                 {/* </View> */}
@@ -228,15 +233,18 @@ class RequestCreator extends Component {
                 <View style={styles.dropdownbtnView}>
                 <TouchableOpacity style={{  backgroundColor:'#ffff',
     justifyContent:'center',
-    // alignItems:'center',
+    alignItems:'center',
+    justifyContent:'center',
+    alignSelf:'center',
     // width:width-50,
-    height:!this.state.expanded?50:180,
+    width:width/1.2,
+    height:!this.state.expanded?height/14:height/4,
     elevation:3,
-    borderRadius:30}} 
+    borderRadius:20}} 
                 onPress={this.changeLayout}>
                  <View>
                         <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                    <Text style={{color:'#707070',fontSize:18,width:width-120,textAlign:'left'}}>{this.state.dropdownText}</Text>
+                    <Text style={{color:'#707070',fontSize:16,fontFamily:'AzoSans-Regular',width:width-120,textAlign:'left',paddingLeft:10}}>{this.state.dropdownText}</Text>
                     <Image 
                     source={require('../assets/img/dropdown.png')}/>
                     </View>
@@ -244,11 +252,11 @@ class RequestCreator extends Component {
                     (<View
                      style={{flexDirection:'column',justifyContent:'center',alignItems:'center',padding:'2%'}}>
                     <Text onPress={()=>this.setState({dropdownText:'Comics',expanded:!this.state.expanded})}
-                     style={{color:'#707070',fontSize:18,width:width-100,textAlign:'center',padding:'2%'}}>Comics</Text>
+                     style={{color:'#707070',fontSize:16,fontFamily:'AzoSans-Regular',width:width-100,textAlign:'center',padding:'2%'}}>Comics</Text>
                     <Text onPress={()=>this.setState({dropdownText:'Illustrations',expanded:!this.state.expanded})}
-                    style={{color:'#707070',fontSize:18,width:width-100,textAlign:'center',padding:'2%'}}>Illustrations</Text>
+                    style={{color:'#707070',fontSize:16,fontFamily:'AzoSans-Regular',width:width-100,textAlign:'center',padding:'2%'}}>Illustrations</Text>
                     <Text onPress={()=>this.setState({dropdownText:'Novels',expanded:!this.state.expanded})}
-                     style={{color:'#707070',fontSize:18,width:width-100,textAlign:'center',padding:'2%'}}>Novels</Text>
+                     style={{color:'#707070',fontSize:16,fontFamily:'AzoSans-Regular',width:width-100,textAlign:'center',padding:'2%'}}>Novels</Text>
                     </View>)}
                     </View>
                    
@@ -262,31 +270,31 @@ class RequestCreator extends Component {
                 onChangeText={(text)=>this.setState({webText:text})}
                 value={this.state.webText}
                 placeholder='Enter Website (optional)'
-                placeholderTextColor='#707070'
+                placeholderTextColor='#cccccc'
                 
             />
                 
                 </View>
                 <View 
-                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-around',paddingLeft:'2%',}}
+                style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',alignSelf:'center',width:width/1.2,}}
                 >
                     <TouchableOpacity 
             onPress={ () => this.setState({ boolean: !this.state.boolean }) } 
             >
                     <Image source={checked} />
                     </TouchableOpacity>
-                    <Text style={{fontSize:14,color:'#707070',width:width/1.3,textAlign:'left'}}>I understand and accept the terms of use. *</Text>
+                    <Text style={{fontSize:14,fontFamily:'AzoSans-Regular',color:'#707070',textAlign:'left',width:width/1.35,}}>I understand and accept the terms of use. *</Text>
              </View> 
              <View style={styles.rowContainer1}>
              <LinearGradient style={styles.btnview1} 
             //  colors={['#24D4BC', '#27A291']} 
             colors={
-                (!(this.state.dropdownText==='Please specify') ?  ['#24D4BC', '#27A291']:['#CCCCCC', '#CCCCCC'])
+                (!(this.state.dropdownText==='Please specify') ?  ['#24D4BC', '#27A291']:['#CCCCCC', '#00000628'])
       } 
              >
                     <TouchableOpacity
                     onPress={()=>this.submitBtn()}>
-                    <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Submit</Text>
+                    <Text style={{color:'#ffff',fontSize:16,fontFamily:'AzoSans-Regular',textAlign:'center'}}>Submit</Text>
                 </TouchableOpacity>    
                 </LinearGradient>      
                  </View>                    
@@ -312,8 +320,7 @@ const styles = StyleSheet.create({
         fontSize:16,
         textAlign:'center',
         margin:'2%',
-        fontSize:18,
-        fontWeight:'bold',
+        fontFamily:'Montserrat-Bold',
     },
     btnview: {
         alignItems:'center',
@@ -326,10 +333,17 @@ const styles = StyleSheet.create({
           alignSelf:'center',
         alignItems:'center',
         width:width/1.2,
-        justifyContent:'center',
-          height:50,
-        borderRadius:30,
+          height:height/14,
+          justifyContent:'center',
+        marginBottom:'3%',
+        borderRadius:30
 
+      },
+      h4:{
+        fontFamily:'AzoSans-Regular',
+        fontSize:14,
+        marginTop:5
+      
       },
     rowContainer:{
         flexDirection:'row',
@@ -349,10 +363,11 @@ const styles = StyleSheet.create({
     html:{
         margin:'5%',
         paddingLeft:'2%',
-        paddingRight:'2%'
+        paddingRight:'2%',
+       
     },
     dropdownbtnView:{
-        margin:'5%',
+        margin:'2%',
       
     },
     text:{
@@ -361,24 +376,25 @@ const styles = StyleSheet.create({
         // marginRight:'5%'
     },
     textt:{
-        marginLeft:'5%',
-        marginRight:'5%',
-        paddingLeft:'2%',
-        paddingRight:'2%',
-        fontSize:16,
+        // marginLeft:'5%',
+        // marginRight:'5%',
+        // paddingLeft:'2%',
+        // paddingRight:'2%',
+        width:width-60,
+        alignSelf:'center',
+        fontFamily:'AzoSans-Regular',
+        fontSize:14,
     },
     underline_text:{
-        marginLeft:'5%',
-        marginRight:'5%',
-        paddingLeft:'2%',
-        paddingRight:'2%',
-        fontSize:16,
+        width:width-60,
+        alignSelf:'center',
+        fontFamily:'AzoSans-Regular',
+        fontSize:14,
         textDecorationLine:'underline',
         color:'#27A291'
         
     },
     bottomLine: {
-      
         height:'8%',
         bottom:0,
         left: 0,
@@ -409,11 +425,13 @@ const styles = StyleSheet.create({
     },
     textInputStyle:{
         textAlign: 'center',
-        height: 50,
         backgroundColor:'#F9F9F9',
-
+        width:width/1.2,
+        height:height/14,
         // width:width-50,
-        borderRadius:30
+        alignSelf:'center',
+        borderRadius:30,
+        fontSize:16,fontFamily:'AzoSans-Regular'
     },
     touchableBtn:{
         backgroundColor:'#F9F9F9',
@@ -451,14 +469,14 @@ const styles = StyleSheet.create({
         paddingLeft:50,
         // backgroundColor:'pink',
         textAlign:'center',
-        fontSize:20,
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'Montserrat-Bold',
         color:'#27A291'
     },
     textTitle:{
         fontSize:24,
         textAlign:'center',
-        fontWeight:'bold',
+        fontFamily:'Montserrat-Light',
         padding:'5%',
     },
     textTitle1:{

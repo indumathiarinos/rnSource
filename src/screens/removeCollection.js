@@ -384,7 +384,7 @@ componentWillUnmount() {
                       </View>
                   </View>
                   <BlurModal visible={this.state.modalVisible}
-          children={
+                     children={
                         <View style={{
                             left: 0, right: 0, bottom: 0, position: 'absolute',
                             height: '10%',
@@ -393,11 +393,12 @@ componentWillUnmount() {
                             alignItems: 'center',
                             justifyContent: 'center',
                             backgroundColor: '#E74C3C',
+                            paddingTop:'1%'
                         }}>
                             <Text numberOfLines={2} style={{ color: '#fff', fontSize: 16, textAlign: 'center',fontFamily:'AzoSans-Bold' }}>Removed - {this.state.deletedName} </Text>
 
 
-                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'4%'}}
                             onPress={()=>this.setState({undo:true})}
                             >
                                 <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline',fontFamily:'AzoSans-Regular' }}>Undo</Text>

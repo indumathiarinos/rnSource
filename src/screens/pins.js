@@ -336,36 +336,35 @@ class Pins extends Component {
       pinscoverItems({ item }) {
         // const value = item;
         return (
-            <View style={{height:150,width:width,}}>
+            <View style={{height:height/4,width:width,}}>
 
                     <View style={{flex:1,flexDirection:'row',}}>
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image1!=""?null:'#27A291'}}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image1!=""?null:'#27A291'}}
                             source={{ uri: item.Image1!=""?item.Image1:null }} />
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image2!=""?null:'#27A291'  }}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image2!=""?null:'#27A291'  }}
                             source={{ uri: item.Image2!=""?item.Image2:null }} />
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',alignItems:'center',justifyContent:'center',backgroundColor:item.Image3!=""?null:'#27A291',}}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',alignItems:'center',justifyContent:'center',backgroundColor:item.Image3!=""?null:'#27A291',}}
                             source={{ uri: item.Image3!=""?item.Image3:null }} >
                         </Image>
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image4!=""?null:'#27A291'}}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image4!=""?null:'#27A291'}}
                             source={{ uri: item.Image4!=""?item.Image4:null }} />
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image5!=""?null:'#27A291' }}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image5!=""?null:'#27A291' }}
                             source={{ uri: item.Image5!=""?item.Image5:null }} />
-                            <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image6!=""?null:'#27A291'}}
+                            <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image6!=""?null:'#27A291'}}
                             source={{ uri: item.Image6!=""?item.Image6:null }} />
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image7!=""?null:'#27A291'  }}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image7!=""?null:'#27A291'  }}
                             source={{ uri: item.Image7!=""?item.Image7:null }} />
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',alignItems:'center',justifyContent:'center',backgroundColor:item.Image8!=""?null:'#27A291'}}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',alignItems:'center',justifyContent:'center',backgroundColor:item.Image8!=""?null:'#27A291'}}
                             source={{ uri: item.Image8!=""?item.Image8:null }} >
                         </Image>
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image9!=""?null:'#27A291'}}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image9!=""?null:'#27A291'}}
                             source={{ uri: item.Image9!=""?item.Image9:null }} />
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image10!=""?null:'#27A291' }}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image10!=""?null:'#27A291' }}
                             source={{ uri: item.Image10!=""?item.Image10:null }} />
-                            <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image11!=""?null:'#27A291'}}
+                            <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image11!=""?null:'#27A291'}}
                             source={{ uri: item.Image11!=""?item.Image11:null }} />
-                        <Image style={{  height:150,width:width/12, resizeMode: 'cover',backgroundColor:item.Image12!=""?null:'#27A291'  }}
+                        <Image style={{  height:height/4,width:width/12, resizeMode: 'cover',backgroundColor:item.Image12!=""?null:'#27A291'  }}
                             source={{ uri: item.Image12!=""?item.Image12:null }} />
-                       
                         </View>
                    
                     {/* <View style={{  marginTop: '-20%',
@@ -515,7 +514,7 @@ class Pins extends Component {
           
           <View style={{flexDirection:'row'}}>
           <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatar ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-        <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+          <Image style={{top:'60%',right:'38%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
           </View>
                   
         </TouchableOpacity>
@@ -640,7 +639,7 @@ const styles = StyleSheet.create({
         fontSize:16,
         width: width / 2 - 40,
         textAlign:'left',
-        marginTop:'1%',
+        marginTop:'6%',
         marginBottom:'1%'
     }
 })

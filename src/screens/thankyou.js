@@ -131,7 +131,7 @@ class Thankyou extends Component {
                      onPress={()=>this.backpress()}
                 >
                  <Image
-                            style={{ alignSelf: 'center',width:50,height:50 }} 
+                            style={{ alignSelf: 'center',width:50,height:50,marginLeft:'2%' }} 
                             source={require('../assets/img/close.png')} />
                      </TouchableOpacity>
                     
@@ -143,9 +143,9 @@ class Thankyou extends Component {
                 <View style={{flex:1,alignItems:'center'}}>
                     <Image style={{width:width}} source={require('../assets/img/thankyou.png')} /> 
                 
-                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginTop:'4%'}}>
                 <Image
-              style={{width:50,height:50,borderRadius:50/2}}
+              style={{width:60,height:60,borderRadius:60/2}}
               source={{uri:this.state.avatar}}
               // source={require('../assets/img/user.png')}
               />
@@ -162,7 +162,7 @@ class Thankyou extends Component {
                     <TouchableOpacity
 
                     onPress={()=>this.backpress()}>
-                    <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Continue</Text>
+                    <Text style={{color:'#ffff',fontSize:16,fontFamily:'AzoSans-Regular',textAlign:'center'}}>Continue</Text>
                 </TouchableOpacity>    
                 </LinearGradient>      
                      </View>            
@@ -197,9 +197,10 @@ const styles = StyleSheet.create({
 
       },
     centerText:{
-        fontSize:16,
+        fontSize:14,
         textAlign:'center',
-        margin:'5%'
+        margin:'5%',
+        fontFamily:'AzoSans-Regular',
     },
     
     headerRow:{
@@ -215,19 +216,19 @@ const styles = StyleSheet.create({
      
     },
     heading:{
-        width:width-50,
+        width:width-80,
         paddingLeft:50,
         // backgroundColor:'pink',
         textAlign:'center',
-        fontSize:20,
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'AzoSans-Bold',
         color:'#27A291'
     },
     textTitle:{
-        fontSize:20,
+        fontSize:16,
         textAlign:'center',
-        fontWeight:'bold',
-        padding:'5%',
+        fontFamily:'Montserrat-Bold',
+        padding:'3%',
         color:'#27A291'
 
     },

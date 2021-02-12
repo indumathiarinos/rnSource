@@ -372,9 +372,8 @@ tags(name){
       onPress={()=>this.pressIcon(item)}
       >
 
-<CardView
-                // cardElevation={2}
-                // cardMaxElevation={2}
+          {/* <CardView
+             
                 style={{ backgroundColor: this.tags(item.Category_name),padding:'2%',height:230,width:width-70}}
                 cornerRadius={20}>
                      <View style={{flex:1,margin:10,marginBottom:0,flexDirection:'row',alignItems:'center',justifyContent:'center'}}>
@@ -391,13 +390,29 @@ tags(name){
                  <Text style={{ marginBottom: 5,color:'#fff', fontSize: 16,fontFamily:'AzoSans-Medium',textAlign:'center',marginTop:10}}>
                     {item.Category_name}
                 </Text>
-                {/* <Image
-                    resizeMode="contain"
-                    style={{ width: width/1.4, height: 150, alignSelf: 'center' }} source={{ uri: item.Images }} />
-                <Text style={{ marginBottom: 5, marginTop: 5, fontWeight: 'bold', fontSize: 15,textAlign:'center' }}>
-                    {item.Category_name}
-                </Text> */}
-            </CardView>
+               
+            </CardView> */}
+                <CardView
+                                        // cardElevation={2}
+                                        // cardMaxElevation={2}
+                                        style={{ backgroundColor: this.tags(item.Category_name), padding: '2%', height: height/3.5,width:width/1.3 }}
+                                        cornerRadius={20}>
+                                        <View style={{ flex: 1, margin: 10, marginBottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Image
+                                                resizeMode="stretch"
+                                                style={{ width: width / 4, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, height: height / 4.8, alignSelf: 'center' }} source={{ uri: item.Image1 != "" ? item.Image1 : null }} />
+                                            <Image
+                                                resizeMode="stretch"
+                                                style={{ width: width / 4, height: height / 4.8, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, alignSelf: 'center', paddingRight: 40, marginLeft: -10 }} source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
+                                            <Image
+                                                resizeMode="stretch"
+                                                style={{ width: width / 4, height: height / 4.8, borderRadius: 8, alignSelf: 'center', paddingRight: 80, marginLeft: -10 }} source={{ uri: item.Image3 != "" ? item.Image3 : null }} />
+                                        </View>
+                                        <Text style={{ marginBottom: 5, color: '#fff', fontSize: 16, fontFamily: 'AzoSans-Medium', textAlign: 'center', marginTop: 10 }}>
+                                            {item.Category_name}
+                                        </Text>
+                                    
+                                    </CardView>
         </TouchableOpacity>
         {/* </View> */}
       </View>
@@ -488,7 +503,7 @@ tags(name){
           </View> 
           <View style={styles.backdrop}>
             {/* <View style={{ marginTop: '5%', flex:1 }}> */}
-              <View style={{ flexDirection: 'row',width:width,
+              <View style={{ flexDirection: 'row',width:width,marginTop:'5%',
               //  margin:'2%', 
                alignContent: 'center', justifyContent: 'center',}}>
 
@@ -597,7 +612,7 @@ tags(name){
             />
 
        
-        <Divider style={{color:'#707070',borderWidth:0.2,width:width}} />
+        <Divider style={{borderWidth:0.2,width:width}} />
        {this.state.searchText==""?null: <TouchableOpacity style={{padding:'1%',}}    
         onPress={()=>{
           AsyncStorage.setItem('searchText',this.state.searchText)
@@ -672,7 +687,7 @@ onBackdropPress={() =>     this.setState({reportModal:false})
             {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
             <View style={{flexDirection:'row'}}>
             <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.explore_page == '0' ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-          <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+            <Image style={{top:'60%',right:'38%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
             </View>
                       {/* <Text>Menu</Text> */}
             {/* </Drawer> */}

@@ -486,7 +486,7 @@ componentWillUnmount() {
                             <Text numberOfLines={2} style={{ color: '#fff', fontSize: 16,fontFamily:'AzoSans-Bold', textAlign: 'center' }}>Removed - {this.state.deletedName} </Text>
 
 
-                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'4%'}}
                             onPress={()=>this.setState({undo:true})}
                             >
                                 <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline',fontFamily:'AzoSans-Regular'}}>Undo</Text>

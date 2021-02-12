@@ -232,6 +232,7 @@ class NewsFeed extends Component {
   // }
 
   exploredata = async () => {
+    this.props.navigation.closeDrawer() 
     this.setState({ loading: true })
     var json = JSON.stringify({
       // 'UserId': userid,
@@ -1027,7 +1028,7 @@ class NewsFeed extends Component {
             activeOpacity={0.7}
           /> */}
           <ImageBackground
-            style={{ width: width, height: item.TypeID == 4 ? 217 : 514, alignSelf: 'center', marginTop: '2%', resizeMode: 'cover' }}
+            style={{ width: width, height: item.TypeID == 4 ? height/2.5 : height/1.2, alignSelf: 'center', marginTop: '2%', resizeMode: 'cover' }}
             source={{ uri: item.Images != "" ? item.Images : null }}
             onPress={() => console.log("Works!")}
             activeOpacity={0.7}
@@ -1036,7 +1037,7 @@ class NewsFeed extends Component {
 
         <View style={{
           backgroundColor: '#F9F9F9',
-          // paddingLeft: '5%', paddingRight: '5%', 
+          paddingLeft: '3%', paddingRight: '3%', 
           paddingTop: '2%', paddingBottom: '2%'
         }}>
           <ReadMore
@@ -1112,7 +1113,7 @@ class NewsFeed extends Component {
               />
               <Text style={{
                 color:
-                  // item.Likestatus=='Y' ? '#27A291' :
+                  item.CommentStatus=='Y' ? '#27A291' :
                   '#707070', textAlign: 'center', marginTop: 2, marginBottom: 2,fontFamily: 'AzoSans-Regular',fontSize: 12,
               }}>
                 {/* {item.likescount=="" || item.likescount==0?'':item.likescount} */}
@@ -1572,13 +1573,20 @@ styles={{flexDirection:'row'}}
             <Image style={{ width: 50, height: 50, marginTop: 5 }} source={require('../assets/img/search.png')} />
             {/* <Text>Search</Text> */}
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }]} onPress={() => this.toggleTab4()}>
+          <TouchableOpacity style={[styles.tabsss, { width: 28, height: 28, }]} onPress={() => this.toggleTab4()}>
             {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
             {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
+            <View style={{flexDirection:'row'}}>
+
             <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.explore_page == '0' ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
+            <TouchableOpacity style={{right:'25%'}}  onPress={() => this.toggleTab4()}>
+
+            <Image style={{top:'60%',right:'35%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
+           </TouchableOpacity>
+            </View>
             {/* <Text>Menu</Text> */}
             {/* </Drawer> */}
           </TouchableOpacity>

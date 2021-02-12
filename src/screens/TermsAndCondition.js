@@ -97,8 +97,8 @@ return true;
                the right, at your expense, to assume the exclusive defense and control of any matter for which you are required to indemnify us, and you agree to cooperate, at your expense, with our defense of such claims. We will use reasonable efforts to notify you of any such claim, action, or proceeding which is subject to this indemnification upon becoming aware of it. USER DATA We will maintain certain data that you transmit to the Site for the purpose of managing the Site, as well as data relating to your use of the Site. Although we perform regular routine backups of data, you are solely responsible for all data that you transmit or that relates to any activity you have undertaken using the Site. You agree that we shall have no liability to you for any loss or corruption of any such data, and you hereby waive any right of action against us arising from any such loss or corruption of such data. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES Visiting the Site, sending us emails, and completing online forms constitute electronic communications. You consent to receive electronic communications, and you agree that all agreements, notices, disclosures, and other communications we provide to you electronically, via email and on the Site, satisfy any legal requirement that such communication be in writing. YOU HEREBY AGREE TO THE USE OF ELECTRONIC SIGNATURES, CONTRACTS, ORDERS, AND OTHER RECORDS, AND TO ELECTRONIC DELIVERY OF NOTICES, POLICIES, AND RECORDS OF TRANSACTIONS INITIATED OR COMPLETED BY US OR VIA THE SITE. You hereby waive any rights or requirements under any statutes, regulations, rules, ordinances, or other laws in any jurisdiction which require an original signature or delivery or retention of non-electronic records, or to payments or the granting of credits by any means other than electronic means. CALIFORNIA USERS AND RESIDENTS If any complaint with us is not satisfactorily resolved, you can contact the Complaint Assistance Unit of the Division of Consumer Services of the California Department of Consumer Affairs in writing at 1625 North Market Blvd., Suite N 112, Sacramento, California 95834 or by telephone at (800) 952-5210 or (916) 445-1254. MISCELLANEOUS These Terms of Use and any policies or operating rules posted by us on the Site constitute the entire agreement and understanding between you and us. Our failure to exercise or enforce any right or provision of these Terms of Use shall not operate as a waiver of such right or provision. These Terms of Use operate to the fullest extent permissible by law. We may assign any or all of our rights and obligations to others at any time. We shall not be responsible or liable for any loss, damage, delay, or failure to act caused by any cause beyond our reasonable control. If any provision or part of a provision of these Terms of Use is determined to be unlawful, void, or unenforceable, that provision or part of the provision is deemed severable from these Terms of Use and does not affect the validity and enforceability of any remaining provisions. There is no joint venture, partnership, employment or agency relationship created between you and us as a result of these Terms of Use or use of the Site. You agree that these Terms of Use will not be construed against us by virtue of having drafted them. You hereby waive any and all defenses you may have based on the electronic form of these Terms of Use and the lack of signing by the parties hereto to execute these Terms of Use. CONTACT US In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at: [Corporate Name] [Corporate Address] [Corporate Phone Number] [Corporate Fax Number] [Email Address]</div>`
        
        
-       
-               const htmlContent1 =`<h4>If you’re visiting this page, you’re likely here because you’re searching for a random sentence. Sometimes a random word just isn’t enough, and that is where the random sentence generator comes into play. By inputting the desired number, you can make a list of as many random sentences as you want or need. Producing random sentences can be helpful in a number of different ways.</h4>`
+          
+        const htmlContent1 =`<h4>If you’re visiting this page, you’re likely here because you’re searching for a random sentence. Sometimes a random word just isn’t enough, and that is where the random sentence generator comes into play. By inputting the desired number, you can make a list of as many random sentences as you want or need. Producing random sentences can be helpful in a number of different ways.</h4>`
         return (
             <SafeAreaView style={styles.container}>
                 {/* <View style={{ flexDirection: "row", marginTop: '15%' }}>
@@ -123,7 +123,7 @@ return true;
                         }}>
 
                             <ScrollView style={{ backgroundColor: '#F9F9F9', borderRadius: 1, flexWrap: 'nowrap' }}>
-                                 <HTMLView value={this.state.termsData}  ></HTMLView> 
+                                 <HTMLView stylesheet={styles} value={this.state.termsData}  ></HTMLView> 
                             </ScrollView>
                         </View>
                     </View>
@@ -155,7 +155,14 @@ return true;
         }
         
 const styles = StyleSheet.create({
-
+    h4:{
+        fontFamily:'AzoSans-Regular',
+        fontSize:14
+    },
+    p:{
+        fontFamily:'AzoSans-Regular',
+        fontSize:14
+    },
                     input: {
                     width: width - 100,
                 height: height / 16,
@@ -197,7 +204,7 @@ const styles = StyleSheet.create({
     title: {
                 color:'#27A291',
                     fontSize: 24,
-                fontWeight: 'bold',
+                fontFamily: 'Montserrat-Light',
                 // top:'15%',
                 marginTop: '15%'
             },

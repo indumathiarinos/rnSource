@@ -635,7 +635,7 @@ fontFamily:'AzoSans-Medium'}}
     //   fontWeight:'600',
     // },
     body:{
-      marginTop:5,
+      marginTop:'5%',
     },
     bodyContent: {
       alignItems: 'center',

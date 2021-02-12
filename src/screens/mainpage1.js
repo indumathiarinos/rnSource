@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import Modal1 from "react-native-modal";
 // import apiCall from "../redux/ActionCreator";
 import { connect } from "react-redux";
+import MenuIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Card } from "react-native-elements";
 import CardView from 'react-native-cardview';
 import LinearGradient from 'react-native-linear-gradient';
@@ -1296,8 +1297,8 @@ class Home extends Component {
                                             <CardView
                                                 cardElevation={2}
                                                 // cardMaxElevation={2}
-                                                cornerRadius={8}>
-                                                <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width:width/2.5, height: height/3.5, jsutifyContent: 'center', resizeMode: 'cover' }}>
+                                                cornerRadius={15}>
+                                                <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width:width/2.5, height: height/4, jsutifyContent: 'center', resizeMode: 'cover' }}>
                                                     {/* {this.state.explore_page=='0'? */}
                                                     <TouchableOpacity
                                                         onPress={() => this.moreClick(item, "pressIcon")}>
@@ -1322,7 +1323,7 @@ class Home extends Component {
                                 enableMomentum={true}
                                 sliderWidth={Dimensions.get('window').width}
                                 itemWidth={width/2.5}
-                                itemHeight={width/3.5}
+                                itemHeight={width/4}
                                 snapToInterval={20}
                                 currentIndex={1}
                                 contentContainerCustomStyle={{ marginLeft: 0 }}
@@ -1382,18 +1383,18 @@ class Home extends Component {
                                     <CardView
                                         // cardElevation={2}
                                         // cardMaxElevation={2}
-                                        style={{ backgroundColor: this.tags(item.Category_name), padding: '2%', height: height/3 }}
+                                        style={{ backgroundColor: this.tags(item.Category_name), padding: '2%', height: height/3.5,width:width/1.3 }}
                                         cornerRadius={20}>
                                         <View style={{ flex: 1, margin: 10, marginBottom: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                             <Image
                                                 resizeMode="stretch"
-                                                style={{ width: width / 4, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, height: height / 4.5, alignSelf: 'center' }} source={{ uri: item.Image1 != "" ? item.Image1 : null }} />
+                                                style={{ width: width / 4, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, height: height / 4.8, alignSelf: 'center' }} source={{ uri: item.Image1 != "" ? item.Image1 : null }} />
                                             <Image
                                                 resizeMode="stretch"
-                                                style={{ width: width / 4, height: height / 4.5, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, alignSelf: 'center', paddingRight: 40, marginLeft: -10 }} source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
+                                                style={{ width: width / 4, height: height / 4.8, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, alignSelf: 'center', paddingRight: 40, marginLeft: -10 }} source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
                                             <Image
                                                 resizeMode="stretch"
-                                                style={{ width: width / 4, height: height / 4.5, borderRadius: 8, alignSelf: 'center', paddingRight: 80, marginLeft: -10 }} source={{ uri: item.Image3 != "" ? item.Image3 : null }} />
+                                                style={{ width: width / 4, height: height / 4.8, borderRadius: 8, alignSelf: 'center', paddingRight: 80, marginLeft: -10 }} source={{ uri: item.Image3 != "" ? item.Image3 : null }} />
                                         </View>
                                         <Text style={{ marginBottom: 5, color: '#fff', fontSize: 16, fontFamily: 'AzoSans-Medium', textAlign: 'center', marginTop: 10 }}>
                                             {item.Category_name}
@@ -1412,8 +1413,8 @@ class Home extends Component {
                             autoplay={false}
                             enableMomentum={true}
                             sliderWidth={Dimensions.get('window').width}
-                            itemWidth={340}
-                            itemHeight={230}
+                            itemWidth={width/1.3}
+                            itemHeight={height/3.5}
                             contentContainerCustomStyle={{ alignItems: "center", justifyContent: 'center' }}
                             snapToAlignment={'center'}
                             onSnapToItem={(index) => this.snapItem(index, 'expl')}
@@ -1447,8 +1448,8 @@ class Home extends Component {
                                         <CardView
                                             cardElevation={2}
                                             cardMaxElevation={2}
-                                            cornerRadius={8}>
-                                            <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width: width/2.5, height: height/3.5, jsutifyContent: 'center', resizeMode: 'cover' }}>
+                                            cornerRadius={15}>
+                                            <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={{ width: width/2.5, height: height/4, jsutifyContent: 'center', resizeMode: 'cover' }}>
                                                 <TouchableOpacity
                                                     onPress={() => this.moreClick(item, "pressIcon")}>
                                                     <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1469,7 +1470,7 @@ class Home extends Component {
                             enableMomentum={true}
                             sliderWidth={Dimensions.get('window').width}
                             itemWidth={width/2.5}
-                            itemHeight={height/3.5}
+                            itemHeight={height/4}
                             snapToInterval={20}
                             contentContainerCustomStyle={{ marginLeft: -80 }}
                             snapToAlignment={'start'}
@@ -1675,7 +1676,7 @@ class Home extends Component {
                                         <CardView
                                             cardElevation={2}
                                             cardMaxElevation={2}
-                                            cornerRadius={8}>
+                                            cornerRadius={15}>
 
                                             <ImageBackground source={{ uri: item.Images != '' ? item.Images : null }} style={item.TypeID == 1 ? styles.pubImgStyle : styles.pageImgStyle}>
                                                 <TouchableOpacity
@@ -1699,7 +1700,7 @@ class Home extends Component {
                             enableMomentum={true}
                             sliderWidth={Dimensions.get('window').width}
                             itemWidth={width/2.5}
-                            itemHeight={height/3.5}
+                            itemHeight={height/4}
                             snapToInterval={20}
                             contentContainerCustomStyle={{ marginLeft: -80 }}
                             snapToAlignment={'start'}
@@ -1914,7 +1915,7 @@ class Home extends Component {
                               console.log('Modal has been closed.');
                           }}> */}
                 {this.state.readlaterPopup ?
-                    <BlurModal visible={this.state.modalVisible}
+                    <BlurModal visible={this.state.readlaterPopup}
                         children={
                             <View style={{
                                 left: 0, right: 0, bottom: '6%', position: 'absolute',
@@ -1952,7 +1953,13 @@ class Home extends Component {
           
             <View style={{flexDirection:'row'}}>
             <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.explore_page == '0' ? this.state.avatar : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-          <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+        {/* <MenuIcon
+            name={'microsoft-xbox-controller-menu'}
+            size={15}
+            color={'#27A291'}
+            style={{top:'50%',right:'40%'}}
+        /> */}
+          <Image style={{top:'60%',right:'38%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
             </View>
                     
           </TouchableOpacity>
@@ -2210,7 +2217,7 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     pubImgStyle: {
-        width:width/2.5, height: height/3.5,
+        width:width/2.5, height: height/4,
         borderRadius: 15,
         //  justifyContent: 'center'
     },

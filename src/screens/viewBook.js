@@ -1540,12 +1540,16 @@ onPress={() => this.props.navigation.navigate('report')}>
             onPress={() => { this.state.explore_page == '0' ? this.likeClick(this.state.getpostid) : this.alertPopup() }}
           >
             {/* {this.renderImage} */}
-            <View style={{flexDirection:'row'}}>
             <Icons name={this.state.likeStatus ? 'like1' : 'like2'}
                 size={20}
                 style={{ alignSelf: 'center' }}
                 color={this.state.likeStatus ? '#27A291' : '#707070'}
               />
+              {this.state.likeStatus? <Text style={{
+                color:
+                this.state.likeStatus? '#27A291' :
+                    '#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Like</Text>:null}
               {/* <Text style={{
                 color:
                 this.state.likeStatus? '#27A291' :
@@ -1553,7 +1557,7 @@ onPress={() => this.props.navigation.navigate('report')}>
               }}>
                 {item.likescount=="" || item.likescount==0?'':item.likescount} {item.likescount=="" || item.likescount<=1?'Like' : 'Likes'}
                 </Text> */}
-          </View>
+               
             {/* {this.state.likeStatus == 'Y' ? <Image
               style={{ marginTop: 12 }}
               source={require('../assets/img/small_like.png')} /> : <Image style={styles.group} source={require('../assets/img/like-icon.png')}
@@ -1616,9 +1620,9 @@ onRequestClose={() => {
               justifyContent: 'center',
               backgroundColor: '#27A291',
             }}>
-              <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Added to {this.state.getsecColName} -</Text>
+              <Text style={{ color: '#fff', fontSize: 16, textAlign: 'center' ,fontFamily:'AzoSans-Bold'}}>Added to {this.state.getsecColName} -</Text>
               <TouchableOpacity onPress={() => this.gotoCollSec()}>
-                <Text style={{ fontSize: 16, color: '#fff', padding: '2%', textDecorationLine: 'underline' }}>{this.state.popup_title}</Text>
+                <Text style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#fff', padding: '2%', textDecorationLine: 'underline' }}>{this.state.popup_title}</Text>
 
               </TouchableOpacity>
             </View>
@@ -1646,9 +1650,9 @@ onRequestClose={() => {
                 justifyContent: 'center',
                 backgroundColor: '#27A291',
               }}>
-                <Text style={{ color: '#fff', fontSize: 18, textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
+                <Text style={{ color: '#fff', fontSize: 16,fontFamily:'AzoSans-Bold', textAlign: 'center', width: width / 1.4 }}>{!this.state.exists ? "Added to ReadLater" : "Already Added in ReadLater"}</Text>
                 <TouchableOpacity onPress={() => this.setState({ undo: true })}>
-                  <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
+                  <Text style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#fff', textDecorationLine: 'underline', }}>Undo</Text>
                 </TouchableOpacity>
               </View>
             } />

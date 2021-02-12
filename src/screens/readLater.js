@@ -66,6 +66,7 @@ class ReadLater extends Component {
     tab2: false,
     tab3: false,
     tab4: false,
+    currentItem:''
 }
 this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -308,7 +309,7 @@ showModal2 = () => {
       modalVisible: false,undo:false
     })
   //  { this.getData()}
-    }, 3000);
+    }, 2000);
 }
 // showModal = () => {
 //   this.setState({
@@ -339,7 +340,7 @@ showModal2 = () => {
 // }
 removeItem(item1){
   this.setState({deletedName:item1.Titel,
-    selectedId:item1.id,undo:false});
+    selectedId:item1.id,undo:false,currentItem:item1});
   this.state.filterdata.push(item1);
   // this.setState({getDeleteId:item1.id});
 
@@ -430,10 +431,13 @@ _renderTruncatedFooter = (handlePress,index,item) => {
     return (
     <View key={index} style={{ width: width, flex: 1,backgroundColor:'#fff' }}>
        
-            <View style={{ flexDirection: 'row',justifyContent:'space-between',alignSelf:'center',width:'90%',marginTop:'5%' }}>
+            <View style={{ flexDirection: 'row',justifyContent:'space-between',alignSelf:'center',width:'90%',marginTop:'2%' }}>
             <View style={{flexDirection:'column',width:'80%'}}>
             <Text style={{color:'#707070',fontSize:12,fontFamily:'AzoSans-Regular', marginBottom:'1%'}}>{item.updated_date}</Text>
-            <Text style={{fontSize:16,fontFamily:'Montserrat-Bold'}}>{item.Titel}</Text></View>
+            <Text style={{fontSize:16,fontFamily:'Montserrat-Bold'}}>{item.Titel}</Text>
+            
+            
+            </View>
            
      <TouchableOpacity onPress={()=>this.removeItem(item)}>
      <Image style={{width:40,height:40}} source={require('../assets/img/trashicon.png')} />
@@ -597,7 +601,10 @@ onPress={() => this.bookmarkPress()}
          
          <View style={{flexDirection:'row',justifyContent:'center'}}>
                 <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Bold',textAlign:'center',}} >Removed - </Text>
+                <TouchableOpacity onPress={()=>this.goToRead(this.state.currentItem)}>
                 <Text numberOfLines={2} style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Medium',textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
+
+                </TouchableOpacity>
   
               </View>         
            
@@ -632,7 +639,7 @@ onPress={() => this.bookmarkPress()}
           
           <View style={{flexDirection:'row'}}>
           <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatarProfile ? this.state.avatarProfile : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-        <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+          <Image style={{top:'60%',right:'38%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
           </View>
                   
         </TouchableOpacity>

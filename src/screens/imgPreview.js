@@ -542,6 +542,11 @@ class PreView extends Component {
                 style={{ alignSelf: 'center' }}
                 color={this.state.likeStatus ? '#fff' : '#fff'}
               />
+               {this.state.likeStatus? <Text style={{
+                color:
+                this.state.likeStatus? '#fff' :
+                    '#fff',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Like</Text>:null}
          </TouchableOpacity>
          <TouchableOpacity
            onPress={() => this.commentClick()}

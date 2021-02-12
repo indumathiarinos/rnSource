@@ -55,7 +55,9 @@ class SectionEdit extends Component {
         editPopupState:false,
         editpagetitle:'',
         undo:false,
-        getpostid:''
+        getpostid:'',
+        colledit:false,
+        sec_name:''
 
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -137,15 +139,23 @@ async componentDidMount() {
     AsyncStorage.getItem('sectionId').then(val =>this.setState({ sourceSecId: val })).done;
     AsyncStorage.getItem('newColl_Id').then(val =>this.setState({ sourceCollId: val })).done;
     AsyncStorage.getItem('coll_postid').then(val =>this.setState({ getpostid: val })).done;
-
+    AsyncStorage.getItem('coll_Edit').then(val=>this.setState({colledit:val})).done();
     // AsyncStorage.getItem('collectionId').then((val) => this.setState({ getCollectionId: val })).done();
-    console.log('collection userid is ',this.state.getuserid,this.state.getCollectionId)
     AsyncStorage.getItem('edit_title').then((value) => this.setState({ editpagetitle : value })).done();
 
     this.CheckConnectivity();
 
     this.focusListener = this.props.navigation.addListener('willFocus', () => {
-        
+        AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
+        // AsyncStorage.getItem('sDetail_collId').then((val) => this.setState({ sourceCollId: val })).done();
+        // AsyncStorage.getItem('sDetail_secId').then((val) => this.setState({ sourceSecId: val })).done();
+        AsyncStorage.getItem('sectionId').then(val =>this.setState({ sourceSecId: val })).done;
+        AsyncStorage.getItem('newColl_Id').then(val =>this.setState({ sourceCollId: val })).done;
+        AsyncStorage.getItem('coll_postid').then(val =>this.setState({ getpostid: val })).done;
+        AsyncStorage.getItem('coll_Edit').then(val=>this.setState({colledit:val})).done();
+        // AsyncStorage.getItem('collectionId').then((val) => this.setState({ getCollectionId: val })).done();
+        AsyncStorage.getItem('edit_title').then((value) => this.setState({ editpagetitle : value })).done();
+    
         this.CheckConnectivity();
     })
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -174,9 +184,13 @@ handleBackButtonClick() {
 getData() {
     setTimeout(() => {
         AsyncStorage.getItem('bookmarkUserid').then((val)=>{console.log('value is ',val)}).done();
-        this.setState({selectedCol:this.state.sourceCollId,selectedSec:this.state.sourceSecId});
-        this.sectionClick(this.state.selectedCol,"");
+        this.setState({selectedCol:this.state.sourceCollId,
+            selectedSec:this.state.colledit?null: this.state.sourceSecId
+        });
+        // this.sectionClick(this.state.selectedCol,"");
         console.log('userid is ',this.state.getuserid);
+        console.log('collection userid is ',this.state.getuserid,this.state.getCollectionId, 'post id',this.state.getpostid,'colledit',this.state.colledit)
+            // {this.state.colledit==false?this.state.sectionClick(this.state.getCollectionId,""):null}
             {this.collData(this.state.getuserid,"","")};
 
         // { this.exploredata(this.state.getuserid) }
@@ -419,7 +433,6 @@ editClk() {
         this.setState({ loading: false })
         console.warn(responseJson);
         // this.props.navigation.navigate('sectionDetail')
-
         // this.props.secEditPopupFunc();
         // AsyncStorage.setItem('secEdit_Name',JSON.stringify(this.state.collSourceName))
         // AsyncStorage.setItem('sectionEditPopup',true)
@@ -434,7 +447,7 @@ editClk() {
         AsyncStorage.setItem('collectionId',JSON.stringify(Number(this.state.selectedCol)));
         AsyncStorage.setItem('secEdit_Name',JSON.stringify(this.state.collSourceName))
         console.log('collection book value is ',value)
-       
+        AsyncStorage.setItem('coll_name',JSON.stringify(this.state.collSourceName));
         }
         gotoCreateColl=()=>{
             AsyncStorage.setItem('EditCreateColl',JSON.stringify(true));
@@ -449,22 +462,30 @@ editClk() {
             }
         sectionClick = (collid,value) => {
             LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            this.setState({ sectionExpand:true,next:value!=""?!this.state.next:false,collSourceName:value,
-                selectedCol:collid,secCollid:collid,selectedCol:collid
+            this.setState({ sectionExpand:!this.state.sectionExpand,next:value!=""?!this.state.next:false,collSourceName:value,
+                selectedCol:collid,
+                // secCollid:collid,selectedCol:collid
             });
             this.secData(this.state.getuserid,collid)
             console.log('section data collection ',this.state.section);
         }
         secBook=(value,collid,secid,item)=>{
-            this.setState({collectionModal:false,next:true,selectedSec:secid});
+            this.setState({collectionModal:false,next:true,selectedSec:secid,sec_name:value});
             console.log('section book value is ',value,item, collid,secid,)
-        
+            AsyncStorage.getItem('sec_name',JSON.stringify(value));
+            {this.state.sectionExpand?AsyncStorage.setItem('sec_name',JSON.stringify(this.state.collSourceName)):null}
+
             }
             viewCollection({ item }) {
         
             }
             gotoSectionDetail(){
                this.editClk()
+            }
+            gotoCollpage=()=>{
+                AsyncStorage.setItem('coll_name',JSON.stringify(this.state.collSourceName));
+                {this.state.sectionExpand?AsyncStorage.setItem('sec_name',JSON.stringify(this.state.collSourceName)):null}
+                this.props.navigation.navigate('collectionDetail', { 'collId':  this.state.selectedCol})
             }
         render() {
             // AsyncStorage.getItem('loading').then((value) => {value==true?
@@ -482,8 +503,11 @@ editClk() {
                     <Text style={{color:'#fff',fontFamily:'Montserrrat-Bold',fontSize:16,textAlign:'center'}}>Edit {this.state.editpagetitle}</Text>
                     </View>
                     <ScrollView style={{paddingBottom:'10%',marginBottom:100}}>
-                    <View style={{flexDirection:'row',alignItems:'center',}}><Text style={{fontSize:24,color:'#000',margin:'2%',padding:'1%',fontFamily:'Montserrat-Light',marginRight:0}}>Collection / </Text>
-                    <Text style={{fontSize:24,color:'#27A291',margin:'2%',marginLeft:0,marginTop:'3%',padding:'1%',fontFamily:'Montserrat-Regular',marginRight:0}}>Section</Text></View>
+                    <View style={{flexDirection:'row',alignItems:'center',}}><Text style={{fontSize:24,color:'#000',margin:'2%',padding:'1%',fontFamily:'Montserrat-Light',marginRight:0}}>Collection</Text>
+                    {this.state.sectionExpand?<Text style={{fontSize:24,color:'#000',margin:'2%',padding:'1%',fontFamily:'Montserrat-Light',marginRight:0}}> / </Text>:null}
+
+                   {this.state.sectionExpand?<Text style={{fontSize:24,color:'#27A291',margin:'2%',marginLeft:0,marginTop:'3%',padding:'1%',fontFamily:'Montserrat-Regular',marginRight:0}}>Section</Text>:null }
+                   </View>
                         <View style={{width:width-20,height:1,backgroundColor:'#27A291',alignSelf:'center',marginLeft:'2%',marginRight:'2%',marginBottom:'2%'}}/>
                         <ScrollView>
                        <FlatList
@@ -514,8 +538,8 @@ editClk() {
                                   {item.SectionStatus==0?null:
                                 //   <Image style={{ alignSelf: 'center',marginLeft:'2%',width:20,height:20,}} source={item.id==this.state.selectedCol?require('../assets/img/right-arrow1.png'):require('../assets/img/down-arrow1.png')} />
                                 <Icon
-                                    name={item.id==this.state.selectedCol||this.state.txtClick==item.id || item.id==this.state.secCollid ?'chevron-thin-down':'chevron-thin-right'}
-                                    color={item.id==this.state.selectedCol||this.state.txtClick==item.id || item.id==this.state.secCollid ?'#fff':'#707070'}
+                                    name={this.state.sectionExpand && item.id==this.state.selectedCol?'chevron-thin-down':'chevron-thin-right'}
+                                    color={item.id==this.state.sectionExpand|| item.id==this.state.selectedCol ?'#fff':'#707070'}
                                     size={20}
                                     />
                                }
@@ -550,7 +574,7 @@ editClk() {
                                        style={{width:30,height:30,alignItems:'center',justifyContent:'center'}}>      
                                        <Image style={{width:20,height:20}} source={ require('../assets/img/white_tick.png')}/>
                                        </TouchableOpacity>
-                                       <TouchableOpacity onPress={()=>this.setState({sectionCheck:!this.state.sectionCheck,next:true,selectedSec:item.SectionID})} style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} >      
+                                       <TouchableOpacity onPress={()=>this.setState({sectionCheck:!this.state.sectionCheck,next:true,selectedSec:item.SectionID,sourceSecId:item.SectionID})} style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} >      
                                        <Image style={{width:20,height:20}} source={item.SectionID==this.state.selectedSec? require('../assets/img/white_tick.png'):require('../assets/img/uncheck.png')}/>
                                        </TouchableOpacity>
                                        <Text style={[{ fontSize: 16, color: '#707070', textAlign: 'center', width: width/1.5,fontFamily:'AzoSans-Regular'},{color: item.SectionID==this.state.selectedSec || this.state.sectionExpand ? "#fff":"#707070"}]}>{item.Title}</Text>
@@ -598,7 +622,7 @@ editClk() {
                              
                     
                     </ScrollView >
-                  {this.state.secCollid==""?
+                  {!this.state.sectionExpand?
                   <View style={{position:'absolute',bottom:'10%',right:'5%'}}>
                   <TouchableOpacity onPress={()=>this.gotoCreateColl()}>
                   <View style={{width:width/3,borderWidth:1,borderColor:'#27A291',backgroundColor:'#fff',height:35,alignItems:'center', flexDirection:'row',justifyContent:'space-between',borderRadius:18,alignSelf:'flex-end',}}>
@@ -680,13 +704,16 @@ editClk() {
           {this.state.editpagetitle}
           </Text>
           <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}> to </Text>
-          <Text style={{textDecorationLine:'underline',color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>
+         <TouchableOpacity onPress={()=>this.gotoCollpage()}>
+         <Text style={{textDecorationLine:'underline',color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>
             {this.state.collSourceName}
             {/* Sample Collection1 */}
             </Text>
+         </TouchableOpacity>
+         
            </View>
            
-          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({undo:true})}>
+          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'4%',marginBottom:'1%',}} onPress={()=>this.setState({undo:true})}>
           <Text style={{fontSize: 16,color:'white',textDecorationLine:'underline',fontFamily:'AzoSans-Regular'}}>Undo</Text>
           </TouchableOpacity>
        </View>}

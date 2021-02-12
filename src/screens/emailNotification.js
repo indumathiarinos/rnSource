@@ -166,7 +166,7 @@ class EmailNotification extends Component {
             <SafeAreaView style={{ flex: 1,backgroundColor:'#fff'}}>
           <View style={styles.staticheader}>
          
-          <View style={{ flexDirection: 'row', width: width-50, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', width: width-60, justifyContent: 'center', alignItems: 'center' }}>
           <TouchableOpacity style={{ alignItems: 'center' }} 
             onPress={() => this.props.navigation.navigate('settings')}
             >
@@ -183,19 +183,17 @@ class EmailNotification extends Component {
               >Account</Text>
             </TouchableOpacity>
 
-            <LinearGradient style={{ borderRadius: 10}} colors={
-              ['#24D4BC', '#27A291']}>
-            <TouchableOpacity
+        
+            <TouchableOpacity style={{ borderRadius: 10,backgroundColor:'#27A291'}}
               onPress={this.headerBtnClk}>
               <Text style={{
                 padding: '5%',
-                fontSize: 16,
+                fontSize: 14,
                 color: 'white',
-                fontWeight: 'bold'
+                fontFamily: 'AzoSans-Medium'
               }}
               >Email Notifications</Text>
             </TouchableOpacity>
-            </LinearGradient>
             {/* </View> */}
             {/* </View> */}
           </View>
@@ -300,7 +298,7 @@ class EmailNotification extends Component {
                 <Text style={styles.text2}>Important announcements, new product, features and interesting content</Text>
                 <LinearGradient style={styles.btnview} colors={['#24D4BC', '#27A291']} >
                     <TouchableOpacity onPress={()=>this.props.navigation.navigate('loginSignup')}>
-                    <Text style={{color:'#ffff',fontSize:18,textAlign:'center'}}>Logout</Text>
+                    <Text style={{color:'#ffff',fontSize:16,textAlign:'center',fontFamily:'AzoSans-Regular'}}>Logout</Text>
                 </TouchableOpacity>
                 </LinearGradient>
             </View>
@@ -321,8 +319,8 @@ class EmailNotification extends Component {
 }
 const styles = StyleSheet.create({
     text:{
-      fontSize:19,
-      fontWeight:'bold',width:width/1.5,
+      fontSize:16,
+      fontFamily:'Montserrat-Bold',width:width/1.5,
     },
     btnview: {
         alignItems:'center',
@@ -332,20 +330,23 @@ const styles = StyleSheet.create({
 
       },
     text1:{
-        fontSize:18,width:width/1.5,
+        fontSize:16,width:width/1.5,
         color:'#505050',
+        fontFamily:'AzoSans-Regular',
+        marginTop:'4%'
         // margin:'2%'
     },
     text2:{
-        fontSize:16,
+        fontSize:12,
         color:'#707070',
         marginTop:'5%',
-        marginBottom:'10%'
+        marginBottom:'10%',
+        fontFamily:'AzoSans-Regular'
         // margin:'2%'
     },
     title:{
-        fontSize:19,
-        fontWeight:'bold',
+        fontSize:16,
+        fontFamily:'Montserrat-Bold',
         textAlign:'center',
         margin:'2%'
         
@@ -366,8 +367,9 @@ const styles = StyleSheet.create({
       },
     headerText: {
         padding: '2%',
-        fontSize: 16,
-        fontWeight: 'bold'
+        fontSize: 14,
+        fontFamily: 'AzoSans-Medium',
+        color:'#707070'
     }, 
 })
 

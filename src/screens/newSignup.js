@@ -50,7 +50,9 @@ const pass = value =>
       
           if(state.isConnected==true){
             // {this.getData();}
-            this.signUp();
+           {this.state.email!="" && this.state.pwd !="" && this.state.re_pwd !=""?this.signUp():
+          alert('Please fill all the fields')
+          } 
           }else{
             alert('No Internet connection.Make sure that Mobile data or Wifi is turned on,then try again.')
           }

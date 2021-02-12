@@ -12,6 +12,7 @@ import {
     BackHandler,
     Dimensions,
     AsyncStorage,
+    SectionList,
     SafeAreaView,
     Button
 } from 'react-native';
@@ -67,6 +68,7 @@ class Comments extends Component {
             customlike: false,
             commentsData:'',
             reply_m_id:'',
+            Reply_id:'',
             currentCommentId:'',
             m_reply_status:false,
             dummy: [
@@ -136,8 +138,8 @@ class Comments extends Component {
     exploredata() {
         var json = JSON.stringify({ "pageID": 
         this.state.getpageid != "" ? this.state.getpageid : 0
-        , "postID": this.state.getpostid != "" ? this.state.getpostid : 0,"UserID":this.state.getuserid });
-        console.log('get json ', json, 'type id ', this.state.gettypeid)
+        , "postID": this.state.getpostid != "" ? this.state.getpostid : 0,"UserID":this.state.getuserid,"Sort_By":"" });
+        console.log('get json ', json, 'type id ', this.state.gettypeid,this.state.selectedItemReply)
         fetch("http://162.250.120.20:444/Login/CommentAllGet",
             {
                 method: 'POST',
@@ -152,10 +154,11 @@ class Comments extends Component {
             .then((responseJson) => {
                 //alert(responseText);1
                 this.setState({
-                    comments: responseJson, loading: false,commentsData:responseJson[0].commentID,
-                    commentCounts: responseJson[0].COUNTS
+                    comments: responseJson, loading: false,
+                    // commentsData:responseJson[0].commentID,
+                   
                 });
-                AsyncStorage.setItem('commentId', JSON.stringify(Number(responseJson.commentID)))
+                // AsyncStorage.setItem('commentId', JSON.stringify(Number(responseJson[0].commentID)))
                 console.warn(this.state.comments)
             })
             .catch((error) => {
@@ -265,25 +268,28 @@ class Comments extends Component {
         // MultiselectItems.push(selectedItemArray);
         this.setState({ comments: list });
     }
-    replyPress=(commentID)=>{
+    replyPress=(commentID,replyID)=>{
+        console.log('item commentid ',commentID)
         let list = [...this.state.comments];
         for (let comments of list) {
             if (comments.commentID == commentID) {
 
                 comments.reply = (comments.reply == null) ? true : !comments.reply;
-                (comments.reply) ? this.state.selectedItemReply.push(comments) : this.state.selectedItemReply.pop(comments);
+                (comments.reply) ? this.state.selectedItemReply.push(comments.commentID) : this.state.selectedItemReply.pop(comments.commentID);
                 console.log('selected item array ', this.state.selectedItemReply);
-                console.log('data ', comments.Data)
+                console.log('data ', comments.data)
                 console.log("data.selected" + comments.reply, 'id', comments.commentID);
-                
+                // this.setState({ reply_m_id:commentID,m_reply_status:true });
+                console.log('m reply status',this.state.m_reply_status,this.state.reply_m_id);
                 break;
             }
         }
         // console.log("array"+this.state.selectedItemArray);
         // MultiselectItems.push(selectedItemArray);
-        this.setState({ comments: list,reply_m_id:commentID,m_reply_status:true });
-        console.log('m reply status',this.state.m_reply_status)
-    }
+        this.setState({ comments:list,m_reply_status:true,reply_m_id:commentID,Reply_id:replyID });
+        console.log('valuedkfksdfj ',this.state.m_reply_status,this.state.reply_m_id,this.state.Reply_id)
+        this.commentRef.focus();
+        }
 //     AllComments({ item, index }) {
 //         let replyarray=[];
 //         return (
@@ -514,20 +520,20 @@ class Comments extends Component {
                 console.warn(error);
             });
     }
-    commentReplyAddService(commentid,replytext) {
+    commentReplyAddService(commentid,replytext,reply_id) {
         this.setState({ loading: true })
         var json11=JSON.stringify({
             "Com_ID":commentid,
-            "R_Com_ID":"0",
+            "R_Com_ID":commentid!=""?reply_id:"",
             "C_Like_USERID":"0",
             "R_C_Like_USERID":"0",
-            "Options":"R_C_ADD",
+            "Options":commentid!=""?"R_C_ADD":"M_C_ADD",
             "USERID":this.state.getuserid,
             "Page_Post_ID":
             this.state.postpageid,
             "Type":this.state.gettypeid,
-            "Master_Comment":"",
-        "Reply_Comment":replytext})
+            "Master_Comment":commentid==""?replytext:"",
+        "Reply_Comment":commentid!=""?replytext:""})
         // var json = JSON.stringify({
         //     "UserID": this.state.getuserid,
         //     "PageID": this.state.getpageid,
@@ -550,7 +556,8 @@ class Comments extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 //alert(responseText);1
-                this.setState({ loading: false, commentText: "",m_reply_status:false,reply_m_id:''});
+                this.setState({ loading: false, commentText: "",m_reply_status:false,reply_m_id:'',selectedItemReply:[],Reply_id:''});
+                this.goToTop()
                 { this.exploredata() }
                 console.warn(responseJson);
                 console.warn('comments add')
@@ -560,12 +567,12 @@ class Comments extends Component {
                 console.warn(error);
             });
     }
-    likeService(commentid,replyid,c_like_userid,r_like_userid) {
+    likeService(commentid,c_like_userid,replyid,r_like_userid) {
         this.setState({ loading: true })
         var json11=JSON.stringify({
             "Com_ID":commentid,
             "R_Com_ID":replyid,
-            "C_Like_USERID":c_like_userid,
+            "C_Like_USERID":this.state.getuserid,
             "R_C_Like_USERID":r_like_userid,
             "Options":"Like_Add",
             "USERID":this.state.getuserid,
@@ -611,7 +618,7 @@ class Comments extends Component {
         var json11=JSON.stringify({
             "Com_ID":commentid,
             "R_Com_ID":replyid,
-            "C_Like_USERID":c_like_userid,
+            "C_Like_USERID":this.state.getuserid,
             "R_C_Like_USERID":r_like_userid,
             "Options":"Like_Delete",
             "USERID":this.state.getuserid,
@@ -693,7 +700,7 @@ class Comments extends Component {
                         >
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width / 3 }}>
                                 <Text style={{ fontSize: 18, color: 'black',alignSelf:'flex-end',paddingLeft:5,paddingRight:5,marginTop:-5}}
-                                >{this.state.commentCounts}</Text>
+                                >{this.state.comments.length>=1?this.state.comments[0].COUNTS:null}</Text>
                                    <MaterialIcon name={'comment-text-outline'}
                 size={20}
                 style={{ alignSelf: 'center' }}
@@ -723,170 +730,294 @@ class Comments extends Component {
                     <Text style={styles.headline}>Comments</Text>
 
                     <Divider />
-                    {this.state.commentsData==0?null: 
-                    <FlatList
-            data={this.state.comments}
-            renderItem={({ item,index1 }) => (
-               <View style={{flex:1 }}>
-                <View style={index1 == 0 ? styles.selectedContainer : styles.container}>
-                    <View style={styles.heading1}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('profileAbout')}>
-                            <Image style={styles.image} source={{ uri: item.IMG != "" ? item.IMG : null }} />
-                        </TouchableOpacity>
-                        <Text style={styles.name}>{item.NAME}</Text>
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.contentText} rkType='primary3 mediumLine'>{item.MasterComment}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: "space-between", marginLeft: 17, marginRight: 17, }}>
-                        <View style={styles.bottomReply}>
-                            <TouchableOpacity
-                                onPress={() => item.commentlikestatus=='N'?this.likeService(item.commentID,item.m_user_id,"",""):this.unlikeService(item.commentID,item.m_user_id,"","")
-                                    // this.onPressHandler2(item.commentID)
-                                }
-                            // onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
-                            >
-                                <View style={styles.bottomReply}>
-                                    {/* <Image
-                                    source={imgSource}
-                                /> */}
-                                 <Icons name={item.commentlikestatus=='N' ?'like2':'like1'}
-                size={20}
-                style={{ alignSelf: 'center' }}
-                color={item.commentlikestatus=='N' ?'#707070':'#27A291'}
-              />
-                                    {/* {item.like ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />} */}
-<TouchableOpacity onPress={()=>{
-       AsyncStorage.setItem('commentId',JSON.stringify(item.commentID));
-       // Asy÷ncStorage.setItem('replyId',item.commentReplyID)
-    this.props.navigation.navigate('commentsLike')}}>
-<Text style={[styles.textPadding, { color: item.commentlikestatus=='Y' ? '#27A291' : '#707070',marginTop:'1%',textDecorationLine:'underline',textDecorationColor:item.commentlikestatus=='Y' ? '#27A291' : '#707070' }]}>{ item.c_like_count + (item.c_like_count == 0 || item.c_like_count == 1 ? " Like" : " Likes") }</Text>
-
-</TouchableOpacity>
-                                </View>
-                                {/* <Text style={{color:'#707070',}}>{item.CommentLike!=0?item.CommentLike:null}</Text> */}
-                              
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.imgGap}
-                             onPress={() => this.replyPress(item.commentID)}
-                                // onPress={() => this.onPressHandler1(item)}
-                            // onPress={() => this.setState({ replyImg: !this.state.replyImg })}
-                            >
-                                <View style={styles.bottomReply}>
-                                <MaterialIcon name={'comment-text-outline'}
-                size={20}
-                style={{ alignSelf: 'center' }}
-                //  style={{marginLeft:15,marginBottom:3}}
-                color={
-                   item.commentstatus=='Y'?'#27A291':
-                  '#707070'}
-              />
-                                    {/* {item.reply == true ? <Image source={require('../assets/img/commentcolor.png')} /> : <Image source={require('../assets/img/comment1.png')} />} */}
-
-                                    {/* <Image
-                                    source={replyImg} /> */}
-                                    <Text style={styles.textPadding}>Reply</Text>
-                                </View>
-
-                            </TouchableOpacity>
-                        </View>
-
-                        <Text style={styles.time}>{item.m_created_at}</Text>
-                    </View>
-                   
-                    {/* <View style={styles.heading1}>
-
-
-                    </View> */}
-                </View>
-                <FlatList
-                  data={item.Data}
-                  renderItem={({ item }) => 
-                  <View style={{flex:1,alignSelf:'flex-end' }}>
-                  <View style={ styles.replyContainer}>
-                      <View style={styles.heading1}>
-                          <TouchableOpacity onPress={() => this.props.navigation.navigate('profileAbout')}>
-                              <Image style={styles.image} source={{ uri: item.avatar != "" ? item.avatar : null }} />
-                          </TouchableOpacity>
-                          <Text style={styles.name}>{item.first_name}</Text>
-                      </View>
-                      <View style={styles.content}>
-                          <Text style={styles.contentText} rkType='primary3 mediumLine'>{item.ReplyComment}</Text>
-                      </View>
-                      <View style={{ flexDirection: 'row', justifyContent: "space-between", marginLeft: 17, marginRight: 17, }}>
-                          <View style={styles.bottomReply}>
-                              <TouchableOpacity
-                   onPress={() => item.replylikestatus=='N'?this.likeService(item.commentID,item.m_user_id,item.commentReplyID,item.user_id):this.unlikeService(item.commentID,item.m_user_id,item.commentReplyID,item.user_id)
-                }
-                                //   onPress={() => this.onPressHandler2(item.commentID)}
-                              // onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
-                              >
+                    {/* {this.state.commentsData ==0 || this.state.commentsData === [] ?null:  */}
+                      <FlatList
+                      data={this.state.comments}
+                      renderItem={({ item,index }) => 
+                         <View style={{flex:1 }}>
+                          <View style={index == 0 ? styles.selectedContainer : styles.container}>
+                              <View style={styles.heading1}>
+                                  <TouchableOpacity onPress={() => this.props.navigation.navigate('profileAbout')}>
+                                      <Image style={styles.image} source={{ uri: item.IMG != "" ? item.IMG : null }} />
+                                  </TouchableOpacity>
+                                  <Text style={styles.name}>{item.NAME}</Text>
+                              </View>
+                              <View style={styles.content}>
+                                  <Text style={styles.contentText} rkType='primary3 mediumLine'>{item.MasterComment}</Text>
+                              </View>
+                              <View style={{ flexDirection: 'row', justifyContent: "space-between", marginLeft: 17, marginRight: 17, }}>
                                   <View style={styles.bottomReply}>
-                                      {/* <Image
-                                      source={imgSource}
-                                  /> */}
-                                <Icons name={item.replylikestatus=='N' ?'like2':'like1'}
-                size={20}
-                style={{ alignSelf: 'center' }}
-                color={item.replylikestatus=='N' ?'#707070':'#27A291'}
-              />
-                                      {/* {item.like ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />} */}
-                                      <TouchableOpacity onPress={()=>{
-                                          console.log('comments index1')
-    //    AsyncStorage.setItem('commentId',JSON.stringify(Number(this.state.comments[index1].commentID)));
-       AsyncStorage.setItem('replyId',JSON.stringify(Number(item.commentReplyID)));
-
-       // Asy÷ncStorage.setItem('replyId',item.commentReplyID)
-    this.props.navigation.navigate('commentsLike')}}>
-<Text style={[styles.textPadding, { color: item.replylikestatus=='Y' ? '#27A291' : '#707070',marginTop:'1%',textDecorationLine:'underline',textDecorationColor:item.replylikestatus=='Y' ? '#27A291' : '#707070' }]}>{ item.r_like_count + (item.r_like_count == 0 || item.r_like_count == 1 ? " Like" : " Likes") }</Text>
-
-</TouchableOpacity>
-                                      {/* <Text style={[styles.textPadding, { color: item.like ? '#27A291' : '#707070' }]}>{item.like == true ? item.c_like_count + (item.c_like_count == 0 || item.c_like_count == 1 ? "Like" : "Likes") : null}</Text> */}
+                                      <TouchableOpacity
+                                          onPress={() => item.commentlikestatus=='N'?this.likeService(item.commentID,item.user_id,"",""):this.unlikeService(item.commentID,item.m_user_id,"","")
+                                              // this.onPressHandler2(item.commentID)
+                                          }
+                                      // onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
+                                      >
+                                          <View style={styles.bottomReply}>
+                                              {/* <Image
+                                              source={imgSource}
+                                          /> */}
+                                           <Icons name={item.commentlikestatus=='N' ?'like2':'like1'}
+                          size={20}
+                          style={{ alignSelf: 'center' }}
+                          color={item.commentlikestatus=='N' ?'#707070':'#27A291'}
+                        />
+                                              {/* {item.like ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />} */}
+          <TouchableOpacity onPress={()=>{
+                 AsyncStorage.setItem('commentId',JSON.stringify(item.commentID));
+                 AsyncStorage.setItem('replyId',"")
+              this.props.navigation.navigate('commentsLike')}}>
+          <Text style={[styles.textPadding, { color: item.commentlikestatus=='Y' ? '#27A291' : '#707070',marginTop:'1%',}]}>{(item.c_like_count>0?item.c_like_count:"")+(item.c_like_count == 0 || item.c_like_count == 1  ? " Like" : " Likes")}</Text>
+          
+          </TouchableOpacity>
+                                          </View>
+                                          {/* <Text style={{color:'#707070',}}>{item.CommentLike!=0?item.CommentLike:null}</Text> */}
+                                        
+                                      </TouchableOpacity>
+                                      <TouchableOpacity style={styles.imgGap}
+                                       onPress={() => this.replyPress(item.commentID,"")}
+                                          // onPress={() => this.onPressHandler1(item)}
+                                      // onPress={() => this.setState({ replyImg: !this.state.replyImg })}
+                                      >
+                                          <View style={styles.bottomReply}>
+                                          <MaterialIcon name={'comment-text-outline'}
+                          size={20}
+                          style={{ alignSelf: 'center' }}
+                          //  style={{marginLeft:15,marginBottom:3}}
+                          color={
+                            item.commentstatus=='Y'?'#27A291':
+                            '#707070'}
+                        />
+                                              {/* {item.reply == true ? <Image source={require('../assets/img/commentcolor.png')} /> : <Image source={require('../assets/img/comment1.png')} />} */}
+          
+                                              {/* <Image
+                                              source={replyImg} /> */}
+                                              <Text style={[styles.textPadding,{color:item.commentstatus=='Y'?'#27A291':'#707070'}]}>Reply</Text>
+                                          </View>
+          
+                                      </TouchableOpacity>
                                   </View>
-                                  {/* <Text style={{color:'#707070',}}>{item.CommentLike!=0?item.CommentLike:null}</Text> */}
-                                
-                              </TouchableOpacity>
-                              <TouchableOpacity style={styles.imgGap}
-                                  onPress={() => this.onPressHandler1(item)}
-                              // onPress={() => this.setState({ replyImg: !this.state.replyImg })}
-                              >
-                                  <View style={styles.bottomReply}>
-                                  <MaterialIcon name={'comment-text-outline'}
-                size={20}
-                style={{ alignSelf: 'center' }}
-                //  style={{marginLeft:15,marginBottom:3}}
-                color={
-                   item.replystatus=='Y'?'#27A291':
-                  '#707070'}
-              />
-                   
-                                      {/* {item.reply == true ? <Image source={require('../assets/img/commentcolor.png')} /> : <Image source={require('../assets/img/comment1.png')} />} */}
-  
-                                      {/* <Image
-                                      source={replyImg} /> */}
-                                      <Text style={styles.textPadding}>Reply</Text>
-                                  </View>
-  
-                              </TouchableOpacity>
+          
+                                  <Text style={styles.time}>{item.m_created_at}</Text>
+                              </View>
+                             
+                              {/* <View style={styles.heading1}>
+          
+          
+                              </View> */}
                           </View>
-  
-                          <Text style={styles.time}>{item.m_created_at}</Text>
-                      </View>
-                     
-                      {/* <View style={styles.heading1}>
-  
-  
-                      </View> */}
+                          <FlatList
+                            data={item.data}
+                            renderItem={({ item:innerData }) => 
+                            <View style={{flex:1,alignSelf:'flex-end' }}>
+                            <View style={ styles.replyContainer}>
+                                <View style={styles.heading1}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('profileAbout')}>
+                                        <Image style={styles.image} source={{ uri: innerData.avatar != "" ? innerData.avatar : null }} />
+                                    </TouchableOpacity>
+                                    <Text style={styles.name}>{innerData.first_name}</Text>
+                                </View>
+                                <View style={styles.content}>
+                                    <Text style={styles.contentText} rkType='primary3 mediumLine'>{innerData.ReplyComment}</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: "space-between", marginLeft: 17, marginRight: 17, }}>
+                                    <View style={styles.bottomReply}>
+                                        <TouchableOpacity
+                             onPress={() => innerData.replylikestatus=='N'?this.likeService(item.commentID,innerData.m_user_id,innerData.commentReplyID,innerData.user_id):this.unlikeService(innerData.commentID,innerData.m_user_id,innerData.commentReplyID,innerData.user_id)
+                          }
+                                          //   onPress={() => this.onPressHandler2(item.commentID)}
+                                        // onPress={() => this.setState({ showlikeImg: !this.state.showlikeImg })}
+                                        >
+                                            <View style={styles.bottomReply}>
+                                                {/* <Image
+                                                source={imgSource}
+                                            /> */}
+                                          <Icons name={innerData.replylikestatus=='N' ?'like2':'like1'}
+                          size={20}
+                          style={{ alignSelf: 'center' }}
+                          color={innerData.replylikestatus=='N' ?'#707070':'#27A291'}
+                        />
+                                                {/* {item.like ? <Image source={require('../assets/img/like.png')} /> : <Image source={require('../assets/img/unlike.png')} />} */}
+                                                <TouchableOpacity onPress={()=>{
+                                                    console.log('comments index1')
+                 AsyncStorage.setItem('commentId',JSON.stringify(Number(item.commentID)));
+                 AsyncStorage.setItem('replyId',JSON.stringify(Number(innerData.commentReplyID)));
+          
+                 // Asy÷ncStorage.setItem('replyId',item.commentReplyID)
+              this.props.navigation.navigate('commentsLike')}}>
+          <Text style={[styles.textPadding, { color: innerData.replylikestatus=='Y' ? '#27A291' : '#707070',marginTop:'1%', }]}>{ innerData.r_like_count>0?innerData.r_like_count:"" + (innerData.r_like_count == 0 || innerData.r_like_count == 1 ? " Like" : " Likes") }</Text>
+          
+          </TouchableOpacity>
+                                                {/* <Text style={[styles.textPadding, { color: item.like ? '#27A291' : '#707070' }]}>{item.like == true ? item.c_like_count + (item.c_like_count == 0 || item.c_like_count == 1 ? "Like" : "Likes") : null}</Text> */}
+                                            </View>
+                                            {/* <Text style={{color:'#707070',}}>{item.CommentLike!=0?item.CommentLike:null}</Text> */}
+                                          
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={styles.imgGap}
+                                         onPress={() => this.replyPress(item.commentID,innerData.commentReplyID)}
+                                            // onPress={() => this.onPressHandler1(innerData)}
+                                        // onPress={() => this.setState({ replyImg: !this.state.replyImg })}
+                                        >
+                                            <View style={styles.bottomReply}>
+                                            <MaterialIcon name={'comment-text-outline'}
+                          size={20}
+                          style={{ alignSelf: 'center' }}
+                          //  style={{marginLeft:15,marginBottom:3}}
+                          color={
+                            innerData.replystatus=='Y'?'#27A291':
+                            '#707070'}
+                        />
+                             
+                                                {/* {item.reply == true ? <Image source={require('../assets/img/commentcolor.png')} /> : <Image source={require('../assets/img/comment1.png')} />} */}
+            
+                                                {/* <Image
+                                                source={replyImg} /> */}
+                                                <Text style={[styles.textPadding,{color:item.commentstatus=='Y'?'#27A291':'#707070'}]}>Reply</Text>
+                                            </View>
+            
+                                        </TouchableOpacity>
+                                    </View>
+            
+                                    <Text style={styles.time}>{innerData.created_at}</Text>
+                                </View>
+                               
+                                {/* <View style={styles.heading1}>
+            
+            
+                                </View> */}
+                            </View>
+                            </View>
+                          }
+                            keyExtractor={(item,index)=> item.commentReplyID}
+                          />
+                        </View>
+                      }
+                      keyExtractor={(data,index )=>data.commentID}
+                    />
+                      {/* } */}
+
+                    {/* <FlatList
+                data={this.state.comments}
+                renderItem={({ item }) => (
+                  <View>
+                    <Text>{item.commentID}</Text>
+                    <FlatList
+                        data={item.Data}
+                        renderItem={({ item }) => 
+                        <View>
+                            <Text>{item.ReplyComment}</Text>
+                        </View>
+                        }
+                        keyExtractor={(item2, index) => index}
+                    />
                   </View>
-                  </View>
-                }
-                  keyExtractor={(item,index)=> item.commentReplyID}
-                />
-              </View>
-            )}
-            keyExtractor={(item,index )=>item.commentID}
-          />
-            }
+                )}
+                keyExtractor={(item, index) => index}
+              /> */}
+              {/* <SectionList
+  renderItem={({item, index, section}) => <Text key={index}>{item.ReplyComment}</Text>}
+  renderSectionHeader={({section: {COUNTS}}) => (
+    <Text style={{fontWeight: 'bold'}}>{COUNTS}</Text>
+  )}
+  sections={[
+    { COUNTS: "7", Data: [{
+        ReplyComment: "tq",
+        avatar: "http://162.250.120.20:444/ProfileImage/UserID_1_07_26_47.jpeg",
+        commentReplyID: "18",
+        commentreplycount: "1",
+        created_at: "08 February 2021",
+        first_name: "jochals",
+        r_like_count: "0",
+        replylikestatus: "N",
+        replystatus: "Y",
+        user_id: "1"}]},
+    { COUNTS: "7", Data: ['item3', 'item4']},
+    { COUNTS: "7", Data: ['item5', 'item6']},
+  ]}
+  keyExtractor={(item, index) => item + index}
+/> */}
+              {/* <SectionList
+                    renderItem={({item, index, section}) => <Text key={index}>{item}</Text>}
+                    renderSectionHeader={({section: {commentID}}) => (
+                        <Text style={{fontWeight: 'bold'}}>{commentID}</Text>
+                    )}
+                    sections={[
+                        {
+                            COUNTS: "7",
+                                Data: [{
+                                ReplyComment: "tq",
+                                avatar: "http://162.250.120.20:444/ProfileImage/UserID_1_07_26_47.jpeg",
+                                commentReplyID: "18",
+                                commentreplycount: "1",
+                                created_at: "08 February 2021",
+                                first_name: "jochals",
+                                r_like_count: "0",
+                                replylikestatus: "N",
+                                replystatus: "Y",
+                                user_id: "1"}],
+                                IMG: "http://162.250.120.20:444/ProfileImage/UserID_1_07_26_47.jpeg",
+                                MasterComment: "Test",
+                                NAME: "jochals",
+                                c_like_count: "",
+                                commentID: 33,
+                                commentcount: "7",
+                                commentlikestatus: "N",
+                                commentstatus: "Y",
+                                m_created_at: "08 February 2021",
+                                m_user_id: 1
+                        },
+                        
+                        // {title: 'Title1', data: ['item1', 'item2']},
+                        {
+                            COUNTS: "7",
+                                Data: [{
+                                ReplyComment: "tq1",
+                                avatar: "http://162.250.120.20:444/ProfileImage/UserID_1_07_26_47.jpeg",
+                                commentReplyID: "18",
+                                commentreplycount: "1",
+                                created_at: "08 February 2021",
+                                first_name: "jochals",
+                                r_like_count: "0",
+                                replylikestatus: "N",
+                                replystatus: "Y",
+                                user_id: "1"}],
+                                IMG: "http://162.250.120.20:444/ProfileImage/UserID_1_07_26_47.jpeg",
+                                MasterComment: "Test",
+                                NAME: "jochals",
+                                c_like_count: "",
+                                commentID: 34,
+                                commentcount: "7",
+                                commentlikestatus: "N",
+                                commentstatus: "Y",
+                                m_created_at: "08 February 2021",
+                                m_user_id: 1
+                        },                       {
+                            COUNTS: "7",
+                                Data: [{
+                                ReplyComment: "tq2",
+                                avatar: "http://162.250.120.20:444/ProfileImage/UserID_1_07_26_47.jpeg",
+                                commentReplyID: "18",
+                                commentreplycount: "1",
+                                created_at: "08 February 2021",
+                                first_name: "jochals",
+                                r_like_count: "0",
+                                replylikestatus: "N",
+                                replystatus: "Y",
+                                user_id: "1"}],
+                                IMG: "http://162.250.120.20:444/ProfileImage/UserID_1_07_26_47.jpeg",
+                                MasterComment: "Test",
+                                NAME: "jochals",
+                                c_like_count: "",
+                                commentID: 35,
+                                commentcount: "7",
+                                commentlikestatus: "N",
+                                commentstatus: "Y",
+                                m_created_at: "08 February 2021",
+                                m_user_id: 1
+                        },
+                    ]}
+                    keyExtractor={(item, index) => index.toString}
+                    /> */}
                     {/* <FlatList
 
                         data={this.state.comments}
@@ -926,17 +1057,23 @@ class Comments extends Component {
                 {/* <Divider /> */}
                 {/* <TouchableOpacity style={{width:'90%',backgroundColor:'#F9F9F9'}}> */}
                 <View style={{ backgroundColor: '#fff', elevation: 1, borderColor: '#707070', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
-                    <TextInput style={styles.input}
+                    <TextInput 
+                         ref={(input) => { this.commentRef = input; }}
+                        style={styles.input}
                         placeholder="Write a Comment"
                         placeholderTextColor='#cccccc'
+                        autoFocus={true}
                         onChangeText={(val) => this.setState({ commentText: val })}
                         value={this.state.commentText}
                     // onChangeText={value => this.refs.modal4.open()}
                     />
                     <TouchableOpacity style={styles.touchableButton}
                         onPress={() =>{
-                            // this.state.selectedItemReply!=[]?this.commentReplyAddService(this.state.reply_m_id,this.state.commentText) :
-                        this.commentAddService()}}>
+                            this.state.selectedItemReply!=[]?this.commentReplyAddService(this.state.reply_m_id,this.state.commentText,this.state.Reply_id) :
+                    //   this.state.m_reply_status?this.commentReplyAddService():
+                    // this.commentAddService()
+                    null
+                    }}>
                         <Image style={{ width: 25, height: 25 }}
                             source={require('../assets/img/send-icon.png')}
                         />
@@ -1044,7 +1181,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 40,
         borderWidth: 1,
         margin: 10,
-        borderColor: '#707070',
+        borderColor: '#cccccc',
         width:width-100,
         // marginLeft:40,
         marginRight:30
@@ -1099,7 +1236,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 40,
         borderWidth: 3,
         margin: 10,
-        borderColor: '#707070',
+        borderColor: '#cccccc',
         marginLeft:20,marginRight:20
     },
     content: {
@@ -1136,6 +1273,7 @@ const styles = StyleSheet.create({
     time: {
         fontSize: 12,
         color: "#707070",
+        marginTop:2,
         fontFamily: 'AzoSans-Light'
     },
     name: {
@@ -1154,7 +1292,7 @@ const styles = StyleSheet.create({
         fontFamily: 'AzoSans-Light'
     },
     imgGap: {
-        marginLeft: 20
+        marginLeft: 10
     },
     headline: {
         fontSize: 24,

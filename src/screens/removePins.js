@@ -432,10 +432,19 @@ render() {
             <View style={styles.bottomLine}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around',alignItems:'center' }}>
                 <TouchableOpacity style={{backgroundColor:'#fff',width:width/3,padding:'1%',borderRadius:15}}
-                        onPress={() =>this.state.selectedColid==""?
-                        //  this.props.navigation.navigate('collectionDetail')
+                        onPress={() =>{
+                            let pinsdata;                
+                            this.state.selectedColid==""?
                         this.props.navigation.goBack()
-                         :null}>
+                         : 
+                          pinsdata=this.state.pins.map(item => {
+                                  item.abc = false;
+                                  return item;
+                                });
+                                this.setState({pins:pinsdata,selectedColid:'',selectedItemArray:[],next:false})
+
+                        }
+                         }>
                         <Text style={[this.state.selectedColid==""?styles.textStyle:styles.inacitveStyle]}>Back</Text>
 
                     </TouchableOpacity>
@@ -459,13 +468,11 @@ render() {
                             <Text numberOfLines={2} style={{ color: '#fff', fontSize: 18, textAlign: 'center' }}>Removed {this.state.selectedItemArray.length>1?"Pins":"Pin"} - {this.state.deletedName} </Text>
 
 
-                            <TouchableOpacity style={{ marginTop: '2%', alignSelf: 'flex-end', marginRight: '2%' }}
+                            <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'4%'}}
                             onPress={()=>this.setState({undo:true})}
                             >
                                 <Text style={{ fontSize: 16, color: '#fff', textDecorationLine: 'underline' }}>Undo</Text>
                             </TouchableOpacity>
-
-
                         </View>}
                         />
                 <Modal1 isVisible={this.state.loading}  >

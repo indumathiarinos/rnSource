@@ -88,7 +88,8 @@ class CollectionDetail extends Component {
         getCollectionId:'',
         profileColl:false,
         profile_userid:'',
-        editRemovePopup:false
+        editRemovePopup:false,
+        deleteId:''
   
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -198,7 +199,7 @@ readsRemoveModal = () => {
       readsRemovePopup: false
     })
     if(this.state.removeUndo==false){
-      {this.deletefunc(this.state.currentItem)}
+      {this.deletefunc(this.state.deleteId)}
     }else{
       this.setState({removeUndo:false})
     }
@@ -317,9 +318,14 @@ console.log('json in section page ',json)
         this.setState({sectionData: filteredList,loading:false})
         const filteredList1 = responseJson.filter((item) => item.SectionID == 0);
 
-        this.setState({readsData:filteredList1,desc:responseJson[0].Description})
+        this.setState({readsData:filteredList1,})
+        if(responseJson!=[]){
+          this.setState({desc:responseJson[0].Description})
+        }
       
         console.log('data is ',this.state.sectionData)
+        console.log('reads data is ',this.state.readsData)
+
 
         console.warn(responseJson)
         // console.warn("collection")
@@ -614,7 +620,7 @@ readsItems({ item }) {
         marginLeft:0,marginRight:0,
         justifyContent: 'space-between'
       }}>
-  <View style={{ flexDirection: 'column',width:width/1.8,  }}>
+  <View style={{ flexDirection: 'column',width:width/1.9,  }}>
               <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Medium', color: '#000' }}>{item.Page_Post_Title}</Text>
           <Text numberOfLines={1} style={{ color: '#707070',fontFamily:'AzoSans-Light',fontSize:12,width:width/2.5,marginTop:'1%'
          }}>{item.Author}</Text>
@@ -622,17 +628,20 @@ readsItems({ item }) {
         {/* <Image source={item.img} /> */}
         <TouchableOpacity
         onPress={()=>this.descPage(item)}
-        style={[styles.button,{height:item.Type==4?height/6.5:200}]} >
-              <ImageBackground source={{uri:item.Image1}} 
+        style={[styles.button,{height:item.Type==4?height/7.5:height/4}]} >
+              <ImageBackground source={{uri:item.Img}} 
         imageStyle={{ borderRadius: 15 }}
-        style={[item.Type==4?styles.pageImgStyle:styles.pubImgStyle,{borderColor:!item.Image1?'#fff':null}]}
+        style={[item.Type==4?styles.pageImgStyle:styles.pubImgStyle,{borderColor:!item.Img?'#fff':null}]}
            >
         {/* {!this.state.profileColl?  */}
          <TouchableOpacity
-            onPress={() => {this.setState({editRemovePopup:true})
-            this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title})
+            onPress={() => {
+            this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title,deleteId:item.PK_ID})
             AsyncStorage.setItem('newColl_Id',JSON.stringify(Number(item.CollectionsID)));
             AsyncStorage.setItem('edit_title',item.Page_Post_Title);
+            AsyncStorage.setItem('postid',JSON.stringify(Number(item.PK_ID)))
+            AsyncStorage.setItem('coll_Edit',JSON.stringify(true))
+            this.setState({editRemovePopup:true})
           }}>
             <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
           </TouchableOpacity>
@@ -747,15 +756,39 @@ readsItems({ item }) {
                     <Text style={{color:'#000',width:width-40,textAlign:'left',margin:'2%',fontSize: 24,fontFamily: 'Montserrat-Medium'}}>Reads</Text>
                     <View style={{width:width-40,height:1,backgroundColor:'#27A291'}}/>
                     </View>:null}
-                    <FlatList
+
+                    {/* <FlatList
             data={this.state.readsData}
-            contentContainerStyle={{ marginTop: '5%',width:width-40,alignSelf:'center'}}
+            contentContainerStyle={{ 
+              // marginTop: '5%',
+            // width:width-40,
+            alignSelf:'center'}}
             extraData={this.state}
             renderItem={this.readsItems.bind(this)}
-            removeClippedSubviews={false}
-            enableEmptySections={false}
+            // removeClippedSubviews={false}
+            // enableEmptySections={false}
             keyExtractor={(item, index) => index.toString()}
-          />
+          /> */}
+           <FlatList
+                        contentContainerStyle={{
+                            flex: 1,
+                            // marginBottom:this.state.sectionData.length<=2?'60%':'0%',
+                            marginTop:'5%',
+                            width:width-40,
+                            alignSelf:'center'
+                            // marginLeft:'5%',
+                            // marginRight:'5%'
+                            // width:width/1.2
+                          
+                            // marginLeft:'5%'
+                        }}
+                        data={this.state.readsData}
+                        extraData={this.state}
+                        renderItem={this.readsItems.bind(this)}
+                        removeClippedSubviews={false}
+                        enableEmptySections={false}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
                 </ScrollView>
                    {/* {!this.state.profileColl?   */}
                    <FloatingAction
@@ -839,18 +872,24 @@ readsItems({ item }) {
             <View style={{
           left:0,right:0,bottom:0,position:'absolute',   
           height:'8%',
-          backgroundColor: 'red',
+          backgroundColor: '#E74C3C',
           flexDirection:'row',
-          widt:width-10,
+          width:width,
           
           padding:'1%',
          }}>
-           <View style={{flexDirection:'row',width:'85%',margin:'1%',alignSelf:'center',  alignItems: 'center',
+           <View style={{flexDirection:'row',margin:'1%',alignSelf:'center',  alignItems: 'center',width:width-10,
           justifyContent:'center',}}>
-           <Text  style={{fontSize: 17,marginLeft:'2%',textAlign:'center', color: 'white',alignSelf:'center',}}>Removed - </Text>
-           <Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',textAlign:'left'}}> 
+           <Text  style={{fontSize: 16,marginLeft:'1%',textAlign:'center', color: 'white',alignSelf:'center',fontFamily:'AzoSans-Bold',}}>Removed - </Text>
+           <TouchableOpacity onPress={()=>this.descPage(this.state.currentItem)}>
+           <Text numberOfLines={2} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Medium',textDecorationColor:'#fff',}}> 
           {this.state.readsDeletedName}
           </Text>
+           </TouchableOpacity>
+           <Text style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',fontFamily:'AzoSans-Light',}}> from </Text>
+           <TouchableOpacity onPress={()=>this.props.navigation.navigate('collection')}>
+             <Text numberOfLines={1} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Light',textDecorationColor:'#fff',}}>{this.state.coll_name} </Text>
+           </TouchableOpacity>
           {/* {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null} */}
            </View>
            
@@ -875,14 +914,20 @@ readsItems({ item }) {
 
                             {/* <Text>Search</Text> */}
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,borderRadius:28/2,borderColor:'#27A291',borderWidth:1}]} onPress={() => this.toggleTab4()}>
+                        <TouchableOpacity style={[styles.tabsss,{ width: 28, height: 28,}]} onPress={() => this.toggleTab4()}>
                             {/* <Drawer
         ref={(ref) => { this.drawer = ref; }}
         content={<SideBar navigator={this.navigator} />}
         onClose={() => this.closeDrawer()} > */}
                             {/* <TouchableOpacity onPress = {() =>navigation.openDrawer() }>  */}
-                            <Image style={{ width: 28, height: 28,borderRadius:28/2 }} source={{uri:this.state.avatar}}></Image>
-                            {/* <Text>Menu</Text> */}
+                            <View style={{flexDirection:'row'}}>
+          <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatar ? this.state.avatar :
+            //  'http://pagevio.com/uploads/profile/noimage.jpg'
+            null
+              }}></Image>
+          <Image style={{top:'60%',right:'38%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
+          </View>                  
+                    {/* <Text>Menu</Text> */}
                             {/* </Drawer> */}
                         </TouchableOpacity>
                    
@@ -950,15 +995,17 @@ const styles = StyleSheet.create({
   },
   pubImgStyle:{ 
     // elevation:1,
-    width: 140, height: 200,
-    borderRadius:15
+    width:width/2.8, height: height/4,
+    borderRadius: 15,
+    backgroundColor:'pink'
+    
     // alignItems:'center',
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
       // elevation:1,
-      width:140, height: height/6.5,
-      borderRadius:15
+      width: width/2.8, height: height/7.5,
+        borderRadius: 15,
       // alignItems:'center',
       //  jsutifyContent: 'center'
        },

@@ -103,7 +103,9 @@ class BooksPin extends Component {
         pins:'',
         // pinsCount:'',
         loading:true,
-        SortBy:"DESC"
+        SortBy:"DESC",
+        getpostid:'',
+        gettypeid:''
   }
   this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -111,6 +113,9 @@ async componentDidMount() {
   BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
   AsyncStorage.getItem('userid').then((val) => this.setState({ getuserid: val })).done();
   AsyncStorage.getItem('pinsFilter').then((val) => this.setState({ SortBy: val })).done();
+  AsyncStorage.getItem('postid').then((val) => this.setState({ getpostid: val })).done();
+  AsyncStorage.getItem('typeid').then((val) => this.setState({ gettypeid: val })).done();
+
   AsyncStorage.setItem('contentFilter',"ASC");
   console.log('user id ',this.state.getuserid,this.state.SortBy);
 //    AsyncStorage.getItem('sectionPin').then((val) =>Alert(val)).done();
@@ -150,8 +155,9 @@ getData() {
 exploreData(userid) {
   this.setState({loading:true})
   var json = JSON.stringify({
-    "options":"Select","page_id":"","type":"","collection_id":"","section_id":"","Description":"","user_id":userid,"SortBy":this.state.SortBy
+    "options":"Select","page_id":"","type":this.state.gettypeid,"collection_id":"","section_id":"","Description":"","user_id":userid,"SortBy":this.state.SortBy,"pub_id":this.state.getpostid
   });
+  console.log('json ',json)
   fetch("http://162.250.120.20:444/Login/pinsInsertGet",
       {
           method: 'POST',

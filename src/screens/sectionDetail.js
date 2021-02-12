@@ -314,7 +314,7 @@ handleBackButtonClick() {
           {/* <Image source={item.img} /> */}
           <TouchableOpacity
           onPress={()=>this.descPage(item)}
-          style={[styles.button,{height:item.Type==4?height/6.5:200}]} >
+          style={[styles.button,{height:item.Type==4?height/7.5:height/4}]} >
           <ImageBackground source={{uri:item.Image}} 
           imageStyle={{ borderRadius: 15 }}
           style={[item.Type==4?styles.pageImgStyle:styles.pubImgStyle,{borderColor:!item.Image?'#fff':null}]}
@@ -326,6 +326,7 @@ handleBackButtonClick() {
                 AsyncStorage.setItem('coll_postid',JSON.stringify(Number(item.collection_post_id)))
               this.setState({currentItem:item,deletedName:item.Title,title:item.Title,})
               AsyncStorage.setItem('edit_title',item.Title);
+              AsyncStorage.setItem('coll_Edit',JSON.stringify(false))
               // alert(item.title)
              }}>
               <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
@@ -631,15 +632,16 @@ handleBackButtonClick() {
 const styles = StyleSheet.create({
   pubImgStyle:{ 
     // elevation:1,
-    width: 140, height: 200,
-    borderRadius:15
+    width:width/2.8, height: height/4,
+    borderRadius: 15,
+    
     // alignItems:'center',
     //  jsutifyContent: 'center'
      },
      pageImgStyle:{ 
       // elevation:1,
-      width:140, height: height/6.5,
-      borderRadius:15
+      width: width/2.8, height: height/7.5,
+        borderRadius: 15,
       // alignItems:'center',
       //  jsutifyContent: 'center'
        },

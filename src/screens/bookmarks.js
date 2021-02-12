@@ -35,6 +35,7 @@ class Bookmark extends Component {
     tab2: false,
     tab3: false,
     tab4: false,
+    currentItem:''
 }
 this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 }
@@ -243,7 +244,7 @@ showModal = (item1) => {
   // console.log(this.state.undo)
   
     this.setState({
-      modalVisible: true,deletedName:item1.Titel,getDeleteId:item1.id,
+      modalVisible: true,deletedName:item1.Titel,getDeleteId:item1.id,currentItem:item1,
       undo:false
     });
       // {this.deleteData(this.state.getuserid,this.state.getDeleteId)}
@@ -399,7 +400,7 @@ _renderTruncatedFooter = (handlePress,index,item) => {
     return (
     <View key={index} style={{ width: width, flex: 1,backgroundColor:'#fff' }}>
        
-            <View style={{ flexDirection: 'row',justifyContent:'space-between',alignSelf:'center',width:'90%',marginTop:'5%' }}>
+            <View style={{ flexDirection: 'row',justifyContent:'space-between',alignSelf:'center',width:'90%',marginTop:'1%' }}>
             <View  style={{flexDirection:'column',width:'80%'}}>
           <Text style={{color:'#707070',fontSize:12,fontFamily:'AzoSans-Regular',margin:'1%'}}>{item.upated_date}</Text>
           <Text numberOfLines={2} style={{fontSize:16,fontFamily:'Montserrat-Bold'}}>{item.Titel}</Text>
@@ -432,7 +433,9 @@ _renderTruncatedFooter = (handlePress,index,item) => {
                <ReadMoreText
                 contentContainerStyle={{backgroundColor:'#F9F9F9'}}
                 numberOfLines={1}
-                renderTruncatedFooter={this._renderTruncatedFooter}
+                renderTruncatedFooter={(handlePress1,index)=>this._renderTruncatedFooter(handlePress1,index,item)}
+
+                // renderTruncatedFooter={(handlePress,index,item)=>this._renderTruncatedFooter(handlePress,index,item)}
                 // renderRevealedFooter={this._renderRevealedFooter}
                 onReady={this._handleTextReady}>
                 <Text style={{backgroundColor:'#F9F9F9',alignSelf:'center',fontFamily:'AzoSans-Regular',fontSize:14}}>{item.Linedata}</Text>
@@ -565,8 +568,9 @@ _renderTruncatedFooter = (handlePress,index,item) => {
          
          <View style={{flexDirection:'row',justifyContent:'center'}}>
                 <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Bold',textAlign:'center',}} >Removed - </Text>
+                <TouchableOpacity onPress={()=>this.goToRead(this.state.currentItem)}>
                 <Text numberOfLines={2} style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Medium',textAlign:'left',textDecorationLine:'underline',textShadowColor:'#fff',width:width/1.5}}>{this.state.deletedName}</Text>
-  
+              </TouchableOpacity>
               </View>         
            
           <TouchableOpacity style={{marginTop:'2%',alignSelf:'flex-end',marginRight:'2%'}} 
@@ -600,12 +604,13 @@ _renderTruncatedFooter = (handlePress,index,item) => {
           
           <View style={{flexDirection:'row'}}>
           <Image style={{ width: 28, height: 28, borderRadius: 28 / 2, borderColor: '#27A291', borderWidth: 1 }} source={{ uri: this.state.avatarProfile ? this.state.avatarProfile : 'http://pagevio.com/uploads/profile/noimage.jpg' }}></Image>
-        <Image style={{top:'60%',right:'35%'}} source={require('../assets/img/menuimg.png')}/>
+          <Image style={{top:'60%',right:'38%',width:15,height:15}} source={require('../assets/img/menuimg.png')}/>
           </View>
                   
         </TouchableOpacity>
 
                 </View>
+            
     </SafeAreaView>
   )
 }

@@ -1082,7 +1082,9 @@ collData(userid,colid,secid) {
             // style={{resizeMode:'cover',width:100,height:120,borderRadius:20,
             // marginTop:'2%',marginBottom:'2%'
             // }}>
-            style={[item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null, marginTop:'2%',marginBottom:'2%'}]}
+            style={[item.TypeID==1?styles.pubImgStyle:styles.pageImgStyle,{borderColor:!item.Image?'#fff':null, 
+            // marginTop:'2%',marginBottom:'2%'
+          }]}
               >
 
             <TouchableOpacity style={{padding:'2%'}}
@@ -1686,7 +1688,7 @@ const styles = StyleSheet.create({
     },
     pubImgStyle:{ 
       // elevation:1,
-      width: width/3.5,height:height/3.5,
+      width: width/2.8,height:height/4,
       // width:100,height:160,
           borderRadius:15,
       
@@ -1695,7 +1697,7 @@ const styles = StyleSheet.create({
        },
        pageImgStyle:{ 
         // elevation:1,
-        width: width/3.5,height:height/7.5,
+        width: width/2.8,height:height/7.5,
         // width:100,height:120,
         borderRadius:15
         // alignItems:'center',
