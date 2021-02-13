@@ -60,8 +60,13 @@ class RequestCreator extends Component {
         this.setState({ expanded: !this.state.expanded });
       }
       submitBtn=()=>{
-        this.setState({btnActive:!this.state.btnActive})
-        this.CheckConnectivity1();
+          if(!this.state.boolean){
+            this.setState({btnActive:!this.state.btnActive})
+            this.CheckConnectivity1();
+          }else{
+              alert("Please check the terms of use")
+          }
+       
         // this.props.changeNavNews();
         // this.backpress();
         // this.props.navigation.navigate('thankyou')
@@ -279,8 +284,8 @@ class RequestCreator extends Component {
                 style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',alignSelf:'center',width:width/1.2,}}
                 >
                     <TouchableOpacity 
-            onPress={ () => this.setState({ boolean: !this.state.boolean }) } 
-            >
+                            onPress={ () => this.setState({ boolean: !this.state.boolean }) } 
+                            >
                     <Image source={checked} />
                     </TouchableOpacity>
                     <Text style={{fontSize:14,fontFamily:'AzoSans-Regular',color:'#707070',textAlign:'left',width:width/1.35,}}>I understand and accept the terms of use. *</Text>

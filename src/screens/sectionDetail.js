@@ -301,7 +301,8 @@ handleBackButtonClick() {
       <TouchableOpacity onPress={()=>this.descPage(item)}>
         <View style={{
           flex: 1,
-          height:210,
+          // height:210,
+          margin:'2%',
           marginLeft:20,marginRight:20,
           flexDirection: 'row',
           // width: '50%',
@@ -388,29 +389,29 @@ handleBackButtonClick() {
   secCoverItems({ item }) {
     // const value = item;
     return (
-      <View style={{flex:1, height:150,width:width}}>
+      <View style={{flex:1, height:height/4,width:width}}>
             
                 <ImageBackground 
                 style={{flexDirection: 'row' }}
                 >
-                    <Image style={{  height:150,width:width/5, resizeMode: 'cover',}}
+                    <Image style={{  height:height/4,width:width/5, resizeMode: 'cover',}}
                         source={{ uri: item.Image1!=""?item.Image1:null }}
                          />
-                    <Image style={{  height:150,width:width/5, resizeMode: 'cover', }}
+                    <Image style={{  height:height/4,width:width/5, resizeMode: 'cover', }}
                         source={{ uri: item.Image2!=""?item.Image2:null }} />
-                   <Image style={{  height:150,width:width/5, resizeMode: 'cover',alignItems:'center',justifyContent:'center',}}
+                   <Image style={{  height:height/4,width:width/5, resizeMode: 'cover',alignItems:'center',justifyContent:'center',}}
                       source={{ uri: item.Image3!=""?item.Image3:null }} 
                       // source={this.state.coll_img!=null?{uri:this.state.coll_img}:require('../assets/img/collectimg.png')}
                       />
-                    <Image style={{  height:150,width:width/5, resizeMode: 'cover',}}
+                    <Image style={{  height:height/4,width:width/5, resizeMode: 'cover',}}
                         source={{ uri: item.Image4!=""?item.Image4:null }} />
-                    <Image style={{  height:150,width:width/5, resizeMode: 'cover', }}
+                    <Image style={{  height:height/4,width:width/5, resizeMode: 'cover', }}
                         source={{ uri: item.Image5!=""?item.Image5:null }} />
   
                 </ImageBackground>
                 <View style={styles.overlay}/>
 
-                <View style={{position:'absolute',top:40,alignItems:'center',width:width,justifyContent:'center',}}>
+                <View style={{position:'absolute',top:60,alignItems:'center',width:width,justifyContent:'center',}}>
                 <Text style={{ textAlign: 'center', color: 'white', fontFamily: 'AzoSans-Bold', fontSize: 24 }}>{!this.state.toggle?this.state.coll_name:this.state.desc}</Text>
                             <View style={styles.divider}></View>
                              <Text style={{ textAlign: 'center', color: 'white', marginTop: '2%', fontSize: 20,fontFamily:'AzoSans-Medium' }}>{this.state.sec_name}</Text>
@@ -595,25 +596,26 @@ handleBackButtonClick() {
        <View style={{
           left:0,right:0,bottom:0,position:'absolute',   
           height:'8%',
-          backgroundColor: 'red',
-          flexDirection:'row',
-          widt:width-10,
-          
+          backgroundColor: '#E74C3C',
+          flexDirection:'row',          
           padding:'1%',
          }}>
-           <View style={{flexDirection:'row',width:'85%',margin:'1%',alignSelf:'center',  alignItems: 'center',
+           <View style={{flexDirection:'row',width:width-20,margin:'1%',alignSelf:'center',  alignItems: 'center',
           justifyContent:'center',}}>
            <Text  style={{fontSize: 17,marginLeft:'2%',textAlign:'center', color: 'white',alignSelf:'center',}}>Removed - </Text>
-           <Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',textAlign:'left'}}> 
-          {this.state.deletedName}
-          </Text>
+           <Text numberOfLines={2} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',width:width/2}}> 
+          {this.state.deletedName}</Text>
+          <Text  style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',fontFamily:'AzoSans-Light',}}> from </Text>
+          <TouchableOpacity onPress={()=>this.props.navigation.goBack()}>
+            <Text numberOfLines={1} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Light',textDecorationColor:'#fff',width:width/2}}>{this.state.coll_name}</Text>
+          </TouchableOpacity>
           {/* {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null} */}
            </View>
            
           <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'3%',bottom:5}} onPress={()=>this.setState({removeUndo:true})}>
             <Text style={{fontSize: 16,color:'white',width:50,textDecorationLine:'underline',textAlign:'center'}}>Undo</Text>
          </TouchableOpacity>
-       </View>}
+       </View>}x
          />
           <Modal1 isVisible={this.state.loading}
         
@@ -657,7 +659,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     backgroundColor: 'black',
     width: width,
-    height:150
+    height:height/4
   },
   bottombtn1:{
     width:width,

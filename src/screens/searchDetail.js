@@ -163,6 +163,7 @@ getData(){
   }, 1000);
 }
 exploredata(){
+  this.setState({loading:true})
   var json=JSON.stringify(
     {"SearchText":this.state.text,"SortBy":this.state.sortby}
     );
@@ -194,7 +195,7 @@ exploredata(){
 }
 
 profileService(){
-  // this.setState({loading:true});
+  this.setState({loading:true});
   var json = JSON.stringify({"user_id":this.state.getuserid,"SearchText":this.state.text}
   );
   console.log('json profile ',json);
@@ -310,9 +311,9 @@ selectItem = data => {
 SearchFilterFunction(text) {
   //passing the inserted text in textinput
   // if(!this.state.profilepage){
+    
   {this.exploredata();}
     {this.profileService();}
-
   const newData1 = this.arrayholder.filter(function(item) {
     //applying filter for the inserted text in search bar
     const itemData = item.PostLinkTitle ? item.PostLinkTitle.toUpperCase() : ''.toUpperCase();
@@ -545,11 +546,16 @@ SearchFilterFunction(text) {
            value={this.state.text}
            underlineColorAndroid={this.state.text!=""?'#27A291':'#707070'}
            placeholder="Search Here"
-           onChangeText={(text)=>this.SearchFilterFunction(text)}
+           onChangeText={(text)=>{this.setState({text:text,sortby:'DESC'})
+            //  this.SearchFilterFunction(text)
+            }}
                 />
                 {Platform.OS=='ios'?<View style={{width:width/1.6,alignSelf:'center',height:1,backgroundColor:'#707070',marginBottom:'2%'}} />:null}
           </View>      
-                <TouchableOpacity style={styles.touchableButton} 
+                <TouchableOpacity style={styles.touchableButton} onPress={()=>{
+                  this.exploredata()
+                  this.profileService()
+                }}
               >
                 <Image style={{width:20,height:20}}
                   source={this.state.text!=""?require('../assets/img/greensearch.png'):require('../assets/img/searchicon.png')}

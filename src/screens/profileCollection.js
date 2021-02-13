@@ -226,15 +226,17 @@ pressIcon = (item) => {
   let { collection } = this.state;
   collection = collection.map(e => {
       //     if (item.collectionsID === e.collectionsID) {
-      AsyncStorage.setItem('collectionId',item.collectionsID);
-      AsyncStorage.setItem('col_id',item.collectionsID);
+        AsyncStorage.setItem('profile_coll_userid',JSON.stringify(Number(this.state.loginUserid)))
+
+      // AsyncStorage.setItem('collectionId',item.collectionsID);
+      // AsyncStorage.setItem('col_id',item.collectionsID);
       AsyncStorage.setItem('coll_name', item.Title);
       AsyncStorage.setItem('coll_desc', item.Description);
      {this.state.loginUserid!=this.state.getuserid? AsyncStorage.setItem('profileCollection',JSON.stringify(true)): AsyncStorage.setItem('profileCollection',JSON.stringify(false))}
       console.log('collection id ', item.collectionsID)
-      // AsyncStorage.setItem('userid',JSON.stringify(this.state.loginUserid))
       // item.like = !e.like;
-      return this.props.navigation.navigate('collectionDetail', { 'collId': item.collectionsID.toString() + "" });
+      return this.state.loginUserid!=this.state.getuserid? this.props.navigation.navigate('profileSection', { 'collId': item.collectionsID.toString() + "" }):this.props.navigation.navigate('collectionDetail', { 'collId': item.collectionsID.toString() + "" });
+      // this.props.navigation.navigate('collectionDetail', { 'collId': item.collectionsID.toString() + "" });
       // this.props.navigation.navigate('collectionDetail',{'collId':item.collectionsID});
       // } else {
       //     return e;
@@ -376,11 +378,11 @@ fontFamily:'AzoSans-Medium'}}
             >Collection</Text>
   
               </TouchableOpacity>
-            <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate('profileShelves')}>
+            {/* <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate('profileShelves')}>
             <Text style={styles.headerText}
               
               >Shelves</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           
             {/* </View> */}
           {/* </View> */}

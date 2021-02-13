@@ -527,7 +527,10 @@ editClk() {
                                         // item.id==this.state.selectedCol||this.state.txtClick==item.id || item.id==this.state.secCollid ?styles.activeList:styles.inacitveList
                                         ]}
                                      >
-                                     <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{this.setState({selectedCol:item.id,secCollid:null,})}}>      
+                                     <TouchableOpacity style={{width:30,height:30,alignItems:'center',justifyContent:'center'}} onPress={()=>{
+                                        //  this.setState({selectedCol:item.id,secCollid:null,})
+                                        this.collectionBook(item.title,item.id,)
+                                         }}>      
                                        <Image style={{width:20,height:20}} source={item.id==this.state.selectedCol||item.id==this.state.secCollid? require('../assets/img/white_tick.png'):require('../assets/img/uncheck.png')}/>
                                        </TouchableOpacity>
                                        <Text style={[{ fontSize: 16, color: '#707070', textAlign: 'center', width: width/1.5,fontFamily:'AzoSans-Regular' },{color:  item.id==this.state.selectedCol || item.id==this.state.secCollid ?"#fff":"#707070"}]}>{item.title}</Text>

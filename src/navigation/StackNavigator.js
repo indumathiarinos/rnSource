@@ -53,11 +53,13 @@ import reportIssue from '../screens/reportIssue';
 import search_explore from '../screens/search_explore';
 import reportThankyou from '../screens/reportThankyou';
 import collectionDetail from '../screens/collectionDetail';
+import profileSection from '../screens/profileSection';
 import createSection from '../screens/createSection';
 import editCreateSection from '../screens/editCreateSection';
 import editCollection from '../screens/editCollection';
 import readingBook from '../screens/readingBook';
 import sectionDetail from '../screens/sectionDetail';
+import profileReads from '../screens/profileReads';
 import editSection from '../screens/editSection';
 import editPins from '../screens/editPins';
 import seriesViewBook from '../screens/seriesViewBook';
@@ -123,6 +125,18 @@ const HomeNavigator = createStackNavigator({
   },
   collection:{
     screen:collection,
+    navigationOptions:{
+      header:null
+    }
+  },
+  profileSection:{
+    screen:profileSection,
+    navigationOptions:{
+      header:null
+    }
+  },
+  profileReads:{
+    screen:profileReads,
     navigationOptions:{
       header:null
     }

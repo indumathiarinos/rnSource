@@ -307,11 +307,11 @@ getData(){
             >Collection</Text>
           </TouchableOpacity>
          
-          <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate('profileShelves')}>
+          {/* <TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.props.navigation.navigate('profileShelves')}>
           <Text style={styles.headerText}
             
             >Shelves</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         
           {/* </View> */}
         {/* </View> */}

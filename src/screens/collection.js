@@ -369,21 +369,21 @@ class Collection extends Component {
     collCoverItems({ item }) {
         // const value = item;
         return (
-            <View style={{ height: 150, width: width }}>
+            <View style={{ height:height/4, width: width }}>
 
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image1!=""?null:'#27A291' }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image1!=""?null:'#27A291' }}
                         source={{ uri: item.Image1 != "" ? item.Image1 : null }}
                     />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image2!=""?null:'#27A291' }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image2!=""?null:'#27A291' }}
                         source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', alignItems: 'center',backgroundColor:item.Image3!=""?null:'#27A291', justifyContent: 'center', }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover', alignItems: 'center',backgroundColor:item.Image3!=""?null:'#27A291', justifyContent: 'center', }}
                         source={{ uri: item.Image3 != "" ? item.Image3 : null }}
                     />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image4!=""?null:'#27A291' }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image4!=""?null:'#27A291' }}
                         source={{ uri: item.Image4 != "" ? item.Image4 : null }} />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image5!=""?null:'#27A291' }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image5!=""?null:'#27A291' }}
                         source={{ uri: item.Image5 != "" ? item.Image5 : null }} />
                 </View>
 
@@ -455,9 +455,9 @@ class Collection extends Component {
                         contentContainerStyle={{
                             flex: 1,
                             justifyContent: 'center',
-                            marginBottom: '5%',
+                            // marginBottom: '2%',
                             width: width,
-                            height: 150
+                            height: height/4
                         }}
                         data={this.state.collCoverImg}
                         extraData={this.state}
@@ -468,14 +468,14 @@ class Collection extends Component {
                     />
                     <View style={styles.overlay} />
 
-                    <View style={{ position: 'absolute', top: 70, alignItems: 'center', width: width, justifyContent: 'center', }}>
+                    <View style={{ position: 'absolute', top: 80, alignItems: 'center', width: width, justifyContent: 'center', }}>
                         <Text style={{ textAlign: 'center', color: '#fff', fontFamily: 'AzoSans-Bold', fontSize: 24 }}>Library</Text>
 
                     </View>
                     <FlatList
                         contentContainerStyle={{
                             flex: 0.5,
-                            marginTop: '5%',
+                            marginTop: '2%',
                             // marginBottom:this.state.collection.length<=4?'60%':null,
                             // marginLeft:'5%'
                         }}
@@ -643,7 +643,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
         backgroundColor: 'black',
         width: width,
-        height: 150
+        height: height/4
     },
     activeText: {
         padding: '5%',

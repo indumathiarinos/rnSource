@@ -440,7 +440,7 @@ class Pins extends Component {
                     marginBottom:'5%',
                     // backgroundColor: 'black',
                     width: width,
-                    height:150
+                    height:height/4
                     }]}
                     data={this.state.pinsCoverImg}
                     extraData={this.state}
@@ -450,7 +450,7 @@ class Pins extends Component {
 
                     />
                      <View style={styles.overlay}/>
-                    <View style={{position:'absolute',top:70,alignItems:'center',width:width,justifyContent:'center',}}>
+                    <View style={{position:'absolute',top:80,alignItems:'center',width:width,justifyContent:'center',}}>
                 <Text style={{ textAlign: 'center', color:'#fff', fontFamily: 'AzoSans-Bold', fontSize: 24 }}>Pins</Text>
 
                 </View>
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
         opacity: 0.7,
         backgroundColor: 'black',
         width: width,
-        height:150
+        height:height/4
       },
       activeText: {
         padding: '5%',

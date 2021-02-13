@@ -313,7 +313,7 @@ class ViewBook extends Component {
     setTimeout(() => {
       console.log('vire book typrif postid ', this.state.gettypeid, this.state.getpostid)
       { this.exploredata(this.state.gettypeid, this.state.getpostid) }
-    }, 3000)
+    }, 1000)
   }
 
 

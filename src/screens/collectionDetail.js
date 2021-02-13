@@ -89,7 +89,8 @@ class CollectionDetail extends Component {
         profileColl:false,
         profile_userid:'',
         editRemovePopup:false,
-        deleteId:''
+        deleteId:'',
+        removeUndo:false
   
       }
       this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -187,7 +188,7 @@ showModal = () => {
     }, 3000);
     console.log('modal state is ',this.state.modalVisible)
 }
-readsRemoveModal = () => {
+readsRemoveModal = (delete_id) => {
   // this.refs.modal.close();
   // console.log('enters')
   this.setState({
@@ -199,7 +200,7 @@ readsRemoveModal = () => {
       readsRemovePopup: false
     })
     if(this.state.removeUndo==false){
-      {this.deletefunc(this.state.deleteId)}
+      {this.deletefunc(delete_id)}
     }else{
       this.setState({removeUndo:false})
     }
@@ -261,23 +262,23 @@ pressIcon = (item) => {
 secCoverItems({ item }) {
   // const value = item;
   return (
-    <View style={{height:150,width:width}}>
+    <View style={{height:height/4,width:width}}>
           
               <View 
               style={{flexDirection: 'row',width:width,
               height:150}}
               >
-                 <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image1!=""?null:'#27A291' }}
+                 <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image1!=""?null:'#27A291' }}
                         source={{ uri: item.Image1 != "" ? item.Image1 : null }}
                     />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image2!=""?null:'#27A291' }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image2!=""?null:'#27A291' }}
                         source={{ uri: item.Image2 != "" ? item.Image2 : null }} />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover', alignItems: 'center',backgroundColor:item.Image3!=""?null:'#27A291', justifyContent: 'center', }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover', alignItems: 'center',backgroundColor:item.Image3!=""?null:'#27A291', justifyContent: 'center', }}
                         source={{ uri: item.Image3 != "" ? item.Image3 : null }}
                     />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image4!=""?null:'#27A291' }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image4!=""?null:'#27A291' }}
                         source={{ uri: item.Image4 != "" ? item.Image4 : null }} />
-                    <Image style={{ height: 150, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image5!=""?null:'#27A291' }}
+                    <Image style={{ height: height/4, width: width / 5, resizeMode: 'cover',backgroundColor:item.Image5!=""?null:'#27A291' }}
                         source={{ uri: item.Image5 != "" ? item.Image5 : null }} />
               </View>
            
@@ -568,12 +569,12 @@ descPage = (item) => {
   }
   });
 }
-deletefunc(item){
+deletefunc(id){
   this.setState({loading:true,})
 
   var json = JSON.stringify({
       "Deleted_for":"CollectionPost",
-      "PK_ID":item.PK_ID,
+      "PK_ID":id,
       "user_ID":this.state.getuserid
   });
   console.log('json in sec read ',this.state.readsDeletedName,json)
@@ -607,10 +608,26 @@ deletefunc(item){
           console.warn(error);
       });
 }
+popupeditDelete=(item)=>{
+  let { readsData } = this.state;
+  console.log('items are', item)
+  readsData = readsData.map(e => {
+    if (item.PK_ID === e.PK_ID) {
+  this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title,deleteId:item.PK_ID})
+  AsyncStorage.setItem('newColl_Id',JSON.stringify(Number(item.CollectionsID)));
+  AsyncStorage.setItem('edit_title',item.Page_Post_Title);
+  AsyncStorage.setItem('postid',JSON.stringify(Number(item.PK_ID)))
+  AsyncStorage.setItem('coll_Edit',JSON.stringify(true))
+  this.setState({editRemovePopup:true})
+    }
+  })
+
+}
 readsItems({ item }) {
   // const value = item;
   return (
     // <View style={{margin:'2%',}}>
+    <View>
     <TouchableOpacity onPress={()=>this.descPage(item)}>
       <View style={{
         flex: 1,
@@ -635,14 +652,7 @@ readsItems({ item }) {
            >
         {/* {!this.state.profileColl?  */}
          <TouchableOpacity
-            onPress={() => {
-            this.setState({currentItem:item,readsDeletedName:item.Page_Post_Title,PostPageTitle:item.Page_Post_Title,deleteId:item.PK_ID})
-            AsyncStorage.setItem('newColl_Id',JSON.stringify(Number(item.CollectionsID)));
-            AsyncStorage.setItem('edit_title',item.Page_Post_Title);
-            AsyncStorage.setItem('postid',JSON.stringify(Number(item.PK_ID)))
-            AsyncStorage.setItem('coll_Edit',JSON.stringify(true))
-            this.setState({editRemovePopup:true})
-          }}>
+            onPress={() =>this.popupeditDelete(item)}>
             <Image style={{ alignSelf:'flex-end', marginRight:'8%', marginTop:'6%' }} source={require('../assets/img/3dots_white.png')} />
           </TouchableOpacity>
           {/* :null} */}
@@ -650,6 +660,47 @@ readsItems({ item }) {
         </TouchableOpacity>
       </View>
       </TouchableOpacity>
+
+      <BlurModal
+         visible={this.state.editRemovePopup}
+        children={
+          <View  style={[styles.bottomBar,{height:height/5.5, justifyContent:'center',
+          flexDirection:'column',}]}
+          >
+             {/* <TouchableOpacity onPress={this._toggleModal} >
+               <Text style={styles.modaltext}>Share</Text>
+             </TouchableOpacity>
+             <TouchableOpacity
+               onPress={() => {
+                 this.refs.toast.show('Copied link to clipboard'),
+                   this.refs.modal5.close()
+               }}
+             >
+               <Text style={styles.modaltext}>Copy Link</Text>
+             </TouchableOpacity> */}
+             <TouchableOpacity style={styles.bottombtn} onPress={() =>{
+              this.setState({editRemovePopup:false})
+               this.props.navigation.navigate('sectionEdit')}
+              } >
+             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
+     <Image style={styles.iconwidth} source={require('../assets/img/pencil.png')} />
+     <Text style={styles.modaltext}>Edit</Text>
+   </View>
+               {/* <Text style={styles.modaltext}>Edit</Text> */}
+             </TouchableOpacity>
+             <TouchableOpacity style={styles.bottombtn} onPress={()=>this.readsRemoveModal(item.PK_ID)}>
+             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
+             <Image source={require('../assets/img/editRemove.png')} />
+               <Text style={styles.modaltext}>Remove</Text>
+               </View>
+             </TouchableOpacity>
+             <TouchableOpacity style={styles.bottombtn1} onPress={()=>this.setState({editRemovePopup:false})}>
+ 
+               <Text style={styles.modaltext1}>Cancel</Text>
+             </TouchableOpacity>
+           </View>
+        }/>
+      </View>
   )
 
 }
@@ -703,7 +754,7 @@ readsItems({ item }) {
 
                 </View>
           </View>
-          <ScrollView style={{marginBottom:'10%'}}>
+          <ScrollView style={{marginBottom:'11%'}}>
                     {/* <ImageBackground style={{ width: width, height: 150, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,1)' }}
                         imageStyle={{
                             opacity: 0.5
@@ -721,7 +772,7 @@ readsItems({ item }) {
                     justifyContent:'center',
                     marginBottom:'5%',
                     width:width,
-                    height:150
+                    height:height/4
                 }}
                     data={this.state.secCoverImg}
                     extraData={this.state}
@@ -731,7 +782,7 @@ readsItems({ item }) {
 
                     />
                        <View style={styles.overlay}/>
-              <View style={{position:'absolute',top:60,alignItems:'center',width:width,justifyContent:'center',}}>
+              <View style={{position:'absolute',top:80,alignItems:'center',width:width,justifyContent:'center',}}>
                           <Text style={{ textAlign: 'center', color: 'white', fontFamily: 'AzoSans-Bold', fontSize: 24 }}
                           onPress={()=>this.setState({toggle:!this.state.toggle})}>{!this.state.toggle?this.state.coll_name:this.state.coll_desc}</Text>
                 </View>
@@ -821,54 +872,17 @@ readsItems({ item }) {
           isDisabled={this.state.isDisabled}>
          
         </ModalBox> */}
-        <BlurModal
-         visible={this.state.editRemovePopup}
-        children={
-          <View  style={[styles.bottomBar,{height:height/5.5, justifyContent:'center',
-          flexDirection:'column',}]}
-          >
-             {/* <TouchableOpacity onPress={this._toggleModal} >
-               <Text style={styles.modaltext}>Share</Text>
-             </TouchableOpacity>
-             <TouchableOpacity
-               onPress={() => {
-                 this.refs.toast.show('Copied link to clipboard'),
-                   this.refs.modal5.close()
-               }}
-             >
-               <Text style={styles.modaltext}>Copy Link</Text>
-             </TouchableOpacity> */}
-             <TouchableOpacity style={styles.bottombtn} onPress={() =>{
-              this.setState({editRemovePopup:false})
-               this.props.navigation.navigate('sectionEdit')}
-              } >
-             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
-     <Image style={styles.iconwidth} source={require('../assets/img/pencil.png')} />
-     <Text style={styles.modaltext}>Edit</Text>
-   </View>
-               {/* <Text style={styles.modaltext}>Edit</Text> */}
-             </TouchableOpacity>
-             <TouchableOpacity style={styles.bottombtn} onPress={()=>this.readsRemoveModal()}>
-             <View style={{ flexDirection: 'row',alignItems:'center', width:width,justifyContent:'center' }}>
-             <Image source={require('../assets/img/editRemove.png')} />
-               <Text style={styles.modaltext}>Remove</Text>
-               </View>
-             </TouchableOpacity>
-             <TouchableOpacity style={styles.bottombtn1} onPress={()=>this.setState({editRemovePopup:false})}>
- 
-               <Text style={styles.modaltext1}>Cancel</Text>
-             </TouchableOpacity>
-           </View>
-        }/>
+       
         
-        <Modal
+        {/* <Modal
           animationType="slide"
           transparent
           visible={this.state.readsRemovePopup}
           onRequestClose={() => {
             console.log('Modal has been closed.');
-          }}>
-            
+          }}> */}
+              <BlurModal visible={this.state.readsRemovePopup}
+          children={
             <View style={{
           left:0,right:0,bottom:0,position:'absolute',   
           height:'8%',
@@ -887,7 +901,7 @@ readsItems({ item }) {
           </Text>
            </TouchableOpacity>
            <Text style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',fontFamily:'AzoSans-Light',}}> from </Text>
-           <TouchableOpacity onPress={()=>this.props.navigation.navigate('collection')}>
+           <TouchableOpacity>
              <Text numberOfLines={1} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Light',textDecorationColor:'#fff',}}>{this.state.coll_name} </Text>
            </TouchableOpacity>
           {/* {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null} */}
@@ -897,7 +911,9 @@ readsItems({ item }) {
             <Text style={{fontSize: 16,color:'white',width:50,textDecorationLine:'underline',textAlign:'center'}}>Undo</Text>
          </TouchableOpacity>
        </View>
-          </Modal>
+          }/>
+                    {/* </Modal> */}
+
                  <View style={styles.bottomBar}>
                         <TouchableOpacity
                             style={styles.tabsss}
@@ -1084,7 +1100,7 @@ const styles = StyleSheet.create({
       opacity: 0.7,
       backgroundColor: 'black',
       width: width,
-      height:150
+      height:height/4
     },
     container: {
         position: 'absolute',
@@ -1104,14 +1120,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         position: 'absolute',
         backgroundColor: '#00000029'
-
     },
 })
 function mapStateToProps(state) {
     return {
         sectionMerge:state.apiReducer.sectionMerge,
         sectionRemove:state.apiReducer.sectionRemove,
-       
     }
 }
 

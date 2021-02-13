@@ -65,7 +65,9 @@ const pass = value =>
         this.setState({email:'',pwd:'',re_pwd:''})
       }
 signUp=()=>{
-  var json=JSON.stringify({
+  
+ if(email(this.state.email) && pass(this.state.pwd) && this.state.pwd==this.state.re_pwd){
+ var json=JSON.stringify({
     'Email': this.state.email,
     'Password': this.state.pwd,
     });
@@ -150,8 +152,21 @@ console.warn(json+"")
     .catch((error) => {
         console.warn(error);
     });
+ }
 
 }
+signupdata(){
+ 
+}
+termsClick=()=>{
+   
+  AsyncStorage.setItem('login', JSON.stringify(1));
+  this.props.navigation.navigate('TermsAndCondition');
+}
+privacyClick=()=>{
+  AsyncStorage.setItem('loginPrivacy', JSON.stringify(2));
+  this.props.navigation.navigate('privacyPolicy');
+  }
 onChangeText = (key, val) => {
   this.setState({ [key]: val })
   // this.state.email!=''?this.setState({borderEmail:true}):this.setState({borderEmail:false});
@@ -215,13 +230,13 @@ render(){
           <TouchableOpacity
            onPress={() => this.CheckConnectivity()}
           >
-          <Text style={{textAlign:'center',color:'#fff',fontSize:18}}>Sign Up</Text>
+          <Text style={{textAlign:'center',color:'#fff',fontSize: 16,fontFamily:'AzoSans-Regular'}}>Sign Up</Text>
           </TouchableOpacity>
         </LinearGradient>
         </View>
         <View style={{flexDirection:'row',alignItems:'center',marginTop:'15%',alignSelf:'center'}}>
               <View style={{backgroundColor:'#CCCCCC',height:1,width:width/4,marginRight:'5%'}}/>
-              <Text style={{color:'#707070',fontSize:17}}>or Sign Up with</Text>
+              <Text style={{color:'#707070',fontSize:15,fontFamily:'AzoSans-Regular'}}>or Sign Up with</Text>
               <View style={{backgroundColor:'#CCCCCC',height:1,width:width/4,marginLeft:'5%'}}/>
           </View>
           <View style={styles.logoContainer}>
@@ -233,18 +248,21 @@ render(){
             source={require('../assets/img/google.png')}
           />
         </View>
-        <Text style={{ color: 'black', fontSize: 13, marginTop: 20,textAlign:'center'}}> By continuing you indicate that you have agree to </Text>
-          <View style={{ flexDirection: 'row',justifyContent:'center' ,alignItems:'center'}}>
-          <Text>PageVio's </Text>
-          <Text
-              onPress={() => this.props.navigation.navigate('TermsAndCondition')}
-              style={styles.TextStyle}
-              >Terms of service</Text><Text style={{ color: 'black', fontSize: 12, marginTop: 5 }}> & </Text>
-              <Text
-             
-                  onPress={() => this.props.navigation.navigate('privacyPolicy')}
-              style={styles.TextStyle}>privacy Policy</Text>
-          </View>
+        <Text style={styles.smallText}> By continuing you indicate that you have agree to </Text>
+        <View style={{ flexDirection: 'row',justifyContent:'center' ,alignItems:'center'}}>
+            <Text style={{fontSize:12,fontFamily:'AzoSans-Regular'}}>PageVio's </Text>
+            <Text
+                onPress={() => this.termsClick()}
+                style={styles.TextStyle}
+                >Terms of service</Text><Text style={styles.smallText}> & </Text>
+                <Text
+                onPress={
+                    () =>
+                    this.privacyClick()
+                }
+                style={styles.TextStyle}>privacy Policy</Text>
+            </View>
+
         {/* <TouchableOpacity style={styles.confirmBtn}>
         </TouchableOpacity> */}
       </SafeAreaView>
@@ -254,6 +272,7 @@ render(){
 
 }
 const styles=StyleSheet.create({
+ 
   container:{
       flex:1,
       backgroundColor:'#fff'
@@ -271,28 +290,26 @@ input: {
   height: height / 14,
   alignSelf:'center',
   margin:'3%',
-  // fontFamily: 'Azo Sans',
+  fontFamily: 'AzoSans-Regular',
   paddingLeft: '5%',
   borderRadius:18,
   borderWidth:0.5,
   borderColor:'#CCCCCC28',
   backgroundColor: '#CCCCCC28',
-  fontSize: 18,
-  fontWeight: '500',
+  fontSize: 14,
 },
 input1: {
   width: width - 80,
   height: height / 14,
   alignSelf:'center',
-  // fontFamily: 'Azo Sans',
+  fontFamily: 'AzoSans-Regular',
   margin: '2%',
   paddingLeft: '5%',
   color: '#fff',
   borderRadius: 18,
   borderColor: '#27A291',
   backgroundColor: '#27A291',
-  fontSize: 18,
-  fontWeight: '500',
+  fontSize: 14,
 },
 logoContainer: {
   flexDirection: 'row',
@@ -302,9 +319,17 @@ logoContainer: {
 },
 TextStyle: {
   textAlign: 'center',
-  fontSize: 13,
+  fontSize: 12,
   textDecorationLine: 'underline',
-  color:'#27A291'
+  color:'#27A291',
+  fontFamily:'AzoSans-Regular'
+},
+smallText:{
+  color: 'black', 
+  fontSize: 12,
+  fontFamily:'AzoSans-Regular',
+  marginTop: 5,
+  alignSelf:'center'
 },
 })
 

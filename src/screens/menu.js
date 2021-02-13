@@ -33,12 +33,12 @@ class MenuPage extends Component {
         title:`Request Creator's Account`,
         img:require('../assets/img/reqcreators.png')
       },
-      {
-        id:4,
-        title:'Offline',
-        img:require('../assets/img/offline1.png')
+      // {
+      //   id:4,
+      //   title:'Offline',
+      //   img:require('../assets/img/offline1.png')
     
-      },
+      // },
       // {
       //   id:5,
       //   title:'Help',
@@ -48,7 +48,6 @@ class MenuPage extends Component {
         id:5,
         title:'Settings',
         img:require('../assets/img/settings1.png')
-    
       },
     ],
     list1: [
@@ -61,14 +60,12 @@ class MenuPage extends Component {
         id:2,
         title:'QR Code Reader',
         img:require('../assets/img/qrcode1.png')
-    
       },
-      {
-        id:4,
-        title:'Offline',
-        img:require('../assets/img/offline1.png')
-    
-      },
+      // {
+      //   id:4,
+      //   title:'Offline',
+      //   img:require('../assets/img/offline1.png')
+      // },
       // {
       //   id:5,
       //   title:'Help',
@@ -78,7 +75,6 @@ class MenuPage extends Component {
         id:5,
         title:'Settings',
         img:require('../assets/img/settings1.png')
-    
       },
     ],
     profileGetData:'',
@@ -220,8 +216,8 @@ class MenuPage extends Component {
         }else if(item.id ==3){
           return this.props.navigation.navigate('requestCreator') && this.props.navigation.closeDrawer();
 
-          }else if(item.id==4){
-            return this.props.navigation.navigate('offline') && this.props.navigation.closeDrawer();         
+          // }else if(item.id==4){
+          //   return this.props.navigation.navigate('offline') && this.props.navigation.closeDrawer();         
         // }else if(item.id==5){
         //   return this.props.navigation.navigate('viewBook', {
         //     item: item}) && this.props.navigation.closeDrawer();
@@ -306,7 +302,7 @@ class MenuPage extends Component {
                               </TouchableOpacity>
                               <TouchableOpacity
                   onPress={()=>this.profileClick()}>
-                  <View style={{flexDirection:'column',width:width/2,height:50,justifyContent:'center'}}>
+                  <View style={{flexDirection:'column',width:width/2.2,height:50,justifyContent:'center',marginLeft:'2%'}}>
                   <Text numberOfLines={this.state.username.length>30?1:1} style={{color:'#27A291',fontSize:16,fontFamily:'Montserrat-Bold'}}>{this.state.username}</Text>
                   <Text
                   onPress={()=>this.profileClick()}
@@ -334,7 +330,7 @@ class MenuPage extends Component {
                   />
                 {this.state.notificationCount!=0?
               <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',left:25,top:20,backgroundColor:'#fff',}}>
-              <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+              <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',alignSelf:'center',marginTop:'5%'}}>{this.state.notificationCount}</Text>
           </View>
                   :null}
                   </TouchableOpacity>
@@ -403,7 +399,7 @@ class MenuPage extends Component {
                               </TouchableOpacity>
                               <TouchableOpacity
                   onPress={()=>this.profileClick()}>
-                  <View style={{flexDirection:'column',width:width/2,height:50,justifyContent:'center'}}>
+                  <View style={{flexDirection:'column',width:width/2.2,height:50,justifyContent:'center',marginLeft:'2%'}}>
                   <Text numberOfLines={this.state.username.length>30?1:1} style={{color:'#27A291',fontSize:16,fontFamily:'Montserrat-Bold'}}>{this.state.username}</Text>
                   <Text
                   onPress={()=>this.profileClick()}
@@ -447,7 +443,7 @@ class MenuPage extends Component {
                   />
                 {this.state.notificationCount!=0?
                <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',left:25,top:20,backgroundColor:'#fff',}}>
-               <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+               <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',alignSelf:'center',marginTop:'5%'}}>{this.state.notificationCount}</Text>
            </View>
                   :null}
                   </TouchableOpacity>
@@ -476,7 +472,7 @@ class MenuPage extends Component {
                               </TouchableOpacity>
                               <TouchableOpacity
                   onPress={()=>this.profileClick()}>
-                  <View style={{flexDirection:'column',width:width/2,height:50,justifyContent:'center'}}>
+                  <View style={{flexDirection:'column',width:width/2.2,height:50,justifyContent:'center',marginLeft:'2%'}}>
                   <Text numberOfLines={this.state.username.length>30?1:1} style={{color:'#27A291',fontSize:16,fontFamily:'Montserrat-Bold'}}>{this.state.username}</Text>
                   <Text
                   onPress={()=>this.profileClick()}
@@ -520,7 +516,7 @@ class MenuPage extends Component {
                   />
                 {this.state.notificationCount!=0?
                     <View style={{alignItems:'center',width:20,height:20,borderRadius:20/2,borderWidth:0.5,borderColor:'#27A291',position:'absolute',left:25,top:20,backgroundColor:'#fff',}}>
-                    <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',}}>{this.state.notificationCount}</Text>
+                    <Text style={{color:'#27A291',fontSize:12,fontFamily:'AzoSans-Regular',marginTop:'5%'}}>{this.state.notificationCount}</Text>
                 </View>
                   :null}
                   </TouchableOpacity>

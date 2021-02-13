@@ -1136,8 +1136,8 @@ collData(userid,colid,secid) {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    cornerRadius={8}>
-                    <ImageBackground source={{ uri: item.image }} style={{ width: width/2.5, height: height/3.5, jsutifyContent: 'center' }}>
+                    cornerRadius={10}>
+                    <ImageBackground source={{ uri: item.image }} style={{  width: width/2.5,height:height/4, jsutifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon") }>
                             <Image style={{ alignSelf: 'flex-end', marginRight: '10%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1158,8 +1158,8 @@ collData(userid,colid,secid) {
     autoplay={false}
     enableMomentum={true}
     sliderWidth={Dimensions.get('window').width}
-    itemWidth={width/2.5}
-    itemHeight={width/3.5}
+    itemWidth={width/2.8}
+    itemHeight={width/4}
     snapToInterval={20}
     contentContainerCustomStyle={{marginLeft:-80}}
     containerCustomStyle={{ marginTop: 30 }}
@@ -1187,8 +1187,8 @@ collData(userid,colid,secid) {
                 <CardView
                     cardElevation={2}
                     cardMaxElevation={2}
-                    cornerRadius={5}>
-                    <ImageBackground source={{ uri: item.image }} style={{ width: width/2.5,height:height/6.5, jsutifyContent: 'center' }}>
+                    cornerRadius={10}>
+                    <ImageBackground source={{ uri: item.image }} style={{ width: width/2.5,height:height/7.5, jsutifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => this.moreClick(item,"pressIcon_pages") }>
                             <Image style={{ alignSelf: 'flex-end', marginRight: '8%', marginTop: '5%' }} source={require('../assets/img/3dots_white.png')} />
@@ -1214,7 +1214,7 @@ collData(userid,colid,secid) {
     enableMomentum={true}
     sliderWidth={Dimensions.get('window').width}
     itemWidth={width/2.5}
-    itemHeight={height/6.5}
+    itemHeight={height/7.5}
     snapToInterval={20}
     contentContainerCustomStyle={{marginLeft:-80}}
     snapToAlignment={'start'}
