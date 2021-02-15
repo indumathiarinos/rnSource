@@ -196,14 +196,14 @@ readsRemoveModal = (delete_id) => {
   });
   setTimeout(() => {
       // this.props.changeRemove()
-    this.setState({
-      readsRemovePopup: false
-    })
-    if(this.state.removeUndo==false){
-      {this.deletefunc(delete_id)}
-    }else{
-      this.setState({removeUndo:false})
-    }
+    // this.setState({
+    //   readsRemovePopup: false
+    // })
+    // if(this.state.removeUndo==false){
+    //   {this.deletefunc(delete_id)}
+    // }else{
+    //   this.setState({removeUndo:false})
+    // }
     }, 3000);
     console.log('modal state is ',this.state.readsRemovePopup)
 }
@@ -888,23 +888,26 @@ readsItems({ item }) {
           height:'8%',
           backgroundColor: '#E74C3C',
           flexDirection:'row',
-          width:width,
+          // width:width,
+          flex:0.8
           
-          padding:'1%',
+          // padding:'1%',
          }}>
-           <View style={{flexDirection:'row',margin:'1%',alignSelf:'center',  alignItems: 'center',width:width-10,
+           <View style={{flexDirection:'row',
+          //  margin:'1%',
+           alignSelf:'center',  alignItems: 'center',
+           width:width-20,
           justifyContent:'center',}}>
-           <Text  style={{fontSize: 16,marginLeft:'1%',textAlign:'center', color: 'white',alignSelf:'center',fontFamily:'AzoSans-Bold',}}>Removed - </Text>
+           <Text  style={{fontSize: 16,marginLeft:'1%',textAlign:'center', color: 'white',alignSelf:'center',fontFamily:'AzoSans-Bold',width:width/5}}>Removed - </Text>
            <TouchableOpacity onPress={()=>this.descPage(this.state.currentItem)}>
-           <Text numberOfLines={2} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Medium',textDecorationColor:'#fff',}}> 
+           <Text numberOfLines={2} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Medium',textDecorationColor:'#fff',width:width/2,}}> 
           {this.state.readsDeletedName}
           </Text>
            </TouchableOpacity>
-           <Text style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',fontFamily:'AzoSans-Light',}}> from </Text>
+           <Text style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',fontFamily:'AzoSans-Light',width:width/6}}> from </Text>
            <TouchableOpacity>
-             <Text numberOfLines={1} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Light',textDecorationColor:'#fff',}}>{this.state.coll_name} </Text>
+             <Text numberOfLines={1} style={{ fontSize: 16,textAlign:'left', color: '#fff',textAlign:'left',textDecorationLine:'underline',fontFamily:'AzoSans-Light',textDecorationColor:'#fff',width:width/4}}>{this.state.coll_name} </Text>
            </TouchableOpacity>
-          {/* {this.state.deletedName.length>25?<Text numberOfLines={2} style={{ fontSize: 17,textAlign:'left', color: '#fff',width:width-120,}}> {this.state.deletedName}</Text>:null} */}
            </View>
            
           <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'2%',}} onPress={()=>this.setState({removeUndo:true})}>
@@ -912,6 +915,42 @@ readsItems({ item }) {
          </TouchableOpacity>
        </View>
           }/>
+
+{/* <BlurModal visible={this.state.readsRemovePopup}
+          children={
+              <View style={{
+                flex:1,
+          left:0,right:0,bottom:0,position:'absolute',   
+          height:'10%',
+          backgroundColor: '#E74C3C',
+          flexDirection:'row',
+          width:width,
+          
+          padding:'1%',
+         }}>
+           <View style={{flexDirection:'row',flex:1,width:width,
+           width:'85%',
+           margin:'1%',
+          alignSelf:'center',  alignItems: 'center',
+          justifyContent:'center',}}>
+           <Text  style={{fontSize: 16,fontFamily:'AzoSans-Regular',textAlign:'center', color: 'white',alignSelf:'center',marginLeft:'2%'}}>Removed - </Text>
+          <Text numberOfLines={2} style={{ fontSize: 16,fontFamily:'AzoSans-Regular',textAlign:'left', color: '#fff',width:Number(this.state.readsDeletedName).length!=null && this.state.readsDeletedName.length<10?width/8:width/4.5,textAlign:'center'}}> 
+          {this.state.readsDeletedName}
+          </Text>
+          <Text style={{color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}> to </Text>
+         <TouchableOpacity onPress={()=>this.gotoCollpage()}>
+         <Text style={{textDecorationLine:'underline',color:'#fff',fontSize:16,fontFamily:'AzoSans-Regular'}}>
+            {this.state.coll_name}
+            </Text>
+         </TouchableOpacity>
+         
+           </View>
+           
+          <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'4%',marginBottom:'1%',}} onPress={()=>this.setState({removeUndo:true})}>
+          <Text style={{fontSize: 16,color:'white',textDecorationLine:'underline',fontFamily:'AzoSans-Regular'}}>Undo</Text>
+          </TouchableOpacity>
+       </View>}
+        /> */}
                     {/* </Modal> */}
 
                  <View style={styles.bottomBar}>
@@ -1013,10 +1052,9 @@ const styles = StyleSheet.create({
     // elevation:1,
     width:width/2.8, height: height/4,
     borderRadius: 15,
-    backgroundColor:'pink'
     
     // alignItems:'center',
-    //  jsutifyContent: 'center'
+    //  jsutifyContent: 'center'  
      },
      pageImgStyle:{ 
       // elevation:1,

@@ -7,7 +7,7 @@ const {width,height}=Dimensions.get('window');
 import Modal from 'react-native-modal';
 import { connect } from "react-redux";
 import NetInfo from "@react-native-community/netinfo";
-
+import {LoginManager} from 'react-native-fbsdk';
 // import apiCall from "../redux/ActionCreator";
 // import { connect } from "react-redux";
 
@@ -69,6 +69,21 @@ componentWillUnmount() {
 handleBackButtonClick() {
   BackHandler.exitApp();
   return true;
+}
+fbAuth() {
+  LoginManager.logInWithReadPermissions(['public_profile']).then(
+    function (result) {
+      if (result.isCancelled) {
+        console.log('Login was cancelled');
+      } else {
+        console.log('Login was successful with permissions: '
+          + result.grantedPermissions.toString());
+      }
+    },
+    function (error) {
+      console.log('Login failed with error: ' + error);
+    }
+  );
 }
 clear=(pagename)=>{
   // this.props.changeNavRec();
@@ -316,9 +331,12 @@ console.warn(json+"")
                 <View style={styles.logText}/>
             </View>
           <View style={styles.logoContainer}>
+            <TouchableOpacity onPress={this.fbAuth.bind(this)}>
             <Image style={styles.avatar}
               source={require('../assets/img/fb.png')}
             />
+            </TouchableOpacity>
+           
           <Image style={styles.avatar}
               source={require('../assets/img/google.png')}
             />

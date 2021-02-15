@@ -105,7 +105,8 @@ class ViewBook extends Component {
       loginPopup: false,
       undo: false,
       likeStatus: false,
-      scrollend: false
+      scrollend: false,
+      likecount:''
       // Image: "https://arinos.co.uk/uploads/publication-cover/1581929254.jpg"
       // Title: "SNOW WHITE AND THE SEVEN DWARF"
       // Content: "Once upon a time . . . in a great castle, a Prince’s daughter grew up happy and contented, in spite of a jealous stepmother. She was very pretty, with blue eyes and long black hair. Her skin was delicate and fair, and so she was called Snow White. Everyone was quite sure she would become very beautiful. Though her stepmother was a wicked woman, she too was very beautiful, and the magic mirror told her this every day, whenever she asked it"
@@ -412,7 +413,8 @@ class ViewBook extends Component {
           post_translator: responseJson[0].post_translator,
           isbn: responseJson[0].post_isbn_years,
           exists: responseJson[0].Readstatus == 'N' ? false : true,
-          likeStatus: responseJson[0].Likestatus == 'Y'?true:false
+          likeStatus: responseJson[0].Likestatus == 'Y'?true:false,
+          likecount:responseJson[0].likecount
         
           // visible:this.state.Is_Follow=="Follow"?false:true
         })
@@ -1549,7 +1551,9 @@ onPress={() => this.props.navigation.navigate('report')}>
                 color:
                 this.state.likeStatus? '#27A291' :
                     '#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
-              }}>Like</Text>:null}
+              }}>{this.state.likecount} Like</Text>:<Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Like</Text>}
               {/* <Text style={{
                 color:
                 this.state.likeStatus? '#27A291' :
@@ -1578,6 +1582,9 @@ onPress={() => this.props.navigation.navigate('report')}>
                   //  item.Likestatus=='Y'?'#27A291':
                   '#707070'}
               />
+              <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Comment</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -1590,6 +1597,9 @@ onPress={() => this.props.navigation.navigate('report')}>
   style={{alignSelf:'center'}}
   color={'#707070'}
   />
+  <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Add to</Text>
           </TouchableOpacity>
           <TouchableOpacity
 
@@ -1601,6 +1611,9 @@ onPress={() => this.props.navigation.navigate('report')}>
   style={{alignSelf:'center'}}
   color={'#707070'}
   />
+  <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Share</Text>
           </TouchableOpacity>
         </View>
         {/* :null} */}

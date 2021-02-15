@@ -55,7 +55,8 @@ class PreView extends Component {
       author:'',
       title:'',
       img:'',
-      undo:false
+      undo:false,
+      likecount:''
     }
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
@@ -417,7 +418,8 @@ class PreView extends Component {
           author: responseJson[0].username,
           user_id: responseJson[0].user_id,
           exists: responseJson[0].Readstatus == 'N' ? false : true,
-          likeStatus: responseJson[0].Likestatus == 'Y'?true:false
+          likeStatus: responseJson[0].Likestatus == 'Y'?true:false,
+          likecount:responseJson[0].likecount
                 })
  
       })
@@ -546,7 +548,9 @@ class PreView extends Component {
                 color:
                 this.state.likeStatus? '#fff' :
                     '#fff',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
-              }}>Like</Text>:null}
+              }}>{this.state.likecount} Like</Text>:<Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Like</Text>}
          </TouchableOpacity>
          <TouchableOpacity
            onPress={() => this.commentClick()}
@@ -559,6 +563,9 @@ class PreView extends Component {
                   //  item.Likestatus=='Y'?'#27A291':
                   '#fff'}
               />
+              <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Comment</Text>
          </TouchableOpacity>
          <TouchableOpacity
                  onPress={()=>this.setState({collectionModal:true})}
@@ -568,6 +575,9 @@ class PreView extends Component {
   style={{alignSelf:'center'}}
   color={'#fff'}
   />
+  <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Add to</Text>
          </TouchableOpacity>
          <TouchableOpacity 
 
@@ -577,7 +587,10 @@ class PreView extends Component {
   size={25}
   style={{alignSelf:'center'}}
   color={'#fff'}
-  />      
+  />   
+  <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Share</Text>   
      </TouchableOpacity>
        </View>
        }

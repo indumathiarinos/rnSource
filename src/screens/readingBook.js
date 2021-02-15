@@ -35,7 +35,7 @@ import WebView from 'react-native-webview';
 import NetInfo from '@react-native-community/netinfo';
 // import SelectableText from 'react-native-selectable-text';
 import LinearGradient from 'react-native-linear-gradient';
-import { SelectableText } from "@astrocoders/react-native-selectable-text";
+// import { SelectableText } from "@astrocoders/react-native-selectable-text";
 import Share from 'react-native-share';
 import SnackBar from 'react-native-snackbar';
 import { color } from 'react-native-reanimated';
@@ -153,7 +153,8 @@ class ReadingBook extends Component {
       likestatus:false,
       postImg:'',
       undo:false,
-      subtitle:''
+      subtitle:'',
+      likescount:''
      
 
     }
@@ -565,7 +566,8 @@ readlater = () => {
           postImg:responseJson[0].PostImg,
           exists:responseJson[0].Readstatus=="N"?false:true,
           likeStatus:responseJson[0].Likestatus=='Y'?true:false,
-          subtitle:responseJson[0].sub_title
+          subtitle:responseJson[0].sub_title,
+          likescount:responseJson[0].likescount
 
         })
         console.log('page des ',this.state.description)
@@ -636,51 +638,51 @@ readlater = () => {
     // return this.props.navigation.navigate('viewBook');
 
   }
-  descriptionList({ item }) {
-    return (
-      <View>
-        {item.Contant == null ? <Image source={{ uri: item.Image }}
-        // style={{width:item.Image!=null?'80%':null}}
-        /> : null}
-        {item.Image == null ?
-          //  <Text>new</Text>
-          //   <SelectableText
-          //   selectable
-          //   multiline
-          //   contextMenuHidden
-          //   scrollEnabled={false}
-          //   editable={false}
-          //   onSelectionChange={(event) => {
-          //     const {
-          //       nativeEvent: {
-          //         selection: { start, end },
-          //       },
-          //     } = event
-          //     const str = text.substring(start, end)
-          //     onSelectionChange({ str, start, end })
-          //   }}
-          //   style={{
-          //     color: "#BAB6C8",
-          //   }}
-          //   value={item.Contant}
-          // />
-          <SelectableText
-            menuItems={["Select"]}
-            selectable={true} selectionColor='#27A291'
-            value={item.Contant}
-             onSelection={({ eventType, content, selectionStart, selectionEnd }) => {
-              this.setState({ getContent: content, showTopTab: !this.state.showTopTab, selectable: !this.state.selectable })
-              console.log(content)
-            }
-            }
-            style={[styles.description, theme[this.state.modeState].description]} />
-          // <Text style={[this.state.modeState=='light'?styles.description:theme[this.state.modeState].description]}>
-          // {item.Contant}
-          //                  </Text>
-          : null}
-      </View>
-    )
-  }
+  // descriptionList({ item }) {
+  //   return (
+  //     <View>
+  //       {item.Contant == null ? <Image source={{ uri: item.Image }}
+  //       // style={{width:item.Image!=null?'80%':null}}
+  //       /> : null}
+  //       {item.Image == null ?
+  //         //  <Text>new</Text>
+  //         //   <SelectableText
+  //         //   selectable
+  //         //   multiline
+  //         //   contextMenuHidden
+  //         //   scrollEnabled={false}
+  //         //   editable={false}
+  //         //   onSelectionChange={(event) => {
+  //         //     const {
+  //         //       nativeEvent: {
+  //         //         selection: { start, end },
+  //         //       },
+  //         //     } = event
+  //         //     const str = text.substring(start, end)
+  //         //     onSelectionChange({ str, start, end })
+  //         //   }}
+  //         //   style={{
+  //         //     color: "#BAB6C8",
+  //         //   }}
+  //         //   value={item.Contant}
+  //         // />
+  //         <SelectableText
+  //           menuItems={["Select"]}
+  //           selectable={true} selectionColor='#27A291'
+  //           value={item.Contant}
+  //            onSelection={({ eventType, content, selectionStart, selectionEnd }) => {
+  //             this.setState({ getContent: content, showTopTab: !this.state.showTopTab, selectable: !this.state.selectable })
+  //             console.log(content)
+  //           }
+  //           }
+  //           style={[styles.description, theme[this.state.modeState].description]} />
+  //         // <Text style={[this.state.modeState=='light'?styles.description:theme[this.state.modeState].description]}>
+  //         // {item.Contant}
+  //         //                  </Text>
+  //         : null}
+  //     </View>
+  //   )
+  // }
   addPins= async () => { 
    const clipboardContent = await Clipboard.getString();
    this.setState({ copiedData: clipboardContent });
@@ -1398,7 +1400,9 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                 color:
                 this.state.likeStatus? '#27A291' :
                     '#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
-              }}>Like</Text>:null}
+              }}>{this.state.likescount} Like</Text>:<Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Like</Text>}
                    {/* <Image
             source={imgSource}
           /> */}
@@ -1419,6 +1423,9 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
                   //  item.Likestatus=='Y'?'#27A291':
                   '#707070'}
               />
+              <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Comment</Text>
         </TouchableOpacity>
         <TouchableOpacity
           // onPress={() => this.refs.modal4.open()} 
@@ -1432,6 +1439,9 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
   style={{alignSelf:'center'}}
   color={'#707070'}
   />    
+  <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Add to</Text>
       </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>{this.state.explore_page=='0'?
@@ -1443,6 +1453,9 @@ onPress={()=>{this.state.explore_page=='0'?this.fb():this.alertPopup()}}
   style={{alignSelf:'center'}}
   color={'#707070'}
   />   
+  <Text style={{
+                color:'#707070',fontFamily: 'AzoSans-Regular',fontSize: 12, textAlign: 'center', marginTop: 2, marginBottom: 2
+              }}>Share</Text>
        </TouchableOpacity>
       </View> 
         }

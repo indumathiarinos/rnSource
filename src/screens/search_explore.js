@@ -1158,7 +1158,7 @@ collData(userid,colid,secid) {
     autoplay={false}
     enableMomentum={true}
     sliderWidth={Dimensions.get('window').width}
-    itemWidth={width/2.8}
+    itemWidth={width/2.5}
     itemHeight={width/4}
     snapToInterval={20}
     contentContainerCustomStyle={{marginLeft:-80}}
